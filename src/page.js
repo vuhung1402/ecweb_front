@@ -1,0 +1,5 @@
+export { default as HomePage } from "./pages/home/Home"
+export {default as LoginPage} from "./pages/auth//Login"
+export {default as SignUpPage} from "./pages/auth/SignUp"
+export {default as ProductsPage} from "./pages/product/Products" 
+export {default as ProductDetailPage} from "./pages/product/ProductDetail"
