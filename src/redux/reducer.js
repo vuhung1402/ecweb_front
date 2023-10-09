@@ -1,4 +1,4 @@
-import { USER_PACKAGE, CLEAR } from "./actionTypes";
+import { USER_PACKAGE, CLEAR } from "./constants";
 
 const userState = {
     user: {}

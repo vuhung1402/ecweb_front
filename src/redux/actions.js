@@ -1,4 +1,4 @@
-import { USER_PACKAGE, CLEAR } from "./actionTypes";
+import { USER_PACKAGE, CLEAR } from "./constants";
 
 export const userPackage = (user) => ({
     type: USER_PACKAGE,
