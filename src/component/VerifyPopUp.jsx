@@ -1,4 +1,4 @@
-function VerifyPopUp(){
+function VerifyPopUp({message}){
     return(
         <div onClick={(e) => e.stopPropagation()} className="h-[200px] w-[400px] bg-white rounded-2xl">
             <div className=" text-center h-1/2 flex justify-center items-center text-lg font-semibold">MAIL XÁC NHẬN ĐÃ ĐƯỢC GỬI QUA MAIL CỦA BẠN</div>
