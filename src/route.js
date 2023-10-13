@@ -25,6 +25,11 @@ const AppRoutes = [
         path: '/productDetail',
         Component: Page?.ProductDetailPage,
         defaultLayout: true,
+    },
+    {
+        path: '/forgotPass',
+        Component: Page?.ForgotPassPage,
+        defaultLayout: false,
     }
 ]
 
