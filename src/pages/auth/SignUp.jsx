@@ -23,11 +23,14 @@ function SignUp(){
         fetch("http://localhost:3001/api/auth/register", {
             method:"POST",
             body: JSON.stringify(data),
-        }).then(respone => 
-            respone.json()
+            headers: {
+                'Content-Type': 'application/json',
+              },
+        }).then(response => 
+            response.json()
         ).then(json => {
             setRespone(json)
-            console.log("respone: ", respone)
+            console.log("respone: ", json)
         }).catch(e => {
             console.log("e", e)
         })
