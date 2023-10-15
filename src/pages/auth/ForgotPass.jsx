@@ -1,7 +1,8 @@
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 const ForgotPass = () => {
+    const [response, setResponse] = useState()
     const emailRef = useRef()
 
     const navigate = useNavigate();
@@ -9,20 +10,20 @@ const ForgotPass = () => {
     const handleResetPass = () => {
         console.log("email: ", emailRef.current.value)
 
-        // fetch("http://localhost:3001/api/auth/forgot-password", {
-        //     method: "GET",
-        // }).then((response) => {
-        //     if(!response.ok){
-        //         throw new Error("Netword response not ok")
-        //     }
-        //     return response.json()
-        // }).then((json) => {
-        //     setResponse(json)
-        //     console.log("Response: ", json)
-        // }).catch((error) => {
-        //     console.error("Error: ", error)
-        // })
-        navigate(`/resetPass`)
+        fetch(`http://localhost:3001/api/auth/forgot-password/?email=${emailRef.current.value}`, {
+            method: "GET",
+        }).then((response) => {
+            if(!response.ok){
+                throw new Error("Netword response not ok")
+            }
+            return response.json()
+        }).then((json) => {
+            setResponse(json)
+            console.log("Response: ", json)
+        }).catch((error) => {
+            console.error("Error: ", error)
+        })
+        // navigate(`/resetPass`)
     }
 
     return(
