@@ -5,25 +5,37 @@ const ForgotPass = () => {
     const [response, setResponse] = useState()
     const emailRef = useRef()
 
-    const navigate = useNavigate();
+    const [checkMailSent, setCheckMailSent] = useState(false)
+    const [checkError, setCheckError] = useState(false)
 
     const handleResetPass = () => {
         console.log("email: ", emailRef.current.value)
+        const body = {
+            email: emailRef.current.value
+        }
 
-        fetch(`http://localhost:3001/api/auth/forgot-password/?email=${emailRef.current.value}`, {
-            method: "GET",
+        fetch('https://tiny-jade-elk-wear.cyclic.cloud/api/auth/forgot-password', {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json',
+            },
         }).then((response) => {
             if(!response.ok){
                 throw new Error("Netword response not ok")
             }
             return response.json()
         }).then((json) => {
-            setResponse(json)
-            console.log("Response: ", json)
+            // setResponse(json)
+            if(json?.success){
+                setCheckError(false)
+                setCheckMailSent(true)
+                console.log("respone: ", json)
+            }
         }).catch((error) => {
+            setCheckError(true)
             console.error("Error: ", error)
         })
-        // navigate(`/resetPass`)
     }
 
     return(
@@ -56,7 +68,22 @@ const ForgotPass = () => {
                             required=""
                         />
                     </div>
-                        
+                    {
+                        checkMailSent &&
+                        (
+                            <div className="mt-1 text-green-600 text-xls font-medium">
+                                We've just sent you a verify email
+                            </div>
+                        )
+                    }
+                    {
+                        checkError &&
+                        (
+                            <div className="mt-1 text-pink-600 text-sm text-xls font-medium">
+                                Please check your email again !!!
+                            </div>
+                        )
+                    }
                     <button
                         onClick={handleResetPass}
                         type="button"
