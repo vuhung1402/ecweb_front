@@ -27,7 +27,7 @@ const AppRoutes = [
         defaultLayout: true,
     },
     {
-        path: '/resetPass',
+        path: '/resetPass/:resetCode',
         Component: Page?.ResetPass,
         defaultLayout: false,
     },
@@ -35,6 +35,16 @@ const AppRoutes = [
         path: '/forgotPass',
         Component: Page?.ForgotPass,
         defaultLayout: false,
+    },
+    {
+        path: '/verifyEmail/:code',
+        Component: Page?.VerifyEmailPage,
+        defaultLayout: false,
+    },
+    {
+        path: '/profile',
+        Component: Page?.ProfilePage,
+        defaultLayout: true,
     }
 ]
 
