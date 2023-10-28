@@ -1,11 +1,20 @@
 import { useRef } from "react"
+import { useUserPackageHook } from "../../redux/hooks/userHook"
+import { useNavigate } from "react-router-dom"
 
 const Header = () => {
     const searchRef = useRef()
-    
+
+    const data = useUserPackageHook()
+    const navigate = useNavigate()
+
     const handleSearch = () => {
       console.log("Search: ", searchRef.current.value)
     }
+
+    const handleClick = () => {
+      navigate('/profile')
+    } 
 
     return(
         <header className="bg-white border-b-2">
@@ -46,15 +55,15 @@ const Header = () => {
               </button>
             </div>
             <div className="hidden lg:flex lg:gap-x-12">
-              <div className="relative">
+              {/* <div className="relative">
                 <a
                   href={"/products"}
                   className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-gray-900"
                 >
                   Product
                 </a>
-              </div>
-              <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+              </div> */}
+              {/* <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
                 Features
               </a>
               <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
@@ -62,7 +71,7 @@ const Header = () => {
               </a>
               <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
                 Company
-              </a>
+              </a> */}
             </div>
             {/* search */}
             <div className="ml-3 w-[500px]">
@@ -107,10 +116,32 @@ const Header = () => {
                 </button>
               </div>
             </div>
-            <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-              <a href={"/login"} className="text-sm font-semibold leading-6 text-gray-900 cursor-pointer">
+            <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:items-center">
+              <div className=" mr-10 cursor-pointer">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm12.75 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
+                </svg>
+              </div>
+              {
+                data?.user ?
+                (
+                  <div onClick={handleClick} className="flex items-center justify-between cursor-pointer">
+                    <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                      <svg className="absolute w-12 h-12 text-gray-400 -left-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+                    </div>
+                     <div className=" ml-3">{data?.user?.email.slice(0, data?.user?.email.indexOf("@"))}</div>
+                  </div>
+                )
+                :
+                (
+                  <a href={"/login"} className="text-sm font-semibold leading-6 text-gray-900 cursor-pointer">
+                    Login
+                  </a>
+                )
+              }
+              {/* <a href={"/login"} className="text-sm font-semibold leading-6 text-gray-900 cursor-pointer">
                 Login
-              </a>
+              </a> */}
             </div>
           </nav>
           {/* Mobile menu, show/hide based on menu open state. */}
