@@ -6,34 +6,56 @@ function SignUp(){
     const passwordRef = useRef(null)
     const confirmPassRef = useRef(null)
 
+    const [email, setEmail] = useState()
+    const [password, setPassword] = useState()
+    const [confirmPass, setConfirmPass] = useState()
+    const [checkPass, setCheckPass] = useState(false)
+    const [checkMailSent, setCheckMailSent] = useState(false)
+    const [checkMailSentErr, setCheckMailSentErr] = useState(false)
+    const [message, setMessage] = useState()
+    const [errorCode, setErroreCode] = useState()
+
     const [respone, setRespone] = useState()
 
     const [verifyPopUp, setVerifyPopUp] = useState(false)
 
     const handleSignIn =  () => {
         // setVerifyPopUp(!verifyPopUp);
-        // console.log("email: ",emailRef.current.value);
-        // console.log("pass: ",passwordRef.current.value);
-        // console.log("confirm: ",confirmPassRef.current.value);
+        // console.log("email: ",email);
+        // console.log("pass: ",password);
+        // console.log("confirm: ",confirmPass);
         const data = {
             email: emailRef.current.value,
             password: passwordRef.current.value,
             confirmPassword: confirmPassRef.current.value,
         }
-        fetch("http://localhost:3001/api/auth/register", {
+
+        if(password === confirmPass){
+            fetch("https://tiny-jade-elk-wear.cyclic.cloud/api/auth/register", {
             method:"POST",
             body: JSON.stringify(data),
             headers: {
                 'Content-Type': 'application/json',
               },
-        }).then(response => 
-            response.json()
-        ).then(json => {
-            setRespone(json)
-            console.log("respone: ", json)
-        }).catch(e => {
-            console.log("e", e)
-        })
+            }).then((response) => {
+                if(!response.ok){
+                    setErroreCode(response.status)
+                    throw new Error(`Netword response not ok ${response.status}`)
+                }
+                return response.json()
+            }).then((json) => {
+                if(json?.success){
+                    setCheckMailSent(true)
+                    console.log("respone: ", json)
+                }
+            }).catch((e) => {
+                setCheckMailSentErr(true)
+                console.log("e", e)
+            })
+        }else{
+            setCheckPass(true)
+        }
+        
     }
 
     return(
@@ -71,6 +93,7 @@ function SignUp(){
                                 placeholder="name@company.com"
                                 required=""
                                 ref={emailRef}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
                         </div>
                         <div>
@@ -88,6 +111,7 @@ function SignUp(){
                                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required=""
                                 ref={passwordRef}
+                                onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
                         <div>
@@ -105,6 +129,7 @@ function SignUp(){
                                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required=""
                                 ref={confirmPassRef}
+                                onChange={(e) => setConfirmPass(e.target.value)}
                             />
                         </div>
                         <div className="flex items-start">
@@ -132,6 +157,30 @@ function SignUp(){
                             </label>
                             </div>
                         </div>
+                        {
+                            checkPass &&
+                            (
+                                <div className="mt-1 text-pink-600 text-sm text-xls font-medium">
+                                    Your password and confirm password do not match !!
+                                </div>
+                            )
+                        }
+                        {
+                            checkMailSent &&
+                            (
+                                <div className="mt-1 text-green-600 text-xls font-medium">
+                                    We've just sent you a verify email
+                                </div>
+                            )
+                        }
+                        {
+                            errorCode === 409 &&
+                            (
+                                <div className="mt-1 text-pink-600 text-sm text-xls font-medium">
+                                    Your email already exist !!!
+                                </div>
+                            )
+                        }
                         <button
                             onClick={handleSignIn}
                             className="w-full text-white bg-sky-500	 hover:bg-sky-400 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
@@ -151,14 +200,14 @@ function SignUp(){
                 </div>
                 </div>
             </div>
-            {
-                verifyPopUp &&
+            {/* {
+                respone?.success &&
                 (
                     <div onClick={handleSignIn} className="fixed inset-0 bg-[rgba(184,184,184,0.35)] bg-opacity-90 flex justify-center items-center">
                         <VerifyPopUp/>
                     </div>
                 ) 
-            }
+            } */}
         </div>
 
     )
