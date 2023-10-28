@@ -1,15 +1,23 @@
 import { useRef, useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
+import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { userPackage } from "../../redux/actions"
 
 const Login = () => {
-    const user = useUserPackageHook()
-    console.log(user)
-    const [response, setResponse] = useState()
+    // const user = useUserPackageHook()
+    // console.log(user)
+    const[check, setCheck] = useState(false)
+
+    const navigate = useNavigate()
+
 
     const emailRef = useRef(null);
     const passwordRef = useRef(null);
 
-    const handleLogin = () =>{
+    const dispatch = useDispatch()
+
+    const handleLogin = async () =>{
         console.log("email: ", emailRef.current.value)
         console.log("pass: ", passwordRef.current.value)
         const body = {
@@ -17,7 +25,7 @@ const Login = () => {
             password: passwordRef.current.value
         }
 
-        fetch("http://localhost:3001/api/auth/login", {
+        await fetch("https://tiny-jade-elk-wear.cyclic.cloud/api/auth/login", {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
@@ -29,9 +37,13 @@ const Login = () => {
             }
             return response.json()
         }).then((json) => {
-            setResponse(json)
-            console.log("Response: ", json)
+            // setResponse(json)
+            if(json?.success){
+                dispatch(userPackage(json?.data))
+                navigate('/')
+            }
         }).catch((error) => {
+            setCheck(true)
             console.error("Error: ", error)
         })
     }
@@ -90,6 +102,14 @@ const Login = () => {
                             required=""
                         />
                     </div>
+                    {
+                        check &&
+                        (
+                            <div className="mt-1 text-pink-600 text-sm">
+                                Check your email and password again
+                            </div>
+                        )
+                    }
                     <button onClick={handleLogin} type="button" className=" w-full text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                         Login
                     </button>
