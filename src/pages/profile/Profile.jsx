@@ -2,8 +2,9 @@ import { useDispatch } from "react-redux"
 import { clear } from "../../redux/actions"
 import { useNavigate } from "react-router-dom"
 import FormInfor from "../../component/FormInfor"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
+import Address from "../../component/Address"
 
 
 const Profile = () => {
@@ -13,37 +14,18 @@ const Profile = () => {
 
     const user = useUserPackageHook()
 
+    const [content, setContent] = useState(1)
+
     const handleLogOut = () => {
         dispatch(clear())
         navigate('/')
     }
-
-    useEffect(() => {
-        fetch("https://tiny-jade-elk-wear.cyclic.cloud/api/users/me", {
-            method: "GET",
-            headers: {
-                'Authorization': `Bearer ${user?.accessToken}`,
-            },
-        }).then((response) => {
-            if(!response.ok){
-                throw new Error("Netword response not ok")
-            }
-            return response.json()
-        }).then((json) => {
-            // setResponse(json)
-            if(json?.success){
-                console.log("json: ", json)
-            }
-        }).catch((error) => {
-            console.error("Error: ", error)
-        })
-    },[])
     
     return( 
         // <button onClick={handleLogOut} type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
         //     Log out
         // </button>
-        <div className="flex">
+        <div className="flex h-screen">
             <button data-drawer-target="default-sidebar" data-drawer-toggle="default-sidebar" aria-controls="default-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
                 <span class="sr-only">Open sidebar</span>
                 <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -54,12 +36,21 @@ const Profile = () => {
             <aside id="default-sidebar" className="w-64 h-screen border-r-2 transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
                 <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
                     <ul class="space-y-2 font-medium">
-                        <li>
+                        <li onClick={() => setContent(1)}>
                             <div className="cursor-pointer flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                             <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
                                 <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
                             </svg>
                             <span class="flex-1 ml-3 whitespace-nowrap">Information</span>
+                            </div>
+                        </li>
+                        <li onClick={() => setContent(2)}>
+                            <div className="cursor-pointer flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                            </svg>
+                            <span class="flex-1 ml-3 whitespace-nowrap">Address</span>
                             </div>
                         </li>
                         <li>
@@ -85,7 +76,8 @@ const Profile = () => {
             </aside>
 
             <div class="w-full">
-                <FormInfor/>
+                {content === 1 && <FormInfor/>}
+                {content === 2 && <Address/>}
             </div>
         </div>
     )
