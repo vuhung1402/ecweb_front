@@ -1,13 +1,42 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useUserPackageHook } from "../redux/hooks/userHook"
+import { useDispatch } from "react-redux"
+import { userPackage } from "../redux/actions"
 
  const FormInfor = () => {
+    const user = useUserPackageHook()
+    const dispatch = useDispatch()
+
     const [name, setName] = useState()
     const [phone, setPhone] = useState()
-    const [gender, setGender] = useState("Men")
+    const [gender, setGender] = useState("Male")
     const [birthday, setBirthday] = useState()
+    // const [response, setResponse] = useState()
 
-    const user = useUserPackageHook()
+    useEffect(() => {
+        fetch("https://tiny-jade-elk-wear.cyclic.cloud/api/users/me", {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${user?.accessToken}`,
+                'Content-Type': 'application/json',
+            },
+        }).then((response) => {
+            if(!response.ok){
+                throw new Error("Netword response not ok")
+            }
+            return response.json()
+        }).then((json) => {
+            if(json?.success){
+                setName(json?.data?.user?.name)
+                setPhone(json?.data?.user?.phone)
+                setGender(json?.data?.user?.gender)
+                setBirthday(json?.data?.user?.birthday?.split("T")[0])
+                console.log("json: ", json)
+            }
+        }).catch((error) => {
+            console.error("Error: ", error)
+        })
+    },[name])
 
     const handleSavechange = async () => {
         console.log("name: ", name)
@@ -26,6 +55,7 @@ import { useUserPackageHook } from "../redux/hooks/userHook"
             body: JSON.stringify(body),
             headers: {
                 'Authorization': `Bearer ${user?.accessToken}`,
+                'Content-Type': 'application/json',
             },
         }).then((response) => {
             if(!response.ok){
@@ -33,8 +63,11 @@ import { useUserPackageHook } from "../redux/hooks/userHook"
             }
             return response.json()
         }).then((json) => {
-            // setResponse(json)
             if(json?.success){
+                setName(json?.data?.user?.name)
+                setPhone(json?.data?.user?.phone)
+                setGender(json?.data?.user?.gender)
+                setBirthday(json?.data?.user?.birthday?.split("T")[0])
                 console.log("json: ", json)
             }
         }).catch((error) => {
@@ -55,6 +88,7 @@ import { useUserPackageHook } from "../redux/hooks/userHook"
                                     User name
                                 </label>
                                 <input
+                                    value={name}
                                     onChange={(e) => {setName(e.target.value)}}
                                     class="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark:bg-gray-600 dark:text-gray-100"
                                     type="text"
@@ -64,6 +98,7 @@ import { useUserPackageHook } from "../redux/hooks/userHook"
                             <div>
                                 <label class="text-gray-600 dark:text-gray-400">Phone</label>
                                 <input
+                                    value={phone}
                                     onChange={(e) => {setPhone(e.target.value)}}
                                     class="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark:bg-gray-600 dark:text-gray-100"
                                     type="text"/>
@@ -71,7 +106,7 @@ import { useUserPackageHook } from "../redux/hooks/userHook"
 
                             <div>
                                 <label class="text-gray-600 dark:text-gray-400">Gender</label>
-                               <select onChange={(e) => {setGender(e.target.value)}} className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark:bg-gray-600 dark:text-gray-100">
+                               <select value={gender} onChange={(e) => {setGender(e.target.value)}} className="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark:bg-gray-600 dark:text-gray-100">
                                     <option value={"Male"}>Male</option>
                                     <option value={"Female"}>Female</option>
                                </select>
@@ -80,6 +115,7 @@ import { useUserPackageHook } from "../redux/hooks/userHook"
                             <div>
                                 <label class="text-gray-600 dark:text-gray-400">Date</label>
                                 <input
+                                    value={birthday}
                                     onChange={(e) => {setBirthday(e.target.value)}}
                                     class="w-full py-3 border border-slate-200 rounded-lg px-3 focus:outline-none focus:border-slate-500 hover:shadow dark:bg-gray-600 dark:text-gray-100"
                                     type="date"/>
