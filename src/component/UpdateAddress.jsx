@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { useUserPackageHook } from "../redux/hooks/userHook"
+import { endpoint } from "../api"
 
-const UpdateAddress = ({address,setUpdateAddress}) => {
+const UpdateAddress = ({address,setSuccessAlert,setUnsuccessAlert,setUpdateAddress}) => {
 
     const user = useUserPackageHook()
     const [name, setName] = useState(address?.name)
@@ -21,7 +22,7 @@ const UpdateAddress = ({address,setUpdateAddress}) => {
             detail: detail
         }
 
-        fetch(`https://tiny-jade-elk-wear.cyclic.cloud/api/addresses/${address?._id}/me`, {
+        fetch(`${endpoint}/addresses/${address?._id}/me`, {
             method: "PUT",
             body: JSON.stringify(body),
             headers: {
@@ -37,8 +38,16 @@ const UpdateAddress = ({address,setUpdateAddress}) => {
             if(json?.success){
                 console.log("json: ", json)
                 setUpdateAddress(false)
+                setSuccessAlert(true)
+                setTimeout(() => {
+                    setSuccessAlert(false)
+                },3000)
             }
         }).catch((error) => {
+            setUnsuccessAlert(true)
+            setTimeout(() => {
+                setUnsuccessAlert(false)
+            },3000)
             console.error("Error: ", error)
         })
     }

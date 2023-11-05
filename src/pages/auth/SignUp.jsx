@@ -1,3 +1,4 @@
+import { endpoint } from "../../api";
 import VerifyPopUp from "../../component/VerifyPopUp";
 import { useRef, useState } from "react";
 
@@ -31,7 +32,7 @@ function SignUp(){
         }
 
         if(password === confirmPass){
-            fetch("https://tiny-jade-elk-wear.cyclic.cloud/api/auth/register", {
+            fetch(`${endpoint}/auth/register`, {
             method:"POST",
             body: JSON.stringify(data),
             headers: {

@@ -1,5 +1,6 @@
 import { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { endpoint } from "../../api"
 
 const ForgotPass = () => {
     const [response, setResponse] = useState()
@@ -14,7 +15,7 @@ const ForgotPass = () => {
             email: emailRef.current.value
         }
 
-        fetch('https://tiny-jade-elk-wear.cyclic.cloud/api/auth/forgot-password', {
+        fetch(`${endpoint}/auth/forgot-password`, {
             method: "POST",
             body: JSON.stringify(body),
             headers: {

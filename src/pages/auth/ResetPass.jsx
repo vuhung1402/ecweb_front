@@ -1,5 +1,6 @@
 import { useRef, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
+import { endpoint } from "../../api"
 
 const ResetPass = () => {
     const [response, setResponse] = useState()
@@ -22,7 +23,7 @@ const ResetPass = () => {
             resetCode: resetCode
         }
 
-        fetch("https://tiny-jade-elk-wear.cyclic.cloud/api/auth/forgot-password", {
+        fetch(`${endpoint}/auth/forgot-password`, {
             method: "PATCH",
             body: JSON.stringify(body),
             headers: {

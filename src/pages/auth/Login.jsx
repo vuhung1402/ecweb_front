@@ -3,6 +3,7 @@ import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { userPackage } from "../../redux/actions"
+import { endpoint } from "../../api"
 
 const Login = () => {
     // const user = useUserPackageHook()
@@ -25,7 +26,7 @@ const Login = () => {
             password: passwordRef.current.value
         }
 
-        await fetch("https://tiny-jade-elk-wear.cyclic.cloud/api/auth/login", {
+        await fetch(`${endpoint}/auth/login`, {
             method: "POST",
             body: JSON.stringify(body),
             headers: {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import VerifyPopUp from "../../component/VerifyPopUp"
+import { endpoint } from "../../api"
 
 const VerifyEmail = () => {
     const {code} = useParams()
@@ -13,7 +14,7 @@ const VerifyEmail = () => {
             code: code,
         }
 
-        fetch("https://tiny-jade-elk-wear.cyclic.cloud/api/auth/verify/email", {
+        fetch(`${endpoint}{/auth/verify/email`, {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
