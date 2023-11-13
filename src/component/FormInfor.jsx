@@ -46,10 +46,6 @@ import { endpoint } from "../api"
     },[name])
 
     const handleSavechange = async () => {
-        console.log("name: ", name)
-        console.log("phone: ", phone)
-        console.log("gender: ", gender)
-        console.log("birthday: ", birthday)
 
         const body = {
             name : name,
@@ -57,7 +53,7 @@ import { endpoint } from "../api"
             gender: gender,
             birthday: birthday
         }
-        await fetch("https://tiny-jade-elk-wear.cyclic.cloud/api/users/me", {
+        await fetch(`${endpoint}/users/me`, {
             method: "PATCH",
             body: JSON.stringify(body),
             headers: {
