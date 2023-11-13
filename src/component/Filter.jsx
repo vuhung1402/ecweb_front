@@ -8,7 +8,7 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-function Filter({children}){
+function Filter({search}){
     const sortOptions = [
         { name: 'Most Popular', href: '#', current: true },
         { name: 'Best Rating', href: '#', current: false },
@@ -294,7 +294,7 @@ function Filter({children}){
                         {/* Product grid */}
                             <div className="lg:col-span-3">
                                 {/* Your content */}
-                                <ProductList/>
+                                <ProductList search = {search} />
                             </div>
                         </div>
                     </section>
