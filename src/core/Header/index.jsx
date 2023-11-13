@@ -10,6 +10,7 @@ const Header = () => {
 
     const handleSearch = () => {
       console.log("Search: ", searchRef.current.value)
+      navigate(`/products/${searchRef.current.value}`)
     }
 
     const handleClick = () => {
