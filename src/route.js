@@ -17,7 +17,7 @@ const AppRoutes = [
         defaultLayout: false,
     },
     {
-        path: '/products/:search',
+        path: '/products',
         Component: Page?.ProductsPage,
         defaultLayout: true,
     },
@@ -50,6 +50,17 @@ const AppRoutes = [
         path: '/cart',
         Component: Page?.Cartpage,
         defaultLayout: true,
+    },
+    {
+        path: '/checkout/:code',
+        Component: Page?.CheckOutPage,
+        defaultLayout: true,
+    }
+    ,
+    {
+        path: '/registerSeller',
+        Component: Page?.RegisterSellerPage,
+        defaultLayout: false,
     }
 ]
 
