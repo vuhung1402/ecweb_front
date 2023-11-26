@@ -2,31 +2,14 @@ import { useEffect, useState } from "react"
 import Loading from "./Loading"
 import { endpoint } from "../api"
 
-const ProductList = ({search}) => {
+const ProductList = ({search, category}) => {
 
   const [products, setProducts] = useState()
 
+  console.log(category)
+
   useEffect(() => {
-    if(!search){
-      fetch(`${endpoint}/products?limit=8&page=1`, {
-        method: "GET",
-        headers: {
-            'Content-Type': 'application/json',
-        },
-      }).then((response) => {
-          if(!response.ok){
-              throw new Error("Netword response not ok")
-          }
-          return response.json()
-      }).then((json) => {
-          if(json?.success){
-              setProducts(json?.data?.products)
-              console.log("json: ", json)
-          }
-      }).catch((error) => {
-          console.error("Error: ", error)
-      })
-    }else{
+    if(search){
       fetch(`${endpoint}/products?search=${search}`, {
         method: "GET",
         headers: {
@@ -45,8 +28,46 @@ const ProductList = ({search}) => {
       }).catch((error) => {
           console.error("Error: ", error)
       })
+    }else if(category){
+      fetch(`${endpoint}/products?category=${category}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+      }).then((response) => {
+          if(!response.ok){
+              throw new Error("Netword response not ok")
+          }
+          return response.json()
+      }).then((json) => {
+          if(json?.success){
+              setProducts(json?.data?.products)
+              console.log("json: ", json)
+          }
+      }).catch((error) => {
+          console.error("Error: ", error)
+      })
+    }else{
+      fetch(`${endpoint}/products?limit=8&page=1`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+      }).then((response) => {
+          if(!response.ok){
+              throw new Error("Netword response not ok")
+          }
+          return response.json()
+      }).then((json) => {
+          if(json?.success){
+              setProducts(json?.data?.products)
+              console.log("json: ", json)
+          }
+      }).catch((error) => {
+          console.error("Error: ", error)
+      })
     }
-  },[search])
+  },[search,category])
 
   console.log(search)
     const products1 = [
