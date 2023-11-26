@@ -1,7 +1,8 @@
 import { useState } from "react"
 import { useUserPackageHook } from "../redux/hooks/userHook"
+import { endpoint } from "../api"
 
-const AddressInfor = ({addresses,setAddressPopUp}) => {
+const AddressInfor = ({setAddressPopUp}) => {
     const user = useUserPackageHook()
     const [name, setName] = useState()
     const [phone, setPhone] = useState()
@@ -9,8 +10,6 @@ const AddressInfor = ({addresses,setAddressPopUp}) => {
     const [district, setDistrict] = useState()
     const [ward, setWard] = useState()
     const [detail, setDetail] = useState()
-
-    console.log(addresses)
 
     const handleAddAddress = () => {
         const body = {
@@ -22,7 +21,7 @@ const AddressInfor = ({addresses,setAddressPopUp}) => {
             detail: detail
         }
 
-        fetch("https://tiny-jade-elk-wear.cyclic.cloud/api/users/me/addresses", {
+        fetch(`${endpoint}/users/me/addresses`, {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
