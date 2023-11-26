@@ -1,12 +1,15 @@
 import { useUserPackageHook } from "../redux/hooks/userHook"
 import { useEffect, useState } from "react"
 import { endpoint } from "../api"
+import { useNavigate } from "react-router-dom"
 
 const Cart = () => {
 
     const user = useUserPackageHook()
     const [cart, setCart] = useState()
     const [totalPrice, setTotalPrice] = useState(0)
+    const [productCheckout, setProductCheckOut] = useState([])
+    const navigate = useNavigate()
 
     useEffect(() => {
         // fetch(`${endpoint}/carts`, {
@@ -107,13 +110,54 @@ const Cart = () => {
         })
     }
 
-    const handleChange = (price, event) => {
+    const handleChange = (price, product, variation, quantity, event) => {
         if(event.target.checked){
             setTotalPrice(totalPrice + price)
+            setProductCheckOut(prev => ([
+                ...prev,
+                {
+                    _id: product?._id,
+                    variationId: variation?._id,
+                    quantity: quantity
+                }
+            ]))
         }else{
             setTotalPrice(totalPrice - price)
+            setProductCheckOut(prev => (
+                prev.filter((item) => item?._id !== product?._id)
+            ))
         }
     }
+
+    const handleCheckout = () => {
+
+        const body = {
+            products: productCheckout
+        }
+
+        fetch(`${endpoint}/orders/checkout`, {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+                'Authorization': `Bearer ${user?.accessToken}`,
+                'Content-Type': 'application/json',
+            },
+        }).then((response) => {
+            if(!response.ok){
+                throw new Error("Netword response not ok")
+            }
+            return response.json()
+        }).then((json) => {
+            if(json?.success){
+                navigate(`/checkout/${json?.code}`)
+                console.log("json: ", json)
+            }
+        }).catch((error) => {
+            console.error("Error: ", error)
+        })
+    }
+
+    console.log("Product for check out", productCheckout)
 
     const fetchData = () => {
         fetch(`${endpoint}/carts`, {
@@ -140,8 +184,8 @@ const Cart = () => {
     return(
         <div class="h-auto bg-gray-100 pt-2">
             <h1 class="mb-4 text-center text-2xl font-bold">Cart Items</h1>
-            <div class="mx-auto max-w-5xl h-auto justify-center px-6 md:flex md:space-x-6 xl:px-0">
-                <div class="h-auto rounded-lg md:w-2/3">
+            <div class="mx-auto max-w-6xl h-auto justify-center px-6 md:flex md:space-x-6 md:relative xl:px-0">
+                <div class="h-auto rounded-lg md:w-full">
                     {cart?.map((item) => {
                         return(
                             <>
@@ -152,7 +196,7 @@ const Cart = () => {
                                     item?.products?.map((item) => {
                                         return(
                                             <div class="justify-between mb-5 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
-                                                <input type="checkbox" className="mr-4" onChange={(e) => handleChange(item?.totalPrice, e)}/>
+                                                <input type="checkbox" className="mr-4" onChange={(e) => handleChange(item?.totalPrice, item?.product, item?.variation, item?.quantity, e)}/>
                                                 <img src="https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="product-image" class="w-full rounded-lg sm:w-40" />
                                                 <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                                                     <div class="mt-5 sm:mt-0">
@@ -184,7 +228,9 @@ const Cart = () => {
                     })}
                 </div>
                 {/* <!-- Sub total --> */}
-                <div class="mt-6 h-full rounded-lg border bg-white p-6 shadow-md md:mt-0 md:w-1/3">
+                
+            </div>  
+            <div class="mt-6 h-[150px] rounded-lg border bg-white p-6 shadow-md md:mt-0 md:fixed md:bottom-0 md:w-full">
                     {/* <div class="mb-2 flex justify-between">
                     <p class="text-gray-700">Subtotal</p>
                     <p class="text-gray-700">$129.99</p>
@@ -193,16 +239,14 @@ const Cart = () => {
                     <p class="text-gray-700">Shipping</p>
                     <p class="text-gray-700">$4.99</p>
                     </div> */}
-                    <hr class="my-4" />
                     <div class="flex justify-between">
                         <p class="text-lg font-bold">Total</p>
                         <div class="">
                             <p class="mb-1 text-lg font-bold">{totalPrice}</p>
                         </div>
                     </div>
-                    <button class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
-                </div>
-            </div>  
+                    <button onClick={handleCheckout} class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
+            </div>
         </div>
     )
 }
