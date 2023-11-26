@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react"
 import Loading from "./Loading"
 import { endpoint } from "../api"
+import { useNavigate } from "react-router-dom"
 
 const Category = () => {
 
     const [categories, setCategories] = useState()
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         fetch(`${endpoint}/categories`, {
@@ -26,6 +29,17 @@ const Category = () => {
             console.error("Error: ", error)
         })
     },[])
+
+    const handleClick = (slug) => {
+        navigate(
+            `/products`, 
+            {
+              state:{
+                category: slug
+              } 
+            }
+          )
+    }
 
     console.log(categories)
 
@@ -65,7 +79,7 @@ const Category = () => {
 
                 <div className="mt-6 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0">
                     {categories?.map((category) => (
-                        <div key={category.slug} className="group relative">
+                        <div onClick={() => handleClick(category.slug)} key={category.slug} className="group relative">
                             <div className="relative mt-3 h-80 w-full overflow-hidden rounded-lg bg-white sm:aspect-h-1 sm:aspect-w-2 lg:aspect-h-1 lg:aspect-w-1 group-hover:opacity-75 sm:h-64">
                                 <img
                                     src='https://tailwindui.com/img/ecommerce-images/home-page-02-edition-01.jpg'
