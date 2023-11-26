@@ -1,12 +1,11 @@
-import { useParams } from "react-router-dom"
+import { useLocation, useParams } from "react-router-dom"
 import Filter from "../../component/Filter"
 
 const Products = () => {
-    
-    const {search} = useParams()
-
+    const location = useLocation()
+    console.log(location)
     return(
-        <Filter search = {search} />
+        <Filter search = {location?.state?.search} category = {location?.state?.category} />
     )
 }
 
