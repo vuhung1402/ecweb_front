@@ -10,7 +10,14 @@ const Header = () => {
 
     const handleSearch = () => {
       console.log("Search: ", searchRef.current.value)
-      navigate(`/products/${searchRef.current.value}`)
+      navigate(
+        `/products`, 
+        {
+          state:{
+            search: searchRef.current.value
+          } 
+        }
+      )
     }
 
     const handleClick = () => {
@@ -21,8 +28,15 @@ const Header = () => {
       navigate('/cart')
     }
 
+    const handleBecomeSeller = () => {
+      navigate("./registerSeller")
+    }
+
+    console.log("user dat: ", data);
+
     return(
         <header className="bg-white border-b-2">
+          <div onClick={handleBecomeSeller} className=" p-1 text-blue-500 cursor-pointer underline">Become a seller</div>
           <nav
             className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
             aria-label="Global"
