@@ -1,10 +1,11 @@
+import { endpoint } from "../api"
 import { useUserPackageHook } from "../redux/hooks/userHook"
 
 const DeletePopUp = ({addressId, setDeleteAddress}) => {
     const user = useUserPackageHook()
 
     const handleDelete = () => {
-        fetch(`https://tiny-jade-elk-wear.cyclic.cloud/api/addresses/${addressId}/me`, {
+        fetch(`${endpoint}/addresses/${addressId}/me`, {
             method: "DELETE",
             headers: {
                 'Authorization': `Bearer ${user?.accessToken}`,
