@@ -38,7 +38,7 @@ const Address = () => {
         }).catch((error) => {
             console.error("Error: ", error)
         })
-    },[updateAddress,deleteAddress,addresses])
+    },[updateAddress,deleteAddress, addressPopUp])
 
     return(
         <div className=" p-2 h-screen overflow-y-scroll scrollbar-hide">
