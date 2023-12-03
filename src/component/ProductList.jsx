@@ -2,11 +2,9 @@ import { useEffect, useState } from "react"
 import Loading from "./Loading"
 import { endpoint } from "../api"
 
-const ProductList = ({search, category}) => {
-
+const ProductList = (props) => {
+  const {search, category, shopId} = props 
   const [products, setProducts] = useState()
-
-  console.log(category)
 
   useEffect(() => {
     if(search){
@@ -47,6 +45,25 @@ const ProductList = ({search, category}) => {
       }).catch((error) => {
           console.error("Error: ", error)
       })
+    }else if(shopId){
+      fetch(`${endpoint}/shops/${shopId}/products`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+      }).then((response) => {
+          if(!response.ok){
+              throw new Error("Netword response not ok")
+          }
+          return response.json()
+      }).then((json) => {
+          if(json?.success){
+              setProducts(json?.data?.products)
+              console.log("json: ", json)
+          }
+      }).catch((error) => {
+          console.error("Error: ", error)
+      })
     }else{
       fetch(`${endpoint}/products?limit=8&page=1`, {
         method: "GET",
@@ -69,7 +86,6 @@ const ProductList = ({search, category}) => {
     }
   },[search,category])
 
-  console.log(search)
     const products1 = [
       {
         id: 1,
