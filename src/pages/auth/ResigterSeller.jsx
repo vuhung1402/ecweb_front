@@ -1,47 +1,91 @@
+import { useEffect, useState } from "react"
+import { endpoint } from "../../api"
 import HeaderSeller from "../../component/HeaderSeller"
+import { useUserPackageHook } from "../../redux/hooks/userHook"
+import UpdateAddress from "../../component/UpdateAddress"
+import SuccessAlert from "../../component/SuccesAlert"
+import UnsuccessAlert from "../../component/UnsuccessAlert"
 
 const RegisterSeller = () => {
+    const [addresses, setAddresses] = useState()
+    const [updateAddress, setUpdateAddress] = useState(false)
+    const [successAlert, setSuccessAlert] = useState(false)
+    const [unsuccessAlert, setUnsuccessAlert] = useState(false)
+
+    const data = useUserPackageHook()
+
+    useEffect(() => {
+        fetch(`${endpoint}/users/me/addresses`, {
+            method: "GET",
+            headers: {
+                'Authorization': `Bearer ${data?.accessToken}`,
+                'Content-Type': 'application/json',
+            },
+        }).then((response) => {
+            if(!response.ok){
+                throw new Error("Netword response not ok")
+            }
+            return response.json()
+        }).then((json) => {
+            if(json?.success){
+                setAddresses(json?.data?.addresses)
+                console.log(json)
+            }
+        }).catch((error) => {
+            console.error("Error: ", error)
+        })
+    },[])
+
+    const handleUpdate = () => {
+        setUpdateAddress(!updateAddress)
+    }
+
     return(
         <div>
             <HeaderSeller/>
-            <div class="max-w-sm mx-auto">
+            {updateAddress && <UpdateAddress address = {addresses[0]} setSuccessAlert = {setSuccessAlert} setUnsuccessAlert = {setUnsuccessAlert} setUpdateAddress = {setUpdateAddress} />}
+            { successAlert && <SuccessAlert/>}
+            { unsuccessAlert && <UnsuccessAlert/>}
+            <div class="max-w-sm mx-auto mt-2">
                 <div>
-                    <div className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Infor shop</div>
+                    <div className="block mb-2 text-xl font-medium text-gray-900 dark:text-white">Infor shop</div>
                     <div class="mb-2">
-                        <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="name@flowbite.com" required/>
+                        <input type="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Tên cửa hàng" required/>
                     </div>
                     <div class="mb-2">
-                        <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
-                    </div>
-                    <div class="mb-2">
-                        <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
+                        <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Tổng quan về cửa hàng" required/>
                     </div>
                 </div>
                 
-                <div>
-                    <div className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Shop Address</div>
-                    <div class="mb-2">
-                        <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
-                    </div>
-                    <div class="mb-2">
-                        <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
-                    </div>
-                    <div class="mb-2">
-                        <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
-                    </div>
-                    <div class="mb-2">
-                        <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
-                    </div>
-                    <div class="mb-2">
-                        <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
-                    </div>
-                    <div class="mb-2">
-                        <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required/>
-                    </div>
+                <div className="mt-5">
+                    <div className="block mb-2 text-xl font-medium text-gray-900 dark:text-white">Shop Address</div>
+                    
+                    { addresses &&
 
+                        (
+                            <div className=" border-t-2">
+                                <div className="flex items-center justify-between border-b-2">
+                                    <div>
+                                        <div className="p-1">{addresses[0]?.name}</div>
+                                        <div className="p-1">{addresses[0]?.phone}</div>
+                                        <div className="p-1">{addresses[0]?.ward}, {addresses[0]?.district}, {addresses[0]?.city}</div>
+                                        <div className="p-1">{addresses[0]?.detail}</div>
+                                    </div>
+                                    <div className=" text-center">
+                                        <button onClick={handleUpdate} class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                                            Cập nhật
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    
+                    }
                 </div>
                 
-                <button type="submit" class="text-white float-right bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
+                <div className="">
+                    <button type="submit" className="text-white mt-4 w-full bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm sm:w-full px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Đăng ký</button>
+                </div>
             </div>
 
             
