@@ -32,7 +32,10 @@ const Header = () => {
 
     return(
         <header className="bg-white border-b-2">
-          <a href="/shopPage" className=" p-1 text-blue-500 cursor-pointer underline">Become a seller</a>
+          {data?.user?.isSeller ? 
+            <a href="/shopPage" className=" p-1 text-blue-500 cursor-pointer underline">Kênh người bán</a> : 
+            <a href="/registerSeller" className=" p-1 text-blue-500 cursor-pointer underline">Đăng ký bán hàng</a>
+          }
           <nav
             className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
             aria-label="Global"
