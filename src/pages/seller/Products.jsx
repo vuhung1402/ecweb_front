@@ -1,8 +1,11 @@
+import { useState } from "react"
 import AllProduct from "./AllProduct"
+import AddProduct from "./AddProduct"
 
 
 const ProductListSeller = () => {
 
+    const [nav, setNav] = useState(1)
 
     return(
         <div>
@@ -11,16 +14,17 @@ const ProductListSeller = () => {
                     <div class="flex items-center w-full">
                         <ul class="flex flex-row w-full justify-evenly font-medium mt-0 space-x-8 rtl:space-x-reverse text-sm">
                             <li>
-                                <a href="#" class="text-gray-900 dark:text-white hover:underline" aria-current="page">Products</a>
+                                <div onClick={() => setNav(1)} class={`text-gray-900 dark:text-white hover:underline cursor-pointer ${nav === 1 && "underline"} `} aria-current="page">Products</div>
                             </li>
                             <li>
-                                <a href="#" class="text-gray-900 dark:text-white hover:underline">Add Produts</a>
+                                <div onClick={() => setNav(2)} class={`text-gray-900 dark:text-white hover:underline cursor-pointer ${nav === 2 && "underline"}`}>Add Produts</div>
                             </li>
                         </ul>
                     </div>
                 </div>
             </nav>
-            <AllProduct/>
+            {nav === 1 && <AllProduct/>}
+            {nav === 2 && <AddProduct/>}
         </div>
     )
 }

@@ -36,6 +36,12 @@ const Header = () => {
             <a href="/shopPage" className=" p-1 text-blue-500 cursor-pointer underline">Kênh người bán</a> : 
             <a href="/registerSeller" className=" p-1 text-blue-500 cursor-pointer underline">Đăng ký bán hàng</a>
           }
+
+          {
+            data?.user?.isAdmin &&
+            <a href="/admin" className=" p-1 text-blue-500 cursor-pointer underline">Admin</a>
+          }
+
           <nav
             className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
             aria-label="Global"
