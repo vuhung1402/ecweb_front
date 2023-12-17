@@ -71,6 +71,11 @@ const AppRoutes = [
         path: '/shopPage',
         Component: Page?.ShopPage,
         defaultLayout: false,
+    },
+    {
+        path: '/admin',
+        Component: Page?.HomePageAdmin,
+        defaultLayout: false,
     }
 ]
 
