@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react"
 import { endpoint } from "../../api"
 
-const InforProduct = () => {
+const InforProduct = ({setBody}) => {
 
     const [categories, setCategories] = useState()
     const [mainCategorieSlug, setMainCategorieSlug] = useState("")
     const [subCategorieSlug, setSubCategorieSlug] = useState()
     const [variations, setVariations] = useState([{name: "", price: "", stock: ""}])
+    const [packageSize, setPackageSize] = useState({})
 
     useEffect(() => {
         fetch(`${endpoint}/categories`, {
@@ -38,26 +39,33 @@ const InforProduct = () => {
         const onChangeVal = [...variations]
         onChangeVal[i][name] = value
         setVariations(onChangeVal)
+        setBody(prev => ({...prev, variations: [...variations]}))
     }
 
     const handleDelete = (i) => {
         const deleteVariation = [...variations]
         deleteVariation.splice(i,1)
         setVariations(deleteVariation)
+        setBody(prev => ({...prev, variations: [...variations]}))
     }
 
     return(
         <div className="mt-8">
             <div className="flex items-center px-2 mb-4">
                 <div for="first_name" className="block mb-2 mr-9 text-sm font-medium text-gray-900 dark:text-white">Tên sản phẩm</div>
-                <input type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block flex-1 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="John" required/>
+                <input onChange={(e) => setBody(prev => ({...prev, name: e.target.value}))} type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block flex-1 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required/>
+            </div>
+
+            <div className="flex items-center px-2 mb-4">
+                <div for="first_name" className="block mb-2 mr-9 text-sm font-medium text-gray-900 dark:text-white">Thương hiệu</div>
+                <input onChange={(e) => setBody(prev => ({...prev, brand: e.target.value}))} type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block flex-1 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" required/>
             </div>
 
             <div className="flex items-center px-2 mb-4">
                 <div for="first_name" className="block mb-2 mr-5 text-sm font-medium text-gray-900 dark:text-white">Mô tả sản phẩm</div>
                 {/* <input type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block flex-1 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="John" required/> */}
 
-                <textarea className="bg-gray-50 border h-[100px] border-gray-300 text-gray-900 text-sm rounded-lg block flex-1 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="John" required></textarea>
+                <textarea onChange={(e) => setBody(prev => ({...prev, description: e.target.value}))} className="bg-gray-50 border h-[100px] border-gray-300 text-gray-900 text-sm rounded-lg block flex-1 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="John" required></textarea>
             </div>
             
             <div className="flex items-center px-2 mb-4">
@@ -75,7 +83,8 @@ const InforProduct = () => {
 
             <div className="flex items-center px-2 mb-4">
                 <div for="countries" class="block mb-2 mr-2 text-sm font-medium text-gray-900 dark:text-white">Nghành hàng phụ</div>
-                <select onChange={(e) => setSubCategorieSlug(e.target.value)} id="countries" class="bg-gray-50 border flex-1 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <select onChange={(e) => setBody(prev => ({...prev, category: {categorySlug: mainCategorieSlug, subCategorySlug: e.target.value}}))} 
+                        id="countries" class="bg-gray-50 border flex-1 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     {
                         mainCategorieSlug &&
                         categories[categories?.findIndex((categorie) => categorie?.slug === mainCategorieSlug)]?.subCategories?.map((subCategorie) =>{
@@ -125,15 +134,15 @@ const InforProduct = () => {
             
             <div className="flex items-center px-2 mb-4">
                 <div for="first_name" className="block mb-2 mr-6 text-sm font-medium text-gray-900 dark:text-white">Cân nặng khi đóng gói</div>
-                <input type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block flex-1 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="" required/>
+                <input onChange={(e) => setBody(prev => ({...prev, weight: e.target.value}))} type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block flex-1 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="" required/>
             </div>
 
             <div className="flex items-center px-2 mb-4">
                 <div for="first_name" className="block mb-2 mr-9 text-sm font-medium text-gray-900 dark:text-white">Kích thước đóng gói</div>
                 <div className="flex">
-                    <input type="text" id="first_name" class="bg-gray-50 border mr-3 border-gray-300 text-gray-900 text-sm rounded-lg block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Rộng" required/>
-                    <input type="text" id="first_name" class="bg-gray-50 border mr-3 border-gray-300 text-gray-900 text-sm rounded-lg block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Dài" required/>
-                    <input type="text" id="first_name" class="bg-gray-50 border mr-3 border-gray-300 text-gray-900 text-sm rounded-lg block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Cao" required/>
+                    <input onChange={(e) => setPackageSize(prev => ({...prev, width: e.target.value}))} type="text" id="first_name" class="bg-gray-50 border mr-3 border-gray-300 text-gray-900 text-sm rounded-lg block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Rộng" required/>
+                    <input onChange={(e) => setPackageSize(prev => ({...prev, length: e.target.value}))} type="text" id="first_name" class="bg-gray-50 border mr-3 border-gray-300 text-gray-900 text-sm rounded-lg block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Dài" required/>
+                    <input onChange={(e) => setBody(prev => ({...prev, packageSize: {...packageSize, height: e.target.value}}))} type="text" id="first_name" class="bg-gray-50 border mr-3 border-gray-300 text-gray-900 text-sm rounded-lg block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Cao" required/>
                 </div>
             </div>
         </div>
