@@ -3,10 +3,13 @@ import Loading from "../../component/Loading"
 import { useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { endpoint } from "../../api"
+import UpdateProduct from "./UpdateProduct"
 
 const AllProduct = () => {
     const [data, setData] = useState()
     const user = useUserPackageHook()
+    const [update, setUpdate] = useState(false)
+    const [index, setIndex] = useState()
 
     useEffect(() => {
         fetch(`${endpoint}/shops/me/products`, {
@@ -28,7 +31,12 @@ const AllProduct = () => {
         }).catch((error) => {
             console.error("Error: ", error)
         })
-    },[])
+    },[update])
+
+    const handleClick = (index) => {
+        setIndex(index)
+        setUpdate(!update)
+    }
 
 
     return(
@@ -37,19 +45,22 @@ const AllProduct = () => {
                 { !data && <Loading/>}
                 {data?.products?.length === 0 && <div className=" font-semibold">Hiện tại chưa có sản phẩm nào ở trong cửa hàng</div>}
         
-                <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-                    {data?.products?.map((product) => (
-                    <a key={product.slug} href={`/productDetail/${product.slug}`} className="group">
-                        <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
-                        <img
-                            src={"https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg"}
-                            // alt={product.imageAlt}
-                            className="h-full w-full object-cover object-center group-hover:opacity-75"
-                        />
-                        </div>
-                        <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
-                        {/* <p className="mt-1 text-lg font-medium text-gray-900">{product.price}</p> */}
-                    </a>
+                <div className={update === true ?"" : "grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8"}>
+                    {data?.products?.map((product, index) => (
+                        <>
+                            {update === false && <div onClick={() => handleClick(index)} className="group cursor-pointer">
+                                <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
+                                <img
+                                    src={"https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg"}
+                                    // alt={product.imageAlt}
+                                    className="h-full w-full object-cover object-center group-hover:opacity-75"
+                                />
+                                </div>
+                                <h3 className="mt-4 text-sm text-gray-700">{product.name}</h3>
+                                {/* <p className="mt-1 text-lg font-medium text-gray-900">{product.price}</p> */}
+                            </div>}
+                            {update && <UpdateProduct setUpdate={setUpdate} slug={product}/>}
+                        </>    
                     ))}
                 </div>
             </div>
