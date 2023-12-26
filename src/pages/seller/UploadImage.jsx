@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-const UploadImage = () => {
+const UploadImage = ({setBody, setImages}) => {
 
     const [files, setFile] = useState([])
     const [message, setMessage] = useState()
@@ -14,6 +14,8 @@ const UploadImage = () => {
             const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
             if (validImageTypes.includes(fileType)) {
                 setFile([...files, file[i]]);
+                setBody(prev => ({...prev, 
+                    images: [file[i]?.name]}))
             } else {
                 setMessage("only images accepted");
             }
@@ -23,6 +25,8 @@ const UploadImage = () => {
 
     const removeImage = (i) => {
         setFile(files.filter(x => x.name !== i));
+        setBody(prev => ({...prev, 
+            images: files}))
      }
 
 
