@@ -18,17 +18,37 @@ const Footer = () => {
               <div className="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
                 <div>
                   <h2 className="mb-6 text-sm font-semibold text-gray-900 uppercase dark:text-white">
-                    Resources
+                    Hỗ trợ
                   </h2>
                   <ul className="text-gray-500 dark:text-gray-400 font-medium">
-                    <li className="mb-4">
+                    <li className="mb-2">
                       <a href="https://flowbite.com/" className="hover:underline">
-                        Flowbite
+                        Chính sách đổi trả
                       </a>
                     </li>
-                    <li>
+                    <li className="mb-2">
                       <a href="https://tailwindcss.com/" className="hover:underline">
-                        Tailwind CSS
+                        Chính sách bảo mật
+                      </a>
+                    </li>
+                    <li className="mb-2">
+                      <a href="https://tailwindcss.com/" className="hover:underline">
+                        Chính sách giao hàng
+                      </a>
+                    </li>
+                    <li className="mb-2">
+                      <a href="https://tailwindcss.com/" className="hover:underline">
+                        Chính sách thanh toán
+                      </a>
+                    </li>
+                    <li className="mb-2">
+                      <a href="https://tailwindcss.com/" className="hover:underline">
+                        Hướng dẫn mua hàng
+                      </a>
+                    </li>
+                    <li className="mb-2">
+                      <a href="https://tailwindcss.com/" className="hover:underline">
+                        Cửa hàng
                       </a>
                     </li>
                   </ul>
