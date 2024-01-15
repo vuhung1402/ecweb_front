@@ -1,0 +1,90 @@
+html,body{
+    height: 100%;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+ul {
+    list-style: none;
+}
+
+body {
+    font-size: 1rem;
+    line-height: 1.6;
+    background-color: #ffffff;
+}
+
+// nav style
+
+header{
+    height: 80px;
+    z-index: 9999999;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0.5px solid rgb(157, 155, 155);
+    padding: 2rem;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.menu {
+    // background: #222;
+}
+
+.menu ul {
+    all: unset;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    background: #ffffff;
+}
+.menu ul li {
+    position: relative;
+}
+.menu ul li a {
+    display: block;
+    padding: 10px;
+}
+
+/* Style the submenus */
+.menu ul li ul {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+}
+
+.menu ul ul li {
+    width: max-content;
+    min-width: 100%;
+    max-width: 200px;
+    border-bottom: 0.5px solid rgb(157, 155, 155);
+}
+
+.menu ul a {
+    all: unset;
+    // color: #fff;
+    cursor: pointer;
+}
+.menu ul a:hover {
+    color: rgb(0, 4, 255);
+}
+
+.menu ul li:hover > ul {
+    display: flex; /* Show submenus on hover */
+}
+
+/* Style the third-level submenu */
+.menu ul ul ul {
+    top: 0;
+    left: 100%;
+    z-index: 999999999999999;
+}
+
