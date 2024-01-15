@@ -1,10 +1,24 @@
 import { useEffect, useState } from "react"
 import Loading from "./Loading"
 import { endpoint } from "../api"
+import CardProduct from "./CardProduct/CardProduct"
 
 const ProductList = (props) => {
   const {search, category, shopId} = props 
   const [products, setProducts] = useState()
+  const [img, setImg] = useState('https://firebasestorage.googleapis.com/v0/b/imgaeproject.appspot.com/o/Shirt%2Faothun_coton_olive.jpg?alt=media&token=0c83e73d-eff4-4b66-a4a3-272ad1d05c66')
+  const VND = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  })
+
+  const onMouseEnter = () => {
+    setImg("https://i.imgur.com/bSbiTHO.jpeg")
+  }
+
+  const onMouseLeave = () => {
+    setImg("https://firebasestorage.googleapis.com/v0/b/imgaeproject.appspot.com/o/Shirt%2Faothun_coton_olive.jpg?alt=media&token=0c83e73d-eff4-4b66-a4a3-272ad1d05c66")
+  }
 
   useEffect(() => {
     if(search){
@@ -125,10 +139,15 @@ const ProductList = (props) => {
     return (
       <div className="bg-white">
         <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Product</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Sản phẩm</h2>
           { !products && <Loading/>}
+
+          <div className=" grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+            <CardProduct/>
+            <CardProduct/>
+          </div>
   
-          <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
+          {/* <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
             {products?.map((product) => (
               <a key={product.slug} href={`/productDetail/${product.slug}`} className="group">
                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg bg-gray-200 xl:aspect-h-8 xl:aspect-w-7">
@@ -142,7 +161,8 @@ const ProductList = (props) => {
                 <p className="mt-1 text-lg font-medium text-gray-900">{product.price}</p>
               </a>
             ))}
-          </div>
+          </div> */}
+
         </div>
       </div>
   
