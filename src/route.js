@@ -9,12 +9,12 @@ const AppRoutes = [
     {
         path: '/login',
         Component: Page?.LoginPage,
-        defaultLayout: false,
+        defaultLayout: true,
     },
     {
-        path: '/sign-up',
+        path: '/register',
         Component: Page?.SignUpPage,
-        defaultLayout: false,
+        defaultLayout: true,
     },
     {
         path: '/products',
@@ -27,22 +27,22 @@ const AppRoutes = [
         defaultLayout: true,
     },
     {
-        path: '/resetPass/:resetCode',
+        path: '/resetPass/:id/resetPass/:token',
         Component: Page?.ResetPass,
-        defaultLayout: false,
+        defaultLayout: true,
     },
     {
         path: '/forgotPass',
         Component: Page?.ForgotPass,
-        defaultLayout: false,
+        defaultLayout: true,
     },
     {
-        path: '/verifyEmail/:code',
+        path: '/verify/:id/verify/:token',
         Component: Page?.VerifyEmailPage,
         defaultLayout: false,
     },
     {
-        path: '/profile',
+        path: '/account',
         Component: Page?.ProfilePage,
         defaultLayout: true,
     },
@@ -76,7 +76,18 @@ const AppRoutes = [
         path: '/admin',
         Component: Page?.HomePageAdmin,
         defaultLayout: false,
-    }
+    },
+    {
+        path: '/updateProductSeller',
+        Component: Page?.UpdateProductSeller,
+        defaultLayout: false,
+    },
+    {
+        path: '/address',
+        Component: Page?.AddressPage,
+        defaultLayout: true,
+    },
+
 ]
 
 export default AppRoutes
