@@ -1,14 +1,37 @@
 import { useRef, useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
 import './style.scss'
 import SearchBox from "../../component/SearchBox/SearchBox"
 import CartPopUp from "../../component/CartPopUp/CartPopUp"
+import { clear } from "../../redux/actions"
 
 const Header = () => {
+  const user = useUserPackageHook()
   const [searchBox, setSearchBox] = useState(false)
   const [account, setAccount] = useState(false)
   const [cartPopUp, setCartPopUp] = useState(false)
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const handleAccount = () => {
+    if(user?.data){
+      setAccount(!account)
+      setSearchBox(false)
+      setCartPopUp(false)
+    }else{
+      navigate('/login')
+    }
+  }
+
+  const handleLogOut = () => {
+    dispatch(clear())
+    setAccount(!account)
+    navigate('/')
+}
+
 
     return(
         <header>
@@ -75,11 +98,7 @@ const Header = () => {
               }
             </div>
             <div className=" cursor-pointer relative">
-              <div onClick={() => {
-                setAccount(!account)
-                setSearchBox(false)
-                setCartPopUp(false)
-              }}>
+              <div onClick={() => handleAccount()}>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                 </svg>
@@ -89,8 +108,11 @@ const Header = () => {
                 (
                   <div className=" absolute right-1 top-10 w-[220px] bg-white rounded border p-2">
                     <div className=" uppercase text-center font-semibold p-2 border-b-[1px]">Thông tin tài khoản</div>
-                    <div className=" hover:text-blue-300 cursor-pointer">Tài khoản của tôi</div>
-                    <div className="hover:text-blue-300 cursor-pointer">Đăng xuất</div>
+                    <div onClick={() => {
+                      navigate("/account")
+                      setAccount(!account)
+                    }} className=" hover:text-blue-300 cursor-pointer">Tài khoản của tôi</div>
+                    <div onClick={handleLogOut} className="hover:text-blue-300 cursor-pointer">Đăng xuất</div>
                   </div>
                 )
               }
