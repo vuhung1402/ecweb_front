@@ -6,29 +6,25 @@ import { userPackage } from "../../redux/actions"
 import { endpoint } from "../../api"
 
 const Login = () => {
-    // const user = useUserPackageHook()
+    const user = useUserPackageHook()
     // console.log(user)
-    const[check, setCheck] = useState(false)
 
-    const navigate = useNavigate()
-
-
-    const emailRef = useRef(null);
-    const passwordRef = useRef(null);
+    const[loginInfor, setLoginInfor] = useState(
+        {
+            email: "",
+            password: ""
+        }
+    )
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
+    const [notify, setNotify] = useState()
     const handleLogin = async () =>{
-        console.log("email: ", emailRef.current.value)
-        console.log("pass: ", passwordRef.current.value)
-        const body = {
-            email: emailRef.current.value,
-            password: passwordRef.current.value
-        }
 
-        await fetch(`${endpoint}/auth/login`, {
+        await fetch(`${endpoint}/auth/`, {
             method: "POST",
-            body: JSON.stringify(body),
+            body: JSON.stringify(loginInfor),
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -40,124 +36,41 @@ const Login = () => {
         }).then((json) => {
             // setResponse(json)
             if(json?.success){
-                dispatch(userPackage(json?.data))
+                dispatch(userPackage(json))
                 navigate('/')
+            }else{
+                setNotify(json)
             }
         }).catch((error) => {
-            setCheck(true)
             console.error("Error: ", error)
         })
     }
 
     return(
-        <div className="bg-gray-50 dark:bg-gray-900">
-            <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-                <a
-                    href="/"
-                    className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
-                >
-                    <img
-                        className="w-8 h-8 mr-2"
-                        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
-                        alt="logo"
-                    />
-                    Flowbite
-                </a>
-                <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
-                <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                    <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                        Sign in to your account
-                    </h1>
-                    <div className="space-y-4 md:space-y-6">
-                    <div>
-                        <label
-                            htmlFor="email"
-                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        >
-                            Your email
-                        </label>
-                        <input
-                            ref={emailRef}
-                            type="email"
-                            name="email"
-                            id="email"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="name@company.com"
-                            required=""
-                        />
+        <div className="flex">
+            <div className=" w-1/2 border-r-[1px] flex justify-center items-center font-semibold text-5xl">
+                Đăng nhập
+            </div>
+
+            <div className=" w-1/2 p-[100px]">
+                <input placeholder="Email" className=" w-full outline-none border p-3 mb-4" value={loginInfor.email} onChange={e => setLoginInfor({...loginInfor, email:e.target.value})}/>
+
+                <input placeholder="Mật khẩu" type="password" className=" w-full outline-none border p-3" value={loginInfor.password} onChange={e => setLoginInfor({...loginInfor, password: e.target.value})}/>
+
+                {
+                    notify && 
+                    (
+                        <p className={`${notify?.color}`}>{notify?.message}</p>
+                    )
+                }
+
+
+                <div className=" mt-5 flex items-center"> 
+                    <button onClick={handleLogin} type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xl px-5 py-5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Đăng nhập</button>
+                    <div className=" ml-2">
+                        <div className=" hover:text-blue-500 cursor-pointer"><a href="/forgotPass">Quên mật khẩu?</a></div>
+                        <div className=" hover:text-blue-500 cursor-pointer"><a href="/register" >Đăng ký</a></div>
                     </div>
-                    <div>
-                        <label
-                            htmlFor="password"
-                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        >
-                            Password
-                        </label>
-                        <input
-                            ref={passwordRef}
-                            type="password"
-                            name="password"
-                            id="password"
-                            placeholder="••••••••"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            required=""
-                        />
-                    </div>
-                    {
-                        check &&
-                        (
-                            <div className="mt-1 text-pink-600 text-sm">
-                                Check your email and password again
-                            </div>
-                        )
-                    }
-                    <button onClick={handleLogin} type="button" className=" w-full text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        Login
-                    </button>
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-start">
-                        <div className="flex items-center h-5">
-                            <input
-                            id="remember"
-                            aria-describedby="remember"
-                            type="checkbox"
-                            className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                            required=""
-                            />
-                        </div>
-                        <div className="ml-3 text-sm">
-                            <label
-                                htmlFor="remember"
-                                className="text-gray-500 dark:text-gray-300"
-                            >
-                                Remember me
-                            </label>
-                        </div>
-                        </div>
-                        <a
-                            href="/forgotPass"
-                            className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
-                        >
-                            Forgot password?
-                        </a>
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                    >
-                        Sign in
-                    </button>
-                    <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                        Don’t have an account yet?{" "}
-                        <a
-                            href="/sign-up"
-                            className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-                        >
-                            Sign up
-                        </a>
-                    </p>
-                    </div>
-                </div>
                 </div>
             </div>
         </div>
