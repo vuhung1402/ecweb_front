@@ -18,7 +18,7 @@ const CardProduct = () => {
     
     return(
         <div className=" p-2">
-            <img onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} className="h-[250px] w-[250px] cursor-pointer" src={img}/>
+            <img onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} className=" h-[248px] w-[250px] cursor-pointer" src={img}/>
             <div>FEARLESS corduroy daily cap</div>
             <div className=" font-semibold">{VND.format(375000)}</div>
             <div className="mt-1">
