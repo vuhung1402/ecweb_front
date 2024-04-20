@@ -1,4 +1,4 @@
-export const endpoint = "https://ecwebsite.onrender.com/api"
+export const endpoint = "https://ecweb-backend.onrender.com/api/v1"
 
 export const status = {
     "to-pay": "Chờ thanh toán",
