@@ -2,88 +2,49 @@ import { useState } from "react"
 import { useUserPackageHook } from "../redux/hooks/userHook"
 import { endpoint } from "../api"
 
-const UpdateAddress = ({address,setSuccessAlert,setUnsuccessAlert,setUpdateAddress}) => {
-
-    const user = useUserPackageHook()
-    const [name, setName] = useState(address?.name)
-    const [phone, setPhone] = useState(address?.phone)
-    const [city, setCity] = useState(address?.city)
-    const [district, setDistrict] = useState(address?.district)
-    const [ward, setWard] = useState(address?.ward)
-    const [detail, setDetail] = useState(address?.detail)
-
-    const handleUpdateAddress = () => {
-        const body = {
-            name: name,
-            phone: phone,
-            city: city,
-            district: district,
-            ward: ward,
-            detail: detail
-        }
-
-        fetch(`${endpoint}/addresses/${address?._id}/me`, {
-            method: "PUT",
-            body: JSON.stringify(body),
-            headers: {
-                'Authorization': `Bearer ${user?.accessToken}`,
-                'Content-Type': 'application/json',
-            },
-        }).then((response) => {
-            if(!response.ok){
-                throw new Error("Netword response not ok")
-            }
-            return response.json()
-        }).then((json) => {
-            if(json?.success){
-                console.log("json: ", json)
-                setUpdateAddress(false)
-                setSuccessAlert(true)
-                setTimeout(() => {
-                    setSuccessAlert(false)
-                },3000)
-            }
-        }).catch((error) => {
-            setUnsuccessAlert(true)
-            setTimeout(() => {
-                setUnsuccessAlert(false)
-            },3000)
-            console.error("Error: ", error)
-        })
-    }
+const UpdateAddress = ({inforAdress, handleUpdateInfor, handleSaveAddress}) => {
+    
 
     return(
-        <div className="bg-[rgba(184,184,184,0.35)] bg-opacity-90 fixed w-screen h-screen top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-            <div className="h-[500px] w-[400px] px-2 bg-white">
-                <div onClick={() => setUpdateAddress(false)}  className="flex flex-row-reverse cursor-pointer mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </div>
-                <div className=" text-2xl font-bold w-full">
-                    Địa chỉ
-                </div>
-                <div class="my-3">
-                    <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Họ và tên" id="default-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                </div>
-                <div class="my-3">
-                    <input value={phone} onChange={(e) => setPhone(e.target.value)} type="text" placeholder="Số điện thoại" id="default-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                </div>
-                <div class="my-3">
-                    <input value={city} onChange={(e) => setCity(e.target.value)} type="text" placeholder="Thành Phố" id="default-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                </div>
-                <div class="my-3">
-                    <input value={district} onChange={(e) => setDistrict(e.target.value)} type="text" placeholder="Quận/Huyện" id="default-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                </div>
-                <div class="my-3">
-                    <input value={ward} onChange={(e) => setWard(e.target.value)} type="text" placeholder="Phường/Xã" id="default-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                </div>
-                <div class="my-3">
-                    <input value={detail} onChange={(e) => setDetail(e.target.value)} type="text" placeholder="Địa chỉ cụ thể" id="default-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                </div>
-                <button onClick={handleUpdateAddress} className="text-white float-right bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                    Update
+         <div className="p-3 flex flex-col gap-3 bg-[#fafafa]">
+            <input 
+                onChange={(e) => handleUpdateInfor(e, "name")}
+                value={inforAdress?.name} 
+                className="p-3 text-sm outline-none" 
+                placeholder="Họ và tên"
+            />
+
+            <input 
+                onChange={(e) => handleUpdateInfor(e, "street")}
+                value={inforAdress?.street} 
+                className="p-3 text-sm outline-none" 
+                placeholder="tên đường, số nhà, phường/xã, quận/huyện, thành phố/tỉnh"
+            />
+
+            <input 
+                onChange={(e) => handleUpdateInfor(e, "number")}
+                value={inforAdress?.number} 
+                className="p-3 text-sm outline-none" 
+                placeholder="Số điện thoại"
+            />
+
+            <div class="flex items-center mb-4">
+                <input 
+                    onChange={(e) => handleUpdateInfor(e, "isDefault")}
+                    checked= {inforAdress?.isDefault} id="default-checkbox" 
+                    type="checkbox" value="" 
+                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 outline-none"
+                />
+                <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Đặt làm địa chỉ mặc định</label>
+            </div>
+
+            <div className=" mt-5 flex items-center"> 
+                <button onClick={handleSaveAddress} type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xl px-5 py-3 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                    Cập nhật
                 </button>
+                <div className=" ml-2">
+                    <div className=" cursor-pointer mr-2">hoặc  <a className="hover:text-blue-500" href="/forgotPass">Huỷ</a></div>
+                </div>
             </div>
         </div>
     )
