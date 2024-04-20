@@ -1,31 +1,54 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useUserPackageHook } from "../redux/hooks/userHook"
 import { endpoint } from "../api"
+import UpdateAddress from "./UpdateAddress";
 
-const AddressInfor = ({setAddressPopUp}) => {
-    const user = useUserPackageHook()
-    const [name, setName] = useState()
-    const [phone, setPhone] = useState()
-    const [city, setCity] = useState()
-    const [district, setDistrict] = useState()
-    const [ward, setWard] = useState()
-    const [detail, setDetail] = useState()
-
-    const handleAddAddress = () => {
-        const body = {
-            name: name,
-            phone: phone,
-            city: city,
-            district: district,
-            ward: ward,
-            detail: detail
+const AddressInfor = ({address}) => {
+    const user = useUserPackageHook();
+    const [state, setState] = useState({
+        updateAddress: false,
+        inforAdress: {
+            name: "",
+            street: "",
+            number: "",
+            isDefault: false
         }
+    })
 
-        fetch(`${endpoint}/users/me/addresses`, {
+    useEffect(() => {
+        if(address){
+            state.inforAdress.name = address?.name;
+            state.inforAdress.street = address?.street;
+            state.inforAdress.number = address?.number;
+            state.inforAdress.isDefault = address?.isDefault;
+        }
+    },[address])
+
+    const handleUpdateInfor = (e, key) => {
+        state.inforAdress[key] = key === "isDefault" ? e.target.checked : e.target.value;
+        setState(prev => ({...prev}));
+    }
+
+    const handleSaveAddress = () => {
+        console.log(state.inforAdress);
+    }
+
+    const handleUpdate = () => {
+        if(state.updateAddress){
+            state.inforAdress.name = address?.name;
+            state.inforAdress.street = address?.street;
+            state.inforAdress.number = address?.number;
+            state.inforAdress.isDefault = address?.isDefault;
+        }
+        state.updateAddress = !state.updateAddress;
+        setState(prev => ({...prev}));
+    }
+
+
+    const handleDelete = () => {
+        fetch(`${endpoint}/users/delete_address/${user?.data}/${address?._id}/`, {
             method: "POST",
-            body: JSON.stringify(body),
             headers: {
-                'Authorization': `Bearer ${user?.accessToken}`,
                 'Content-Type': 'application/json',
             },
         }).then((response) => {
@@ -35,48 +58,67 @@ const AddressInfor = ({setAddressPopUp}) => {
             return response.json()
         }).then((json) => {
             if(json?.success){
-                console.log("json: ", json)
-                setAddressPopUp(false)
+
+                window.location.reload()
             }
+            
         }).catch((error) => {
             console.error("Error: ", error)
         })
     }
 
+    // onClick={() => setUpdateAddress(!updateAddress)}
     return(
-        <div className="bg-[rgba(184,184,184,0.35)] bg-opacity-90 fixed w-screen h-screen top-0 left-0 right-0 bottom-0 flex items-center justify-center">
-            <div className="h-[500px] w-[400px] px-2 bg-white">
-                <div onClick={() => setAddressPopUp(false)} className="flex flex-row-reverse cursor-pointer mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
+        <div className=" w-full">
+            <div className="bg-[#d9edf7] flex p-3 items-center justify-between">
+                <div className="flex items-center gap-1">
+                    <p className=" font-semibold">{address?.name}</p>
+                    <span>{address?.isDefault ? "(Địa chỉ mặc định)" : ""}</span>
                 </div>
-                <div className=" text-2xl font-bold w-full">
-                    Địa chỉ
+                <div className=" flex gap-2">
+
+                    {/* update */}
+                    <div onClick={handleUpdate}  className=" cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                        </svg>
+                    </div>
+
+                    {/* // delete */}
+                    <div onClick={handleDelete} className=" cursor-pointer">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                    </div>
+
+
                 </div>
-                <div class="my-3">
-                    <input onChange={(e) => setName(e.target.value)} type="text" placeholder="Họ và tên" id="default-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                </div>
-                <div class="my-3">
-                    <input onChange={(e) => setPhone(e.target.value)} type="text" placeholder="Số điện thoại" id="default-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                </div>
-                <div class="my-3">
-                    <input onChange={(e) => setCity(e.target.value)} type="text" placeholder="Thành Phố" id="default-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                </div>
-                <div class="my-3">
-                    <input onChange={(e) => setDistrict(e.target.value)} type="text" placeholder="Quận/Huyện" id="default-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                </div>
-                <div class="my-3">
-                    <input onChange={(e) => setWard(e.target.value)} type="text" placeholder="Phường/Xã" id="default-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                </div>
-                <div class="my-3">
-                    <input onChange={(e) => setDetail(e.target.value)} type="text" placeholder="Địa chỉ cụ thể" id="default-input" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"/>
-                </div>
-                <button onClick={handleAddAddress} className="text-white float-right bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-                    Add address
-                </button>
             </div>
+
+            {/* {updateAddress ? <UpdateAddress/> : <AddressInfor/>} */}
+            {
+                state.updateAddress ? 
+
+                <UpdateAddress address = {address} inforAdress = {state.inforAdress} handleUpdateInfor = {handleUpdateInfor} handleSaveAddress={handleSaveAddress} /> :
+
+                (
+                    <div className=" p-3 flex flex-col gap-3 bg-[#fafafa]">
+                        <h1>{address?.name}</h1>
+                        <div className=" flex items-start">
+                            <p className=" w-[40%]">Địa chỉ:</p>
+                            <p className=" w-[60%] flex  flex-grow justify-start ">{address?.street}</p>
+                        </div>
+                        <div className=" flex items-start">
+                            <p className=" w-[40%]">Số điện thoại:</p>
+                            <p className=" w-[60%] flex justify-start flex-grow">{address?.number}</p>
+                        </div>
+                    </div>
+                )
+            }
+
+
         </div>
+        
     )
 }
 
