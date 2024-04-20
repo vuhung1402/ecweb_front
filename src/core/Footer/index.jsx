@@ -1,6 +1,14 @@
 const Footer = () => {
     return(
         <div className="bg-white dark:bg-gray-900 border-t-2">
+          <div className="flex items-center gap-4 border-b-[1px] p-2 bg-[#f3f3f3]">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 9v.906a2.25 2.25 0 0 1-1.183 1.981l-6.478 3.488M2.25 9v.906a2.25 2.25 0 0 0 1.183 1.981l6.478 3.488m8.839 2.51-4.66-2.51m0 0-1.023-.55a2.25 2.25 0 0 0-2.134 0l-1.022.55m0 0-4.661 2.51m16.5 1.615a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V8.844a2.25 2.25 0 0 1 1.183-1.981l7.5-4.039a2.25 2.25 0 0 1 2.134 0l7.5 4.039a2.25 2.25 0 0 1 1.183 1.98V19.5Z" />
+            </svg>
+            <div>Đăng ký nhận tin</div>
+            <input placeholder="Email" className="  outline-none border px-3 py-2 bg-[#f3f3f3]"/>
+            <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-3 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Đăng ký</button>
+          </div>
           <div className="mx-auto w-full max-w-screen-xl p-4 py-6 lg:py-8">
             <div className="md:flex md:justify-between">
               <div className="mb-6 md:mb-0">
