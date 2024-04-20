@@ -5,6 +5,12 @@ import { useNavigate } from "react-router-dom"
 
 const Cart = () => {
 
+    const VND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    })
+
+
     const user = useUserPackageHook()
     const [cart, setCart] = useState()
     const [totalPrice, setTotalPrice] = useState(0)
@@ -182,70 +188,60 @@ const Cart = () => {
     }
 
     return(
-        <div class="h-auto bg-gray-100 pt-2">
-            <h1 class="mb-4 text-center text-2xl font-bold">Cart Items</h1>
-            <div class="mx-auto max-w-6xl h-auto justify-center px-6 md:flex md:space-x-6 md:relative xl:px-0">
-                <div class="h-auto rounded-lg md:w-full">
-                    {cart?.map((item) => {
-                        return(
-                            <>
-                                <div className=" bg-white rounded-lg p-4 shadow-md sm:flex sm:justify-start border-b-2">
-                                    {item?.shopName}
+        <div className=" px-8 mb-1">
+            <div className=" flex flex-col items-center justify-center font-semibold text-5xl gap-2 p-5 border-b-[1px]">
+                <div className=" font-semibold text-3xl">Giỏ hàng của bạn</div>
+                <div className=" font-normal text-sm">Có 1 sản phẩm trong giỏ hàng của bạn</div>
+                <span className="bg-black p-[1.5px] w-14"></span>
+            </div>
+            <div className=" flex p-4">
+                <div className=" w-1/2">
+                    <div className="p-1 border-b-[1px] flex justify-between">
+                        <div className=" flex items-center">
+                            <img className="h-[100px] w-[100px]" src="https://firebasestorage.googleapis.com/v0/b/imgaeproject.appspot.com/o/Shirt%2Faothun_coton_olive.jpg?alt=media&token=0c83e73d-eff4-4b66-a4a3-272ad1d05c66"/>
+                            <div className=" ml-3">
+                                <a className=" mb-1 hover:text-blue-500" href="#">FEARLESS corduroy daily cap</a>
+                                <div className=" mb-1 text-sm font-light">Đen/XL</div>
+                                <div className=" flex items-center">
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 font-bold">
+                                        +
+                                    </button>
+                                    <span className=" px-4 bg-[#f5f5f5]">1</span>
+                                    <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 font-bold">
+                                        -
+                                    </button>
                                 </div>
-                                {
-                                    item?.products?.map((item) => {
-                                        return(
-                                            <div class="justify-between mb-5 rounded-lg bg-white p-6 shadow-md sm:flex sm:justify-start">
-                                                <input type="checkbox" className="mr-4" onChange={(e) => handleChange(item?.totalPrice, item?.product, item?.variation, item?.quantity, e)}/>
-                                                <img src="https://images.unsplash.com/photo-1515955656352-a1fa3ffcd111?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" alt="product-image" class="w-full rounded-lg sm:w-40" />
-                                                <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
-                                                    <div class="mt-5 sm:mt-0">
-                                                        <h2 class="text-lg font-bold text-gray-900">{item?.product?.name}</h2>
-                                                        <p class="mt-1 text-xs text-gray-700">{item?.variation?.name}</p>
-                                                    </div>
-                                                    <div class="mt-4 flex justify-between sm:space-y-6 sm:mt-0 sm:block sm:space-x-6">
-                                                        <div class="flex justify-center items-center border-gray-100">
-                                                            <button onClick={() => {minusItem(item?.cartId, item?.quantity)}} class="cursor-pointer rounded-l bg-gray-100 py-1 px-3.5 duration-100 hover:bg-blue-500 hover:text-blue-50"> - </button>
-                                                            <input class="h-8 w-8 border bg-white text-center text-xs outline-none"  value={item?.quantity}/>
-                                                            <button onClick={() => {plusItem(item?.cartId, item?.quantity)}} class="cursor-pointer rounded-r bg-gray-100 py-1 px-3 duration-100 hover:bg-blue-500 hover:text-blue-50"> + </button>
-                                                        </div>
-                                                        <div class="flex items-center space-x-4">
-                                                            <p class="text-sm">{item?.totalPrice}</p>
-                                                            <button onClick={() => handleDelete(item?.cartId)}>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-5 w-5 cursor-pointer duration-150 hover:text-red-500">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                                                </svg>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </>
-                        )
-                    })}
-                </div>
-                {/* <!-- Sub total --> */}
-                
-            </div>  
-            <div class="mt-6 h-[150px] rounded-lg border bg-white p-6 shadow-md md:mt-0 md:fixed md:bottom-0 md:w-full">
-                    {/* <div class="mb-2 flex justify-between">
-                    <p class="text-gray-700">Subtotal</p>
-                    <p class="text-gray-700">$129.99</p>
-                    </div>
-                    <div class="flex justify-between">
-                    <p class="text-gray-700">Shipping</p>
-                    <p class="text-gray-700">$4.99</p>
-                    </div> */}
-                    <div class="flex justify-between">
-                        <p class="text-lg font-bold">Total</p>
-                        <div class="">
-                            <p class="mb-1 text-lg font-bold">{totalPrice}</p>
+                            </div>
+                        </div>
+                        <div className=" flex flex-col justify-between items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
+                            <div className=" font-semibold">{VND.format(295000)}</div>
                         </div>
                     </div>
-                    <button onClick={handleCheckout} class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600">Check out</button>
+                </div>
+                <div className=" w-1/2 px-4">
+                    <div className=" w-3/4 p-5 border">
+                        <h1 className=" border-b-[1px] text-lg font-semibold py-3">Thông tin đơn hàng</h1>
+                        <div className=" flex items-center justify-between border-b-[1px] py-3">
+                            <p className=" font-bold">Tổng tiền:</p>
+                            <p className=" text-red-600 font-semibold">{VND.format(295000)}</p>
+                        </div>
+                        <div className=" text-sm py-3">
+                            Phí vận chuyển sẽ được tính ở trang thanh toán.
+                            Bạn cũng có thể nhập mã giảm giá ở trang thanh toán.
+                        </div>
+                        <button className=" uppercase bg-red-600 w-full p-3 text-white">Thanh toán</button>
+                        <div className=" flex text-sm items-center justify-center gap-1 text-blue-600 py-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                            </svg>
+                            <a>Tiếp tục mua hàng</a>
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     )
