@@ -43,7 +43,9 @@ import { endpoint } from "../api"
         }).catch((error) => {
             console.error("Error: ", error)
         })
-    },[name])
+    },[])
+
+    console.log(name)
 
     const handleSavechange = async () => {
 
@@ -90,8 +92,8 @@ import { endpoint } from "../api"
         <div>
             {successAlert && <SuccessAlert/>}
             {unsuccessAlert && <UnsuccessAlert/>}
-            {!name && <Loading/>}
-            {name &&
+            {/* {!name && <Loading/>} */}
+            {
                 <div class="flex justify-center px-8 mt-3">
                     <div class="w-full">
                         <div class="flex flex-wrap dark:bg-gray-600">

@@ -2,12 +2,16 @@ import { useEffect, useState } from "react"
 import { useUserPackageHook } from "../redux/hooks/userHook"
 import { endpoint } from "../api"
 import SelectAddress from "./SelectAddress"
+import SuccessAlert from "./SuccesAlert"
+import UnsuccessAlert from "./UnsuccessAlert"
 
 const Order = ({data}) => {
 
     const user = useUserPackageHook()
 
     const [selectAddress, setSelectAddress] = useState(false)
+    const [successAlert, setSuccessAlert] = useState(false)
+    const [unsuccessAlert, setUnsuccessAlert] = useState(false)
 
     const [addressShipping, setAddressShipping] = useState({
         city: "TP Hồ Chí Minh",
@@ -40,14 +44,24 @@ const Order = ({data}) => {
         }).then((json) => {
             if(json?.success){
                 console.log("json: ", json)
+                setSuccessAlert(true)
+                setTimeout(() => {
+                    setSuccessAlert(false)
+                },3000)
             }
         }).catch((error) => {
+            setUnsuccessAlert(true)
+            setTimeout(() => {
+                setUnsuccessAlert(false)
+            },3000)
             console.error("Error: ", error)
         })
     }
 
     return(
         <div class="h-auto bg-gray-100 pt-2">
+            { successAlert && <SuccessAlert/>}
+            { unsuccessAlert && <UnsuccessAlert/>}
             { selectAddress && <SelectAddress addressShipping = {addressShipping} setAddressShipping = {setAddressShipping} setSelectAddress = {setSelectAddress} />}
             <div class="mx-auto max-w-5xl h-auto justify-center px-6 md:flex md:space-x-6 xl:px-0">
                 <div class="h-auto rounded-lg md:w-full">

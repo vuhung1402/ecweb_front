@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { endpoint, status } from "../../api"
+import SuccessAlert from "../../component/SuccesAlert"
+import UnsuccessAlert from "../../component/UnsuccessAlert"
 
 const OrderListAdmin = ({api}) => {
     const user = useUserPackageHook()
 
     const [orders, setOrders] = useState()
+    const [successAlert, setSuccessAlert] = useState(false)
+    const [unsuccessAlert, setUnsuccessAlert] = useState(false)
 
     useEffect(() => {
         fetch(`${endpoint}${api}`, {
@@ -49,15 +53,59 @@ const OrderListAdmin = ({api}) => {
             return response.json()
         }).then((json) => {
             if(json?.success){
+                setSuccessAlert(true)
+                setTimeout(() => {
+                    setSuccessAlert(false)
+                },3000)
                 console.log("json: ", json)
             }
         }).catch((error) => {
+            setUnsuccessAlert(true)
+            setTimeout(() => {
+                setUnsuccessAlert(false)
+            },3000)
+            console.error("Error: ", error)
+        })
+    }
+
+    const handleCompleted = (orderId) => {
+        const body = {
+            status: "completed"
+        }
+
+        fetch(`${endpoint}/orders/${orderId}/status`, {
+            method: "PATCH",
+            body: JSON.stringify(body),
+            headers: {
+                'Authorization': `Bearer ${user?.accessToken}`,
+                'Content-Type': 'application/json',
+            },
+        }).then((response) => {
+            if(!response.ok){
+                throw new Error("Netword response not ok")
+            }
+            return response.json()
+        }).then((json) => {
+            if(json?.success){
+                setSuccessAlert(true)
+                setTimeout(() => {
+                    setSuccessAlert(false)
+                },3000)
+                console.log("json: ", json)
+            }
+        }).catch((error) => {
+            setUnsuccessAlert(true)
+            setTimeout(() => {
+                setUnsuccessAlert(false)
+            },3000)
             console.error("Error: ", error)
         })
     }
 
     return(
         <div>
+            { successAlert && <SuccessAlert/>}
+            { unsuccessAlert && <UnsuccessAlert/>}
             <div className="h-auto bg-[#e5e7eb]">
                 {   orders?.length === 0 ? <div className=" bg-white text-center mt-3 font-bold">Hiện tại không có đơn hàng nào</div> :
                     orders?.map((order) => {
@@ -93,6 +141,15 @@ const OrderListAdmin = ({api}) => {
                                                     (
                                                         <div className="mt-2 flex flex-row-reverse">
                                                             <button onClick={() => handleConfirm(order?._id)} type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Xác nhận</button>
+                                                        </div>
+                                                    )
+                                                }
+
+                                                {
+                                                    (order?.status === "to-receive") &&
+                                                    (
+                                                        <div className="mt-2 flex flex-row-reverse">
+                                                            <button onClick={() => handleCompleted(order?._id)} type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Đã giao hàng</button>
                                                         </div>
                                                     )
                                                 }

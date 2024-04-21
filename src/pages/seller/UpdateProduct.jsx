@@ -3,10 +3,13 @@ import { endpoint } from "../../api"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import SuccessAlert from "../../component/SuccesAlert"
 import UnsuccessAlert from "../../component/UnsuccessAlert"
+import { useLocation, useNavigate } from "react-router-dom"
 
 const UpdateProduct = ({slug, setUpdate}) => {
+    const location = useLocation()
+    const navigate = useNavigate()
     const user = useUserPackageHook()
-    const [body, setBody] = useState(slug)
+    const [body, setBody] = useState(location?.state?.product)
     const [categories, setCategories] = useState()
     const [mainCategorieSlug, setMainCategorieSlug] = useState("")
     const [subCategorieSlug, setSubCategorieSlug] = useState()
@@ -15,6 +18,9 @@ const UpdateProduct = ({slug, setUpdate}) => {
 
     const [successAlert, setSuccessAlert] = useState(false)
     const [unsuccessAlert, setUnsuccessAlert] = useState(false)
+
+
+    console.log(slug)
 
     useEffect(() => {
         fetch(`${endpoint}/categories`, {
@@ -105,8 +111,8 @@ const UpdateProduct = ({slug, setUpdate}) => {
         }).then((json) => {
             if(json?.success){
                 console.log("json: ", json)
+                navigate('/shopPage')
                 setSuccessAlert(true)
-                setUpdate(false)
                 setTimeout(() => {
                     setSuccessAlert(false)
                 },3000)
@@ -121,7 +127,7 @@ const UpdateProduct = ({slug, setUpdate}) => {
     }
 
     const handleReturn = () => {
-        setUpdate(false)
+        navigate('/shopPage')
     }
 
     const handleDeleteProdcut = () => {
@@ -140,7 +146,6 @@ const UpdateProduct = ({slug, setUpdate}) => {
             if(json?.success){
                 console.log("json: ", json)
                 setSuccessAlert(true)
-                setUpdate(false)
                 setTimeout(() => {
                     setSuccessAlert(false)
                 },3000)

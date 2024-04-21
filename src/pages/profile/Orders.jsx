@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { endpoint, status } from "../../api"
+import SuccessAlert from "../../component/SuccesAlert"
+import UnsuccessAlert from "../../component/UnsuccessAlert"
 
 const Orders = ({api}) => {
     const user = useUserPackageHook()
     const [orders, setOrders] = useState()
+    const [successAlert, setSuccessAlert] = useState(false)
+    const [unsuccessAlert, setUnsuccessAlert] = useState(false)
 
     useEffect(() => {
         fetch(`${endpoint}${api}`, {
@@ -42,15 +46,25 @@ const Orders = ({api}) => {
             return response.json()
         }).then((json) => {
             if(json?.success){
+                setSuccessAlert(true)
+                setTimeout(() => {
+                    setSuccessAlert(false)
+                },3000)
                 console.log(json?.data?.orders)
             }
         }).catch((error) => {
+            setUnsuccessAlert(true)
+            setTimeout(() => {
+                setUnsuccessAlert(false)
+            },3000)
             console.error("Error: ", error)
         })
     }
 
     return(
         <div>
+            { successAlert && <SuccessAlert/>}
+            { unsuccessAlert && <UnsuccessAlert/>}
             <div className="h-auto bg-[#e5e7eb]">
                 {   orders?.length === 0 ? <div className=" bg-white text-center mt-3 font-bold">Hiện tại không có đơn hàng nào</div> :
                     orders?.map((order) => {
