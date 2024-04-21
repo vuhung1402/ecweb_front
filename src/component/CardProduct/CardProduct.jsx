@@ -52,8 +52,8 @@ const CardProduct = () => {
     }
     
     return(
-        <div className=" w-[250px] h-[394px] p-2">
-            <div className=" h-[60%]" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+        <div className="w-[250px] h-auto p-2">
+            <div className=" h-[250px] w-full flex justify-center" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                 { isHover ? 
                     <img className={`w-auto h-full cursor-pointer transition-opacity duration-300 ${isHover ? 'opacity-100' : 'opacity-0'}`} src={img}/> 
                     :
@@ -66,7 +66,7 @@ const CardProduct = () => {
             {
                 Object.keys(data.color).map((item, index) => {
                     return(
-                        <div onMouseLeave={() => setImg(data.image)} onMouseEnter={() => handleColorHover(item, data.color[item])} key={`color-${index}`} className={` cursor-pointer mr-2 border px-2 py-1 w-[20px] h-[20px] rounded-full bg-[${item}]`}></div>
+                        <div style={{backgroundColor: item}} onMouseLeave={() => setImg(data.image)} onMouseEnter={() => handleColorHover(item, data.color[item])} key={`color-${index}`} className={` cursor-pointer mr-2 border px-2 py-1 w-[20px] h-[20px] rounded-full`}></div>
                     )
                 })
             }

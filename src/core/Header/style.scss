@@ -37,6 +37,7 @@ header{
 
 .menu {
     // background: #222;
+    font-size: 14px;
 }
 
 .menu ul {
@@ -59,13 +60,18 @@ header{
     position: absolute;
     display: none;
     flex-direction: column;
+    box-shadow: 2px 4px 12px rgba(0,0,0,.1);
 }
 
 .menu ul ul li {
     width: max-content;
     min-width: 100%;
     max-width: 200px;
-    border-bottom: 0.5px solid rgb(157, 155, 155);
+    border-bottom: 1px solid rgb(246, 248, 248);
+}
+
+.menu ul li ul li ul {
+    box-shadow: 2px 4px 12px rgba(0,0,0,.1);
 }
 
 .menu ul a {
@@ -87,4 +93,3 @@ header{
     left: 100%;
     z-index: 999999999999999;
 }
-

@@ -11,7 +11,7 @@ function getItem(label, key, icon, children, type) {
   };
 }
 
-function Filter(){
+function Filter({onClick}){
 
   const category = [
     {
@@ -59,10 +59,6 @@ function Filter(){
         type: ''
     }
   ]
-
-    const onClick = (item) => {
-        console.log("Item from filter:", item);
-    }
 
     return(
         <div className=' p-5'>

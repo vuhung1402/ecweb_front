@@ -7,7 +7,7 @@ const CartPopUp = () => {
 
 
     return(
-        <div className=" cursor-default">
+        <div className=" cursor-default z-[999]">
             <div className=" uppercase text-base text-center font-semibold p-3 border-b-[1px]">Giỏ hàng</div>
             <div className="p-1 border-b-[1px] flex justify-between">
                 <div className=" flex items-center">

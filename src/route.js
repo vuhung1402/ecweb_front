@@ -17,7 +17,7 @@ const AppRoutes = [
         defaultLayout: true,
     },
     {
-        path: '/products',
+        path: '/products/:category',
         Component: Page?.ProductsPage,
         defaultLayout: true,
     },
