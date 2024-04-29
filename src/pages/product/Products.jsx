@@ -1,10 +1,22 @@
 import { useLocation, useParams } from "react-router-dom"
 import Filter from "../../component/Filter"
 import ProductList from "../../component/ProductList"
+import { useEffect } from "react"
 
 const Products = () => {
     const location = useLocation()
-    console.log(location)
+    
+    console.log(location?.state?.key)
+
+    useEffect(() => {
+        if(location?.state){
+            //call api va set data
+            console.log(location?.state?.key)
+        }else{
+            //call thang api all va set data
+            console.log("all")
+        }
+    },[])
 
     //khi moi load trang lan dau thi phai check url co danh muc hay param dang sau khong neu co lay de filter
 
@@ -37,14 +49,16 @@ const Products = () => {
     const onClick = (item) => {
         //call api
         //api tra du lieu thanh cong set vao state data
-        console.log("Item from filter:", item);
+        console.log("Item key from filter:", item?.item?.props?.route);
+        //navigate(`/products/${item?.item?.props?.route}`)
     }
 
     //khi chon dieu kien filter
     const handleSelect = (value, option) => {
         //call api filter truyen id danh muc voi option.label
         //api tra thanh cong set lai vao state data
-        console.log(value, option.label)
+        //navigate(`/products/${location?.state?.key}?sort=${option.label}`)
+        console.log(option.label)
     }
 
     return(

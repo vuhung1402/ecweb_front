@@ -3,6 +3,7 @@ import Loading from "./Loading"
 import { endpoint } from "../api"
 import CardProduct from "./CardProduct/CardProduct"
 import ProductFilter from "./ProductFilter"
+import { useLocation, useParams } from "react-router-dom"
 
 const ProductList = ({handleSelect}) => {
 

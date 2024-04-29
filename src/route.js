@@ -22,7 +22,7 @@ const AppRoutes = [
         defaultLayout: true,
     },
     {
-        path: '/productDetail/:slug',
+        path: '/product-detail/:slug',
         Component: Page?.ProductDetailPage,
         defaultLayout: true,
     },

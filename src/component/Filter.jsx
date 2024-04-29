@@ -19,10 +19,19 @@ function Filter({onClick}){
         icon: null,
         children: [
             {
+                key: '10',
+                icon: null,
+                children: null,
+                label: 'Xem tất cả áo',
+                route: 'ao-so-mi',
+                type: '',
+            },
+            {
                 key: '2',
                 icon: null,
                 children: null,
                 label: 'Ao so mi',
+                route: 'ao-so-mi',
                 type: '',
             },
             {
@@ -30,6 +39,7 @@ function Filter({onClick}){
                 icon: null,
                 children: null,
                 label: 'Ao thun',
+                route:'ao-thun',
                 type: ''
             }
         ],
@@ -45,6 +55,7 @@ function Filter({onClick}){
                 icon: null,
                 children: null,
                 label: 'Quan dui',
+                route: 'quan-dui',
                 type: '',
             },
             {
@@ -52,6 +63,7 @@ function Filter({onClick}){
                 icon: null,
                 children: null,
                 label: 'Quan dai',
+                route:'quan-dai',
                 type: ''
             }
         ],

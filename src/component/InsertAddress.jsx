@@ -16,7 +16,7 @@ const InsertAddress = ({setAddAddress}) => {
             name: nameRef.current.value,
             street: streetRef.current.value,
             number: phoneRef.current.value,
-            default: isDefault
+            isDefault: isDefault
         }
 
         fetch(`${endpoint}/users/insert_address/${user?.data}/`, {

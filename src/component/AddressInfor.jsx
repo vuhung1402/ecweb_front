@@ -30,7 +30,26 @@ const AddressInfor = ({address}) => {
     }
 
     const handleSaveAddress = () => {
-        console.log(state.inforAdress);
+        fetch(`${endpoint}/users/update_address/${user?.data}/${address?._id}/`, {
+            method: "POST",
+            body:JSON.stringify(state?.inforAdress),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then((response) => {
+            if(!response.ok){
+                throw new Error("Netword response not ok")
+            }
+            return response.json()
+        }).then((json) => {
+            if(json?.success){
+
+                window.location.reload()
+            }
+            
+        }).catch((error) => {
+            console.error("Error: ", error)
+        })
     }
 
     const handleUpdate = () => {

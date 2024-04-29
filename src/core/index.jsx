@@ -9,16 +9,11 @@ const DefaulLayout = ({ children }) => {
                     <Header />
                 </section>
             </header>
-            <div className='content-cms-wrapper'>
+            <div style={{height: 'calc(100vh - 80px)'}} className=''>
                 <section className=''>
                     {children}
                 </section>
             </div>
-            <footer>
-                <section className='w-full'>
-                    <Footer/>
-                </section>
-            </footer>
         </>
     )
 }
