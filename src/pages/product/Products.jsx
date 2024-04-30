@@ -1,22 +1,49 @@
-import { useLocation, useParams } from "react-router-dom"
-import Filter from "../../component/Filter"
-import ProductList from "../../component/ProductList"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
+import Filter from "../../component/Filter/Filter"
+import ProductList from "../../component/ProductList/ProductList"
 import { useEffect } from "react"
+import { endpoint } from "../../api"
 
 const Products = () => {
+    const navigate = useNavigate()
     const location = useLocation()
     
     console.log(location?.state?.key)
+    console.log(location.search)
 
     useEffect(() => {
+        const regex = /[?&]sort_by=([^&]*)/;
+        const match = regex.exec(location?.search);
+        console.log("match: ",match)
         if(location?.state){
+            console.log(`${endpoint}/products/get/${location?.state?.key ? location?.state?.key : 'all'}${match?.[1].length > 0 ? `${location?.search}`:``}`)
             //call api va set data
+            // fetch(`${endpoint}/users/update_address/${user?.data}/${address?._id}/`, {
+            //     method: "POST",
+            //     body:JSON.stringify(state?.inforAdress),
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            // }).then((response) => {
+            //     if(!response.ok){
+            //         throw new Error("Netword response not ok")
+            //     }
+            //     return response.json()
+            // }).then((json) => {
+            //     if(json?.success){
+    
+            //         window.location.reload()
+            //     }
+                
+            // }).catch((error) => {
+            //     console.error("Error: ", error)
+            // })
             console.log(location?.state?.key)
         }else{
             //call thang api all va set data
             console.log("all")
         }
-    },[])
+    },[location.search, location?.state?.key])
 
     //khi moi load trang lan dau thi phai check url co danh muc hay param dang sau khong neu co lay de filter
 
@@ -58,7 +85,18 @@ const Products = () => {
         //call api filter truyen id danh muc voi option.label
         //api tra thanh cong set lai vao state data
         //navigate(`/products/${location?.state?.key}?sort=${option.label}`)
-        console.log(option.label)
+        //call api lai va set lai data
+        navigate(
+            {
+                pathname: `${location?.pathname}`,
+                search: `?sort_by=${option?.label}`,
+            },
+            {
+                state: {
+                    key: location?.state?.key
+                }
+            }
+        )
     }
 
     return(

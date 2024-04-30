@@ -55,32 +55,6 @@ const AppRoutes = [
         path: '/checkout/:code',
         Component: Page?.CheckOutPage,
         defaultLayout: true,
-    }
-    ,
-    {
-        path: '/registerSeller',
-        Component: Page?.RegisterSellerPage,
-        defaultLayout: false,
-    },
-    {
-        path: '/shop/:shopId',
-        Component: Page?.ShopProfilePage,
-        defaultLayout: true,
-    },
-    {
-        path: '/shopPage',
-        Component: Page?.ShopPage,
-        defaultLayout: false,
-    },
-    {
-        path: '/admin',
-        Component: Page?.HomePageAdmin,
-        defaultLayout: false,
-    },
-    {
-        path: '/updateProductSeller',
-        Component: Page?.UpdateProductSeller,
-        defaultLayout: false,
     },
     {
         path: '/address',

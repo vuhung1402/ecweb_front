@@ -1,4 +1,6 @@
+import { message } from "antd"
 import { useState } from "react"
+import { VND, formatCurrencyVN } from "../../utils/function"
 
 const InfoProductDetail = ({data}) => {
 
@@ -20,14 +22,16 @@ const InfoProductDetail = ({data}) => {
         }
     }
 
+    const showMessage = () => {
+        message.success("Thanhf coong")
+    }
 
 
     return(
         <div className=" w-full">
             <div className=" text-[20px] font-semibold py-3 border-b-[1px]">{data?.name}</div>
             <div className=" text-red-500 text-[18px] font-semibold opacity-[0.92] border-b-[1px] py-3">
-                {data?.price}
-                <sup className=" underline">đ</sup>
+                {formatCurrencyVN(data?.price)}
             </div>
             <div className=" py-3 border-b-[1px] cursor-default">
                 <div>
@@ -55,7 +59,7 @@ const InfoProductDetail = ({data}) => {
                 </div>
             </div>
 
-            <div className="w-full bg-[#0d4cdd] mt-3 flex items-center justify-center h-[50px] cursor-pointer">
+            <div onClick={showMessage} className="w-full bg-[#0d4cdd] mt-3 flex items-center justify-center h-[50px] cursor-pointer">
                 <div className=" text-white font-medium">Thêm vào giỏ</div>
             </div>
 

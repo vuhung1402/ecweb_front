@@ -1,11 +1,8 @@
 import { useDispatch } from "react-redux"
 import { clear } from "../../redux/actions"
 import { useNavigate } from "react-router-dom"
-import FormInfor from "../../component/FormInfor"
 import { useEffect, useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
-import Address from "../../component/Address"
-import OrderHistory from "../../component/OrderHistory"
 import { endpoint } from "../../api"
 
 

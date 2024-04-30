@@ -105,7 +105,7 @@ const Header = () => {
             <div>LOGO</div>
             <nav class="menu">
                 <ul>
-                    <li className="px-3 cursor-pointer"><div>TRANG CHỦ</div></li>
+                    <li className="px-3 cursor-pointer"><div onClick={() => navigate("/")}>TRANG CHỦ</div></li>
                     <li className="px-3 cursor-pointer">
                         <div onClick={() => handleNavigate('/products/all')}>SẢN PHẨM ▾</div>
                         <ul>

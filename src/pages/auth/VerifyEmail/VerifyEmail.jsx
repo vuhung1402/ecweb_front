@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react"
 import { useParams, useNavigate, Link } from "react-router-dom"
 import axios from "axios"
-import VerifyPopUp from "../../../component/VerifyPopUp"
-import { endpoint } from "../../../api"
-import { Fragment } from "react"
 import styles from "./styles.module.css";
 import success from "../../../images/success.png";
 

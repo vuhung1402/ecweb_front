@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom"
-import Order from "../../component/Order"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { endpoint } from "../../api"
 import { useEffect, useState } from "react"

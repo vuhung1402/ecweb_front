@@ -1,3 +1,4 @@
+import MyBreadCrumb from "../../component/BreadCrumb"
 import ImagePreview from "../../component/ImagePreview"
 import InfoProductDetail from "../../component/InfoProductDetail"
 import Footer from "../../core/Footer"
@@ -73,7 +74,9 @@ const ProductDetail = () => {
     return (
         <div className="">
             <div className="">
-                <div className=" px-[85px] w-full h-[40px] flex items-center bg-[rgb(245,245,245)]">Breadcrumb</div>
+                <div className=" px-[85px] w-full h-[40px] flex items-center bg-[rgb(245,245,245)]">
+                    <MyBreadCrumb/>
+                </div>
                 <div className=" px-[85px] flex pt-7">
                     <div className=" w-2/3 h-fit">
                         <ImagePreview imageArray = {data?.array_image} />
