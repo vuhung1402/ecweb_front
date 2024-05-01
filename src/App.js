@@ -1,4 +1,5 @@
-import './App.css';
+import './App.scss';
+import React from 'react';
 import DefaulLayout from './core';
 
 import { Fragment } from 'react';

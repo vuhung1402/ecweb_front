@@ -1,15 +1,14 @@
 import React from 'react';
 import { Alert, Flex, Spin } from 'antd';
+import "./Style.scss"
 
 const Loading = () => {
-    return(
-        <Spin className='w-full' tip="Loading...">
-            <Alert
-                message="Đang tải dữ liệu"
-                description="Further details about the context of this alert."
-                type="info"
-            />
-        </Spin>
+    return (
+        <div className = " h-[100px]" >
+            <Spin className='w-full h-full' tip="Đang tải dữ liệu">
+                <div></div>
+            </Spin>
+        </div>
     )
 }
 

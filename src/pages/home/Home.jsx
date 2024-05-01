@@ -1,4 +1,6 @@
 import { useUserPackageHook } from "../../redux/hooks/userHook"
+import React from "react"
+
 
 const Home = () => {
     const user = useUserPackageHook()

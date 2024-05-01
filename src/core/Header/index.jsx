@@ -1,3 +1,4 @@
+import React from "react"
 import { useRef, useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { useNavigate } from "react-router-dom"
@@ -101,7 +102,7 @@ const Header = () => {
 
 
     return (
-        <header>
+        <header className="z-[999]">
             <div>LOGO</div>
             <nav class="menu">
                 <ul>
@@ -138,7 +139,7 @@ const Header = () => {
                         </ul>
                     </li>
                     <li className="px-3 cursor-pointer"><div>CỬA HÀNG</div></li>
-                    <li className="px-3 cursor-pointer">
+                    <li className="px-3 cursor-pointer z-[999]">
                         <div>CHÍNH SÁCH ▾</div>
                         <ul>
                             <li>

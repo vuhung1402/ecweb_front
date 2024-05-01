@@ -1,3 +1,4 @@
+import React from "react"
 
 const CartPopUp = () => {
     const VND = new Intl.NumberFormat('vi-VN', {

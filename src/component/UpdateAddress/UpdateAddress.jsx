@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { endpoint } from "../../api"
 
@@ -43,7 +43,7 @@ const UpdateAddress = ({inforAdress, handleUpdateInfor, handleSaveAddress}) => {
                     Cập nhật
                 </button>
                 <div className=" ml-2">
-                    <div className=" cursor-pointer mr-2">hoặc  <a className="hover:text-blue-500" href="/forgotPass">Huỷ</a></div>
+                    <div className=" cursor-pointer mr-2">hoặc  <a className="hover:text-blue-500" >Huỷ</a></div>
                 </div>
             </div>
         </div>

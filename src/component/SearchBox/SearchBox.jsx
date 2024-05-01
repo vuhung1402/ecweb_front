@@ -1,3 +1,4 @@
+import React from "react"
 
 const SearchBox = () => {
     const VND = new Intl.NumberFormat('vi-VN', {

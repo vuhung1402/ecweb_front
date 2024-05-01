@@ -2,6 +2,8 @@ import MyBreadCrumb from "../../component/BreadCrumb"
 import ImagePreview from "../../component/ImagePreview"
 import InfoProductDetail from "../../component/InfoProductDetail"
 import Footer from "../../core/Footer"
+import React from "react"
+
 
 const ProductDetail = () => {
 

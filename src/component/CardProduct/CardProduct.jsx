@@ -1,6 +1,12 @@
-import { useState } from "react"
+import { formatCurrencyVN } from "@utils/function"
+import React ,{ useState } from "react"
+import { useNavigate } from "react-router-dom"
+
 
 const CardProduct = () => {
+
+    const navigate = useNavigate()
+
     const data = {
         _id: '3812983iuasgdjahgsd',
         name: 'san pham 1',
@@ -62,22 +68,26 @@ const CardProduct = () => {
         setImg("https://product.hstatic.net/200000691337/product/32_b09f46222b0e4a8786fea0a937f1447f_master.jpg")
     }
     
-      const onMouseLeave = () => {
+    const onMouseLeave = () => {
         setIsHover(false)
         setImg("https://product.hstatic.net/200000691337/product/thun_olive_61a7b6153efb4aacac99ec880faaa8a2_master.jpg")
+    }
+
+    const handleNavigate = (route) => {
+        navigate(route)
     }
     
     return(
         <div className="w-[250px] h-auto p-2">
-            <div className=" h-[250px] w-full flex justify-center" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
+            <div onClick = {() => handleNavigate(`/product-detail/${data?.name}`)} className=" h-[250px] w-full flex justify-center" onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
                 { isHover ? 
                     <img className={`w-auto h-full cursor-pointer transition-opacity duration-300 ${isHover ? 'opacity-100' : 'opacity-0'}`} src={img}/> 
                     :
                     <img className={`w-auto h-full cursor-pointer transition-opacity duration-300 ${isHover ? 'opacity-0' : 'opacity-100'}`} src={img}/>
                 }
             </div>
-            <div className=" font-light">{data.name}</div>
-            <div className=" font-light">{VND.format(Number(data.price))}</div>
+            <div onClick = {() => handleNavigate(`/product-detail/${data?.name}`)} className=" font-light hover:text-blue-500 cursor-pointer">{data.name}</div>
+            <div className=" font-light">{formatCurrencyVN(data?.price)}</div>
             <div className="mt-1 flex gap-3">
             {
                 data.color.map((item, index) => {

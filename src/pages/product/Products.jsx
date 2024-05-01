@@ -1,15 +1,15 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import Filter from "../../component/Filter/Filter"
 import ProductList from "../../component/ProductList/ProductList"
-import { useEffect } from "react"
+import React, { useEffect } from "react"
 import { endpoint } from "../../api"
 
 const Products = () => {
     const navigate = useNavigate()
     const location = useLocation()
     
-    console.log(location?.state?.key)
-    console.log(location.search)
+    console.log("location key: ", location?.state?.key)
+    console.log("location search: ", location.search)
 
     useEffect(() => {
         const regex = /[?&]sort_by=([^&]*)/;
@@ -76,8 +76,18 @@ const Products = () => {
     const onClick = (item) => {
         //call api
         //api tra du lieu thanh cong set vao state data
+        console.log("item: ", item)
         console.log("Item key from filter:", item?.item?.props?.route);
-        //navigate(`/products/${item?.item?.props?.route}`)
+        navigate(
+            {
+                pathname: `/products/${item?.item?.props?.route}`,
+            },
+            {
+                state: {
+                    key: item?.key
+                }
+            }
+        )
     }
 
     //khi chon dieu kien filter

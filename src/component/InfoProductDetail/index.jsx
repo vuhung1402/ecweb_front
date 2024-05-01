@@ -1,6 +1,8 @@
 import { message } from "antd"
 import { useState } from "react"
 import { VND, formatCurrencyVN } from "../../utils/function"
+import React from "react"
+
 
 const InfoProductDetail = ({data}) => {
 
@@ -28,7 +30,7 @@ const InfoProductDetail = ({data}) => {
 
 
     return(
-        <div className=" w-full">
+        <div className=" w-full sticky h-fit top-20">
             <div className=" text-[20px] font-semibold py-3 border-b-[1px]">{data?.name}</div>
             <div className=" text-red-500 text-[18px] font-semibold opacity-[0.92] border-b-[1px] py-3">
                 {formatCurrencyVN(data?.price)}
@@ -60,7 +62,7 @@ const InfoProductDetail = ({data}) => {
             </div>
 
             <div onClick={showMessage} className="w-full bg-[#0d4cdd] mt-3 flex items-center justify-center h-[50px] cursor-pointer">
-                <div className=" text-white font-medium">Thêm vào giỏ</div>
+                <div className=" text-white font-medium select-none">Thêm vào giỏ</div>
             </div>
 
             <div className=" mt-5">

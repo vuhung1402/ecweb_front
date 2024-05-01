@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { endpoint } from "../../api"
 import CardProduct from "../CardProduct/CardProduct"
 import { useLocation, useParams } from "react-router-dom"

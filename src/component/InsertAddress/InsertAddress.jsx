@@ -1,8 +1,10 @@
-import { useRef, useState } from "react"
+import React ,{ useRef, useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { endpoint } from "../../api"
+import { message } from "antd"
 
-const InsertAddress = ({setAddAddress}) => {
+
+const InsertAddress = ({setAddAddress, getDataAddress}) => {
     
     const [isDefault, setIsDefault] = useState(false) 
     const nameRef = useRef()
@@ -32,7 +34,8 @@ const InsertAddress = ({setAddAddress}) => {
             return response.json()
         }).then((json) => {
             if(json?.success){
-                window.location.reload()
+                getDataAddress()
+                message.success("Thêm địa chỉ thành công")
             }
             
         }).catch((error) => {
@@ -61,7 +64,7 @@ const InsertAddress = ({setAddAddress}) => {
                 <button onClick={addAddress} type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xl px-5 py-3 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Thêm mới</button>
                 <div className=" ml-2 flex gap-2">
                     <div className="">hoặc</div>
-                    <p onClick={() => setAddAddress(false)} className="hover:text-blue-500 cursor-pointer" href="/forgotPass">Huỷ</p>
+                    <p onClick={() => setAddAddress(false)} className="hover:text-blue-500 cursor-pointer">Huỷ</p>
                 </div>
             </div>
         </>

@@ -1,9 +1,11 @@
+import React from "react";
 import { useEffect, useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { endpoint } from "../../api"
 import UpdateAddress from "../UpdateAddress/UpdateAddress";
+import { message } from "antd";
 
-const AddressInfor = ({address}) => {
+const AddressInfor = ({address, getDataAddress}) => {
     const user = useUserPackageHook();
     const [state, setState] = useState({
         updateAddress: false,
@@ -43,8 +45,8 @@ const AddressInfor = ({address}) => {
             return response.json()
         }).then((json) => {
             if(json?.success){
-
-                window.location.reload()
+                message.success("Cập nhật thành công")
+                getDataAddress()
             }
             
         }).catch((error) => {
@@ -77,8 +79,8 @@ const AddressInfor = ({address}) => {
             return response.json()
         }).then((json) => {
             if(json?.success){
-
-                window.location.reload()
+                getDataAddress()
+                message.success("Đã xoá địa chỉ")
             }
             
         }).catch((error) => {

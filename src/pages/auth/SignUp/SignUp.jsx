@@ -1,5 +1,5 @@
 import { endpoint } from "../../../api";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 function SignUp(){
     const emailRef = useRef(null);
