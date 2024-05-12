@@ -10,3 +10,20 @@ export const formatCurrencyVN = (number) => {
 
     return `${formattedNumber}₫`;
 };
+
+export const getNotInvalidColor = (colorArray) =>{
+    for(let i = 0; i < colorArray?.length; i++){
+        if(!colorArray[i]?.invalid){
+            return colorArray[i];
+        }
+    }
+}
+
+export const addKeyToArraySize = (sizeArray) => {
+    return sizeArray?.map((item) => {
+        return{
+            ...item,
+            invalid: item?.total_number_with_size === 0
+        };
+    });
+}

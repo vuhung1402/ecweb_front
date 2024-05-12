@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useRef, useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { useNavigate } from "react-router-dom"
@@ -7,12 +7,34 @@ import './style.scss'
 import SearchBox from "../../component/SearchBox/SearchBox"
 import CartPopUp from "../../component/CartPopUp/CartPopUp"
 import { clear } from "../../redux/actions"
+import { endpoint } from "../../api"
 
 const Header = () => {
     const user = useUserPackageHook()
     const [searchBox, setSearchBox] = useState(false)
     const [account, setAccount] = useState(false)
     const [cartPopUp, setCartPopUp] = useState(false)
+    const [category, setCategory] = useState([])
+
+    useEffect(() => {
+        fetch(`${endpoint}/category/getAllCategories`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }).then((response) => {
+            if (!response.ok) {
+                throw new Error("Netword response not ok")
+            }
+            return response.json()
+        }).then((json) => {
+            if(json?.success){
+                setCategory(json?.formattedData)
+            }
+        }).catch((error) => {
+            console.error("Error: ", error)
+        })
+    }, [])
 
     const dispatch = useDispatch()
     const navigate = useNavigate()
@@ -36,56 +58,56 @@ const Header = () => {
     const classNameOfMenu = "w-[140px] px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]";
 
 
-    const category = [
-        {
-            key: '1',
-            icon: null,
-            children: [
-                {
-                    key: '2',
-                    icon: null,
-                    children: null,
-                    label: 'Ao so mi',
-                    route: "ao-so-mi",
-                    type: '',
-                },
-                {
-                    key: '3',
-                    icon: null,
-                    children: null,
-                    label: 'Ao thun',
-                    route: "ao-thun",
-                    type: ''
-                }
-            ],
-            label: 'Ao',
-            type: ''
-        },
-        {
-            key: '4',
-            icon: null,
-            children: [
-                {
-                    key: '5',
-                    icon: null,
-                    children: null,
-                    label: 'Quan dui',
-                    route: "quan-dui",
-                    type: '',
-                },
-                {
-                    key: '6',
-                    icon: null,
-                    children: null,
-                    label: 'Quan dai',
-                    route: "quan-dai",
-                    type: ''
-                }
-            ],
-            label: 'Quan',
-            type: ''
-        }
-    ]
+    // const category = [
+    //     {
+    //         key: '1',
+    //         icon: null,
+    //         children: [
+    //             {
+    //                 key: '2',
+    //                 icon: null,
+    //                 children: null,
+    //                 label: 'Ao so mi',
+    //                 route: "ao-so-mi",
+    //                 type: '',
+    //             },
+    //             {
+    //                 key: '3',
+    //                 icon: null,
+    //                 children: null,
+    //                 label: 'Ao thun',
+    //                 route: "ao-thun",
+    //                 type: ''
+    //             }
+    //         ],
+    //         label: 'Ao',
+    //         type: ''
+    //     },
+    //     {
+    //         key: '4',
+    //         icon: null,
+    //         children: [
+    //             {
+    //                 key: '5',
+    //                 icon: null,
+    //                 children: null,
+    //                 label: 'Quan dui',
+    //                 route: "quan-dui",
+    //                 type: '',
+    //             },
+    //             {
+    //                 key: '6',
+    //                 icon: null,
+    //                 children: null,
+    //                 label: 'Quan dai',
+    //                 route: "quan-dai",
+    //                 type: ''
+    //             }
+    //         ],
+    //         label: 'Quan',
+    //         type: ''
+    //     }
+    // ]
 
     const handleNavigate = (route, key) => {
         navigate(

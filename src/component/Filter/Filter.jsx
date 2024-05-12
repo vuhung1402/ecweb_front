@@ -1,6 +1,7 @@
 import { Menu } from 'antd'
 import { AppstoreOutlined, MailOutlined, SettingOutlined, CalendarOutlined } from '@ant-design/icons';
-import React from "react"
+import React, { useEffect, useState } from "react"
+import { endpoint } from '../../api';
 
 
 function getItem(label, key, icon, children, type) {
@@ -15,64 +16,86 @@ function getItem(label, key, icon, children, type) {
 
 function Filter({onClick}){
 
-  const category = [
-    {
-        key: '1',
-        icon: null,
-        children: [
-            {
-                key: '10',
-                icon: null,
-                children: null,
-                label: 'Xem tất cả áo',
-                route: 'ao-so-mi',
-                type: '',
+    const [category, setCategory] = useState([])
+
+    useEffect(() => {
+        fetch(`${endpoint}/category/getAllCategories`, {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
             },
-            {
-                key: '2',
-                icon: null,
-                children: null,
-                label: 'Ao so mi',
-                route: 'ao-so-mi',
-                type: '',
-            },
-            {
-                key: '3',
-                icon: null,
-                children: null,
-                label: 'Ao thun',
-                route:'ao-thun',
-                type: ''
+        }).then((response) => {
+            if (!response.ok) {
+                throw new Error("Netword response not ok")
             }
-        ],
-        label: 'Ao',
-        type: ''
-    },
-    {
-        key: '4',
-        icon: null,
-        children: [
-            {
-                key: '5',
-                icon: null,
-                children: null,
-                label: 'Quan dui',
-                route: 'quan-dui',
-                type: '',
-            },
-            {
-                key: '6',
-                icon: null,
-                children: null,
-                label: 'Quan dai',
-                route:'quan-dai',
-                type: ''
+            return response.json()
+        }).then((json) => {
+            if(json?.success){
+                setCategory(json?.formattedData)
             }
-        ],
-        label: 'Quan',
-        type: ''
-    }
-  ]
+        }).catch((error) => {
+            console.error("Error: ", error)
+        })
+    }, [])
+
+//   const category = [
+//     {
+//         key: '1',
+//         icon: null,
+//         children: [
+//             {
+//                 key: '10',
+//                 icon: null,
+//                 children: null,
+//                 label: 'Xem tất cả áo',
+//                 route: 'ao-so-mi',
+//                 type: '',
+//             },
+//             {
+//                 key: '2',
+//                 icon: null,
+//                 children: null,
+//                 label: 'Ao so mi',
+//                 route: 'ao-so-mi',
+//                 type: '',
+//             },
+//             {
+//                 key: '3',
+//                 icon: null,
+//                 children: null,
+//                 label: 'Ao thun',
+//                 route:'ao-thun',
+//                 type: ''
+//             }
+//         ],
+//         label: 'Ao',
+//         type: ''
+//     },
+//     {
+//         key: '4',
+//         icon: null,
+//         children: [
+//             {
+//                 key: '5',
+//                 icon: null,
+//                 children: null,
+//                 label: 'Quan dui',
+//                 route: 'quan-dui',
+//                 type: '',
+//             },
+//             {
+//                 key: '6',
+//                 icon: null,
+//                 children: null,
+//                 label: 'Quan dai',
+//                 route:'quan-dai',
+//                 type: ''
+//             }
+//         ],
+//         label: 'Quan',
+//         type: ''
+//     }
+//   ]
 
     return(
         <div className=' p-5'>

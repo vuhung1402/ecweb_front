@@ -5,7 +5,7 @@ import { useLocation, useParams } from "react-router-dom"
 import Loading from "../Loading/Loading"
 import ProductFilter from "../ProductFilter/ProductFilter"
 
-const ProductList = ({handleSelect}) => {
+const ProductList = ({handleSelect, data}) => {
 
   //truyen props dataSample
 
@@ -23,15 +23,13 @@ const ProductList = ({handleSelect}) => {
 
 
           <div className=" grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 xl:gap-x-10">
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
-            <CardProduct/>
+            {
+                data?.map((item) => {
+                    return(
+                        <CardProduct data = {item} />
+                    )
+                })
+            }
           </div>
 
         </div>

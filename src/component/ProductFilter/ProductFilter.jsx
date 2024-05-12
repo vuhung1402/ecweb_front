@@ -19,29 +19,30 @@ const ProductFilter = ({handleSelect}) => {
         }
         options={[
           {
-            value: '1',
-            label: 'Not Identified',
+            value: 1,
+            label: 'Giá: Tăng dần',
+            name: "tang-dan"
           },
           {
-            value: '2',
-            label: 'Closed',
+            value: 2,
+            label: 'Giá: Giảm dần',
+            name:'giam-dan'
           },
           {
-            value: '3',
-            label: 'Communicated',
+            value: 3,
+            label: 'Tên: A - Z',
+            name:'A-Z'
           },
           {
-            value: '4',
-            label: 'Identified',
+            value:4,
+            label:'Tên: Z - A',
+            name:'Z-A'
           },
           {
-            value: '5',
-            label: 'Resolved',
-          },
-          {
-            value: '6',
-            label: 'Cancelled',
-          },
+            value: 5,
+            label:'Mới nhất',
+            name:'moi-nhat'
+          }
         ]}
       />
   )

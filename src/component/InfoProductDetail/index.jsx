@@ -1,50 +1,137 @@
 import { message } from "antd"
-import { useState } from "react"
-import { VND, formatCurrencyVN } from "../../utils/function"
+import { useEffect, useState } from "react"
+import { VND, addKeyToArraySize, formatCurrencyVN, getNotInvalidColor } from "../../utils/function"
+import IconClose from "@icon/iconClose.svg"
 import React from "react"
 
 
-const InfoProductDetail = ({data}) => {
+const InfoProductDetail = ({ data }) => {
 
-    const [state, setState] = useState(
-        {
-            number:1
-        }
-    )
+    const [state, setState] = useState({
+        number: 1,
+        color: [],
+        sizes: [],
+        selectColor: {},
+        textColor: '',
+        selectSize: {},
+    });
+
+    useEffect(() => {
+        if (data) {
+            let color = [];
+            if (data?.array_color?.length > 0) {
+                data?.array_color?.map((item) => {
+                    const sizeArray = addKeyToArraySize(item?.array_sizes)
+                    console.log(sizeArray)
+                    color.push({
+                        code: item?.code_color,
+                        name: item?.name_color,
+                        invalid: item?.total_number_with_color === 0,
+                        sizes: sizeArray,
+                    });
+                });
+            };
+
+            const notInvalidColor = getNotInvalidColor(color);
+
+            state.color = color;
+            state.sizes = notInvalidColor?.sizes;
+            state.selectColor = notInvalidColor;
+            state.textColor = notInvalidColor?.name;
+            setState(prev => ({ ...prev }));
+        };
+    }, [data]);
 
     const handleNumber = (params) => {
-        if(state.number > 1){
-            if(params === "minus"){
-                setState(prev => ({...prev, number: prev.number - 1}))
+        if (state.number > 1) {
+            if (params === "minus") {
+                setState(prev => ({ ...prev, number: prev.number - 1 }))
             }
         }
 
-        if(params === "plus"){
-            setState(prev => ({...prev, number: prev.number + 1}))
+        if (params === "plus") {
+            setState(prev => ({ ...prev, number: prev.number + 1 }))
         }
     }
 
-    const showMessage = () => {
-        message.success("Thanhf coong")
+    const handleChangeNameColor = (name) => {
+        console.log(name);
+        setState(prev => ({ ...prev, textColor: name }));
+    };
+
+    const handleMouseLeave = () => {
+        const { selectColor } = state;
+        state.textColor = selectColor?.name;
+        setState(prev => ({ ...prev }));
+    };
+
+    const handleSelectColor = (item) => {
+        if (item.invalid) return;
+
+        const objectColor = state.color?.find(itemColor => itemColor?.code === item.code);
+        console.log("ObjectColor from InfoProductDetail: ", objectColor);
+        state.sizes = objectColor?.sizes;
+        state.selectColor = item;
+        state.selectSize = {};
+        setState((prev) => ({ ...prev }));
+    };
+
+    const handleSelectSize = (item) => {
+        if (item?.invalid) return;
+
+        state.selectSize = item;
+        setState((prev) => ({ ...prev }));
     }
 
-
-    return(
+    return (
         <div className=" w-full sticky h-fit top-20">
             <div className=" text-[20px] font-semibold py-3 border-b-[1px]">{data?.name}</div>
             <div className=" text-red-500 text-[18px] font-semibold opacity-[0.92] border-b-[1px] py-3">
                 {formatCurrencyVN(data?.price)}
             </div>
-            <div className=" py-3 border-b-[1px] cursor-default">
-                <div>
-                    <div className=" text-[13px] font-light mb-2" >Den</div>
-                    <div className=" bg-black rounded-full h-[23px] w-[23px]"></div>
-                </div>
-                <div className=" flex py-3">
-                    <div className=" w-[40px] h-[40px] text-center border flex items-center justify-center">
-                        <div className=" text-[16px]">M</div>
-                    </div>
-                </div>
+            <div id="text-name-color" className="text-[13px] font-light my-2" >{state.textColor.toUpperCase()}</div>
+            <div className="pb-2 cursor-default flex gap-3 items-center">
+                {
+                    state.color?.map((item, index) => {
+                        return (
+
+                            <div
+                                onMouseEnter={() => handleChangeNameColor(item?.name)}
+                                onClick={() => handleSelectColor(item)}
+                                onMouseLeave={handleMouseLeave}
+                                key={`product-color-${index}`}
+                                className={` relative h-[31px] w-[31px] cursor-pointer rounded-full flex justify-center items-center ${state.selectColor?.code === item?.code ? 'border border-[#808284]' : ''}`}
+                            >
+                                <div
+                                    className={` h-[23px] w-[23px] rounded-full ${item.invalid ? ' opacity-5' : ''}`}
+                                    style={{ backgroundColor: item?.code }}
+                                >
+                                </div>
+                                {item.invalid &&
+                                    (<div className=" absolute">
+                                        <IconClose />
+                                    </div>)
+                                }
+                            </div>
+                        )
+                    })
+                }
+            </div>
+            <div className="flex gap-3 pb-3 items-center border-b">
+                {state.sizes?.map((item, index) => {
+                    return (
+                        <>
+                            <div
+                                onClick={() => handleSelectSize(item)}
+                                className={` relative w-[40px] h-[40px] text-center border flex items-center justify-center 
+                                            ${item?.name_size === state.selectSize?.name_size ? 'bg-black text-white' : 'text-black'} ${item?.invalid ? ' cursor-default' : ' cursor-pointer'}`}
+                                key={`product-size-${index}`}
+                            >
+                                <div className={`text-[16px] ${item?.invalid ? ' opacity-30' : ''}`}>{item?.name_size}</div>
+                            </div>
+                        </>
+                    )
+                })}
             </div>
 
             <div className="flex items-center mt-4">
@@ -61,7 +148,7 @@ const InfoProductDetail = ({data}) => {
                 </div>
             </div>
 
-            <div onClick={showMessage} className="w-full bg-[#0d4cdd] mt-3 flex items-center justify-center h-[50px] cursor-pointer">
+            <div className="w-full bg-[#0d4cdd] mt-3 flex items-center justify-center h-[50px] cursor-pointer">
                 <div className=" text-white font-medium select-none">Thêm vào giỏ</div>
             </div>
 
