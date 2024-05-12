@@ -17,7 +17,7 @@
                 "src/components/*"
             ],
             "@icon/*": [
-                "src/assets/icons/*"
+                "src/assets/icon/*"
             ],
             "@utils/*": [
                 "src/utils/*"
