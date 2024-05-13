@@ -61,6 +61,11 @@ const AppRoutes = [
         Component: Page?.AddressPage,
         defaultLayout: true,
     },
+    {
+        path: '/admin',
+        Component: Page?.AdminPage,
+        defaultLayout: false,
+    }
 
 ]
 
