@@ -15,7 +15,7 @@ module.exports = {
         alias: {
             "@pages": path.resolve(__dirname, "src", "pages"),
             "@core": path.resolve(__dirname, "src", "core"),
-            "@components": path.resolve(__dirname, "src", "components"),
+            "@component": path.resolve(__dirname, "src", "component"),
             "@images": path.resolve(__dirname, "src", "assets", "images"),
             "@icon": path.resolve(__dirname, "src", "assets", "icon"),
             "@utils": path.resolve(__dirname, "src", "utils"),

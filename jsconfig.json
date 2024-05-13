@@ -13,8 +13,8 @@
             "@images/*": [
                 "src/assets/images/*"
             ],
-            "@components/*": [
-                "src/components/*"
+            "@component/*": [
+                "src/component/*"
             ],
             "@icon/*": [
                 "src/assets/icon/*"
