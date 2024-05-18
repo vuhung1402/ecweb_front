@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { endpoint } from "../../api"
+import { endpoint } from "../../api/api"
 import CardProduct from "../CardProduct/CardProduct"
 import { useLocation, useParams } from "react-router-dom"
 import Loading from "../Loading/Loading"

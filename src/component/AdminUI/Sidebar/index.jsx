@@ -5,6 +5,9 @@ import UserIcon from "@icon/iconUser.svg"
 import ProductIcon from "@icon/iconProduct.svg"
 import TransactionIcon from "@icon/iconTransaction.svg"
 import InboxIcon from "@icon/iconInbox.svg"
+import { Avatar } from "antd"
+import { UserOutlined } from "@ant-design/icons"
+import NotifiIcon from "@icon/notifiIcon.svg"
 
 const SildeBar = ({tab, handleChangeTab}) => {
 
@@ -36,7 +39,11 @@ const SildeBar = ({tab, handleChangeTab}) => {
     ];
 
     return(
-        <div className=" w-full h-full flex flex-col items-center pt-20 gap-3">
+        <div className=" w-full h-full flex flex-col items-center pt-5 gap-5">
+            <div className=" flex items-center w-3/4 gap-4 p-2">
+                <Avatar icon={<UserOutlined />} />
+                <div>User 1</div>
+            </div>
             {sidebarTitle.map((item, index) => {
                 return (
                     <div

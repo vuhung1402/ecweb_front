@@ -22,6 +22,12 @@
             "@utils/*": [
                 "src/utils/*"
             ],
+            "@redux/*":[
+                "src/redux/*"
+            ],
+            "@api/*":[
+                "src/api/*"
+            ]
         }
     },
 }

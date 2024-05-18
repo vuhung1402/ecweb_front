@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { endpoint } from "../../../api"
+import { endpoint } from "../../../api/api"
 
 const ForgotPass = () => {
     const [notify, setNotify] = useState()

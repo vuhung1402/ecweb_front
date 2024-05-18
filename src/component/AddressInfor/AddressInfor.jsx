@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
-import { endpoint } from "../../api"
+import { endpoint } from "../../api/api"
 import UpdateAddress from "../UpdateAddress/UpdateAddress";
 import { message } from "antd";
 

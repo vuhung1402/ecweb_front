@@ -2,7 +2,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom"
 import Filter from "../../component/Filter/Filter"
 import ProductList from "../../component/ProductList/ProductList"
 import React, { useEffect, useState } from "react"
-import { endpoint } from "../../api"
+import { endpoint } from "../../api/api"
 
 const Products = () => {
     const navigate = useNavigate()

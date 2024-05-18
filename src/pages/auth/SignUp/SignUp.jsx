@@ -1,4 +1,4 @@
-import { endpoint } from "../../../api";
+import { endpoint } from "../../../api/api";
 import React, { useRef, useState } from "react";
 
 function SignUp(){

@@ -7,7 +7,7 @@ import './style.scss'
 import SearchBox from "../../component/SearchBox/SearchBox"
 import CartPopUp from "../../component/CartPopUp/CartPopUp"
 import { clear } from "../../redux/actions"
-import { endpoint } from "../../api"
+import { endpoint } from "../../api/api"
 
 const Header = () => {
     const user = useUserPackageHook()

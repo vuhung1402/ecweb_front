@@ -19,6 +19,8 @@ module.exports = {
             "@images": path.resolve(__dirname, "src", "assets", "images"),
             "@icon": path.resolve(__dirname, "src", "assets", "icon"),
             "@utils": path.resolve(__dirname, "src", "utils"),
+            "@redux": path.resolve(__dirname,"src", "redux"),
+            "@api": path.resolve(__dirname,"src", "api"),
         }
     },
     module: {

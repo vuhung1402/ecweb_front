@@ -3,7 +3,7 @@ import { clear } from "../../redux/actions"
 import { useNavigate } from "react-router-dom"
 import React, { useEffect, useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
-import { endpoint } from "../../api"
+import { endpoint } from "../../api/api"
 import Footer from "@core/Footer"
 import Loading from "../../component/Loading/Loading"
 

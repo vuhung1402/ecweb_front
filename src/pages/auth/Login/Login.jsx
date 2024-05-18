@@ -3,7 +3,7 @@ import { useUserPackageHook } from "../../../redux/hooks/userHook"
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { userPackage } from "../../../redux/actions"
-import { endpoint } from "../../../api"
+import { endpoint } from "../../../api/api"
 import { message } from "antd"
 
 const Login = () => {

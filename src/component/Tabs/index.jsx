@@ -1,77 +1,69 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Tabs } from "antd"
+import ProductList from "@component/AdminUI/ProductList";
+import Modal from "@component/ModalCategory";
 
-const TabCategory = () => {
-    const initialItems = [
-        {
-            label: 'Tab 1',
-            children: 'Content of Tab 1',
-            key: '1',
-        },
-        {
-            label: 'Tab 2',
-            children: 'Content of Tab 2',
-            key: '2',
-        },
-        {
-            label: 'Tab 3',
-            children: 'Content of Tab 3',
-            key: '3',
-        },
-    ];
-    const [activeKey, setActiveKey] = useState(initialItems[0].key);
-    const [items, setItems] = useState(initialItems);
-    const newTabIndex = useRef(0);
+const TabCategory = ({data}) => {
+    const [state, setState] = useState({
+        activeKey: data?.[0]?.category_id,
+        isModalOpen: false,
+        modalType: '',
+    })
+    useEffect(() => {
+        if (data) {
+            state.activeKey = data?.[0]?.category_id;
+            setState((prev) => ({ ...prev }))
+        }
+    }, [data])
 
     const onChange = (newActiveKey) => {
-        setActiveKey(newActiveKey);
+        console.log("newActiveKey: ", newActiveKey);
+        state.activeKey = newActiveKey;
+        setState((prev) => ({ ...prev }))
     };
-    const add = () => {
-        const newActiveKey = `newTab${newTabIndex.current++}`;
-        const newPanes = [...items];
-        newPanes.push({
-            label: 'New Tab',
-            children: 'Content of new Tab',
-            key: newActiveKey,
-        });
-        setItems(newPanes);
-        setActiveKey(newActiveKey);
-    };
-    const remove = (targetKey) => {
-        let newActiveKey = activeKey;
-        let lastIndex = -1;
-        items.forEach((item, i) => {
-            if (item.key === targetKey) {
-                lastIndex = i - 1;
-            }
-        });
-        const newPanes = items.filter((item) => item.key !== targetKey);
-        if (newPanes.length && newActiveKey === targetKey) {
-            if (lastIndex >= 0) {
-                newActiveKey = newPanes[lastIndex].key;
-            } else {
-                newActiveKey = newPanes[0].key;
-            }
-        }
-        setItems(newPanes);
-        setActiveKey(newActiveKey);
-    };
+
+    const handleOpenModal = () => {
+        state.isModalOpen = !state.isModalOpen;
+        setState((prev) => ({...prev}))
+    }
+
+    // const deleteTab = (targetKey) => {
+    //     state.isModalDeleteOpen = !state.isModalDeleteOpen;
+    //     state.activeKey = targetKey
+    //     setState((prev) => ({...prev}))
+    // }
+
     const onEdit = (targetKey, action) => {
         if (action === 'add') {
-            add();
+            state.modalType = 'create'
+            handleOpenModal();
         } else {
-            remove(targetKey);
+            state.modalType = 'delete'
+            handleOpenModal();
         }
+        setState((prev) => ({...prev}))
     };
 
     return (
-        <Tabs
-            type="editable-card"
-            onChange={onChange}
-            activeKey={activeKey}
-            onEdit={onEdit}
-            items={items}
-        />
+        <div>
+            <Tabs
+                type="editable-card"
+                onChange={onChange}
+                activeKey={state.activeKey}
+                onEdit={onEdit}
+                items={data?.map((item, index) => {
+                    return {
+                        label: item.name,
+                        key: item?.category_id,
+                        children: (
+                            <ProductList idCategory={item?.category_id} name = {item?.name} />
+                        )
+                    }
+                })}
+            />
+
+            <Modal open = {state.isModalOpen} onCancel = {handleOpenModal} type = {state.modalType} />
+        </div>
     )
 }
 

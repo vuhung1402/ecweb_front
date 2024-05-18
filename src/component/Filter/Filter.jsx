@@ -1,7 +1,7 @@
 import { Menu } from 'antd'
 import { AppstoreOutlined, MailOutlined, SettingOutlined, CalendarOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from "react"
-import { endpoint } from '../../api';
+import { endpoint } from '../../api/api';
 
 
 function getItem(label, key, icon, children, type) {

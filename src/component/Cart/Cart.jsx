@@ -1,7 +1,7 @@
 import React from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { useEffect, useState } from "react"
-import { endpoint } from "../../api"
+import { endpoint } from "../../api/api"
 import { useNavigate } from "react-router-dom"
 
 const Cart = () => {

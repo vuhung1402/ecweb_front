@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
-import { endpoint } from "../../api"
+import { endpoint } from "../../api/api"
 
 const UpdateAddress = ({inforAdress, handleUpdateInfor, handleSaveAddress}) => {
     

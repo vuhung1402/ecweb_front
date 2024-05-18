@@ -4,7 +4,7 @@ import ImagePreview from "../../component/ImagePreview"
 import InfoProductDetail from "../../component/InfoProductDetail"
 import Footer from "../../core/Footer"
 import React, { useEffect, useState } from "react"
-import { endpoint } from "../../api"
+import { endpoint } from "../../api/api"
 
 
 const ProductDetail = () => {
