@@ -9,13 +9,16 @@ const ModalProduct = (props) => {
     const { onOk, onCancel } = props
 
     useEffect(() => {
-        const element = document.getElementById('ant-modal-wrap');
-        console.log("element: ", element);
-        if (element) {
-            const divsWithTabIndex = element.querySelectorAll('div[tab-index="-1"]');
-            console.log(divsWithTabIndex);
-        }
-    }, []);
+        const element = document.getElementsByClassName('ant-modal-content');
+        const modalBodyElement = document.getElementsByClassName('ant-modal-body');
+
+        if (element?.[0]) {
+            const parentNode = element?.[0]?.parentElement;
+            parentNode.style.height = '100%';
+        };
+
+        if (modalBodyElement?.[0]) modalBodyElement?.[0]?.classList.add('scrollbar-hide');
+    },[open]);
 
     const title = {
         'delete': 'Bạn có chắc chắn muốn xoá!!',
@@ -48,6 +51,7 @@ const ModalProduct = (props) => {
                 height: '300px',
 
             }}
+            rootClassName="root-product"
             title={title}
             open={open}
             onOk={onOk}

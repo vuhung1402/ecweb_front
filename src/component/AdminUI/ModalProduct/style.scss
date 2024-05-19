@@ -1,5 +1,22 @@
-.modal-product{
+.root-product{
     .ant-modal{
         width: 70vw !important;
+        height: 80% !important;
+        top: 0 !important;
+    }
+
+    .ant-modal-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .ant-modal-content {
+        height: 100%;
+    }
+
+    .ant-modal-body {
+        height: calc(100% - 68px);
+        overflow-y: auto;
     }
 }

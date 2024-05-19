@@ -11,6 +11,7 @@ const InforProduct = () => {
             <div className=" flex gap-3 items-center">
                 <div className=" w-28">Mã sản phẩm</div>
                 <Input
+                    type=""
                     placeholder="Mã sản phẩm"
                     style={{
                         width: '400px'
@@ -21,6 +22,7 @@ const InforProduct = () => {
             <div className=" flex gap-3 items-center">
                 <div className=" w-28">Tên sản phẩm</div>
                 <Input
+                    type=""
                     placeholder="Tên sản phẩm"
                     style={{
                         width: '400px'
@@ -29,20 +31,22 @@ const InforProduct = () => {
             </div>
 
             <div className=" flex gap-3 items-center">
-                <div className=" w-28">Giá tiền</div>
+                <div className=" w-28 hide">Giá tiền</div>
                 <InputNumber
                     style={{
                         width: '400px'
                     }}
                     formatter={(value) => `VND ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                     parser={(value) => value?.replace(/\VND\s?|(,*)/g, '')}
-                    // onChange={onChange}
+                // onChange={onChange}
                 />
             </div>
 
-            <div className=" flex gap-3 items-center">
+            <div className=" flex gap-3 items-center w-full">
                 <div className=" w-28">Mô tả</div>
-                <TextEditor/>
+                <div className=" flex flex-grow">
+                    <TextEditor />
+                </div>
             </div>
         </div>
     )

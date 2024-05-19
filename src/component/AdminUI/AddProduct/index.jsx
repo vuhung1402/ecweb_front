@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import InforProduct from "./InforProduct";
+import UploadImage from "./uploadImage";
 
 const AddProduct = () => {
         const divsWithTabIndex = document.querySelectorAll('div[tabindex="-1"]');
@@ -7,10 +8,11 @@ const AddProduct = () => {
 
     return (
         <div
-            className=" overflow-y-auto"
+            className=""
         >
             <div className=" w-full">
                 <InforProduct />
+                <UploadImage/>
             </div>
         </div>
     )

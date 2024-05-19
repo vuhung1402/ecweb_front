@@ -10,12 +10,13 @@ export default function TextEditor() {
     }
   };
   return (
-    <>
+    <div className=' w-full'>
       <Editor
         apiKey='cerf6p0iinuy5e7bjai7nt823hvba5fwe55f72y41qg50pzi'
         onInit={(_evt, editor) => editorRef.current = editor}
         init={{
           height: 400,
+          
           menubar: false,
           plugins: [
             'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
@@ -29,6 +30,6 @@ export default function TextEditor() {
           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
         }}
       />
-    </>
+    </div>
   );
 }
