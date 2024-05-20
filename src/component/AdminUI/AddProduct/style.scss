@@ -1,0 +1,15 @@
+.upload-image-product {
+    .ant-upload-list-item-error {
+        border-color: rgb(219,219,219) !important;
+    }
+    
+    .ant-tooltip {
+        display: none;
+    }
+}
+
+.popover-upload-image {
+    .ant-popover-title {
+        font-size: 17px !important;
+    }
+}
