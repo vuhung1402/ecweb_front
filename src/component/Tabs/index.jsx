@@ -8,13 +8,14 @@ const TabCategory = ({data}) => {
         activeKey: data?.[0]?.category_id,
         isModalOpen: false,
         modalType: '',
-    })
+    });
+
     useEffect(() => {
         if (data) {
             state.activeKey = data?.[0]?.category_id;
             setState((prev) => ({ ...prev }))
         }
-    }, [data])
+    }, [data]);
 
     const onChange = (newActiveKey) => {
         console.log("newActiveKey: ", newActiveKey);
@@ -44,8 +45,14 @@ const TabCategory = ({data}) => {
         setState((prev) => ({...prev}))
     };
 
+    // change tab name
+    const handleChangeName = (e) => {
+        state.name = e.target.value
+        setState((prev) => ({...prev}))
+    };
+
     return (
-        <div>
+        <>
             <Tabs
                 type="editable-card"
                 onChange={onChange}
@@ -62,8 +69,13 @@ const TabCategory = ({data}) => {
                 })}
             />
 
-            <Modal open = {state.isModalOpen} onCancel = {handleOpenModal} type = {state.modalType} />
-        </div>
+            <Modal
+                open={state.isModalOpen}
+                type={state.modalType}
+                onCancel={handleOpenModal}
+                handleChangeName={handleChangeName}
+            />
+        </>
     )
 }
 

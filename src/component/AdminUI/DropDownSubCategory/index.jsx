@@ -7,25 +7,7 @@ import ModalCategory from '@component/ModalCategory';
 
 
 let index = 0;
-const DropDownSubCategory = ({ idCategory }) => {
-    const data = [
-        {
-            "sub_category_id": "1",
-            "name": "Áo Thun",
-            "route": "ao-thun"
-        },
-        {
-            "sub_category_id": "2",
-            "name": "Áo Sơ Mi",
-            "route": "ao-so-mi"
-        },
-        {
-            "sub_category_id": "3",
-            "name": "Áo Polo",
-            "route": "ao-polo"
-        }
-    ]
-
+const DropDownSubCategory = ({ idCategory, handleChangeSubCategory, subCategory }) => {
     const [state, setState] = useState({
         items: [],
         name: '',
@@ -36,9 +18,9 @@ const DropDownSubCategory = ({ idCategory }) => {
 
     useEffect(() => {
         //goi api lay subCategory
-        state.items = data;
+        state.items = subCategory;
         setState((prev) => ({ ...prev }))
-    }, [])
+    }, [subCategory])
 
     const handleSelect = (value, option) => {
         state.idSubCategory =  option?.value
@@ -67,21 +49,30 @@ const DropDownSubCategory = ({ idCategory }) => {
     };
 
     const handleEdit = () => {
+        if (!state.idSubCategory) return;
         state.isModalOpen = !state.isModalOpen;
         state.modalType = 'edit';
         setState((prev) => ({...prev}));
     }
-
+    
     const handleDelte = () => {
+        if (!state.idSubCategory) return;
         state.isModalOpen = !state.isModalOpen;
         state.modalType = 'delete';
         setState((prev) => ({...prev}));
-    }
+    };
+
+    const onChangeSubName = (name) => {
+        handleChangeSubCategory(name, state.idSubCategory);
+        state.isModalOpen = false;
+        setState(prev => ({...prev}));
+    };
 
     return (
         <div className=' flex items-center gap-3 px-4'>
             <Select
                 onSelect={handleSelect}
+                value={state.idSubCategory}
                 style={{
                     width: 300,
                 }}
@@ -112,7 +103,7 @@ const DropDownSubCategory = ({ idCategory }) => {
                         </Space>
                     </>
                 )}
-                options={state.items.map((item) => ({
+                options={state.items?.map((item) => ({
                     label: item?.name,
                     value: item?.sub_category_id,
                 }))}
@@ -123,7 +114,15 @@ const DropDownSubCategory = ({ idCategory }) => {
             <div onClick={handleDelte} className={` cursor-pointer ${state.idSubCategory === '' ? 'opacity-50' : 'opacity-100'}`}>
                 <DeleteIcon />
             </div>
-            <ModalCategory open = {state.isModalOpen} type = {state.modalType} onCancel = {handleEdit} name = {state.name} idCategory = {idCategory} idSubCategory = {state.idSubCategory} />
+            <ModalCategory
+                open={state.isModalOpen}
+                type={state.modalType}
+                onCancel={handleEdit}
+                name={state.name}
+                handleChangeName={onChangeSubName}
+                idCategory={idCategory}
+                idSubCategory={state.idSubCategory}
+            />
         </div>
     );
 };

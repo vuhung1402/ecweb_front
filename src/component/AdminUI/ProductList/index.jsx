@@ -9,10 +9,8 @@ import ModalCategory from '@component/ModalCategory';
 import ModalProduct from '../ModalProduct';
 
 const ProductList = (props) => {
-    const {idCategory, name} = props
-
-    console.log("idCategory::ProductList: ", idCategory);
-    console.log("name::ProductList: ", name);
+    const { idCategory, subCategory } = props;
+    const { handleOpenModal, handleChangeSubCategory } = props; // function
 
     const data = [
         {
@@ -121,40 +119,30 @@ const ProductList = (props) => {
         setState((prev) => ({ ...prev, data: object }));
     }
 
-    const handleEditCategory = () => {
-        state.modalType = 'edit';
-        state.isModalOpen = !state.isModalOpen
-        setState((prev) => ({...prev}))
-    }
-
-    const handleOkEditCategory = (name) => {
-        //call api
-    }
-
     const handleAddProduct = () => {
-        state.isModalProductOpen = !state.isModalProductOpen
-        state.modalProductType = 'create'
-        setState((prev) => ({...prev}))
-    }
-
-    const handleDeleteProduct = () => {
-        
-    }
+        state.isModalProductOpen = !state.isModalProductOpen;
+        state.modalProductType = 'create';
+        setState((prev) => ({...prev}));
+    };
 
     return (
         <div>
             <div className='flex gap-3 items-center justify-between mb-3 px-2'>
                 <div className=' flex items-center gap-3'>
-                    <Button onClick={handleEditCategory} icon={<EditOutlined />} type='primary' >
+                    <Button onClick={() => handleOpenModal('edit')} icon={<EditOutlined />} type='primary' >
                         Sửa danh mục
                     </Button>
-                    <ModalCategory open = {state.isModalOpen} type = {state.modalType} onCancel = {handleEditCategory} name = {name} idCategory = {idCategory} onOk = {handleOkEditCategory} />
+
                     <Button onClick={handleAddProduct} icon={<PlusOutlined />} type='primary' >
                         Thêm sản phẩm
                     </Button>
                     <ModalProduct open = {state.isModalProductOpen} onCancel = {handleAddProduct} type = {state.modalProductType} />
                 </div>
-                <DropDownSubCategory idCategory={idCategory} />
+                <DropDownSubCategory
+                    idCategory={idCategory}
+                    subCategory={subCategory}
+                    handleChangeSubCategory={handleChangeSubCategory}
+                />
             </div>
             <Table columns={columns} dataSource={data} />
         </div>

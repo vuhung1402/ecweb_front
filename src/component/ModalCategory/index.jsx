@@ -1,39 +1,55 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import { Modal } from 'antd'
 
 const ModalCategory = (props) => {
     const { type, open, name, idCategory, idSubCategory} = props;
-    const { onOk, onCancel } = props;
+    const { onCancel, handleChangeName, handleDeleteTab } = props;
+
     const [state, setState]  = useState({
         name: ''
-    })
+    });
+
+    const inputRef = useRef(null);
 
     useEffect(() => {
-        state.name = name
-        setState((prev) => ({...prev}))
-    },[name])
+        state.name = name;
+        setState((prev) => ({...prev}));
+    },[name]);
 
-    // const handleOK = (event) => {
-    //     if (type === 'delete' && typeof onOk === 'function') {
-    //         onOk(event, id)
-    //     }
-    // }
+    useEffect(() => {
+        console.log('re-render');
+        if (inputRef && inputRef.current) inputRef.current.focus();
+    },[open])
 
-    const handleChangeName = (e) => {
-        state.name = e.target.value
-        setState((prev) => ({...prev}))
-    }
+    const handleOK = () => {
+        if (type === 'delete') handleDeleteTab();
+        if (type === 'edit' || type === 'create') {
+            handleChangeName(state.name);
+        };
+    };
 
     const renderTab = {
         'delete': (
             <p>Vui lòng kiểm tra kỹ trước khi xác nhận xoá</p>
         ),
         'edit': (
-            <input onChange={handleChangeName} value={state.name} className="p-3 text-sm outline-none border w-full" placeholder="Tên danh mục sản phẩm" />
+            <input
+                ref={inputRef}
+                onChange={(e) => setState(prev => ({...prev, name: e.target.value}))}
+                value={state.name}
+                className="p-3 text-sm outline-none border w-full"
+                placeholder="Tên danh mục sản phẩm"
+            />
         ),
         'create': (
-            <input className="p-3 text-sm outline-none border w-full" placeholder="Tên danh mục sản phẩm" />
+            <input
+                ref={inputRef}
+                onChange={(e) => setState(prev => ({...prev, name: e.target.value}))}
+                value={state.name}
+                className="p-3 text-sm outline-none border w-full"
+                placeholder="Tên danh mục sản phẩm"
+            />
         )
     }[type];
 
@@ -57,7 +73,7 @@ const ModalCategory = (props) => {
                 okText={okText}
                 okType={type === 'delete' ? 'danger' : 'primary'}
                 cancelText={'Huỷ'}
-                onOk={onOk}
+                onOk={handleOK}
                 onCancel={onCancel}
             >
                 {renderTab}

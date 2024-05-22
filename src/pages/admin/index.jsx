@@ -26,7 +26,6 @@ const Admin = () => {
 
     useEffect(() => {
         const activeTab = localStorage.getItem('activeTab');
-        console.log('activeTab: ', activeTab);
         if(activeTab?.length > 0){
             navigate({
                 search: activeTab
