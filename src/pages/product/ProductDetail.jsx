@@ -41,54 +41,54 @@ const ProductDetail = () => {
         "price": 330000,
         "total_number": 5,
         "array_color": [
-            {
-                "name_color": "red",
-                "code_color": "#FF0000",
-                "total_number_with_color": 4,
-                "image": "https://firebasestorage.googleapis.com/v0/b/imgaeproject.appspot.com/o/ao%2Faopolo%2FFEARLESS%20ringer%20polo%2Fz5366319186598_87e9f35b0c0e65b2ef354031594b8f57.jpg?alt=media&token=4fbf276e-e902-4cd6-802d-7f97ea96135c",
-                "array_sizes": [
-                    {
-                        "name_size": "XL",
-                        "total_number_with_size": 0
-                    },
-                    {
-                        "name_size": "L",
-                        "total_number_with_size": 1
-                    },
-                    {
-                        "name_size": "M",
-                        "total_number_with_size": 1
-                    },
-                    {
-                        "name_size": "S",
-                        "total_number_with_size": 1
-                    }
-                ]
-            },
-            {
-                "name_color": "Black",
-                "code_color": "#000000",
-                "total_number_with_color": 4,
-                "image": "https://firebasestorage.googleapis.com/v0/b/imgaeproject.appspot.com/o/ao%2Faopolo%2FFEARLESS%20ringer%20polo%2Fz5366321941639_904df69be0c4e2270f0e44cc618a6d00.jpg?alt=media&token=cb2e5425-c4fb-4479-8c91-fae8026efc9e",
-                "array_sizes": [
-                    {
-                        "name_size": "XL",
-                        "total_number_with_size": 1
-                    },
-                    {
-                        "name_size": "L",
-                        "total_number_with_size": 1
-                    },
-                    {
-                        "name_size": "M",
-                        "total_number_with_size": 1
-                    },
-                    // {
-                    //     "name_size": "S",
-                    //     "total_number_with_size": 1
-                    // }
-                ]
-            }
+            // {
+            //     "name_color": "red",
+            //     "code_color": "#FF0000",
+            //     "total_number_with_color": 4,
+            //     "image": "https://firebasestorage.googleapis.com/v0/b/imgaeproject.appspot.com/o/ao%2Faopolo%2FFEARLESS%20ringer%20polo%2Fz5366319186598_87e9f35b0c0e65b2ef354031594b8f57.jpg?alt=media&token=4fbf276e-e902-4cd6-802d-7f97ea96135c",
+            //     // "array_sizes": [
+            //     //     {
+            //     //         "name_size": "XL",
+            //     //         "total_number_with_size": 0
+            //     //     },
+            //     //     {
+            //     //         "name_size": "L",
+            //     //         "total_number_with_size": 1
+            //     //     },
+            //     //     {
+            //     //         "name_size": "M",
+            //     //         "total_number_with_size": 1
+            //     //     },
+            //     //     {
+            //     //         "name_size": "S",
+            //     //         "total_number_with_size": 1
+            //     //     }
+            //     // ]
+            // },
+            // {
+            //     "name_color": "Black",
+            //     "code_color": "#000000",
+            //     "total_number_with_color": 4,
+            //     "image": "https://firebasestorage.googleapis.com/v0/b/imgaeproject.appspot.com/o/ao%2Faopolo%2FFEARLESS%20ringer%20polo%2Fz5366321941639_904df69be0c4e2270f0e44cc618a6d00.jpg?alt=media&token=cb2e5425-c4fb-4479-8c91-fae8026efc9e",
+            //     // "array_sizes": [
+            //     //     {
+            //     //         "name_size": "XL",
+            //     //         "total_number_with_size": 1
+            //     //     },
+            //     //     {
+            //     //         "name_size": "L",
+            //     //         "total_number_with_size": 1
+            //     //     },
+            //     //     {
+            //     //         "name_size": "M",
+            //     //         "total_number_with_size": 1
+            //     //     },
+            //     //     // {
+            //     //     //     "name_size": "S",
+            //     //     //     "total_number_with_size": 1
+            //     //     // }
+            //     // ]
+            // }
         ],
         "array_image": [
             "https://firebasestorage.googleapis.com/v0/b/imgaeproject.appspot.com/o/ao%2Faopolo%2FFEARLESS%20ringer%20polo%2Fz5366321941639_904df69be0c4e2270f0e44cc618a6d00.jpg?alt=media&token=cb2e5425-c4fb-4479-8c91-fae8026efc9e",

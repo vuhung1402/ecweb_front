@@ -1,12 +1,18 @@
 import { Modal } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AddProduct from "../AddProduct";
+import { uuid } from "@utils/function";
+
 import "./style.scss"
 
 const ModalProduct = (props) => {
 
     const { open, type } = props
     const { onOk, onCancel } = props
+
+    const [state, setState] = useState({
+        color: [],
+    });
 
     useEffect(() => {
         const element = document.getElementsByClassName('ant-modal-content');
@@ -24,7 +30,92 @@ const ModalProduct = (props) => {
         'delete': 'Bạn có chắc chắn muốn xoá!!',
         'edit': 'Chỉnh sửa sản phẩm',
         'create': 'Tạo mới sản phẩm',
-    }[type]
+    }[type];
+
+    const handleAddColor = () => {
+        const { color } = state;
+
+        const newColor = {
+            _id: uuid(),
+            code_color: '#000000',
+            name_color: 'Đen',
+            size: [],
+        };
+
+        const updateColor = color;
+        updateColor.push(newColor);
+
+        const element = document.getElementById('color-info');
+        if (element) {
+            element.scrollIntoView({behavior: 'smooth', block: 'end'})
+        }
+
+        state.color = updateColor;
+        setState(prev => ({...prev}));
+    };
+
+    const handleDeleteColor = (id) => {
+        const { color } = state;
+
+        const updateColor = [...color];
+
+        const result = updateColor.filter((item) => item?._id !== id);
+
+        state.color = result;
+        setState((prev) => ({...prev}))
+    }
+
+    const handleAddSize = (colorUuid) => {
+        const { color } = state;
+
+        const newSize = {
+            _id: uuid(),
+            name_size: '',
+            total_number_with_size: 0,
+        };
+
+        const updateColor = [...color];
+
+        updateColor.map((item) => {
+            if (item?._id === colorUuid) {
+                const updateSize = item?.size;
+                return {
+                    ...item,
+                    size: updateSize?.push(newSize),
+                };
+            };
+
+            return item;
+        });
+
+        console.log(updateColor);
+
+        state.color = updateColor;
+        setState(prev => ({...prev}));
+    };
+
+    const handleDeleteSize = (id, idSize) => {
+        console.log("id: ", id)
+        console.log("idSize: ", idSize)
+
+        const { color } = state;
+
+        const updateColor = [...color];
+
+        const result = updateColor.map((item, index) => {
+            if (item?._id === id) {
+                const updateSize = [...item?.size]
+                return {
+                    ...item,
+                    size: updateSize?.filter((itemSize) => itemSize?._id !== idSize),
+                };
+            };
+            return item;
+        });
+
+        console.log("result: ", result);
+        setState(prev => ({...prev, color: result}));
+    }
 
     const renderTab = {
         'delete': (
@@ -34,7 +125,13 @@ const ModalProduct = (props) => {
             <div>heelo</div>
         ),
         'create': (
-            <AddProduct />
+            <AddProduct
+                color={state.color}
+                handleAddColor={handleAddColor}
+                handleAddSize={handleAddSize}
+                handleDeleteColor = {handleDeleteColor}
+                handleDeleteSize = {handleDeleteSize}
+            />
         )
     }[type];
 

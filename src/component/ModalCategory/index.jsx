@@ -5,8 +5,6 @@ import { Modal } from 'antd'
 const ModalCategory = (props) => {
     const { type, open, name, idCategory, idSubCategory} = props;
     const { onOk, onCancel } = props;
-    console.log("name: ", name)
-    console.log("type: ", type )
     const [state, setState]  = useState({
         name: ''
     })

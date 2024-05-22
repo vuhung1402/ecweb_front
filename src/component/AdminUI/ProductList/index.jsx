@@ -11,6 +11,9 @@ import ModalProduct from '../ModalProduct';
 const ProductList = (props) => {
     const {idCategory, name} = props
 
+    console.log("idCategory::ProductList: ", idCategory);
+    console.log("name::ProductList: ", name);
+
     const data = [
         {
             "name": "FEARLESS Apple baby tee",
@@ -96,6 +99,7 @@ const ProductList = (props) => {
                     </div>
                     <div className='cursor-pointer'>
                         <DeleteIcon />
+                        <ModalProduct open = {state.isModalProductOpen} type = {state.modalProductType}/>
                     </div>
                 </Space>
             ),
@@ -123,10 +127,18 @@ const ProductList = (props) => {
         setState((prev) => ({...prev}))
     }
 
+    const handleOkEditCategory = (name) => {
+        //call api
+    }
+
     const handleAddProduct = () => {
         state.isModalProductOpen = !state.isModalProductOpen
         state.modalProductType = 'create'
         setState((prev) => ({...prev}))
+    }
+
+    const handleDeleteProduct = () => {
+        
     }
 
     return (
@@ -136,7 +148,7 @@ const ProductList = (props) => {
                     <Button onClick={handleEditCategory} icon={<EditOutlined />} type='primary' >
                         Sửa danh mục
                     </Button>
-                    <ModalCategory open = {state.isModalOpen} type = {state.modalType} onCancel = {handleEditCategory} name = {name} idCategory = {idCategory} />
+                    <ModalCategory open = {state.isModalOpen} type = {state.modalType} onCancel = {handleEditCategory} name = {name} idCategory = {idCategory} onOk = {handleOkEditCategory} />
                     <Button onClick={handleAddProduct} icon={<PlusOutlined />} type='primary' >
                         Thêm sản phẩm
                     </Button>

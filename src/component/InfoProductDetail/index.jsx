@@ -89,7 +89,7 @@ const InfoProductDetail = ({ data }) => {
             <div className=" text-red-500 text-[18px] font-semibold opacity-[0.92] border-b-[1px] py-3">
                 {formatCurrencyVN(data?.price)}
             </div>
-            <div id="text-name-color" className="text-[13px] font-light my-2" >{state.textColor.toUpperCase()}</div>
+            <div id="text-name-color" className="text-[13px] font-light my-2" >{state.textColor?.toUpperCase()}</div>
             <div className="pb-2 cursor-default flex gap-3 items-center">
                 {
                     state.color?.map((item, index) => {

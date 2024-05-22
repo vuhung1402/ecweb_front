@@ -3,18 +3,23 @@ import InforProduct from "./InforProduct";
 import UploadImage from "./uploadImage";
 import ColorInfo from "./ColorInfo";
 
-const AddProduct = () => {
-        const divsWithTabIndex = document.querySelectorAll('div[tabindex="-1"]');
-        console.log(divsWithTabIndex);
+const AddProduct = (props) => {
+
+    const { color } = props;
+    const { handleAddColor, handleAddSize, handleDeleteColor, handleDeleteSize } = props;
 
     return (
-        <div
-            className=""
-        >
+        <div id="modal-product">
             <div className=" w-full">
                 <InforProduct />
                 <UploadImage/>
-                <ColorInfo/>
+                <ColorInfo
+                    color={color}
+                    handleAddColor={handleAddColor}
+                    handleAddSize={handleAddSize}
+                    handleDeleteColor={handleDeleteColor}
+                    handleDeleteSize = {handleDeleteSize}
+                />
             </div>
         </div>
     )
