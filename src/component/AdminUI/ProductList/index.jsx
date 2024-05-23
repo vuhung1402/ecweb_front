@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Space, Switch, Table, Tag } from 'antd';
+import { Button, Popconfirm, Popover, Space, Switch, Table, Tag } from 'antd';
 import DeleteIcon from "@icon/deleteIcon.svg"
 import EditIcon from "@icon/edit.svg"
 import DropDownSubCategory from '../DropDownSubCategory';
@@ -20,6 +20,7 @@ const ProductList = (props) => {
         modalType: '',
         isModalProductOpen: false,
         modalProductType:'',
+        detailData: {},
     })
 
     useEffect(() => {
@@ -28,7 +29,13 @@ const ProductList = (props) => {
         state.idSubCategory = subCategory?.[0]?.sub_category_id;
         state.name = subCategory?.[0]?.name;
         setState((prev) => ({ ...prev }))
-    }, [])
+    }, []);
+
+    const handleDetail = () => {
+        // call api get product detail
+        // then, set state -> detailData
+        // set modal open
+    };
 
     const columns = [
         {
@@ -67,12 +74,22 @@ const ProductList = (props) => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <div className='cursor-pointer'>
+                    <div
+                        className='cursor-pointer'
+                        onClick={handleDetail}
+                    >
                         <EditIcon />
                     </div>
-                    <div className='cursor-pointer'>
-                        <DeleteIcon />
-                    </div>
+                    <Popconfirm
+                        title="Xóa sản phẩm"
+                        description="Bạn có chắc chắn muốn xóa sản phẩm này?"
+                        okText="Xóa"
+                        cancelText="Hủy"
+                    >
+                        <div className='cursor-pointer'>
+                            <DeleteIcon />
+                        </div>
+                    </Popconfirm>
                 </Space>
             ),
         },
@@ -135,6 +152,7 @@ const ProductList = (props) => {
                         idSubCategory={state.idSubCategory}
                         open={state.isModalProductOpen}
                         type={state.modalProductType}
+                        detailData={state.detailData}
                         handleModalProduct={handleModalProduct}
                         handleCloseModalProduct={handleCloseModalProduct}
                     />

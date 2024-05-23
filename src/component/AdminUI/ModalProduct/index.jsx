@@ -7,7 +7,7 @@ import "./style.scss"
 
 const ModalProduct = (props) => {
 
-    const { open, type, idCategory, idSubCategory } = props
+    const { open, type, idCategory, idSubCategory, detailData } = props
     const { handleCloseModalProduct } = props
 
     const [state, setState] = useState({
@@ -20,6 +20,13 @@ const ModalProduct = (props) => {
         mainImage: '',
         hoverImage: '',
     });
+
+    // mode edit
+    useEffect(() => {
+        if (type === 'edit' && Object.keys(detailData).length > 0) {
+            // state.color = detailData?.color;
+        };
+    },[type, detailData]);
 
     useEffect(() => {
         const element = document.getElementsByClassName('ant-modal-content');
