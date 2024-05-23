@@ -69,7 +69,6 @@ const ModalProduct = (props) => {
         let image;
         if(typeInfo === 'image' && value !== ''){
             image = state.fileList.find((item) => item?.uid === value)
-            console.log("image: ", image);
         }
         const obj = state.color?.map((item) => {
             if(item?._id === id){
@@ -174,13 +173,13 @@ const ModalProduct = (props) => {
 
     const handleChangeInfo = (e, type) => {
         if (type === 'description' || type === 'price') {
-            state[type] = e
+            state[type] = e;
         } else {
             state[type] = e.target.value;
-
         };
+
         setState((prev) => ({ ...prev }));
-    }
+    };
 
     const handleExportData = (type, data) => {
         if (type === 'list') state.fileList = data;

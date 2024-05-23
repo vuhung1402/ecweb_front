@@ -7,58 +7,40 @@ const ModalCategory = (props) => {
     const { onCancel, handleChangeName, handleDeleteTab } = props;
 
     const [state, setState]  = useState({
-        name: ''
+        name: '',
     });
 
     const inputRef = useRef(null);
 
+    // set name
     useEffect(() => {
         state.name = name;
         setState((prev) => ({...prev}));
     },[name]);
 
+    // focus on input
     useEffect(() => {
-        console.log('re-render');
         if (inputRef && inputRef.current) inputRef.current.focus();
-    },[open])
+    },[open]);
 
+    // handle when click in ok button
     const handleOK = () => {
         if (type === 'delete') handleDeleteTab();
         if (type === 'edit' || type === 'create') {
             handleChangeName(state.name, type);
+            state.name = '';
+            setState(prev => ({...prev}));
         };
     };
 
-    const renderTab = {
-        'delete': (
-            <p>Vui lòng kiểm tra kỹ trước khi xác nhận xoá</p>
-        ),
-        'edit': (
-            <input
-                ref={inputRef}
-                onChange={(e) => setState(prev => ({...prev, name: e.target.value}))}
-                value={state.name}
-                className="p-3 text-sm outline-none border w-full"
-                placeholder="Tên danh mục sản phẩm"
-            />
-        ),
-        'create': (
-            <input
-                ref={inputRef}
-                onChange={(e) => setState(prev => ({...prev, name: e.target.value}))}
-                value={state.name}
-                className="p-3 text-sm outline-none border w-full"
-                placeholder="Tên danh mục sản phẩm"
-            />
-        )
-    }[type];
-
+    // render title
     const title = {
         'delete': 'Bạn có chắc chắn muốn xoá!!',
         'edit': 'Chỉnh sửa danh mục sản phẩm',
         'create': 'Tạo mới danh mục sản phẩm',
     }[type]
 
+    // render ok text
     const okText = {
         'delete': 'Xoá',
         'edit': 'Xác nhận',
@@ -76,7 +58,17 @@ const ModalCategory = (props) => {
                 onOk={handleOK}
                 onCancel={onCancel}
             >
-                {renderTab}
+                { type === 'delete' && <p>Vui lòng kiểm tra kỹ trước khi xác nhận xoá</p> }
+
+                { (type === 'edit' || type === 'create') && (
+                    <input
+                        ref={inputRef}
+                        onChange={(e) => setState(prev => ({...prev, name: e.target.value}))}
+                        value={state.name}
+                        className="p-3 text-sm outline-none border w-full"
+                        placeholder="Tên danh mục sản phẩm"
+                    />
+                ) }
             </Modal>
         </div>
     );

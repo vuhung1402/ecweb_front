@@ -12,7 +12,6 @@ const InforProduct = (props) => {
             <div className=" flex gap-3 items-center">
                 <div className=" w-28">Mã sản phẩm</div>
                 <Input
-                    required
                     onChange={(e) => handleChangeInfo(e, 'codeProduct')}
                     type=""
                     placeholder="Mã sản phẩm"

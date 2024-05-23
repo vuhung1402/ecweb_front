@@ -9,37 +9,8 @@ import ModalCategory from '@component/ModalCategory';
 import ModalProduct from '../ModalProduct';
 
 const ProductList = (props) => {
-    const { idCategory, subCategory } = props;
+    const { idCategory, subCategory, products } = props;
     const { handleOpenModal, handleChangeSubCategory } = props; // function
-
-    const data = [
-        {
-            "name": "FEARLESS Apple baby tee",
-            "price": 330000,
-            "total_number": 0,
-            "primary_image": "https://firebasestorage.googleapis.com/v0/b/imgaeproject.appspot.com/o/ao%2Faothun%2FFEARLESS%20Apple%20baby%20tee%2Fz5366256165971_4721defa138815d96779a43acc9378d8.jpg?alt=media&token=65e03673-bf59-4968-8105-2f4754f3bf42",
-            "category_id": "a",
-            "sub_category_id": "1",
-            "name_sub_category": "Áo thun",
-            "product_id": "10",
-            "status": "Còn hàng",
-            "onlShop": false,
-            "createDate": "12/02/2002"
-        },
-        {
-            "name": "FEARLESS Apple baby tee 123",
-            "price": 330000,
-            "total_number": 0,
-            "primary_image": "https://firebasestorage.googleapis.com/v0/b/imgaeproject.appspot.com/o/ao%2Faothun%2FFEARLESS%20Apple%20baby%20tee%2Fz5366256165971_4721defa138815d96779a43acc9378d8.jpg?alt=media&token=65e03673-bf59-4968-8105-2f4754f3bf42",
-            "category_id": "a",
-            "sub_category_id": "1",
-            "name_sub_category": "Áo thun",
-            "product_id": "11",
-            "status": "Còn hàng",
-            "onlShop": true,
-            "createDate": "12/02/2002"
-        }
-    ];
 
     const [state, setState] = useState({
         data: [],
@@ -53,7 +24,7 @@ const ProductList = (props) => {
 
     useEffect(() => {
         // state.data = getProductsByCategory(idCategory)
-        state.data = data;
+        state.data = products;
         state.idSubCategory = subCategory?.[0]?.sub_category_id;
         state.name = subCategory?.[0]?.name;
         setState((prev) => ({ ...prev }))
@@ -123,7 +94,6 @@ const ProductList = (props) => {
     }
 
     const handleModalProduct = (type) => {
-        console.log('running');
         if (type === 'create' || type === 'edit') {
             state.modalProductType = type;
             state.isModalProductOpen = true;
@@ -142,8 +112,6 @@ const ProductList = (props) => {
         state.idSubCategory =  option?.value
         state.name = option?.label
         setState((prev) => ({...prev}))
-        console.log("id: ", option.value)
-        console.log("name: ", option.label)
     }
 
     const onNameChange = (event) => {
@@ -183,7 +151,7 @@ const ProductList = (props) => {
             </div>
             <Table
                 columns={columns}
-                dataSource={data}
+                dataSource={products}
                 pagination={{
                     hideOnSinglePage: true,
                     pageSize: 30

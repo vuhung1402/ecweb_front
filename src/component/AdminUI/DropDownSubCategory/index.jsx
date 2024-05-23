@@ -5,7 +5,6 @@ import DeleteIcon from "@icon/deleteIcon.svg"
 import EditIcon from "@icon/edit.svg"
 import ModalCategory from '@component/ModalCategory';
 
-let index = 0;
 const DropDownSubCategory = (props) => {
     const { idCategory,  subCategory, idSubCategory, name} = props;
     const { handleChangeSubCategory, onNameChange, handleSelect } = props;
@@ -25,17 +24,16 @@ const DropDownSubCategory = (props) => {
     }, [subCategory])
 
     const inputRef = useRef(null);
+    
     const addItem = (e) => {
         e.preventDefault();
+
         const body = {
             idCategory: idCategory,
             nameSubCategory: name
-        }
-        console.log("Body: ", body);
+        };
+
         //gọi api để add
-        setTimeout(() => {
-            inputRef.current?.focus();
-        }, 0);
     };
 
     const handleEdit = () => {
@@ -63,23 +61,14 @@ const DropDownSubCategory = (props) => {
             <Select
                 onSelect={handleSelect}
                 value={idSubCategory}
-                style={{
-                    width: 300,
-                }}
+                style={{width: 300}}
                 placeholder="Danh mục phụ"
                 dropdownRender={(menu) => (
                     <>
                         {menu}
-                        <Divider
-                            style={{
-                                margin: '8px 0',
-                            }}
-                        />
-                        <Space
-                            style={{
-                                padding: '0 8px 4px',
-                            }}
-                        >
+                        <Divider style={{margin: '8px 0'}}/>
+
+                        <Space style={{padding: '0 8px 4px'}}>
                             <Input
                                 className='input-dropdown-sub'
                                 placeholder="Nhập tên danh mục phụ mới"
@@ -89,7 +78,11 @@ const DropDownSubCategory = (props) => {
                                 onChange={onNameChange}
                                 onKeyDown={(e) => e.stopPropagation()}
                             />
-                            <Button type="text" icon={<PlusOutlined />} onClick={addItem}>
+                            <Button
+                                type="text"
+                                icon={<PlusOutlined />}
+                                onClick={addItem}
+                            >
                                 Add item
                             </Button>
                         </Space>

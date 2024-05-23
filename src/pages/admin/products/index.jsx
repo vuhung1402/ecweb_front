@@ -8,51 +8,32 @@ import ProductList from "@component/AdminUI/ProductList";
 import ModalCategory from "@component/ModalCategory";
 import { uuid } from "@utils/function";
 
-const Products = ({url}) => {
-    const data = [
-        {
-            "name": "Áo",
-            "route": "xem-tat-ca-ao",
-            "category_id": "a",
-            "sub_category": [
-                {
-                    "sub_category_id": "1",
-                    "name": "Áo Thun",
-                    "route": "ao-thun"
-                },
-                {
-                    "sub_category_id": "2",
-                    "name": "Áo Sơ Mi",
-                    "route": "ao-so-mi"
-                },
-                {
-                    "sub_category_id": "3",
-                    "name": "Áo Polo",
-                    "route": "ao-polo"
-                }
-            ]
-        },
-        {
-            "name": "Quần",
-            "route": "xem-tat-ca-ao",
-            "category_id": "q",
-        }
-    ];
+import { products, category } from "./mock";
+
+const Products = (props) => {
+
+    const { url } = props;
 
     const [state, setState] = useState({
         isModalOpen: false,
         isModalDeleteOpen: false,
-        data: [],
+        category: [],
         activeKey: '', 
         modalType: '',
+        products: [],
     });
 
+    const getData = async () => {
+        state.category = category;
+        state.products = products;
+        state.activeKey = category?.[0]?.category_id;
+        setState((prev) => ({...prev}));
+    };
+
+    // goi ham de get data
     useEffect(() => {
-        //goi ham de get data
-        state.data = data;
-        state.activeKey = data?.[0]?.category_id;
-        setState((prev) => ({...prev}))
-    },[])
+        getData(); 
+    },[]);
 
     const onChangeTab = (newActiveKey) => {
         state.activeKey = newActiveKey;
@@ -71,11 +52,12 @@ const Products = ({url}) => {
         setState((prev) => ({...prev}));
     };
 
-    // change tab name
+    // change tab name --> tạm ok // có api thì chỉ push name lên server
     const handleChangeName = (name, type) => {
-        const { activeKey, data } = state;
-        const updateData = [...data];
-        let newData; 
+        const { activeKey, category } = state;
+
+        const updateData = [...category];
+        let newData = [];
 
         if(type === 'edit'){
             newData = updateData?.map((item) => {
@@ -88,27 +70,28 @@ const Products = ({url}) => {
     
                 return item;
             });
-        }else if(type === 'create'){
-            console.log("Update data: ", updateData)
+        } else if (type === 'create') {
             const schema = {
                 name,
                 route: `xem-tat-ca-${name}`,
                 category_id: uuid(),
                 sub_category: [],
-            }
+            };
+
             updateData?.push(schema)
-            console.log("newData: ", newData)
-        }
+        };
 
         state.isModalOpen = false;
-        state.data = type === 'create' ? updateData : newData ;
+        state.category = type === 'create' ? updateData : newData ;
         setState(prev => ({...prev}));
     };
 
-    const handleChangeSubCategory = (name, sub_category_id) => {
-        const { activeKey, data } = state;
+    //---ok
 
-        const updateData = [...data];
+    const handleChangeSubCategory = (name, sub_category_id) => {
+        const { activeKey, category } = state;
+
+        const updateData = [...category];
         const newData = updateData?.map((item) => {
             if (item?.category_id === activeKey) {
                 const sub = [...item.sub_category];
@@ -127,7 +110,7 @@ const Products = ({url}) => {
             return item;
         });
 
-        state.data = newData;
+        state.category = newData;
         setState(prev => ({...prev}));
     };
 
@@ -138,12 +121,13 @@ const Products = ({url}) => {
                 onChange={onChangeTab}
                 activeKey={state.activeKey}
                 onEdit={onEdit}
-                items={state.data?.map((item) => {
+                items={state.category?.map((item) => {
                     return {
                         label: item.name,
                         key: item?.category_id,
                         children: (
                             <ProductList
+                                products={state.products}
                                 idCategory={item?.category_id}
                                 name={item?.name}
                                 subCategory={item?.sub_category}
@@ -159,7 +143,7 @@ const Products = ({url}) => {
             <ModalCategory
                 open={state.isModalOpen}
                 type={state.modalType}
-                name={state.modalType === 'edit' ? state.data.find(item => item?.category_id === state.activeKey)?.name : ''}
+                name={state.modalType === 'edit' ? state.category.find(item => item?.category_id === state.activeKey)?.name : ''}
                 onCancel={handleOpenModal}
                 handleChangeName={handleChangeName}
             />
