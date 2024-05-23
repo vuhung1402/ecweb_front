@@ -12,7 +12,10 @@ const getBase64 = (file) =>
         reader.onerror = (error) => reject(error);
     });
 
-const UploadImage = () => {
+const UploadImage = (props) => {
+
+    const { handleExportData } = props;
+
     const [state, setState] = useState({
         previewOpen: false,
         previewImage: '',
@@ -24,12 +27,12 @@ const UploadImage = () => {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
     const [fileList, setFileList] = useState([
-        {
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        },
-        {
-            url: 'https://thethaovanhoa.mediacdn.vn/372676912336973824/2023/10/3/alchemy-of-souls-16963118894912050652322.jpg'
-        }
+        // {
+        //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
+        // },
+        // {
+        //     url: 'https://thethaovanhoa.mediacdn.vn/372676912336973824/2023/10/3/alchemy-of-souls-16963118894912050652322.jpg'
+        // }
     ]);
 
     const handlePreview = async (file) => {
@@ -41,6 +44,7 @@ const UploadImage = () => {
     };
 
     const handleChange = (infor) => {
+        handleExportData('list', infor?.fileList);
         setFileList(infor?.fileList)
     };
 
@@ -94,6 +98,11 @@ const UploadImage = () => {
             const { mainImage, hoverImage } = childState;
             state.mainImage = mainImage;
             state.hoverImage = hoverImage;
+            const data = {
+                'mainImage': mainImage,
+                'hoverImage': hoverImage
+            }
+            handleExportData('image', data);
             setState(prev => ({...prev}));
         };
 

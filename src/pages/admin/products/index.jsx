@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { Tabs } from "antd";
 
 // component
-// import TabCategory from "@component/Tabs";
 import ProductList from "@component/AdminUI/ProductList";
 import ModalCategory from "@component/ModalCategory";
 

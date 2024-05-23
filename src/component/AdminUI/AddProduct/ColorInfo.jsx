@@ -5,10 +5,11 @@ import { Button, ColorPicker, Input } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
 import DeleteIcon from "@icon/deleteIcon.svg"
 import PlusIcon from "@icon/plusIcon.svg"
+import SelectImage from "@component/SelectImage";
 
 const ColorInfo = (props) => {
 
-    const { color } = props;
+    const { color, imageList } = props;
     const { handleAddColor, handleAddSize, handleDeleteColor, handleDeleteSize } = props;
 
     const onChange = (value, hex) => {
@@ -40,6 +41,10 @@ const ColorInfo = (props) => {
                                         style={{
                                             width: '200px'
                                         }}
+                                    />
+                                    <SelectImage
+                                        colorId={item?._id}
+                                        imageList={imageList}
                                     />
                                     <div
                                         onClick={() => handleDeleteColor(item?._id)}

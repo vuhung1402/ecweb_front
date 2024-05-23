@@ -5,7 +5,6 @@ import DeleteIcon from "@icon/deleteIcon.svg"
 import EditIcon from "@icon/edit.svg"
 import ModalCategory from '@component/ModalCategory';
 
-
 let index = 0;
 const DropDownSubCategory = ({ idCategory, handleChangeSubCategory, subCategory }) => {
     const [state, setState] = useState({
@@ -69,7 +68,7 @@ const DropDownSubCategory = ({ idCategory, handleChangeSubCategory, subCategory 
     };
 
     return (
-        <div className=' flex items-center gap-3 px-4'>
+        <div className='flex items-center gap-3'>
             <Select
                 onSelect={handleSelect}
                 value={state.idSubCategory}
@@ -91,7 +90,9 @@ const DropDownSubCategory = ({ idCategory, handleChangeSubCategory, subCategory 
                             }}
                         >
                             <Input
+                                className='input-dropdown-sub'
                                 placeholder="Nhập tên danh mục phụ mới"
+                                type=''
                                 ref={inputRef}
                                 value={state.name}
                                 onChange={onNameChange}

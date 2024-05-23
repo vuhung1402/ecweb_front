@@ -97,7 +97,6 @@ const ProductList = (props) => {
                     </div>
                     <div className='cursor-pointer'>
                         <DeleteIcon />
-                        <ModalProduct open = {state.isModalProductOpen} type = {state.modalProductType}/>
                     </div>
                 </Space>
             ),
@@ -119,11 +118,21 @@ const ProductList = (props) => {
         setState((prev) => ({ ...prev, data: object }));
     }
 
-    const handleAddProduct = () => {
-        state.isModalProductOpen = !state.isModalProductOpen;
-        state.modalProductType = 'create';
-        setState((prev) => ({...prev}));
+    const handleModalProduct = (type) => {
+        console.log('running');
+        if (type === 'create' || type === 'edit') {
+            state.modalProductType = type;
+            state.isModalProductOpen = true;
+        } else {
+            state.isModalProductOpen = false;
+        }
+        setState(prev => ({...prev}));
     };
+
+    const handleCloseModalProduct = () => {
+        state.isModalProductOpen = false;
+        setState(prev => ({...prev}));
+    }
 
     return (
         <div>
@@ -133,10 +142,15 @@ const ProductList = (props) => {
                         Sửa danh mục
                     </Button>
 
-                    <Button onClick={handleAddProduct} icon={<PlusOutlined />} type='primary' >
+                    <Button onClick={() => handleModalProduct('create')} icon={<PlusOutlined />} type='primary' >
                         Thêm sản phẩm
                     </Button>
-                    <ModalProduct open = {state.isModalProductOpen} onCancel = {handleAddProduct} type = {state.modalProductType} />
+                    <ModalProduct
+                        open={state.isModalProductOpen}
+                        type={state.modalProductType}
+                        handleModalProduct={handleModalProduct}
+                        handleCloseModalProduct={handleCloseModalProduct}
+                    />
                 </div>
                 <DropDownSubCategory
                     idCategory={idCategory}
@@ -144,7 +158,14 @@ const ProductList = (props) => {
                     handleChangeSubCategory={handleChangeSubCategory}
                 />
             </div>
-            <Table columns={columns} dataSource={data} />
+            <Table
+                columns={columns}
+                dataSource={data}
+                pagination={{
+                    hideOnSinglePage: true,
+                    pageSize: 30
+                }}
+            />
         </div>
     )
 }

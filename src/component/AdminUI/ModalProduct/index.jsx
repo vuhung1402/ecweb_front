@@ -8,7 +8,7 @@ import "./style.scss"
 const ModalProduct = (props) => {
 
     const { open, type } = props
-    const { onOk, onCancel } = props
+    const { handleCloseModalProduct } = props
 
     const [state, setState] = useState({
         color: [],
@@ -88,16 +88,11 @@ const ModalProduct = (props) => {
             return item;
         });
 
-        console.log(updateColor);
-
         state.color = updateColor;
         setState(prev => ({...prev}));
     };
 
     const handleDeleteSize = (id, idSize) => {
-        console.log("id: ", id)
-        console.log("idSize: ", idSize)
-
         const { color } = state;
 
         const updateColor = [...color];
@@ -139,23 +134,19 @@ const ModalProduct = (props) => {
         'delete': 'Xoá',
         'edit': 'Xác nhận',
         'create': 'Thêm mới',
-    }[type]
+    }[type];
 
     return (
         <Modal
             wrapClassName="modal-product"
-            style={{
-                height: '300px',
-
-            }}
             rootClassName="root-product"
             title={title}
             open={open}
-            onOk={onOk}
+            // onOk={onOk}
             okText={okText}
             okType={type === 'delete' ? 'danger' : 'primary'}
             cancelText={'Huỷ'}
-            onCancel={onCancel}
+            onCancel={handleCloseModalProduct}
         >
             {renderTab}
         </Modal>
