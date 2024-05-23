@@ -7,11 +7,18 @@ import "./style.scss"
 
 const ModalProduct = (props) => {
 
-    const { open, type } = props
+    const { open, type, idCategory, idSubCategory } = props
     const { handleCloseModalProduct } = props
 
     const [state, setState] = useState({
         color: [],
+        codeProduct: '',
+        nameProduct: '',
+        price: '',
+        description: '',
+        fileList: [],
+        mainImage: '',
+        hoverImage: '',
     });
 
     useEffect(() => {
@@ -24,7 +31,7 @@ const ModalProduct = (props) => {
         };
 
         if (modalBodyElement?.[0]) modalBodyElement?.[0]?.classList.add('scrollbar-hide');
-    },[open]);
+    }, [open]);
 
     const title = {
         'delete': 'Bạn có chắc chắn muốn xoá!!',
@@ -39,6 +46,10 @@ const ModalProduct = (props) => {
             _id: uuid(),
             code_color: '#000000',
             name_color: 'Đen',
+            image:{
+                uid:'',
+                url:'',
+            },
             size: [],
         };
 
@@ -47,12 +58,32 @@ const ModalProduct = (props) => {
 
         const element = document.getElementById('color-info');
         if (element) {
-            element.scrollIntoView({behavior: 'smooth', block: 'end'})
+            element.scrollIntoView({ behavior: 'smooth', block: 'end' })
         }
 
         state.color = updateColor;
-        setState(prev => ({...prev}));
+        setState(prev => ({ ...prev }));
     };
+
+    const handleEditColor = (value, id, typeInfo) => {
+        let image;
+        if(typeInfo === 'image' && value !== ''){
+            image = state.fileList.find((item) => item?.uid === value)
+            console.log("image: ", image);
+        }
+        const obj = state.color?.map((item) => {
+            if(item?._id === id){
+                console.log("if")
+                return{
+                    ...item,
+                    [typeInfo] : typeInfo === 'image' ? image : value,
+                }
+            };
+            return item;
+        })
+        setState((prev) => ({...prev, color:obj}))
+        console.log("OBJ: ", obj)        
+    }
 
     const handleDeleteColor = (id) => {
         const { color } = state;
@@ -62,7 +93,7 @@ const ModalProduct = (props) => {
         const result = updateColor.filter((item) => item?._id !== id);
 
         state.color = result;
-        setState((prev) => ({...prev}))
+        setState((prev) => ({ ...prev }))
     }
 
     const handleAddSize = (colorUuid) => {
@@ -89,8 +120,37 @@ const ModalProduct = (props) => {
         });
 
         state.color = updateColor;
-        setState(prev => ({...prev}));
+        setState(prev => ({ ...prev }));
     };
+
+    const handleEditSize = (value, colorId, idSize, typeInfo) => {
+        const { color } = state;
+
+        const updateColor = [...color];
+
+        const obj = updateColor?.map((item) => {
+            if(item?._id === colorId){
+                const result = item?.size?.map((itemSize) => {
+                    if(itemSize?._id === idSize){
+                        console.log("if")
+                        return{
+                            ...itemSize,
+                            [typeInfo]: value,
+                        }
+                    }
+                    return itemSize;
+                })
+                return{
+                    ...item,
+                    size: result,
+                }
+            }
+            return item;
+        })
+
+        console.log("Obj: ", obj);
+        setState((prev) => ({...prev, color: obj}));
+    }
 
     const handleDeleteSize = (id, idSize) => {
         const { color } = state;
@@ -109,8 +169,46 @@ const ModalProduct = (props) => {
         });
 
         console.log("result: ", result);
-        setState(prev => ({...prev, color: result}));
+        setState(prev => ({ ...prev, color: result }));
     }
+
+    const handleChangeInfo = (e, type) => {
+        if (type === 'description' || type === 'price') {
+            state[type] = e
+        } else {
+            state[type] = e.target.value;
+
+        };
+        setState((prev) => ({ ...prev }));
+    }
+
+    const handleExportData = (type, data) => {
+        if (type === 'list') state.fileList = data;
+        if (type === 'image') {
+            state.hoverImage = data?.hoverImage;
+            state.mainImage = data?.mainImage;
+        };
+
+        setState(prev => ({...prev}));
+    };
+
+    const onOk = () => {
+        const { description, nameProduct, codeProduct, price, fileList, color, mainImage, hoverImage } = state;
+        const body = {
+            name: nameProduct,
+            codeProduct: codeProduct,
+            price: price,
+            array_color: color,
+            primary_image: mainImage,
+            image_hover: hoverImage,
+            category_id: idCategory,
+            sub_category_id: idSubCategory,
+            array_image: fileList,
+            description
+        }
+        console.log("1123123213", body);
+    }
+
 
     const renderTab = {
         'delete': (
@@ -121,11 +219,16 @@ const ModalProduct = (props) => {
         ),
         'create': (
             <AddProduct
+                imageList={state.fileList} 
                 color={state.color}
                 handleAddColor={handleAddColor}
                 handleAddSize={handleAddSize}
-                handleDeleteColor = {handleDeleteColor}
-                handleDeleteSize = {handleDeleteSize}
+                handleDeleteColor={handleDeleteColor}
+                handleDeleteSize={handleDeleteSize}
+                handleChangeInfo={handleChangeInfo}
+                handleExportData = {handleExportData}
+                handleEditColor={handleEditColor}
+                handleEditSize={handleEditSize}
             />
         )
     }[type];
@@ -142,7 +245,7 @@ const ModalProduct = (props) => {
             rootClassName="root-product"
             title={title}
             open={open}
-            // onOk={onOk}
+            onOk={onOk}
             okText={okText}
             okType={type === 'delete' ? 'danger' : 'primary'}
             cancelText={'Huỷ'}

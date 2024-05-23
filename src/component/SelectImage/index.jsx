@@ -11,20 +11,20 @@ const SelectImage = (props) => {
         open: false,
     });
 
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            const element = document.getElementById('select-image-popover');
-            const titleElement = document.getElementById('select-image-text');
-            const imagePreview = document.querySelectorAll('.ant-image-preview-root');
+    // useEffect(() => {
+    //     const handleClickOutside = (event) => {
+    //         const element = document.getElementById('select-image-popover');
+    //         const titleElement = document.getElementById('select-image-text');
+    //         const imagePreview = document.querySelectorAll('.ant-image-preview-root');
             
-            if (element && !element.contains(event.target) && !titleElement.contains(event.target) && !imagePreview?.[imagePreview.length - 1]?.contains(event.target)) {
-                setState(prev => ({...prev, open: false}));
-            };
-        };
+    //         if (element && !element.contains(event.target) && !titleElement.contains(event.target) && !imagePreview?.[imagePreview.length - 1]?.contains(event.target)) {
+    //             setState(prev => ({...prev, open: false}));
+    //         };
+    //     };
 
-        document.addEventListener('click', handleClickOutside);
-        return () => document.removeEventListener('click', handleClickOutside);
-    },[]);
+    //     document.addEventListener('click', handleClickOutside);
+    //     return () => document.removeEventListener('click', handleClickOutside);
+    // },[]);
 
     const handleClick = () => {
         state.open = !state.open;
@@ -33,7 +33,7 @@ const SelectImage = (props) => {
 
     const handleSelectImage = (event, value) => {
         state.selectedImage = event?.target?.checked ? value?.uid : '';
-        if (typeof onSelectImage === 'function') onSelectImage(event?.target?.checked ? value?.uid : '', colorId);
+        if (typeof onSelectImage === 'function') onSelectImage(event?.target?.checked ? value?.uid : '', colorId, 'image');
         setState(prev => ({...prev}));
     };
 
@@ -42,7 +42,7 @@ const SelectImage = (props) => {
             <Popover
                 trigger={"click"}
                 arrow={false}
-                open={state.open}
+                // open={state.open}
                 id="select-image-popover"
                 title="Chọn ảnh đại diện cho màu"
                 content={

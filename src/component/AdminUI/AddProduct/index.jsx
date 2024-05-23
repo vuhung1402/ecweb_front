@@ -4,40 +4,26 @@ import UploadImage from "./uploadImage";
 import ColorInfo from "./ColorInfo";
 
 const AddProduct = (props) => {
-
-    const { color } = props;
-    const { handleAddColor, handleAddSize, handleDeleteColor, handleDeleteSize } = props;
-
-    const [state, setState] = useState({
-        fileList: [],
-        mainImage: '',
-        hoverImage: '',
-    });
-
-    const handleExportData = (type, data) => {
-        if (type === 'list') state.fileList = data;
-        if (type === 'image') {
-            state.hoverImage = data?.hoverImage;
-            state.mainImage = data?.mainImage;
-        };
-
-        setState(prev => ({...prev}));
-    };
+    const { color, imageList } = props;
+    const { handleAddColor, handleAddSize, handleDeleteColor, handleDeleteSize, handleChangeInfo, handleExportData, handleEditColor } = props;
+    const { handleEditSize } = props
 
     return (
         <div id="modal-product">
             <div className=" w-full">
-                <InforProduct />
+                <InforProduct handleChangeInfo={handleChangeInfo} />
                 <UploadImage
                     handleExportData={handleExportData}
                 />
                 <ColorInfo
                     color={color}
-                    imageList={state.fileList}
+                    imageList={imageList}
                     handleAddColor={handleAddColor}
                     handleAddSize={handleAddSize}
                     handleDeleteColor={handleDeleteColor}
                     handleDeleteSize = {handleDeleteSize}
+                    handleEditColor = {handleEditColor}
+                    handleEditSize = {handleEditSize}
                 />
             </div>
         </div>

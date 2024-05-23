@@ -148,7 +148,6 @@ const UploadImage = (props) => {
                 >
                     <Button
                         className='w-[102px]'
-                        // onClick={() => setOpen(!open)}
                     >
                         Tùy chỉnh
                     </Button>

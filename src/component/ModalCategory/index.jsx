@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Modal } from 'antd'
 
 const ModalCategory = (props) => {
-    const { type, open, name, idCategory, idSubCategory} = props;
+    const { type, open, name } = props;
     const { onCancel, handleChangeName, handleDeleteTab } = props;
 
     const [state, setState]  = useState({
@@ -25,7 +25,7 @@ const ModalCategory = (props) => {
     const handleOK = () => {
         if (type === 'delete') handleDeleteTab();
         if (type === 'edit' || type === 'create') {
-            handleChangeName(state.name);
+            handleChangeName(state.name, type);
         };
     };
 

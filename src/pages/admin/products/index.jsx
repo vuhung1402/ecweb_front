@@ -6,6 +6,7 @@ import { Tabs } from "antd";
 // component
 import ProductList from "@component/AdminUI/ProductList";
 import ModalCategory from "@component/ModalCategory";
+import { uuid } from "@utils/function";
 
 const Products = ({url}) => {
     const data = [
@@ -71,23 +72,36 @@ const Products = ({url}) => {
     };
 
     // change tab name
-    const handleChangeName = (name) => {
+    const handleChangeName = (name, type) => {
         const { activeKey, data } = state;
-
         const updateData = [...data];
-        const newData = updateData.map((item) => {
-            if (item?.category_id === activeKey) {
-                return {
-                    ...item,
-                    name: name,
-                };
-            };
+        let newData; 
 
-            return item;
-        });
+        if(type === 'edit'){
+            newData = updateData?.map((item) => {
+                if (item?.category_id === activeKey) {
+                    return {
+                        ...item,
+                        name: name,
+                    };
+                };
+    
+                return item;
+            });
+        }else if(type === 'create'){
+            console.log("Update data: ", updateData)
+            const schema = {
+                name,
+                route: `xem-tat-ca-${name}`,
+                category_id: uuid(),
+                sub_category: [],
+            }
+            updateData?.push(schema)
+            console.log("newData: ", newData)
+        }
 
         state.isModalOpen = false;
-        state.data = newData;
+        state.data = type === 'create' ? updateData : newData ;
         setState(prev => ({...prev}));
     };
 
@@ -95,10 +109,10 @@ const Products = ({url}) => {
         const { activeKey, data } = state;
 
         const updateData = [...data];
-        const newData = updateData.map((item) => {
+        const newData = updateData?.map((item) => {
             if (item?.category_id === activeKey) {
                 const sub = [...item.sub_category];
-                const newSub = sub.map((value) => {
+                const newSub = sub?.map((value) => {
                     console.log(value);
                     if (value?.sub_category_id === sub_category_id) return { ...value, name: name };
                     return value;

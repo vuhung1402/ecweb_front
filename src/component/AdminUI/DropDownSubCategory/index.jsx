@@ -6,14 +6,17 @@ import EditIcon from "@icon/edit.svg"
 import ModalCategory from '@component/ModalCategory';
 
 let index = 0;
-const DropDownSubCategory = ({ idCategory, handleChangeSubCategory, subCategory }) => {
+const DropDownSubCategory = (props) => {
+    const { idCategory,  subCategory, idSubCategory, name} = props;
+    const { handleChangeSubCategory, onNameChange, handleSelect } = props;
+
     const [state, setState] = useState({
         items: [],
         name: '',
         idSubCategory: '',
         isModalOpen: false,
         modalType: '',
-    })
+    });
 
     useEffect(() => {
         //goi api lay subCategory
@@ -21,24 +24,12 @@ const DropDownSubCategory = ({ idCategory, handleChangeSubCategory, subCategory 
         setState((prev) => ({ ...prev }))
     }, [subCategory])
 
-    const handleSelect = (value, option) => {
-        state.idSubCategory =  option?.value
-        state.name = option?.label
-        setState((prev) => ({...prev}))
-        console.log("id: ", option.value)
-        console.log("name: ", option.label)
-    }
-
     const inputRef = useRef(null);
-    const onNameChange = (event) => {
-        state.name = event.target.value
-        setState((prev) => ({...prev}))
-    };
     const addItem = (e) => {
         e.preventDefault();
         const body = {
             idCategory: idCategory,
-            nameSubCategory: state.name
+            nameSubCategory: name
         }
         console.log("Body: ", body);
         //gọi api để add
@@ -48,21 +39,21 @@ const DropDownSubCategory = ({ idCategory, handleChangeSubCategory, subCategory 
     };
 
     const handleEdit = () => {
-        if (!state.idSubCategory) return;
+        if (!idSubCategory) return;
         state.isModalOpen = !state.isModalOpen;
         state.modalType = 'edit';
         setState((prev) => ({...prev}));
     }
     
     const handleDelte = () => {
-        if (!state.idSubCategory) return;
+        if (!idSubCategory) return;
         state.isModalOpen = !state.isModalOpen;
         state.modalType = 'delete';
         setState((prev) => ({...prev}));
     };
 
     const onChangeSubName = (name) => {
-        handleChangeSubCategory(name, state.idSubCategory);
+        handleChangeSubCategory(name, idSubCategory);
         state.isModalOpen = false;
         setState(prev => ({...prev}));
     };
@@ -71,7 +62,7 @@ const DropDownSubCategory = ({ idCategory, handleChangeSubCategory, subCategory 
         <div className='flex items-center gap-3'>
             <Select
                 onSelect={handleSelect}
-                value={state.idSubCategory}
+                value={idSubCategory}
                 style={{
                     width: 300,
                 }}
@@ -94,7 +85,7 @@ const DropDownSubCategory = ({ idCategory, handleChangeSubCategory, subCategory 
                                 placeholder="Nhập tên danh mục phụ mới"
                                 type=''
                                 ref={inputRef}
-                                value={state.name}
+                                value={name}
                                 onChange={onNameChange}
                                 onKeyDown={(e) => e.stopPropagation()}
                             />
@@ -109,20 +100,18 @@ const DropDownSubCategory = ({ idCategory, handleChangeSubCategory, subCategory 
                     value: item?.sub_category_id,
                 }))}
             />
-            <div onClick={handleEdit} className={` cursor-pointer ${state.idSubCategory === '' ? 'opacity-50' : 'opacity-100'}`}>
+            <div onClick={handleEdit} className={` cursor-pointer ${idSubCategory === '' ? 'opacity-50' : 'opacity-100'}`}>
                 <EditIcon />
             </div>
-            <div onClick={handleDelte} className={` cursor-pointer ${state.idSubCategory === '' ? 'opacity-50' : 'opacity-100'}`}>
+            <div onClick={handleDelte} className={` cursor-pointer ${idSubCategory === '' ? 'opacity-50' : 'opacity-100'}`}>
                 <DeleteIcon />
             </div>
             <ModalCategory
                 open={state.isModalOpen}
                 type={state.modalType}
                 onCancel={handleEdit}
-                name={state.name}
+                name={name}
                 handleChangeName={onChangeSubName}
-                idCategory={idCategory}
-                idSubCategory={state.idSubCategory}
             />
         </div>
     );

@@ -43,6 +43,8 @@ const ProductList = (props) => {
 
     const [state, setState] = useState({
         data: [],
+        name: '',
+        idSubCategory: '',
         isModalOpen: false,
         modalType: '',
         isModalProductOpen: false,
@@ -52,6 +54,8 @@ const ProductList = (props) => {
     useEffect(() => {
         // state.data = getProductsByCategory(idCategory)
         state.data = data;
+        state.idSubCategory = subCategory?.[0]?.sub_category_id;
+        state.name = subCategory?.[0]?.name;
         setState((prev) => ({ ...prev }))
     }, [])
 
@@ -134,6 +138,19 @@ const ProductList = (props) => {
         setState(prev => ({...prev}));
     }
 
+    const handleSelect = (value, option) => {
+        state.idSubCategory =  option?.value
+        state.name = option?.label
+        setState((prev) => ({...prev}))
+        console.log("id: ", option.value)
+        console.log("name: ", option.label)
+    }
+
+    const onNameChange = (event) => {
+        state.name = event.target.value
+        setState((prev) => ({...prev}))
+    };
+
     return (
         <div>
             <div className='flex gap-3 items-center justify-between mb-3 px-2'>
@@ -146,6 +163,8 @@ const ProductList = (props) => {
                         Thêm sản phẩm
                     </Button>
                     <ModalProduct
+                        idCategory={idCategory}
+                        idSubCategory={state.idSubCategory}
                         open={state.isModalProductOpen}
                         type={state.modalProductType}
                         handleModalProduct={handleModalProduct}
@@ -153,9 +172,13 @@ const ProductList = (props) => {
                     />
                 </div>
                 <DropDownSubCategory
+                    name={state.name}
                     idCategory={idCategory}
                     subCategory={subCategory}
+                    idSubCategory={state.idSubCategory}
                     handleChangeSubCategory={handleChangeSubCategory}
+                    handleSelect={handleSelect}
+                    onNameChange={onNameChange}
                 />
             </div>
             <Table

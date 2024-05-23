@@ -1,6 +1,6 @@
 // ColorInfor.jsx
 
-import React from "react";
+import React, { useState } from "react";
 import { Button, ColorPicker, Input } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
 import DeleteIcon from "@icon/deleteIcon.svg"
@@ -10,11 +10,9 @@ import SelectImage from "@component/SelectImage";
 const ColorInfo = (props) => {
 
     const { color, imageList } = props;
-    const { handleAddColor, handleAddSize, handleDeleteColor, handleDeleteSize } = props;
+    const { handleAddColor, handleAddSize, handleDeleteColor, handleDeleteSize, handleEditColor, handleEditSize } = props;
 
     const onChange = (value, hex) => {
-        console.log(value);
-        console.log(hex);
     };
 
     return (
@@ -34,8 +32,14 @@ const ColorInfo = (props) => {
                         return (
                             <>
                                 <div className="flex gap-2 items-center" key={`color-${index}`}>
-                                    <ColorPicker defaultValue="#1677ff" showText onChange={onChange} />
+                                    <ColorPicker
+                                        value={item?.code_color} 
+                                        showText 
+                                        onChange={(value, hex) => handleEditColor(hex, item?._id, 'code_color')} 
+                                    />
                                     <Input
+                                        value={item?.name_color}
+                                        onChange={(e) => handleEditColor(e.target.value, item?._id, 'name_color')}
                                         type=""
                                         placeholder="Tên màu"
                                         style={{
@@ -45,6 +49,7 @@ const ColorInfo = (props) => {
                                     <SelectImage
                                         colorId={item?._id}
                                         imageList={imageList}
+                                        onSelectImage={handleEditColor}  
                                     />
                                     <div
                                         onClick={() => handleDeleteColor(item?._id)}
@@ -63,6 +68,8 @@ const ColorInfo = (props) => {
                                     return (
                                         <div className=" flex gap-3 items-center ml-10" key={`size-${idx}`}>
                                             <Input
+                                                value={itemSize?.name_size}
+                                                onChange={(e) => handleEditSize(e.target.value, item?._id, itemSize?._id, 'name_size')}
                                                 type=""
                                                 placeholder="Size"
                                                 style={{
@@ -70,6 +77,8 @@ const ColorInfo = (props) => {
                                                 }}
                                             />
                                             <Input
+                                                value={itemSize?.total_number_with_size}
+                                                onChange={(e) => handleEditSize(e.target.value, item?._id, itemSize?._id, 'total_number_with_size')}
                                                 type=""
                                                 placeholder="Số lượng"
                                                 style={{
