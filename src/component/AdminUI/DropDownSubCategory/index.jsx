@@ -21,11 +21,10 @@ const DropDownSubCategory = (props) => {
 
     useEffect(() => {
         //goi api lay subCategory
-        console.log("subCategory: ", subCategory)
         state.isLoading=false;
         state.items = subCategory;
         setState((prev) => ({ ...prev }))
-    }, [subCategory, state.isModalOpen])
+    }, [subCategory, state.isModalOpen, idSubCategory])
 
     const inputRef = useRef(null);
     
@@ -68,7 +67,7 @@ const DropDownSubCategory = (props) => {
         <div className='flex items-center gap-3'>
             <Select
                 onSelect={handleSelect}
-                // value={idSubCategory}
+                value={idSubCategory}
                 style={{width: 300}}
                 placeholder="Danh mục phụ"
                 dropdownRender={(menu) => (

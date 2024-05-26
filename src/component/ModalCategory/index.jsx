@@ -11,8 +11,6 @@ const ModalCategory = (props) => {
         confirmLoading: false,
     });
 
-    console.log("confirmLoading: ", state.confirmLoading);
-
     const inputRef = useRef(null);
 
     // set name
@@ -22,7 +20,6 @@ const ModalCategory = (props) => {
     },[name, open]);
 
     useEffect(() => {
-        console.log("Hello")
         setState((prev) => ({...prev, confirmLoading: false}));
     },[open])
 

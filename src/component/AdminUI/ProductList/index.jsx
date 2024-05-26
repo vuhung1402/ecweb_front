@@ -27,7 +27,8 @@ const ProductList = (props) => {
         // state.data = getProductsByCategory(idCategory)
         state.data = products;
         // state.idSubCategory = subCategory?.[0]?.sub_category_id;
-        state.name = subCategory?.[0]?.name;
+        const subIndex = subCategory.findIndex(item => item?.sub_category_id === state.idSubCategory);
+        state.name = subCategory?.[subIndex]?.name;
         setState((prev) => ({ ...prev }))
     }, [subCategory]);
 
@@ -38,7 +39,7 @@ const ProductList = (props) => {
     };
 
     const onConfirm = (product_id) => {
-        console.log("onConfirm: ", product_id);
+        // console.log("onConfirm: ", product_id);
     }
 
     const columns = [

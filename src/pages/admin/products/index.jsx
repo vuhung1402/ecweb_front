@@ -28,7 +28,6 @@ const Products = (props) => {
 
     const getData = async () => {
         const categories = await getCategories();
-        console.log("categories: ", categories);
         state.category = categories;
         state.products = products;
         state.activeKey = localStorage.getItem('category_id') ? localStorage.getItem('category_id') : categories?.[0]?.category_id;
@@ -54,7 +53,6 @@ const Products = (props) => {
     };
 
     const onEdit = (targetKey, action) => {
-        console.log("targetKey: ", targetKey);
         const modalType = action === 'add' ? 'create' : 'delete';
         handleOpenModal(modalType, targetKey);
         setState((prev) => ({ ...prev }));
