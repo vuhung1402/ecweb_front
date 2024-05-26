@@ -8,7 +8,10 @@ const ModalCategory = (props) => {
 
     const [state, setState]  = useState({
         name: '',
+        confirmLoading: false,
     });
+
+    console.log("confirmLoading: ", state.confirmLoading);
 
     const inputRef = useRef(null);
 
@@ -16,7 +19,12 @@ const ModalCategory = (props) => {
     useEffect(() => {
         state.name = name;
         setState((prev) => ({...prev}));
-    },[name]);
+    },[name, open]);
+
+    useEffect(() => {
+        console.log("Hello")
+        setState((prev) => ({...prev, confirmLoading: false}));
+    },[open])
 
     // focus on input
     useEffect(() => {
@@ -24,12 +32,14 @@ const ModalCategory = (props) => {
     },[open]);
 
     // handle when click in ok button
-    const handleOK = () => {
-        if (type === 'delete') handleDeleteTab();
+    const handleOK = async () => {
+        setState(prev => ({...prev, confirmLoading: true}))
+        if (type === 'delete'){
+            await handleDeleteTab();
+        };
         if (type === 'edit' || type === 'create') {
-            handleChangeName(state.name, type);
+            await handleChangeName(state.name, type);
             state.name = '';
-            setState(prev => ({...prev}));
         };
     };
 
@@ -55,6 +65,7 @@ const ModalCategory = (props) => {
                 okText={okText}
                 okType={type === 'delete' ? 'danger' : 'primary'}
                 cancelText={'Huỷ'}
+                confirmLoading={state.confirmLoading}
                 onOk={handleOK}
                 onCancel={onCancel}
             >

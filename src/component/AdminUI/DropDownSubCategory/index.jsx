@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Divider, Input, Select, Space } from 'antd';
+import { Button, Divider, Input, Select, Space, message } from 'antd';
 import DeleteIcon from "@icon/deleteIcon.svg"
 import EditIcon from "@icon/edit.svg"
 import ModalCategory from '@component/ModalCategory';
+import { addSubCategory } from '@pages/admin/products/function';
 
 const DropDownSubCategory = (props) => {
     const { idCategory,  subCategory, idSubCategory, name} = props;
-    const { handleChangeSubCategory, onNameChange, handleSelect } = props;
+    const { handleChangeSubCategory, onNameChange, handleSelect, getData } = props;
 
     const [state, setState] = useState({
         items: [],
@@ -15,23 +16,30 @@ const DropDownSubCategory = (props) => {
         idSubCategory: '',
         isModalOpen: false,
         modalType: '',
+        isLoading: false,
     });
 
     useEffect(() => {
         //goi api lay subCategory
+        console.log("subCategory: ", subCategory)
+        state.isLoading=false;
         state.items = subCategory;
         setState((prev) => ({ ...prev }))
-    }, [subCategory])
+    }, [subCategory, state.isModalOpen])
 
     const inputRef = useRef(null);
     
-    const addItem = (e) => {
+    const addItem = async (e) => {
         e.preventDefault();
-
-        const body = {
-            idCategory: idCategory,
-            nameSubCategory: name
-        };
+        setState((prev) => ({ ...prev, isLoading:true }))
+        const isAddSubCategory = await addSubCategory(name, idCategory);
+        if(isAddSubCategory){
+            await getData()
+            message.success("Thêm thành công!!");
+        }else{
+            message.error("Không thành công!!")
+            setState((prev) => ({ ...prev, isLoading:false }))
+        }
 
         //gọi api để add
     };
@@ -50,8 +58,8 @@ const DropDownSubCategory = (props) => {
         setState((prev) => ({...prev}));
     };
 
-    const onChangeSubName = (name) => {
-        handleChangeSubCategory(name, idSubCategory);
+    const onChangeSubName = async (name) => {
+        await handleChangeSubCategory(name, idSubCategory);
         state.isModalOpen = false;
         setState(prev => ({...prev}));
     };
@@ -60,7 +68,7 @@ const DropDownSubCategory = (props) => {
         <div className='flex items-center gap-3'>
             <Select
                 onSelect={handleSelect}
-                value={idSubCategory}
+                // value={idSubCategory}
                 style={{width: 300}}
                 placeholder="Danh mục phụ"
                 dropdownRender={(menu) => (
@@ -79,6 +87,7 @@ const DropDownSubCategory = (props) => {
                                 onKeyDown={(e) => e.stopPropagation()}
                             />
                             <Button
+                                loading={state.isLoading}
                                 type="text"
                                 icon={<PlusOutlined />}
                                 onClick={addItem}

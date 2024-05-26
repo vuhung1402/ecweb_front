@@ -25,6 +25,7 @@ export const category = [
         "name": "Quần",
         "route": "xem-tat-ca-ao",
         "category_id": "q",
+        "sub_category":[],
     }
 ];
 

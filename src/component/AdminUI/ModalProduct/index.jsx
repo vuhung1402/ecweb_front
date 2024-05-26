@@ -4,6 +4,7 @@ import AddProduct from "../AddProduct";
 import { uuid } from "@utils/function";
 
 import "./style.scss"
+import { category } from "@pages/admin/products/mock";
 
 const ModalProduct = (props) => {
 
@@ -19,7 +20,17 @@ const ModalProduct = (props) => {
         fileList: [],
         mainImage: '',
         hoverImage: '',
+        category: [],
+        idCategory:'',
+        idSubCategory:'',
     });
+
+    useEffect(() => {
+        state.category = category;
+        state.idCategory = idCategory;
+        state.idSubCategory = idSubCategory;
+        setState((prev) => ({...prev}))
+    },[])
 
     // mode edit
     useEffect(() => {
@@ -198,8 +209,19 @@ const ModalProduct = (props) => {
         setState(prev => ({...prev}));
     };
 
+    const handleSelectCategory = (id, type) => {
+        if(type === 'category_id'){
+            state.idCategory = id;
+            state.idSubCategory = '';
+        }
+        if(type === 'sub_category_id'){
+            state.idSubCategory=id;
+        }
+        setState((prev) => ({...prev}))
+    }
+
     const onOk = () => {
-        const { description, nameProduct, codeProduct, price, fileList, color, mainImage, hoverImage } = state;
+        const { description, nameProduct, codeProduct, price, fileList, color, mainImage, hoverImage, idCategory, idSubCategory } = state;
         const body = {
             name: nameProduct,
             codeProduct: codeProduct,
@@ -215,32 +237,7 @@ const ModalProduct = (props) => {
         console.log("1123123213", body);
     }
 
-
-    const renderTab = {
-        'delete': (
-            <p>Vui lòng kiểm tra kỹ trước khi xác nhận xoá</p>
-        ),
-        'edit': (
-            <div>heelo</div>
-        ),
-        'create': (
-            <AddProduct
-                imageList={state.fileList} 
-                color={state.color}
-                handleAddColor={handleAddColor}
-                handleAddSize={handleAddSize}
-                handleDeleteColor={handleDeleteColor}
-                handleDeleteSize={handleDeleteSize}
-                handleChangeInfo={handleChangeInfo}
-                handleExportData = {handleExportData}
-                handleEditColor={handleEditColor}
-                handleEditSize={handleEditSize}
-            />
-        )
-    }[type];
-
     const okText = {
-        'delete': 'Xoá',
         'edit': 'Xác nhận',
         'create': 'Thêm mới',
     }[type];
@@ -253,11 +250,25 @@ const ModalProduct = (props) => {
             open={open}
             onOk={onOk}
             okText={okText}
-            okType={type === 'delete' ? 'danger' : 'primary'}
             cancelText={'Huỷ'}
             onCancel={handleCloseModalProduct}
         >
-            {renderTab}
+            <AddProduct
+                category={state.category}
+                idCategory={state.idCategory}
+                idSubCategory={state.idSubCategory}
+                imageList={state.fileList} 
+                color={state.color}
+                handleAddColor={handleAddColor}
+                handleAddSize={handleAddSize}
+                handleDeleteColor={handleDeleteColor}
+                handleDeleteSize={handleDeleteSize}
+                handleChangeInfo={handleChangeInfo}
+                handleExportData = {handleExportData}
+                handleEditColor={handleEditColor}
+                handleEditSize={handleEditSize}
+                handleSelectCategory={handleSelectCategory}
+            />
         </Modal>
     )
 }

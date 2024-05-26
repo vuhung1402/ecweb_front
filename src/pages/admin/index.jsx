@@ -17,7 +17,7 @@ const Admin = () => {
     const location = useLocation()
     const user = useUserPackageHook()
     const [state, setState] = useState({
-        tab: 3,
+        tab: 0,
     })
 
     // useEffect(() => {
@@ -32,6 +32,7 @@ const Admin = () => {
     },[])
 
     const handleChangeTab = (tab) => {
+        localStorage.removeItem('category_id');
         localStorage.setItem('activeTab', `?url=${tab}`);
         state.tab = tab;
         setState((prev) => ({ ...prev }));
@@ -48,7 +49,7 @@ const Admin = () => {
         3: <Products url={location.search} />,
         4: <Transaction url={location.search} />,
         5: <ChatBox url={location.search} />
-    }[state.tab || 3];
+    }[state.tab || 0];
 
     useEffect(() => {
         const resizer = document.getElementById('resizeHandler');

@@ -1,3 +1,6 @@
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import { storage } from "../firebase/firebase";
+
 export const formatCurrencyVN = (number) => {
     if (isNaN(number)) return "";
 
@@ -36,3 +39,15 @@ export const uuid = () => {
         return v.toString(16);
     });
 }
+
+export const handleUploadToFirebase = async (url) => {
+    const imageRef = ref(storage, `images/${url.uid}`);
+    try {
+        const snapshot = await uploadBytes(imageRef, url);
+        const downloadUrl = await getDownloadURL(imageRef);
+        return downloadUrl;
+    } catch (error) {
+        console.error('Error handling CCCD upload:', error);
+        throw error;
+    }
+};

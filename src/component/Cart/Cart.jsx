@@ -3,190 +3,9 @@ import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { useEffect, useState } from "react"
 import { endpoint } from "../../api/api"
 import { useNavigate } from "react-router-dom"
+import { formatCurrencyVN } from "@utils/function"
 
 const Cart = () => {
-
-    const VND = new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND',
-    })
-
-
-    const user = useUserPackageHook()
-    const [cart, setCart] = useState()
-    const [totalPrice, setTotalPrice] = useState(0)
-    const [productCheckout, setProductCheckOut] = useState([])
-    const navigate = useNavigate()
-
-    useEffect(() => {
-        // fetch(`${endpoint}/carts`, {
-        //     method: "GET",
-        //     headers: {
-        //         'Authorization': `Bearer ${user?.accessToken}`,
-        //         'Content-Type': 'application/json',
-        //     },
-        // }).then((response) => {
-        //     if(!response.ok){
-        //         throw new Error("Netword response not ok")
-        //     }
-        //     return response.json()
-        // }).then((json) => {
-        //     if(json?.success){
-        //         setCart(json?.data?.carts)
-        //         console.log("json: ", json)
-        //     }
-        // }).catch((error) => {
-        //     console.error("Error: ", error)
-        // })
-        fetchData()
-    },[])
-
-    const minusItem = (cartId, quantity) => {
-        const body = {
-            quantity: quantity - 1 
-        }
-
-        fetch(`${endpoint}/carts/${cartId}/quantity`, {
-            method: "PATCH",
-            body: JSON.stringify(body),
-            headers: {
-                'Authorization': `Bearer ${user?.accessToken}`,
-                'Content-Type': 'application/json',
-            },
-        }).then((response) => {
-            if(!response.ok){
-                throw new Error("Netword response not ok")
-            }
-            return response.json()
-        }).then((json) => {
-            if(json?.success){
-                fetchData()
-                console.log("json: ", json)
-            }
-        }).catch((error) => {
-            console.error("Error: ", error)
-        })
-    }
-
-    const plusItem = (cartId, quantity) => {
-        const body = {
-            quantity: quantity + 1
-        }
-
-        fetch(`${endpoint}/carts/${cartId}/quantity`, {
-            method: "PATCH",
-            body: JSON.stringify(body),
-            headers: {
-                'Authorization': `Bearer ${user?.accessToken}`,
-                'Content-Type': 'application/json',
-            },
-        }).then((response) => {
-            if(!response.ok){
-                throw new Error("Netword response not ok")
-            }
-            return response.json()
-        }).then((json) => {
-            if(json?.success){
-                fetchData()
-                console.log("json: ", json)
-            }
-        }).catch((error) => {
-            console.error("Error: ", error)
-        })
-    }
-
-    const handleDelete = (cartId) => {
-        fetch(`${endpoint}/carts/${cartId}`, {
-            method: "DELETE",
-            headers: {
-                'Authorization': `Bearer ${user?.accessToken}`,
-                'Content-Type': 'application/json',
-            },
-        }).then((response) => {
-            if(!response.ok){
-                throw new Error("Netword response not ok")
-            }
-            return response.json()
-        }).then((json) => {
-            if(json?.success){
-                fetchData()
-                console.log("json: ", json)
-            }
-        }).catch((error) => {
-            console.error("Error: ", error)
-        })
-    }
-
-    const handleChange = (price, product, variation, quantity, event) => {
-        if(event.target.checked){
-            setTotalPrice(totalPrice + price)
-            setProductCheckOut(prev => ([
-                ...prev,
-                {
-                    _id: product?._id,
-                    variationId: variation?._id,
-                    quantity: quantity
-                }
-            ]))
-        }else{
-            setTotalPrice(totalPrice - price)
-            setProductCheckOut(prev => (
-                prev.filter((item) => item?._id !== product?._id)
-            ))
-        }
-    }
-
-    const handleCheckout = () => {
-
-        const body = {
-            products: productCheckout
-        }
-
-        fetch(`${endpoint}/orders/checkout`, {
-            method: "POST",
-            body: JSON.stringify(body),
-            headers: {
-                'Authorization': `Bearer ${user?.accessToken}`,
-                'Content-Type': 'application/json',
-            },
-        }).then((response) => {
-            if(!response.ok){
-                throw new Error("Netword response not ok")
-            }
-            return response.json()
-        }).then((json) => {
-            if(json?.success){
-                navigate(`/checkout/${json?.code}`)
-                console.log("json: ", json)
-            }
-        }).catch((error) => {
-            console.error("Error: ", error)
-        })
-    }
-
-    console.log("Product for check out", productCheckout)
-
-    const fetchData = () => {
-        fetch(`${endpoint}/carts`, {
-            method: "GET",
-            headers: {
-                'Authorization': `Bearer ${user?.accessToken}`,
-                'Content-Type': 'application/json',
-            },
-        }).then((response) => {
-            if(!response.ok){
-                throw new Error("Netword response not ok")
-            }
-            return response.json()
-        }).then((json) => {
-            if(json?.success){
-                setCart(json?.data?.carts)
-                console.log("json: ", json)
-            }
-        }).catch((error) => {
-            console.error("Error: ", error)
-        })
-    }
 
     return(
         <div className=" px-8 mb-1">
@@ -218,7 +37,7 @@ const Cart = () => {
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                             </svg>
-                            <div className=" font-semibold">{VND.format(295000)}</div>
+                            <div className=" font-semibold">{formatCurrencyVN(295000)}</div>
                         </div>
                     </div>
                 </div>
@@ -227,7 +46,7 @@ const Cart = () => {
                         <h1 className=" border-b-[1px] text-lg font-semibold py-3">Thông tin đơn hàng</h1>
                         <div className=" flex items-center justify-between border-b-[1px] py-3">
                             <p className=" font-bold">Tổng tiền:</p>
-                            <p className=" text-red-600 font-semibold">{VND.format(295000)}</p>
+                            <p className=" text-red-600 font-semibold">{formatCurrencyVN(120000)}</p>
                         </div>
                         <div className=" text-sm py-3">
                             Phí vận chuyển sẽ được tính ở trang thanh toán.

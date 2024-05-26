@@ -10,7 +10,7 @@ import ModalProduct from '../ModalProduct';
 
 const ProductList = (props) => {
     const { idCategory, subCategory, products } = props;
-    const { handleOpenModal, handleChangeSubCategory } = props; // function
+    const { handleOpenModal, handleChangeSubCategory, getData } = props; // function
 
     const [state, setState] = useState({
         data: [],
@@ -26,16 +26,20 @@ const ProductList = (props) => {
     useEffect(() => {
         // state.data = getProductsByCategory(idCategory)
         state.data = products;
-        state.idSubCategory = subCategory?.[0]?.sub_category_id;
+        // state.idSubCategory = subCategory?.[0]?.sub_category_id;
         state.name = subCategory?.[0]?.name;
         setState((prev) => ({ ...prev }))
-    }, []);
+    }, [subCategory]);
 
     const handleDetail = () => {
         // call api get product detail
         // then, set state -> detailData
         // set modal open
     };
+
+    const onConfirm = (product_id) => {
+        console.log("onConfirm: ", product_id);
+    }
 
     const columns = [
         {
@@ -51,8 +55,8 @@ const ProductList = (props) => {
             dataIndex: 'price',
         },
         {
-            title: 'Danh mục phụ',
-            dataIndex: 'name_sub_category',
+            title: 'Ngày thêm sản phẩm',
+            dataIndex: 'createDate',
         },
         {
             title: 'Trạng thái số lượng',
@@ -85,6 +89,7 @@ const ProductList = (props) => {
                         description="Bạn có chắc chắn muốn xóa sản phẩm này?"
                         okText="Xóa"
                         cancelText="Hủy"
+                        onConfirm={() => onConfirm(record?.product_id)}
                     >
                         <div className='cursor-pointer'>
                             <DeleteIcon />
@@ -140,11 +145,11 @@ const ProductList = (props) => {
         <div>
             <div className='flex gap-3 items-center justify-between mb-3 px-2'>
                 <div className=' flex items-center gap-3'>
-                    <Button onClick={() => handleOpenModal('edit')} icon={<EditOutlined />} type='primary' >
+                    <Button onClick={() => handleOpenModal('edit', idCategory)} icon={<EditOutlined />} type='primary' >
                         Sửa danh mục
                     </Button>
 
-                    <Button onClick={() => handleModalProduct('create')} icon={<PlusOutlined />} type='primary' >
+                    <Button onClick={() => handleModalProduct('create', idCategory)} icon={<PlusOutlined />} type='primary' >
                         Thêm sản phẩm
                     </Button>
                     <ModalProduct
@@ -165,6 +170,7 @@ const ProductList = (props) => {
                     handleChangeSubCategory={handleChangeSubCategory}
                     handleSelect={handleSelect}
                     onNameChange={onNameChange}
+                    getData={getData}
                 />
             </div>
             <Table

@@ -4,14 +4,20 @@ import UploadImage from "./uploadImage";
 import ColorInfo from "./ColorInfo";
 
 const AddProduct = (props) => {
-    const { color, imageList } = props;
+    const { color, imageList, idCategory, idSubCategory, category } = props;
     const { handleAddColor, handleAddSize, handleDeleteColor, handleDeleteSize, handleChangeInfo, handleExportData, handleEditColor } = props;
-    const { handleEditSize } = props
+    const { handleEditSize, handleSelectCategory } = props
 
     return (
         <div id="modal-product">
             <div className=" w-full">
-                <InforProduct handleChangeInfo={handleChangeInfo} />
+                <InforProduct 
+                    handleChangeInfo={handleChangeInfo}
+                    handleSelectCategory={handleSelectCategory}
+                    idCategory={idCategory}
+                    idSubCategory={idSubCategory}
+                    category={category}
+                />
                 <UploadImage
                     handleExportData={handleExportData}
                 />

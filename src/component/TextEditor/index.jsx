@@ -16,7 +16,7 @@ export default function TextEditor(props) {
     return (
         <div className=' w-full'>
             <Editor
-                // value={value}
+                value={value}
                 onEditorChange={(e) => handleChangeInfo(e, 'description')}
                 apiKey='cerf6p0iinuy5e7bjai7nt823hvba5fwe55f72y41qg50pzi'
                 onInit={(_evt, editor) => editorRef.current = editor}
