@@ -4,7 +4,7 @@ import { Button, Divider, Input, Select, Space, message } from 'antd';
 import DeleteIcon from "@icon/deleteIcon.svg"
 import EditIcon from "@icon/edit.svg"
 import ModalCategory from '@component/ModalCategory';
-import { addSubCategory } from '@pages/admin/products/function';
+import { addSubCategory, deleteSubCategory } from '@pages/admin/products/function';
 
 const DropDownSubCategory = (props) => {
     const { idCategory,  subCategory, idSubCategory, name} = props;
@@ -13,7 +13,7 @@ const DropDownSubCategory = (props) => {
     const [state, setState] = useState({
         items: [],
         name: '',
-        idSubCategory: '',
+        // idSubCategory: '',
         isModalOpen: false,
         modalType: '',
         isLoading: false,
@@ -29,6 +29,7 @@ const DropDownSubCategory = (props) => {
     const inputRef = useRef(null);
     
     const addItem = async (e) => {
+        localStorage.setItem('category_id', idCategory);
         e.preventDefault();
         setState((prev) => ({ ...prev, isLoading:true }))
         const isAddSubCategory = await addSubCategory(name, idCategory);
@@ -44,6 +45,7 @@ const DropDownSubCategory = (props) => {
     };
 
     const handleEdit = () => {
+        localStorage.setItem('category_id', idCategory);
         if (!idSubCategory) return;
         state.isModalOpen = !state.isModalOpen;
         state.modalType = 'edit';
@@ -62,6 +64,18 @@ const DropDownSubCategory = (props) => {
         state.isModalOpen = false;
         setState(prev => ({...prev}));
     };
+
+    const handleDeleteTab = async () => {
+        const isDeleteCategory = await deleteSubCategory(idCategory, idSubCategory);
+        if(isDeleteCategory){
+            message.success("Thành công!!");
+            await getData();
+        }else{
+            message.error("Không thành công!!");
+        }
+        state.isModalOpen = false;
+        setState(prev => ({...prev}));
+    }
 
     return (
         <div className='flex items-center gap-3'>
@@ -111,6 +125,7 @@ const DropDownSubCategory = (props) => {
                 open={state.isModalOpen}
                 type={state.modalType}
                 onCancel={handleEdit}
+                handleDeleteTab={handleDeleteTab}
                 name={name}
                 handleChangeName={onChangeSubName}
             />

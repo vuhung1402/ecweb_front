@@ -102,7 +102,6 @@ const Products = (props) => {
     //---ok
 
     const handleChangeSubCategory = async (name, sub_category_id) => {
-        localStorage.setItem('sub_category_id', sub_category_id);
         const { activeKey } = state;
 
         const isEditCategory = await handleEditSubCategory(name, activeKey, sub_category_id);

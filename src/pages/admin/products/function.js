@@ -73,10 +73,10 @@ export const deleteCategory = async (category_id) => {
     }
 }
 
-export const editCategory = async (name, id) => {
+export const editCategory = async (name, category_id) => {
     const body = {
         name,
-        id,
+        category_id,
     }
 
     try {
@@ -101,7 +101,7 @@ export const editCategory = async (name, id) => {
 
 export const addSubCategory = async (name_sub_category, id) => {
     const body = {
-        name_sub_category, 
+        name_sub_category,
         id,
     }
 
@@ -134,6 +134,32 @@ export const handleEditSubCategory = async (name, category_id, sub_category_id) 
 
     try {
         const response = await fetch(`${endpoint}/admin/update_sub_category`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!response.ok) {
+            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data?.success;
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+        console.error('Error:', error);
+    }
+}
+
+export const deleteSubCategory = async (category_id, sub_category_id) => {
+    const body = {
+        category_id,
+        sub_category_id,
+    }
+
+    try {
+        const response = await fetch(`${endpoint}/admin/delete_sub_category`, {
             method: 'POST',
             body: JSON.stringify(body),
             headers: {

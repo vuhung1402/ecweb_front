@@ -24,9 +24,10 @@ const ProductList = (props) => {
     })
 
     useEffect(() => {
-        // state.data = getProductsByCategory(idCategory)
+        if(subCategory?.length === 0){
+            state.idSubCategory='';
+        }
         state.data = products;
-        // state.idSubCategory = subCategory?.[0]?.sub_category_id;
         const subIndex = subCategory.findIndex(item => item?.sub_category_id === state.idSubCategory);
         state.name = subCategory?.[subIndex]?.name;
         setState((prev) => ({ ...prev }))
