@@ -9,7 +9,7 @@ import ModalCategory from "@component/ModalCategory";
 import { uuid } from "@utils/function";
 
 import { products, category } from "./mock";
-import { addCategory, deleteCategory, editCategory, getCategories, handleEditSubCategory } from "./function";
+import { addCategory, deleteCategory, editCategory, getCategories, getProducts, handleEditSubCategory } from "./function";
 import Loading from "@component/Loading/Loading";
 
 const Products = (props) => {
@@ -28,11 +28,18 @@ const Products = (props) => {
 
     const getData = async () => {
         const categories = await getCategories();
+        state.activeKey = localStorage.getItem('category_id') ? localStorage.getItem('category_id') : categories?.[0]?.category_id;
+        const products = await getProducts(state.activeKey);
         state.category = categories;
         state.products = products;
-        state.activeKey = localStorage.getItem('category_id') ? localStorage.getItem('category_id') : categories?.[0]?.category_id;
         setState((prev) => ({ ...prev }));
     };
+
+    const filterData = async (idSubCategory) => {
+        const productFilter = await getProducts(idSubCategory);
+        state.products = productFilter;
+        setState((prev) => ({ ...prev }));
+    }
 
     // goi ham de get data
     useEffect(() => {
@@ -131,6 +138,7 @@ const Products = (props) => {
                                         key: item?.category_id,
                                         children: (
                                             <ProductList
+                                                filterData={filterData}
                                                 products={state.products}
                                                 idCategory={item?.category_id}
                                                 name={item?.name}

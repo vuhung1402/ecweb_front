@@ -2,6 +2,56 @@ import { endpoint } from "@api/api"
 import { useUserPackageHook } from "@redux/hooks/userHook"
 import { message } from "antd"
 
+export const updateOnlShopStatus = async (id, onlShop) => {
+    const body = {
+        id,
+        onlShop,
+    };
+
+    try {
+        const response = await fetch(`${endpoint}/admin/update_onlShop_product`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!response.ok) {
+            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data?.success;
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+        console.error('Error:', error);
+    }
+}
+
+export const getProducts = async (id) => {
+    try {
+        const response = await fetch(`${endpoint}/admin/admin_to_get_product_list/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!response.ok) {
+            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        if(data?.success){
+            return data?.formatted_product
+        }else{
+            return [];
+        }
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+        console.error('Error:', error);
+    }
+}
+
 export const getCategories = async () => {
     try {
         const response = await fetch(`${endpoint}/admin/Admin_get_all_category`, {

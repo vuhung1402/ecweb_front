@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Popconfirm, Popover, Space, Switch, Table, Tag } from 'antd';
+import { Button, Popconfirm, Popover, Space, Switch, Table, Tag, message } from 'antd';
 import DeleteIcon from "@icon/deleteIcon.svg"
 import EditIcon from "@icon/edit.svg"
 import DropDownSubCategory from '../DropDownSubCategory';
 import { PlusOutlined, EditOutlined } from '@ant-design/icons'
-import { changeStatusOnlShop, getProductsByCategory } from '@pages/admin/products/function';
+import { changeStatusOnlShop, getProductsByCategory, updateOnlShopStatus } from '@pages/admin/products/function';
 import ModalCategory from '@component/ModalCategory';
 import ModalProduct from '../ModalProduct';
 
 const ProductList = (props) => {
     const { idCategory, subCategory, products } = props;
-    const { handleOpenModal, handleChangeSubCategory, getData } = props; // function
+    const { handleOpenModal, handleChangeSubCategory, getData, filterData } = props; // function
 
     const [state, setState] = useState({
         data: [],
@@ -46,7 +46,7 @@ const ProductList = (props) => {
     const columns = [
         {
             title: 'Mã sản phẩm',
-            dataIndex: 'product_id',
+            dataIndex: 'code',
         },
         {
             title: 'Tên sản phẩm',
@@ -70,7 +70,7 @@ const ProductList = (props) => {
             render: (_, record) => {
                 const obj = state.data?.find(item => item.product_id === record?.product_id);
                 return (
-                    <Switch checked={obj?.onlShop} onChange={(checked) => handleOnchange(checked, record)} />
+                    <Switch checked={obj?.onlShop} loading={false} onChange={(checked) => handleOnchange(checked, record)} />
                 )
             }
         },
@@ -102,7 +102,7 @@ const ProductList = (props) => {
         },
     ];
 
-    const handleOnchange = (checked, record) => {
+    const handleOnchange = async (checked, record) => {
         const object = state.data.map((item) => {
             if (item?.product_id === record?.product_id) {
                 return {
@@ -112,7 +112,14 @@ const ProductList = (props) => {
             }
             return item
         });
-        //goi api changeStatus onlShop
+        const isUpdateOnlShop = await updateOnlShopStatus(record?.product_id, checked)
+
+        if(isUpdateOnlShop){
+            message.success("Thành công!!");
+        }else{
+            message.success("Không thành công!!");
+        }
+        // goi api changeStatus onlShop
         // changeStatusOnlShop(record?.product_id, checked)
         setState((prev) => ({ ...prev, data: object }));
     }
@@ -132,9 +139,10 @@ const ProductList = (props) => {
         setState(prev => ({...prev}));
     }
 
-    const handleSelect = (value, option) => {
-        state.idSubCategory =  option?.value
-        state.name = option?.label
+    const handleSelect = async (value, option) => {
+        state.idSubCategory =  option?.value;
+        state.name = option?.label;
+        await filterData(option?.value);
         setState((prev) => ({...prev}))
     }
 
