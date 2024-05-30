@@ -44,15 +44,15 @@ const Products = (props) => {
     // goi ham de get data
     useEffect(() => {
         getData();
-    }, []);
+    }, [state.activeKey]);
 
     const onChangeTab = (newActiveKey) => {
+        localStorage.setItem('category_id', newActiveKey);
         state.activeKey = newActiveKey;
         setState((prev) => ({ ...prev }))
     };
 
     const handleOpenModal = (type, targetKey) => {
-        localStorage.setItem('category_id', targetKey);
         state.isModalOpen = !state.isModalOpen;
         state.modalType = type;
         state.activeKey = targetKey;

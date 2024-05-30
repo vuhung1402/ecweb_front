@@ -1,12 +1,26 @@
 import TextEditor from "@component/TextEditor";
 import { Input, InputNumber } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DropDownCategory from "../DropDownCategory";
+import { getCategories } from "@pages/admin/products/function";
 
 const InforProduct = (props) => {
-    const { description, idCategory, category } = props;
+    const { description, idCategory, idSubCategory, code, name, price } = props;
     const { handleChangeInfo, handleSelectCategory } = props;
+
+    const [state, setState] = useState({
+        categories: [],
+    }) 
+
+    useEffect(() => {
+        async function fetchData() {
+            const categories = await getCategories();
+            state.categories = categories;
+            setState((prev) => ({...prev}));
+        };
+        fetchData();
+    }, [idCategory])
 
     return (
         <div className=" w-full flex flex-col gap-4">
@@ -14,6 +28,7 @@ const InforProduct = (props) => {
                 <div className="flex gap-3 items-center">
                     <div className=" w-28">Mã sản phẩm</div>
                     <Input
+                        value={code}
                         onChange={(e) => handleChangeInfo(e, 'codeProduct')}
                         type=""
                         placeholder="Mã sản phẩm"
@@ -26,7 +41,9 @@ const InforProduct = (props) => {
                     <div>Danh mục chính</div>
                     <div>
                         <DropDownCategory
-                            data={category}
+                            idSubCategory={idSubCategory}
+                            idCategory={idCategory}
+                            data={state.categories}
                             type='category_id'
                             handleSelectCategory={handleSelectCategory}
                         />
@@ -38,6 +55,7 @@ const InforProduct = (props) => {
                 <div className=" flex gap-3 items-center">
                     <div className=" w-28">Tên sản phẩm</div>
                     <Input
+                        value={name}
                         onChange={(e) => handleChangeInfo(e, 'nameProduct')}
                         type=""
                         placeholder="Tên sản phẩm"
@@ -50,7 +68,9 @@ const InforProduct = (props) => {
                     <div>Danh mục phụ</div>
                     <div>
                         <DropDownCategory
-                            data={category?.find(item => item?.category_id === idCategory)?.sub_category}
+                            idSubCategory={idSubCategory}
+                            idCategory={idCategory}
+                            data={state.categories?.find(item => item?.category_id === idCategory)?.sub_category}
                             type='sub_category_id'
                             handleSelectCategory={handleSelectCategory}
                         />
@@ -61,6 +81,7 @@ const InforProduct = (props) => {
             <div className=" flex gap-3 items-center">
                 <div className=" w-28 hide">Giá tiền</div>
                 <InputNumber
+                    value={price}
                     onChange={(e) => handleChangeInfo(e, 'price')}
                     style={{
                         width: '300px'
@@ -73,7 +94,7 @@ const InforProduct = (props) => {
             <div className=" flex gap-3 items-center w-full">
                 <div className=" w-28">Mô tả</div>
                 <div className=" flex flex-grow">
-                    <TextEditor handleChangeInfo={handleChangeInfo} />
+                    <TextEditor value={description} handleChangeInfo={handleChangeInfo} />
                 </div>
             </div>
         </div>

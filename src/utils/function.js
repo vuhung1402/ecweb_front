@@ -47,7 +47,7 @@ export const handleUploadToFirebase = async (url) => {
         const downloadUrl = await getDownloadURL(imageRef);
         return downloadUrl;
     } catch (error) {
-        console.error('Error handling CCCD upload:', error);
+        console.error('Error handling upload:', error);
         throw error;
     }
 };

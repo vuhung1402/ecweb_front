@@ -3,8 +3,8 @@ import InforProduct from "./InforProduct";
 import UploadImage from "./uploadImage";
 import ColorInfo from "./ColorInfo";
 
-const AddProduct = (props) => {
-    const { color, imageList, idCategory, idSubCategory, category } = props;
+const AddProduct = React.forwardRef((props, ref) => {
+    const { color, imageList, idCategory, idSubCategory, category, code, name, price, description } = props;
     const { handleAddColor, handleAddSize, handleDeleteColor, handleDeleteSize, handleChangeInfo, handleExportData, handleEditColor } = props;
     const { handleEditSize, handleSelectCategory } = props
 
@@ -12,13 +12,18 @@ const AddProduct = (props) => {
         <div id="modal-product">
             <div className=" w-full">
                 <InforProduct 
+                    description={description}
+                    price={price}
+                    code={code}
+                    name={name}
                     handleChangeInfo={handleChangeInfo}
                     handleSelectCategory={handleSelectCategory}
                     idCategory={idCategory}
                     idSubCategory={idSubCategory}
-                    category={category}
+                    // category={category}
                 />
                 <UploadImage
+                    ref={ref}
                     handleExportData={handleExportData}
                 />
                 <ColorInfo
@@ -34,6 +39,6 @@ const AddProduct = (props) => {
             </div>
         </div>
     )
-}
+})
 
 export default AddProduct

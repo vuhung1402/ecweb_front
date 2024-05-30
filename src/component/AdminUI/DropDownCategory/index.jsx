@@ -1,7 +1,7 @@
 import React from 'react';
 import { Select } from 'antd';
 const DropDownCategory = (props) => {
-    const { data, type } = props;
+    const { data, type, idCategory, idSubCategory } = props;
     const { handleSelectCategory } = props
 
     const onSelect = (value, option) => {
@@ -11,6 +11,7 @@ const DropDownCategory = (props) => {
     return (
         < Select
             onSelect={onSelect}
+            value={type === 'sub_category_id' ? idSubCategory : idCategory}
             style={{
                 width: 200,
             }}

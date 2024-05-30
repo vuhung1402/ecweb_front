@@ -1,15 +1,17 @@
 import { Modal } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AddProduct from "../AddProduct";
-import { uuid } from "@utils/function";
+import { handleUploadToFirebase, uuid } from "@utils/function";
 
 import "./style.scss"
 import { category } from "@pages/admin/products/mock";
 
 const ModalProduct = (props) => {
 
-    const { open, type, idCategory, idSubCategory, detailData } = props
-    const { handleCloseModalProduct } = props
+    const { open, type, idCategory, idSubCategory, detailData } = props;
+    const { handleCloseModalProduct } = props;
+    
+    const uploadImageRef = useRef(null)
 
     const [state, setState] = useState({
         color: [],
@@ -21,23 +23,23 @@ const ModalProduct = (props) => {
         mainImage: '',
         hoverImage: '',
         category: [],
-        idCategory:'',
-        idSubCategory:'',
+        idCategory: '',
+        idSubCategory: '',
     });
 
     useEffect(() => {
-        state.category = category;
+        // state.category = category;
         state.idCategory = idCategory;
         state.idSubCategory = idSubCategory;
-        setState((prev) => ({...prev}))
-    },[])
+        setState((prev) => ({ ...prev }))
+    }, [])
 
     // mode edit
     useEffect(() => {
         if (type === 'edit' && Object.keys(detailData).length > 0) {
             // state.color = detailData?.color;
         };
-    },[type, detailData]);
+    }, [type, detailData]);
 
     useEffect(() => {
         const element = document.getElementsByClassName('ant-modal-content');
@@ -64,9 +66,9 @@ const ModalProduct = (props) => {
             _id: uuid(),
             code_color: '#000000',
             name_color: 'Đen',
-            image:{
-                uid:'',
-                url:'',
+            image: {
+                uid: '',
+                url: '',
             },
             size: [],
         };
@@ -85,21 +87,21 @@ const ModalProduct = (props) => {
 
     const handleEditColor = (value, id, typeInfo) => {
         let image;
-        if(typeInfo === 'image' && value !== ''){
+        if (typeInfo === 'image' && value !== '') {
             image = state.fileList.find((item) => item?.uid === value)
         }
         const obj = state.color?.map((item) => {
-            if(item?._id === id){
+            if (item?._id === id) {
                 console.log("if")
-                return{
+                return {
                     ...item,
-                    [typeInfo] : typeInfo === 'image' ? image : value,
+                    [typeInfo]: typeInfo === 'image' ? image : value,
                 }
             };
             return item;
         })
-        setState((prev) => ({...prev, color:obj}))
-        console.log("OBJ: ", obj)        
+        setState((prev) => ({ ...prev, color: obj }))
+        console.log("OBJ: ", obj)
     }
 
     const handleDeleteColor = (id) => {
@@ -146,18 +148,18 @@ const ModalProduct = (props) => {
         const updateColor = [...color];
 
         const obj = updateColor?.map((item) => {
-            if(item?._id === colorId){
+            if (item?._id === colorId) {
                 const result = item?.size?.map((itemSize) => {
-                    if(itemSize?._id === idSize){
+                    if (itemSize?._id === idSize) {
                         console.log("if")
-                        return{
+                        return {
                             ...itemSize,
                             [typeInfo]: value,
                         }
                     }
                     return itemSize;
                 })
-                return{
+                return {
                     ...item,
                     size: result,
                 }
@@ -166,7 +168,7 @@ const ModalProduct = (props) => {
         })
 
         console.log("Obj: ", obj);
-        setState((prev) => ({...prev, color: obj}));
+        setState((prev) => ({ ...prev, color: obj }));
     }
 
     const handleDeleteSize = (id, idSize) => {
@@ -206,36 +208,70 @@ const ModalProduct = (props) => {
             state.mainImage = data?.mainImage;
         };
 
-        setState(prev => ({...prev}));
+        setState(prev => ({ ...prev }));
     };
 
     const handleSelectCategory = (id, type) => {
-        if(type === 'category_id'){
+        if (type === 'category_id') {
             state.idCategory = id;
             state.idSubCategory = '';
         }
-        if(type === 'sub_category_id'){
-            state.idSubCategory=id;
+        if (type === 'sub_category_id') {
+            state.idSubCategory = id;
         }
-        setState((prev) => ({...prev}))
+        setState((prev) => ({ ...prev }))
     }
 
-    const onOk = () => {
+    const onOk = async () => {
         const { description, nameProduct, codeProduct, price, fileList, color, mainImage, hoverImage, idCategory, idSubCategory } = state;
+
+        const array_image = [];
+        const newColor = [...color];
+
+        fileList?.map(async (item) => {
+            let url;
+            await Promise.all([handleUploadToFirebase(item?.originFileObj)]).then((values) => { url = values?.[0] });
+            console.log("url: ", url);
+            array_image.push({
+                uid: item?.uid,
+                url
+            })
+        });
+
         const body = {
             name: nameProduct,
             codeProduct: codeProduct,
             price: price,
-            array_color: color,
+            array_color: newColor,
             primary_image: mainImage,
             image_hover: hoverImage,
             category_id: idCategory,
             sub_category_id: idSubCategory,
-            array_image: fileList,
+            array_image: array_image,
             description
         }
         console.log("1123123213", body);
     }
+
+    const onCancel = () => {
+        uploadImageRef.current?.clearData();
+        console.log("hello");
+        setState((prev) => ({...prev,
+            color :[],
+            codeProduct : '',
+            nameProduct : '',
+            price : '',
+            description : '',
+            fileList : [],
+            mainImage : '',
+            hoverImage : '',
+            category : [],
+            idCategory : '',
+            idSubCategory : '',
+        }));
+
+        handleCloseModalProduct()
+    };
 
     const okText = {
         'edit': 'Xác nhận',
@@ -251,20 +287,25 @@ const ModalProduct = (props) => {
             onOk={onOk}
             okText={okText}
             cancelText={'Huỷ'}
-            onCancel={handleCloseModalProduct}
+            onCancel={onCancel}
         >
             <AddProduct
-                category={state.category}
+                // category={state.category}
+                ref={uploadImageRef}
+                description={state.description}
+                price={state.price}
+                code={state.codeProduct}
+                name={state.nameProduct}
                 idCategory={state.idCategory}
                 idSubCategory={state.idSubCategory}
-                imageList={state.fileList} 
+                imageList={state.fileList}
                 color={state.color}
                 handleAddColor={handleAddColor}
                 handleAddSize={handleAddSize}
                 handleDeleteColor={handleDeleteColor}
                 handleDeleteSize={handleDeleteSize}
                 handleChangeInfo={handleChangeInfo}
-                handleExportData = {handleExportData}
+                handleExportData={handleExportData}
                 handleEditColor={handleEditColor}
                 handleEditSize={handleEditSize}
                 handleSelectCategory={handleSelectCategory}

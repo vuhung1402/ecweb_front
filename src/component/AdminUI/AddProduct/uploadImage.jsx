@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useImperativeHandle } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Checkbox, Image, Upload, Button, Popover, Switch } from 'antd';
 
@@ -12,14 +12,14 @@ const getBase64 = (file) =>
         reader.onerror = (error) => reject(error);
     });
 
-const UploadImage = (props) => {
+const UploadImage = React.forwardRef((props, ref) => {
 
     const { handleExportData } = props;
 
     const [state, setState] = useState({
-        previewOpen: false,
-        previewImage: '',
-        fileList: [],
+        // previewOpen: false,
+        // previewImage: '',
+        // fileList: [],
         mainImage: '',
         hoverImage: '',
     })
@@ -47,6 +47,19 @@ const UploadImage = (props) => {
         handleExportData('list', infor?.fileList);
         setFileList(infor?.fileList)
     };
+
+    const clearData = () => {
+        setFileList([]);
+        setPreviewImage('');
+        setState((prev) => ({
+            ...prev,
+            mainImage: '',
+            hoverImage: '',
+        }))
+    };
+    useImperativeHandle(ref, () => ({
+        clearData
+    }));
 
     const uploadButton = (
         <button
@@ -79,8 +92,8 @@ const UploadImage = (props) => {
         useEffect(() => {
             childState.mainImage = mainImage;
             childState.hoverImage = hoverImage;
-            setChildState(prev => ({...prev}));
-        },[parentState]);
+            setChildState(prev => ({ ...prev }));
+        }, [parentState]);
 
         const style = {
             display: 'inline-block',
@@ -91,7 +104,7 @@ const UploadImage = (props) => {
 
         const handleSelectImage = (type, uid) => {
             const value = childState[type] === uid ? '' : uid;
-            setChildState(prev => ({...prev, [type] : value}));
+            setChildState(prev => ({ ...prev, [type]: value }));
         };
 
         const handleUpdate = () => {
@@ -103,7 +116,7 @@ const UploadImage = (props) => {
                 'hoverImage': hoverImage
             }
             handleExportData('image', data);
-            setState(prev => ({...prev}));
+            setState(prev => ({ ...prev }));
         };
 
         return (
@@ -170,7 +183,7 @@ const UploadImage = (props) => {
                 onPreview={handlePreview}
                 onChange={handleChange}
                 itemRender={(originNode, file) => (
-                    <DraggableUploadListItem originNode={originNode} file={file} parentState={state}/>
+                    <DraggableUploadListItem originNode={originNode} file={file} parentState={state} />
                 )}
             >
                 {fileList.length >= 8 ? null : uploadButton}
@@ -192,5 +205,5 @@ const UploadImage = (props) => {
             )}
         </div>
     );
-};
+});
 export default UploadImage;
