@@ -18,7 +18,7 @@ const Products = () => {
         const match = regex.exec(location?.search);
         console.log("match: ", match)
 
-        fetch(`${endpoint}/product/getAllProductList/${location?.state?.key ? location?.state?.key : 'all'}/${match?.[1].length > 0 ? `${location?.state?.value}` : `0`}`, {
+        fetch(`${endpoint}/product/getAllProductList/${location?.state?.key ? location?.state?.key : 'all'}/${match?.[1].length > 0 ? `${location?.state?.value}` : `1`}`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',

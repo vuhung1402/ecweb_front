@@ -27,6 +27,11 @@ const AppRoutes = [
         defaultLayout: true,
     },
     {
+        path: 'admin/product/new',
+        Component: Page?.NewProduct,
+        defaultLayout: false,
+    },
+    {
         path: '/resetPass/:id/resetPass/:token',
         Component: Page?.ResetPass,
         defaultLayout: true,

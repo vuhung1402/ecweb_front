@@ -120,7 +120,9 @@ const UploadImage = React.forwardRef((props, ref) => {
         };
 
         return (
-            <div className='flex flex-col items-center gap-2'>
+            <div
+                className='flex flex-col items-center gap-2'
+            >
                 <div
                     style={style}
                     {...attributes}
@@ -170,7 +172,10 @@ const UploadImage = React.forwardRef((props, ref) => {
     };
 
     return (
-        <div className=' flex items-center gap-3 mt-3'>
+        <div
+            id='upload-image'
+            className=' flex items-center gap-3 mt-3'
+        >
             <div className=' w-28'>
                 Ảnh
             </div>

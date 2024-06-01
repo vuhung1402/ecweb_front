@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
 const ImagePreview = ({ imageArray }) => {
-    console.log(imageArray)
     const [imageId, setImageId] = useState()
     
 
@@ -17,7 +16,6 @@ const ImagePreview = ({ imageArray }) => {
                 const imageId = element.id;
                 const index = imageId?.split('-')[1]
                 if(imageId !== index){
-                    console.log("index: ", index)
                     setImageId(index)
                 }
             }
