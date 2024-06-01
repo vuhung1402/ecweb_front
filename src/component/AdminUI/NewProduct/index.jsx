@@ -1,17 +1,19 @@
-import { Modal } from "antd";
+import { Modal, Tabs, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import AddProduct from "../AddProduct";
 import { handleUploadListImage, handleUploadToFirebase, uuid } from "@utils/function";
 
 import "./style.scss"
 import { category } from "@pages/admin/products/mock";
+import { useNavigate } from "react-router-dom";
 
-const ModalProduct = (props) => {
+const NewProduct = (props) => {
 
     const { open, type, idCategory, idSubCategory, detailData } = props;
     const { handleCloseModalProduct } = props;
-    
-    const uploadImageRef = useRef(null)
+
+    const uploadImageRef = useRef(null);
+    const navigate = useNavigate();
 
     const [state, setState] = useState({
         color: [],
@@ -26,6 +28,7 @@ const ModalProduct = (props) => {
         idCategory: '',
         idSubCategory: '',
         total: '',
+        colorUid:'',
     });
 
     useEffect(() => {
@@ -67,6 +70,7 @@ const ModalProduct = (props) => {
             _id: uuid(),
             code_color: '#000000',
             name_color: 'Đen',
+            totalColor: "",
             image: {
                 uid: '',
                 url: '',
@@ -76,11 +80,6 @@ const ModalProduct = (props) => {
 
         const updateColor = color;
         updateColor.push(newColor);
-
-        const element = document.getElementById('color-info');
-        if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'end' })
-        }
 
         state.color = updateColor;
         setState(prev => ({ ...prev }));
@@ -93,7 +92,6 @@ const ModalProduct = (props) => {
         }
         const obj = state.color?.map((item) => {
             if (item?._id === id) {
-                console.log("if")
                 return {
                     ...item,
                     [typeInfo]: typeInfo === 'image' ? image : value,
@@ -102,7 +100,6 @@ const ModalProduct = (props) => {
             return item;
         })
         setState((prev) => ({ ...prev, color: obj }))
-        console.log("OBJ: ", obj)
     }
 
     const handleDeleteColor = (id) => {
@@ -127,8 +124,9 @@ const ModalProduct = (props) => {
 
         const updateColor = [...color];
 
-        updateColor.map((item) => {
+        updateColor.map((item, index) => {
             if (item?._id === colorUuid) {
+                state.colorUid = index;
                 const updateSize = item?.size;
                 return {
                     ...item,
@@ -152,7 +150,6 @@ const ModalProduct = (props) => {
             if (item?._id === colorId) {
                 const result = item?.size?.map((itemSize) => {
                     if (itemSize?._id === idSize) {
-                        console.log("if")
                         return {
                             ...itemSize,
                             [typeInfo]: value,
@@ -168,7 +165,6 @@ const ModalProduct = (props) => {
             return item;
         })
 
-        console.log("Obj: ", obj);
         setState((prev) => ({ ...prev, color: obj }));
     }
 
@@ -188,7 +184,6 @@ const ModalProduct = (props) => {
             return item;
         });
 
-        console.log("result: ", result);
         setState(prev => ({ ...prev, color: result }));
     }
 
@@ -226,13 +221,16 @@ const ModalProduct = (props) => {
     const onOk = async () => {
         const { description, nameProduct, codeProduct, price, fileList, color, mainImage, hoverImage, idCategory, idSubCategory, total } = state;
 
-        const array_image = await handleUploadListImage(fileList, color, hoverImage, mainImage);
+        if(fileList?.length === 0){
+            message.error("Vui Lòng thêm ảnh cho sản phẩm");
+            return;
+        }
 
-        console.log({array_image})
+        const array_image = await handleUploadListImage(fileList, color, hoverImage, mainImage);
 
         const body = {
             name: nameProduct,
-            total, 
+            total,
             codeProduct: codeProduct,
             price: price,
             array_color: array_image.newColor,
@@ -242,27 +240,29 @@ const ModalProduct = (props) => {
             description,
             imagePrimaryAndHover: array_image.imgReview,
         }
-        console.log("1123123213", body);
+        console.log("body", body);
     }
 
     const onCancel = () => {
         uploadImageRef.current?.clearData();
-        console.log("hello");
-        setState((prev) => ({...prev,
-            color :[],
-            codeProduct : '',
-            nameProduct : '',
-            price : '',
-            description : '',
-            fileList : [],
-            mainImage : '',
-            hoverImage : '',
-            category : [],
-            idCategory : '',
-            idSubCategory : '',
+        setState((prev) => ({
+            ...prev,
+            color: [],
+            codeProduct: '',
+            nameProduct: '',
+            price: '',
+            description: '',
+            fileList: [],
+            mainImage: '',
+            hoverImage: '',
+            category: [],
+            idCategory: '',
+            idSubCategory: '',
         }));
-
-        handleCloseModalProduct()
+        navigate({
+            pathname:'/admin',
+            search: `?url=${0}`
+        });
     };
 
     const okText = {
@@ -271,40 +271,45 @@ const ModalProduct = (props) => {
     }[type];
 
     return (
-        <Modal
-            wrapClassName="modal-product"
-            rootClassName="root-product"
-            title={title}
-            open={open}
-            onOk={onOk}
-            okText={okText}
-            cancelText={'Huỷ'}
-            onCancel={onCancel}
-        >
-            <AddProduct
-                // category={state.category}
-                ref={uploadImageRef}
-                description={state.description}
-                total={state.total}
-                price={state.price}
-                code={state.codeProduct}
-                name={state.nameProduct}
-                idCategory={state.idCategory}
-                idSubCategory={state.idSubCategory}
-                imageList={state.fileList}
-                color={state.color}
-                handleAddColor={handleAddColor}
-                handleAddSize={handleAddSize}
-                handleDeleteColor={handleDeleteColor}
-                handleDeleteSize={handleDeleteSize}
-                handleChangeInfo={handleChangeInfo}
-                handleExportData={handleExportData}
-                handleEditColor={handleEditColor}
-                handleEditSize={handleEditSize}
-                handleSelectCategory={handleSelectCategory}
+        <div className="px-10 py-3 h-screen">
+            <Tabs
+                type="card"
+                items={[
+                    {
+                        label: `Sản phẩm mới`,
+                        key: 'addNewProduct',
+                        children: (
+                            <AddProduct
+                                // category={state.category}
+                                colorUid={state.colorUid}
+                                ref={uploadImageRef}
+                                description={state.description}
+                                total={state.total}
+                                price={state.price}
+                                code={state.codeProduct}
+                                name={state.nameProduct}
+                                idCategory={state.idCategory}
+                                idSubCategory={state.idSubCategory}
+                                imageList={state.fileList}
+                                color={state.color}
+                                handleAddColor={handleAddColor}
+                                handleAddSize={handleAddSize}
+                                handleDeleteColor={handleDeleteColor}
+                                handleDeleteSize={handleDeleteSize}
+                                handleChangeInfo={handleChangeInfo}
+                                handleExportData={handleExportData}
+                                handleEditColor={handleEditColor}
+                                handleEditSize={handleEditSize}
+                                handleSelectCategory={handleSelectCategory}
+                                onOk={onOk}
+                                onCancel={onCancel}
+                            />
+                        ),
+                    }
+                ]}
             />
-        </Modal>
+        </div>
     )
 }
 
-export default ModalProduct
+export default NewProduct

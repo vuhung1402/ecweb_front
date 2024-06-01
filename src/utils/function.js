@@ -1,5 +1,6 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../firebase/firebase";
+import { message } from "antd";
 
 export const formatCurrencyVN = (number) => {
     if (isNaN(number)) return "";
@@ -75,13 +76,16 @@ export const handleUploadListImage = async (list, color, idImgHover, idPrimaryIm
 
             color?.map((value) => {
                 if (value?.image?.uid === item?.uid) {
+                    console.log({value})
                     const colorModified = {
                         ...value,
                         image: data,
                     };
-
+                    console.log({colorModified})
                     newColor.push(colorModified);
-                };
+                }else{
+                    newColor.push(value)
+                }
 
             });
 

@@ -1,6 +1,6 @@
 // ColorInfor.jsx
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, ColorPicker, Input } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
 import DeleteIcon from "@icon/deleteIcon.svg"
@@ -9,11 +9,13 @@ import SelectImage from "@component/SelectImage";
 
 const ColorInfo = (props) => {
 
-    const { color, imageList } = props;
+    const { color, imageList, colorUid } = props;
     const { handleAddColor, handleAddSize, handleDeleteColor, handleDeleteSize, handleEditColor, handleEditSize } = props;
 
-    const onChange = (value, hex) => {
-    };
+    useEffect(() => {
+        const element = document.getElementById('endRef');
+        element.scrollIntoView({behavior: "smooth"});
+    }, [color?.length, color?.[colorUid]?.size?.length])
 
     return (
         <div id="color-info" className="flex mt-14 gap-3">
@@ -43,7 +45,16 @@ const ColorInfo = (props) => {
                                         type=""
                                         placeholder="Tên màu"
                                         style={{
-                                            width: '200px'
+                                            width: '100px'
+                                        }}
+                                    />
+                                    <Input
+                                        value={item?.totalColor}
+                                        onChange={(e) => handleEditColor(e.target.value, item?._id, 'totalColor')}
+                                        type=""
+                                        placeholder="Số lượng"
+                                        style={{
+                                            width: '100px'
                                         }}
                                     />
                                     <SelectImage
@@ -99,6 +110,7 @@ const ColorInfo = (props) => {
                     })}
                 </div>
             </div>
+            <div id='endRef' className=" h-1"></div>
         </div>
     )
 }

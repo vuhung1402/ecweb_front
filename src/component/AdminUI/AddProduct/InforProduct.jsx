@@ -23,7 +23,7 @@ const InforProduct = (props) => {
     }, [idCategory])
 
     return (
-        <div className=" w-full flex flex-col gap-4">
+        <div id="infor-product" className=" w-full flex flex-col gap-4">
             <div className=" flex gap-3 items-center justify-between">
                 <div className="flex gap-3 items-center">
                     <div className=" w-28">Mã sản phẩm</div>
@@ -96,8 +96,8 @@ const InforProduct = (props) => {
                 <Input
                     value={total}
                     onChange={(e) => handleChangeInfo(e, 'total')}
-                    type="number"
-                    placeholder="Kho hàng"
+                    type=""
+                    placeholder="Số lượng hàng trong kho"
                     style={{
                         width: '300px'
                     }}

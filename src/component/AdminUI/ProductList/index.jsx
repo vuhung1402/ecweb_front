@@ -4,13 +4,14 @@ import DeleteIcon from "@icon/deleteIcon.svg"
 import EditIcon from "@icon/edit.svg"
 import DropDownSubCategory from '../DropDownSubCategory';
 import { PlusOutlined, EditOutlined } from '@ant-design/icons'
-import { changeStatusOnlShop, getProductsByCategory, updateOnlShopStatus } from '@pages/admin/products/function';
-import ModalCategory from '@component/ModalCategory';
-import ModalProduct from '../ModalProduct';
+import { updateOnlShopStatus } from '@pages/admin/products/function';
+import { useNavigate } from 'react-router-dom';
 
 const ProductList = (props) => {
     const { idCategory, subCategory, products } = props;
     const { handleOpenModal, handleChangeSubCategory, getData, filterData } = props; // function
+
+    const navigate = useNavigate()
 
     const [state, setState] = useState({
         data: [],
@@ -124,20 +125,20 @@ const ProductList = (props) => {
         setState((prev) => ({ ...prev, data: object }));
     }
 
-    const handleModalProduct = (type) => {
-        if (type === 'create' || type === 'edit') {
-            state.modalProductType = type;
-            state.isModalProductOpen = true;
-        } else {
-            state.isModalProductOpen = false;
-        }
-        setState(prev => ({...prev}));
-    };
+    // const handleModalProduct = (type) => {
+    //     if (type === 'create' || type === 'edit') {
+    //         state.modalProductType = type;
+    //         state.isModalProductOpen = true;
+    //     } else {
+    //         state.isModalProductOpen = false;
+    //     }
+    //     setState(prev => ({...prev}));
+    // };
 
-    const handleCloseModalProduct = () => {
-        state.isModalProductOpen = false;
-        setState(prev => ({...prev}));
-    }
+    // const handleCloseModalProduct = () => {
+    //     state.isModalProductOpen = false;
+    //     setState(prev => ({...prev}));
+    // }
 
     const handleSelect = async (value, option) => {
         state.idSubCategory =  option?.value;
@@ -159,18 +160,9 @@ const ProductList = (props) => {
                         Sửa danh mục
                     </Button>
 
-                    <Button onClick={() => handleModalProduct('create', idCategory)} icon={<PlusOutlined />} type='primary' >
+                    <Button onClick={() => navigate('/admin/product/new')} icon={<PlusOutlined />} type='primary' >
                         Thêm sản phẩm
                     </Button>
-                    <ModalProduct
-                        idCategory={idCategory}
-                        idSubCategory={state.idSubCategory}
-                        open={state.isModalProductOpen}
-                        type={state.modalProductType}
-                        detailData={state.detailData}
-                        handleModalProduct={handleModalProduct}
-                        handleCloseModalProduct={handleCloseModalProduct}
-                    />
                 </div>
                 <DropDownSubCategory
                     name={state.name}

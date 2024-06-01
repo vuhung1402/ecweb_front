@@ -78,7 +78,6 @@ const CardProduct = ({ data }) => {
     }
 
     const handleNavigate = (route, id) => {
-        console.log("id: ", id)
         navigate(
             {
                 pathname: route,
