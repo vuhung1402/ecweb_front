@@ -1,7 +1,7 @@
 import { Modal } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import AddProduct from "../AddProduct";
-import { handleUploadToFirebase, uuid } from "@utils/function";
+import { handleUploadListImage, handleUploadToFirebase, uuid } from "@utils/function";
 
 import "./style.scss"
 import { category } from "@pages/admin/products/mock";
@@ -25,6 +25,7 @@ const ModalProduct = (props) => {
         category: [],
         idCategory: '',
         idSubCategory: '',
+        total: '',
     });
 
     useEffect(() => {
@@ -223,32 +224,23 @@ const ModalProduct = (props) => {
     }
 
     const onOk = async () => {
-        const { description, nameProduct, codeProduct, price, fileList, color, mainImage, hoverImage, idCategory, idSubCategory } = state;
+        const { description, nameProduct, codeProduct, price, fileList, color, mainImage, hoverImage, idCategory, idSubCategory, total } = state;
 
-        const array_image = [];
-        const newColor = [...color];
+        const array_image = await handleUploadListImage(fileList, color, hoverImage, mainImage);
 
-        fileList?.map(async (item) => {
-            let url;
-            await Promise.all([handleUploadToFirebase(item?.originFileObj)]).then((values) => { url = values?.[0] });
-            console.log("url: ", url);
-            array_image.push({
-                uid: item?.uid,
-                url
-            })
-        });
+        console.log({array_image})
 
         const body = {
             name: nameProduct,
+            total, 
             codeProduct: codeProduct,
             price: price,
-            array_color: newColor,
-            primary_image: mainImage,
-            image_hover: hoverImage,
+            array_color: array_image.newColor,
             category_id: idCategory,
             sub_category_id: idSubCategory,
-            array_image: array_image,
-            description
+            array_image: array_image.result,
+            description,
+            imagePrimaryAndHover: array_image.imgReview,
         }
         console.log("1123123213", body);
     }
@@ -293,6 +285,7 @@ const ModalProduct = (props) => {
                 // category={state.category}
                 ref={uploadImageRef}
                 description={state.description}
+                total={state.total}
                 price={state.price}
                 code={state.codeProduct}
                 name={state.nameProduct}

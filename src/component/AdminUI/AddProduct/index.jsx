@@ -4,7 +4,7 @@ import UploadImage from "./uploadImage";
 import ColorInfo from "./ColorInfo";
 
 const AddProduct = React.forwardRef((props, ref) => {
-    const { color, imageList, idCategory, idSubCategory, category, code, name, price, description } = props;
+    const { color, imageList, idCategory, idSubCategory, category, code, name, price, description, total } = props;
     const { handleAddColor, handleAddSize, handleDeleteColor, handleDeleteSize, handleChangeInfo, handleExportData, handleEditColor } = props;
     const { handleEditSize, handleSelectCategory } = props
 
@@ -13,6 +13,7 @@ const AddProduct = React.forwardRef((props, ref) => {
             <div className=" w-full">
                 <InforProduct 
                     description={description}
+                    total={total}
                     price={price}
                     code={code}
                     name={name}

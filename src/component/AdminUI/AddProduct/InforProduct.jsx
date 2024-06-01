@@ -6,18 +6,18 @@ import DropDownCategory from "../DropDownCategory";
 import { getCategories } from "@pages/admin/products/function";
 
 const InforProduct = (props) => {
-    const { description, idCategory, idSubCategory, code, name, price } = props;
+    const { description, idCategory, idSubCategory, code, name, price, total } = props;
     const { handleChangeInfo, handleSelectCategory } = props;
 
     const [state, setState] = useState({
         categories: [],
-    }) 
+    })
 
     useEffect(() => {
         async function fetchData() {
             const categories = await getCategories();
             state.categories = categories;
-            setState((prev) => ({...prev}));
+            setState((prev) => ({ ...prev }));
         };
         fetchData();
     }, [idCategory])
@@ -88,6 +88,19 @@ const InforProduct = (props) => {
                     }}
                     formatter={(value) => `VND ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                     parser={(value) => value?.replace(/\VND\s?|(,*)/g, '')}
+                />
+            </div>
+
+            <div className=" flex gap-3 items-center">
+                <div className=" w-28 hide">Kho hàng</div>
+                <Input
+                    value={total}
+                    onChange={(e) => handleChangeInfo(e, 'total')}
+                    type="number"
+                    placeholder="Kho hàng"
+                    style={{
+                        width: '300px'
+                    }}
                 />
             </div>
 

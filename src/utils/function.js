@@ -51,3 +51,43 @@ export const handleUploadToFirebase = async (url) => {
         throw error;
     }
 };
+
+export const handleUploadListImage = async (list, color, idImgHover, idPrimaryImg) => {
+    const imgReview = {};
+    const result = [];
+    const newColor = [];
+
+    list?.map(async (item) => {
+        let url;
+        await Promise.all([handleUploadToFirebase(item?.originFileObj)]).then((values) => { url = values?.[0] });
+
+        const data = {
+            uid: item?.uid,
+            url
+        };
+
+        result.push(data);
+
+        if (data?.url?.length > 0) {
+            if(item?.uid === idImgHover) imgReview.image_hover = data?.url;
+
+            if(item?.uid === idPrimaryImg) imgReview.primary_image = data?.url;
+
+            color?.map((value) => {
+                if (value?.image?.uid === item?.uid) {
+                    const colorModified = {
+                        ...value,
+                        image: data,
+                    };
+
+                    newColor.push(colorModified);
+                };
+
+            });
+
+        };
+
+    });
+
+    return { result, newColor, imgReview };
+};
