@@ -267,16 +267,21 @@ export const productDetail = async (product_id) => {
 }
 
 export const addProduct = async (body) => {
-    console.log("addProduct: ", body);
     try {
-        const response = await axiosInstance.post(`/admin/add_product`, body);
-        // if (!response.ok) {
-        //     message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        //     throw new Error('Network response was not ok');
-        // }
-        // const data = await response.json();
-        // return data;
-        console.log({response});
+        const response = await fetch(`${endpoint}/admin/add_product`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                "token" : `${token}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!response.ok) {
+            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);

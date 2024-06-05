@@ -53,46 +53,40 @@ export const handleUploadToFirebase = async (url) => {
     }
 };
 
-export const handleUploadListImage = async (list, color, idImgHover, idPrimaryImg) => {
+export const handleUploadListImage = (list, color, idImgHover, idPrimaryImg) => {
     const imgReview = {};
     const result = [];
     const newColor = [];
 
-    list?.map(async (item) => {
-        let url;
-        await Promise.all([handleUploadToFirebase(item?.originFileObj)]).then((values) => { url = values?.[0] });
+    return Promise.all(list.map(async (item) => {
+        try {
+            const url = await handleUploadToFirebase(item?.originFileObj);
+            const data = {
+                uid: item?.uid,
+                url
+            };
 
-        const data = {
-            uid: item?.uid,
-            url
-        };
+            result.push(data);
 
-        result.push(data);
+            if (data?.url?.length > 0) {
+                if(item?.uid === idImgHover) imgReview.image_hover = data;
 
-        if (data?.url?.length > 0) {
-            if(item?.uid === idImgHover) imgReview.image_hover = data;
+                if(item?.uid === idPrimaryImg) imgReview.primary_image = data;
 
-            if(item?.uid === idPrimaryImg) imgReview.primary_image = data;
-
-            color?.map((value) => {
-                if (value?.image?.uid === item?.uid) {
-                    console.log({value})
-                    const colorModified = {
-                        ...value,
-                        image: data,
-                    };
-                    console.log({colorModified})
-                    newColor.push(colorModified);
-                }
-                // else{
-                //     newColor.push(value)
-                // }
-
-            });
-
-        };
-
+                color?.forEach(value => {
+                    if (value?.image?.uid === item?.uid) {
+                        const colorModified = {
+                            ...value,
+                            image: data,
+                        };
+                        newColor.push(colorModified);
+                    }
+                });
+            }
+        } catch (error) {
+            console.error("Error uploading image:", error);
+        }
+    })).then(() => {
+        return { result, newColor, imgReview };
     });
-
-    return { result, newColor, imgReview };
 };

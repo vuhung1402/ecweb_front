@@ -278,35 +278,43 @@ const NewProduct = (props) => {
             return;
         }
 
-        const array_image = await handleUploadListImage(fileList, color, hoverImage, mainImage);
-
-        const body = {
-            name: nameProduct,
-            total,
-            codeProduct: codeProduct,
-            price: price,
-            array_color: array_image.newColor,
-            category_id: idCategory,
-            sub_category_id: idSubCategory,
-            array_image: array_image.result,
-            description,
-            imagePrimaryAndHover: array_image.imgReview,
-        }
-        console.log("body", body);
-        const result = await addProduct(body);
-        console.log({result});
-        if(result?.success){
-            setState(prev => ({...prev, addLoading: false}));
-            message.success("Thành công!");
-        }else{
-            if(result?.message === TOKEN_INVALID){
-                navigate("/login");
-                message?.info(LOGIN_AGAIN);
-            }else{
+        handleUploadListImage(fileList, color, hoverImage, mainImage)
+            .then(array_image => {
+                console.log({array_image});
+                const body = {
+                    name: nameProduct,
+                    total,
+                    codeProduct: codeProduct,
+                    price: price,
+                    array_color: array_image.newColor,
+                    category_id: idCategory,
+                    sub_category_id: idSubCategory,
+                    array_image: array_image.result,
+                    description,
+                    imagePrimaryAndHover: array_image.imgReview,
+                };
+        
+                return addProduct(body);
+            })
+            .then(result => {
+                if(result?.success){
+                    setState(prev => ({...prev, addLoading: false}));
+                    message.success("Thành công!");
+                } else {
+                    if(result?.message === TOKEN_INVALID){
+                        navigate("/login");
+                        message?.info(LOGIN_AGAIN);
+                    } else {
+                        setState(prev => ({...prev, addLoading: false}));
+                        message.error(result?.message);
+                    }
+                }
+            })
+            .catch(error => {
                 setState(prev => ({...prev, addLoading: false}));
-                message.error(result?.message);
-            }
-        }
+                message.error("Đã xảy ra lỗi khi xử lý ảnh.");
+                console.error(error);
+            });
     }
 
     const onCancel = () => {
