@@ -4,14 +4,19 @@ import DeleteIcon from "@icon/deleteIcon.svg"
 import EditIcon from "@icon/edit.svg"
 import DropDownSubCategory from '../DropDownSubCategory';
 import { PlusOutlined, EditOutlined } from '@ant-design/icons'
-import { updateOnlShopStatus } from '@pages/admin/products/function';
+import { deleteProduct, productDetail, updateOnlShopStatus } from '@pages/admin/products/function';
 import { useNavigate } from 'react-router-dom';
+import { formatCurrencyVN } from '@utils/function';
+import { useDispatch } from 'react-redux';
+import { clear } from '@redux/actions';
+import { TOKEN_INVALID } from '@utils/error';
 
 const ProductList = (props) => {
     const { idCategory, subCategory, products } = props;
     const { handleOpenModal, handleChangeSubCategory, getData, filterData } = props; // function
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [state, setState] = useState({
         data: [],
@@ -20,28 +25,51 @@ const ProductList = (props) => {
         isModalOpen: false,
         modalType: '',
         isModalProductOpen: false,
-        modalProductType:'',
+        modalProductType: '',
         detailData: {},
+        switchLoading: {
+            status: false,
+            id: '',
+        },
+        confirmLoading: false,
     })
 
     useEffect(() => {
-        if(subCategory?.length === 0){
-            state.idSubCategory='';
-        }
+        // if(subCategory?.length === 0){
+        //     state.idSubCategory='';
+        // }
+        state.idSubCategory = '';
         state.data = products;
         const subIndex = subCategory.findIndex(item => item?.sub_category_id === state.idSubCategory);
         state.name = subCategory?.[subIndex]?.name;
         setState((prev) => ({ ...prev }))
-    }, [subCategory]);
+    }, [subCategory?.length]);
 
-    const handleDetail = () => {
+    const handleDetail = async (product_id) => {
+        const product = await productDetail(product_id);
+        console.log({product});
         // call api get product detail
         // then, set state -> detailData
         // set modal open
     };
 
-    const onConfirm = (product_id) => {
+    const onConfirm = async (product_id) => {
+        setState(prev => ({...prev, confirmLoading:true}));
         // console.log("onConfirm: ", product_id);
+        const result = await deleteProduct(product_id);
+        if (result?.success) {
+            await getData();
+            setState(prev => ({...prev, confirmLoading:false}));
+            message.success(result?.message);
+        } else {
+            if(result?.message === TOKEN_INVALID){
+                message?.info("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại!");
+                navigate("/login");
+            }else{
+                setState(prev => ({...prev, confirmLoading:false}));
+                message?.error("Không thành công!");
+            }
+        }
     }
 
     const columns = [
@@ -56,6 +84,11 @@ const ProductList = (props) => {
         {
             title: 'Giá tiền',
             dataIndex: 'price',
+            render: (_, record) => {
+                return (
+                    <div>{formatCurrencyVN(record?.price)}</div>
+                )
+            }
         },
         {
             title: 'Ngày thêm sản phẩm',
@@ -63,7 +96,7 @@ const ProductList = (props) => {
         },
         {
             title: 'Trạng thái số lượng',
-            dataIndex: 'status',
+            dataIndex: 'total_number',
         },
         {
             title: 'Trạng thái bán hàng',
@@ -71,7 +104,11 @@ const ProductList = (props) => {
             render: (_, record) => {
                 const obj = state.data?.find(item => item.product_id === record?.product_id);
                 return (
-                    <Switch checked={obj?.onlShop} loading={false} onChange={(checked) => handleOnchange(checked, record)} />
+                    <Switch
+                        checked={record?.onlShop}
+                        loading={state.switchLoading.status && record?.product_id === state.switchLoading.id}
+                        onChange={(checked) => handleOnchange(checked, record)}
+                    />
                 )
             }
         },
@@ -83,7 +120,7 @@ const ProductList = (props) => {
                 <Space size="middle">
                     <div
                         className='cursor-pointer'
-                        onClick={handleDetail}
+                        onClick={() => handleDetail(record?.product_id)}
                     >
                         <EditIcon />
                     </div>
@@ -93,6 +130,9 @@ const ProductList = (props) => {
                         okText="Xóa"
                         cancelText="Hủy"
                         onConfirm={() => onConfirm(record?.product_id)}
+                        okButtonProps={{
+                            loading: state.confirmLoading,
+                        }}
                     >
                         <div className='cursor-pointer'>
                             <DeleteIcon />
@@ -104,52 +144,34 @@ const ProductList = (props) => {
     ];
 
     const handleOnchange = async (checked, record) => {
-        const object = state.data.map((item) => {
-            if (item?.product_id === record?.product_id) {
-                return {
-                    ...item,
-                    onlShop: checked,
-                }
-            }
-            return item
-        });
+        setState(prev => ({ ...prev, switchLoading: { status: true, id: record?.product_id } }));
         const isUpdateOnlShop = await updateOnlShopStatus(record?.product_id, checked)
 
-        if(isUpdateOnlShop){
+        if (isUpdateOnlShop?.success) {
+            await getData();
+            setState(prev => ({ ...prev, switchLoading: { status: false, id: '' } }));
             message.success("Thành công!!");
-        }else{
-            message.success("Không thành công!!");
+        } else {
+            if (isUpdateOnlShop?.message === "You're not authenticated") {
+                message.info("Phiên đăng nhập hết hạn!!");
+                navigate('/login');
+            } else {
+                setState(prev => ({ ...prev, switchLoading: { status: false, id: '' } }));
+                message.error("Không thành công!!");
+            }
         }
-        // goi api changeStatus onlShop
-        // changeStatusOnlShop(record?.product_id, checked)
-        setState((prev) => ({ ...prev, data: object }));
     }
 
-    // const handleModalProduct = (type) => {
-    //     if (type === 'create' || type === 'edit') {
-    //         state.modalProductType = type;
-    //         state.isModalProductOpen = true;
-    //     } else {
-    //         state.isModalProductOpen = false;
-    //     }
-    //     setState(prev => ({...prev}));
-    // };
-
-    // const handleCloseModalProduct = () => {
-    //     state.isModalProductOpen = false;
-    //     setState(prev => ({...prev}));
-    // }
-
     const handleSelect = async (value, option) => {
-        state.idSubCategory =  option?.value;
+        state.idSubCategory = option?.value;
         state.name = option?.label;
+        setState((prev) => ({ ...prev }));
         await filterData(option?.value);
-        setState((prev) => ({...prev}))
     }
 
     const onNameChange = (event) => {
         state.name = event.target.value
-        setState((prev) => ({...prev}))
+        setState((prev) => ({ ...prev }))
     };
 
     return (

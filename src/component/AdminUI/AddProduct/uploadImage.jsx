@@ -17,9 +17,6 @@ const UploadImage = React.forwardRef((props, ref) => {
     const { handleExportData } = props;
 
     const [state, setState] = useState({
-        // previewOpen: false,
-        // previewImage: '',
-        // fileList: [],
         mainImage: '',
         hoverImage: '',
     })

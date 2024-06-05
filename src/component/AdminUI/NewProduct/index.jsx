@@ -6,6 +6,9 @@ import { handleUploadListImage, handleUploadToFirebase, uuid } from "@utils/func
 import "./style.scss"
 import { category } from "@pages/admin/products/mock";
 import { useNavigate } from "react-router-dom";
+import { addProduct } from "@pages/admin/products/function";
+import { TOKEN_INVALID } from "@utils/error";
+import { LOGIN_AGAIN } from "@utils/message";
 
 const NewProduct = (props) => {
 
@@ -16,6 +19,7 @@ const NewProduct = (props) => {
     const navigate = useNavigate();
 
     const [state, setState] = useState({
+        addLoading: false, 
         color: [],
         codeProduct: '',
         nameProduct: '',
@@ -29,6 +33,7 @@ const NewProduct = (props) => {
         idSubCategory: '',
         total: '',
         colorUid:'',
+        
     });
 
     useEffect(() => {
@@ -70,12 +75,12 @@ const NewProduct = (props) => {
             _id: uuid(),
             code_color: '#000000',
             name_color: 'Đen',
-            totalColor: "",
+            total_number_with_color: "",
             image: {
                 uid: '',
                 url: '',
             },
-            size: [],
+            array_sizes: [],
         };
 
         const updateColor = color;
@@ -127,10 +132,10 @@ const NewProduct = (props) => {
         updateColor.map((item, index) => {
             if (item?._id === colorUuid) {
                 state.colorUid = index;
-                const updateSize = item?.size;
+                const updateSize = item?.array_sizes;
                 return {
                     ...item,
-                    size: updateSize?.push(newSize),
+                    array_sizes: updateSize?.push(newSize),
                 };
             };
 
@@ -148,7 +153,7 @@ const NewProduct = (props) => {
 
         const obj = updateColor?.map((item) => {
             if (item?._id === colorId) {
-                const result = item?.size?.map((itemSize) => {
+                const result = item?.array_sizes?.map((itemSize) => {
                     if (itemSize?._id === idSize) {
                         return {
                             ...itemSize,
@@ -159,7 +164,7 @@ const NewProduct = (props) => {
                 })
                 return {
                     ...item,
-                    size: result,
+                    array_sizes: result,
                 }
             }
             return item;
@@ -175,10 +180,10 @@ const NewProduct = (props) => {
 
         const result = updateColor.map((item, index) => {
             if (item?._id === id) {
-                const updateSize = [...item?.size]
+                const updateSize = [...item?.array_sizes]
                 return {
                     ...item,
-                    size: updateSize?.filter((itemSize) => itemSize?._id !== idSize),
+                    array_sizes: updateSize?.filter((itemSize) => itemSize?._id !== idSize),
                 };
             };
             return item;
@@ -219,10 +224,57 @@ const NewProduct = (props) => {
     }
 
     const onOk = async () => {
+        setState(prev => ({...prev, addLoading: true}));
         const { description, nameProduct, codeProduct, price, fileList, color, mainImage, hoverImage, idCategory, idSubCategory, total } = state;
 
         if(fileList?.length === 0){
+            setState(prev => ({...prev, addLoading: false}));
             message.error("Vui Lòng thêm ảnh cho sản phẩm");
+            return;
+        }
+        if(description.length === 0){
+            setState(prev => ({...prev, addLoading: false}));
+            message.error("Vui Lòng thêm mô tả cho sản phẩm");
+            return;
+        }
+        if(nameProduct.length === 0){
+            setState(prev => ({...prev, addLoading: false}));
+            message.error("Vui Lòng thêm tên cho sản phẩm");
+            return;
+        }
+        if(codeProduct.length === 0){
+            setState(prev => ({...prev, addLoading: false}));
+            message.error("Vui Lòng thêm mã cho sản phẩm");
+            return;
+        }
+        if(price.length === 0){
+            setState(prev => ({...prev, addLoading: false}));
+            message.error("Vui Lòng thêm giá cho sản phẩm");
+            return;
+        }
+        if(mainImage.length === 0){
+            setState(prev => ({...prev, addLoading: false}));
+            message.error("Vui Lòng chọn ảnh chính cho sản phẩm");
+            return;
+        }
+        if(hoverImage.length === 0){
+            setState(prev => ({...prev, addLoading: false}));
+            message.error("Vui Lòng chọn ảnh reivew cho sản phẩm");
+            return;
+        }
+        if(idCategory.length === 0){
+            setState(prev => ({...prev, addLoading: false}));
+            message.error("Vui Lòng chọn danh mục cho sản phẩm");
+            return;
+        }
+        if(idSubCategory.length === 0){
+            setState(prev => ({...prev, addLoading: false}));
+            message.error("Vui Lòng chọn danh mục phụ cho sản phẩm");
+            return;
+        }
+        if(total.length === 0){
+            setState(prev => ({...prev, addLoading: false}));
+            message.error("Vui Lòng thêm số lượng trong kho hàng cho sản phẩm");
             return;
         }
 
@@ -241,6 +293,20 @@ const NewProduct = (props) => {
             imagePrimaryAndHover: array_image.imgReview,
         }
         console.log("body", body);
+        const result = await addProduct(body);
+        console.log({result});
+        if(result?.success){
+            setState(prev => ({...prev, addLoading: false}));
+            message.success("Thành công!");
+        }else{
+            if(result?.message === TOKEN_INVALID){
+                navigate("/login");
+                message?.info(LOGIN_AGAIN);
+            }else{
+                setState(prev => ({...prev, addLoading: false}));
+                message.error(result?.message);
+            }
+        }
     }
 
     const onCancel = () => {
@@ -281,6 +347,7 @@ const NewProduct = (props) => {
                         children: (
                             <AddProduct
                                 // category={state.category}
+                                addLoading={state.addLoading}
                                 colorUid={state.colorUid}
                                 ref={uploadImageRef}
                                 description={state.description}

@@ -28,7 +28,7 @@ const Header = () => {
             }
             return response.json()
         }).then((json) => {
-            if(json?.success){
+            if (json?.success) {
                 setCategory(json?.formattedData)
             }
         }).catch((error) => {
@@ -40,7 +40,7 @@ const Header = () => {
     const navigate = useNavigate()
 
     const handleAccount = () => {
-        if (user?.data) {
+        if (user?.Token) {
             setAccount(!account)
             setSearchBox(false)
             setCartPopUp(false)
@@ -57,66 +57,14 @@ const Header = () => {
 
     const classNameOfMenu = "w-[140px] px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]";
 
-
-    // const category = [
-    //     {
-    //         key: '1',
-    //         icon: null,
-    //         children: [
-    //             {
-    //                 key: '2',
-    //                 icon: null,
-    //                 children: null,
-    //                 label: 'Ao so mi',
-    //                 route: "ao-so-mi",
-    //                 type: '',
-    //             },
-    //             {
-    //                 key: '3',
-    //                 icon: null,
-    //                 children: null,
-    //                 label: 'Ao thun',
-    //                 route: "ao-thun",
-    //                 type: ''
-    //             }
-    //         ],
-    //         label: 'Ao',
-    //         type: ''
-    //     },
-    //     {
-    //         key: '4',
-    //         icon: null,
-    //         children: [
-    //             {
-    //                 key: '5',
-    //                 icon: null,
-    //                 children: null,
-    //                 label: 'Quan dui',
-    //                 route: "quan-dui",
-    //                 type: '',
-    //             },
-    //             {
-    //                 key: '6',
-    //                 icon: null,
-    //                 children: null,
-    //                 label: 'Quan dai',
-    //                 route: "quan-dai",
-    //                 type: ''
-    //             }
-    //         ],
-    //         label: 'Quan',
-    //         type: ''
-    //     }
-    // ]
-
     const handleNavigate = (route, key) => {
         navigate(
             {
                 pathname: route
             },
             {
-                state:{
-                  key: key,
+                state: {
+                    key: key,
                 }
             }
         );
@@ -214,10 +162,27 @@ const Header = () => {
                         (
                             <div className=" absolute right-1 top-10 w-[220px] bg-white rounded border p-2 z-[999]">
                                 <div className=" uppercase text-center font-semibold p-2 border-b-[1px]">Thông tin tài khoản</div>
-                                <div onClick={() => {
-                                    navigate("/account")
-                                    setAccount(!account)
-                                }} className=" hover:text-blue-300 cursor-pointer">Tài khoản của tôi</div>
+                                {
+                                    user?.isAdmin &&
+                                    <div
+                                        onClick={() => {
+                                            navigate("/admin")
+                                            setAccount(!account)
+                                        }}
+                                        className=" hover:text-blue-300 cursor-pointer"
+                                    >
+                                        Trang quản lý
+                                    </div>
+                                }
+                                <div
+                                    onClick={() => {
+                                        navigate("/account")
+                                        setAccount(!account)
+                                    }}
+                                    className=" hover:text-blue-300 cursor-pointer"
+                                >
+                                    Tài khoản của tôi
+                                </div>
                                 <div onClick={handleLogOut} className="hover:text-blue-300 cursor-pointer">Đăng xuất</div>
                             </div>
                         )

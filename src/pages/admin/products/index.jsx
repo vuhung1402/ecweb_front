@@ -6,9 +6,7 @@ import { Tabs, message } from "antd";
 // component
 import ProductList from "@component/AdminUI/ProductList";
 import ModalCategory from "@component/ModalCategory";
-import { uuid } from "@utils/function";
 
-import { products, category } from "./mock";
 import { addCategory, deleteCategory, editCategory, getCategories, getProducts, handleEditSubCategory } from "./function";
 import Loading from "@component/Loading/Loading";
 
@@ -20,6 +18,7 @@ const Products = (props) => {
         isModalOpen: false,
         isModalDeleteOpen: false,
         category: [],
+        deleteTab: '',
         activeKey: '',
         modalType: '',
         products: [],
@@ -52,21 +51,29 @@ const Products = (props) => {
         setState((prev) => ({ ...prev }))
     };
 
-    const handleOpenModal = (type, targetKey) => {
-        state.isModalOpen = !state.isModalOpen;
-        state.modalType = type;
-        state.activeKey = targetKey;
-        setState((prev) => ({ ...prev }))
-    };
-
     const onEdit = (targetKey, action) => {
         const modalType = action === 'add' ? 'create' : 'delete';
+        console.log({targetKey});
         handleOpenModal(modalType, targetKey);
         setState((prev) => ({ ...prev }));
     };
 
+    const handleOpenModal = (type, targetKey) => {
+        console.log({targetKey})
+        state.isModalOpen = !state.isModalOpen;
+        state.modalType = type;
+        if(type === 'delete'){
+            state.deleteTab = targetKey;
+        }
+        if(type === 'edit'){
+            state.activeKey = targetKey;
+        }
+        setState((prev) => ({ ...prev }))
+    };
+    console.log("state.activeKey ", state.activeKey)
     const handleDelteCategory = async () => {
-        const isDelete = await deleteCategory(state.activeKey);
+        console.log("handleDelteCategory state.activeKey ", state.deleteTab)
+        const isDelete = await deleteCategory(state.deleteTab);
         if (isDelete) {
             message.success("Xoá danh mục thành công!!");
             state.isModalOpen = !state.isModalOpen;
@@ -93,8 +100,8 @@ const Products = (props) => {
                 state.isModalOpen = false;
             }
         } else if (type === 'create') {
-            const isAddCategory = await addCategory(name);
-            if (isAddCategory) {
+            const response = await addCategory(name);
+            if (response?.success) {
                 message.success("Thêm mới thành công!!");
                 state.isModalOpen = false;
                 await getData()
@@ -124,7 +131,7 @@ const Products = (props) => {
     return (
         <>
             {
-                state.category.length === 0 ? <Loading /> :
+                !state.category ? <Loading /> :
                     (
                         <div className="w-full h-full p-4">
                             <Tabs

@@ -1,10 +1,8 @@
+import { message } from "antd";
 import { endpoint } from "../../../api/api";
 import React, { useRef, useState } from "react";
 
 function SignUp(){
-    const emailRef = useRef(null);
-    const passwordRef = useRef(null)
-    const confirmPassRef = useRef(null)
 
     const [inforUser, setInforUser] = useState({
         ho: "",
@@ -16,19 +14,6 @@ function SignUp(){
     })
 
     const [notifi, setNotifi] = useState()
-    const [email, setEmail] = useState()
-    const [password, setPassword] = useState()
-    const [confirmPass, setConfirmPass] = useState()
-    const [checkPass, setCheckPass] = useState(false)
-    const [checkMailSent, setCheckMailSent] = useState(false)
-    const [checkMailSentErr, setCheckMailSentErr] = useState(false)
-    const [message, setMessage] = useState()
-    const [errorCode, setErroreCode] = useState()
-
-    const [respone, setRespone] = useState()
-
-    const [verifyPopUp, setVerifyPopUp] = useState(false)
-
     const handleSignIn =  () => {
         fetch(`${endpoint}/users/`,{
             method: "POST",
@@ -42,8 +27,10 @@ function SignUp(){
             }
             return response.json()
         }).then((json) => {
-            setNotifi(json)
+            message.info(json);
+            setNotifi(json);
         }).catch((e) => {
+            message.error("Trang web đang được bảo trì, vui lòng quay lại sau!")
            console.log("e: ", e);
         })
         

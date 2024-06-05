@@ -1,0 +1,1 @@
+export const LOGIN_AGAIN = "Phiên đăng nhập hết hàng. Vui lòng đăng nhập lại!";

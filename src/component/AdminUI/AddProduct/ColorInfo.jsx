@@ -14,8 +14,8 @@ const ColorInfo = (props) => {
 
     useEffect(() => {
         const element = document.getElementById('endRef');
-        element.scrollIntoView({behavior: "smooth"});
-    }, [color?.length, color?.[colorUid]?.size?.length])
+        element.scrollIntoView({ behavior: "smooth" });
+    }, [color?.length, color?.[colorUid]?.array_sizes?.length])
 
     return (
         <div id="color-info" className="flex mt-14 gap-3">
@@ -35,9 +35,9 @@ const ColorInfo = (props) => {
                             <>
                                 <div className="flex gap-2 items-center" key={`color-${index}`}>
                                     <ColorPicker
-                                        value={item?.code_color} 
-                                        showText 
-                                        onChange={(value, hex) => handleEditColor(hex, item?._id, 'code_color')} 
+                                        value={item?.code_color}
+                                        showText
+                                        onChange={(value, hex) => handleEditColor(hex, item?._id, 'code_color')}
                                     />
                                     <Input
                                         value={item?.name_color}
@@ -49,8 +49,8 @@ const ColorInfo = (props) => {
                                         }}
                                     />
                                     <Input
-                                        value={item?.totalColor}
-                                        onChange={(e) => handleEditColor(e.target.value, item?._id, 'totalColor')}
+                                        value={item?.total_number_with_color}
+                                        onChange={(e) => handleEditColor(e.target.value, item?._id, 'total_number_with_color')}
                                         type=""
                                         placeholder="Số lượng"
                                         style={{
@@ -60,7 +60,7 @@ const ColorInfo = (props) => {
                                     <SelectImage
                                         colorId={item?._id}
                                         imageList={imageList}
-                                        onSelectImage={handleEditColor}  
+                                        onSelectImage={handleEditColor}
                                     />
                                     <div
                                         onClick={() => handleDeleteColor(item?._id)}
@@ -75,7 +75,7 @@ const ColorInfo = (props) => {
                                         <PlusIcon />
                                     </div>
                                 </div>
-                                {item?.size?.length > 0 && item?.size?.map((itemSize, idx) => {
+                                {item?.array_sizes?.length > 0 && item?.array_sizes?.map((itemSize, idx) => {
                                     return (
                                         <div className=" flex gap-3 items-center ml-10" key={`size-${idx}`}>
                                             <Input
@@ -97,7 +97,7 @@ const ColorInfo = (props) => {
                                                 }}
                                             />
                                             <div
-                                                onClick={() => handleDeleteSize(item?._id, itemSize?._id)} 
+                                                onClick={() => handleDeleteSize(item?._id, itemSize?._id)}
                                                 className=" cursor-pointer"
                                             >
                                                 <DeleteIcon />
@@ -108,9 +108,9 @@ const ColorInfo = (props) => {
                             </>
                         )
                     })}
+                    <div id='endRef' className=" h-1 w-full"></div>
                 </div>
             </div>
-            <div id='endRef' className=" h-1"></div>
         </div>
     )
 }

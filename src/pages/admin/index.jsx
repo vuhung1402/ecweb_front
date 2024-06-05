@@ -20,20 +20,23 @@ const Admin = () => {
         tab: 0,
     })
 
-    // useEffect(() => {
-    //     if(!user?.isAdmin){
-    //         navigate('/notFound')
-    //     }
-    // })
+    useEffect(() => {
+        if(!user?.isAdmin){
+            navigate('/404')
+        }
+    },[])
 
     useEffect(() => {
+        state.tab = localStorage.getItem('currentTab');
         const activeTab = localStorage.getItem('activeTab');
         activeTab?.length > 0 ? navigate({search: activeTab}) : navigate({search: `?url=${state.tab}`});
+        setState((prev) => ({ ...prev }));
     },[])
 
     const handleChangeTab = (tab) => {
         localStorage.removeItem('category_id');
         localStorage.setItem('activeTab', `?url=${tab}`);
+        localStorage.setItem('currentTab', tab);
         state.tab = tab;
         setState((prev) => ({ ...prev }));
 

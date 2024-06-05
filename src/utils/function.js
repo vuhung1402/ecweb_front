@@ -70,9 +70,9 @@ export const handleUploadListImage = async (list, color, idImgHover, idPrimaryIm
         result.push(data);
 
         if (data?.url?.length > 0) {
-            if(item?.uid === idImgHover) imgReview.image_hover = data?.url;
+            if(item?.uid === idImgHover) imgReview.image_hover = data;
 
-            if(item?.uid === idPrimaryImg) imgReview.primary_image = data?.url;
+            if(item?.uid === idPrimaryImg) imgReview.primary_image = data;
 
             color?.map((value) => {
                 if (value?.image?.uid === item?.uid) {
@@ -83,9 +83,10 @@ export const handleUploadListImage = async (list, color, idImgHover, idPrimaryIm
                     };
                     console.log({colorModified})
                     newColor.push(colorModified);
-                }else{
-                    newColor.push(value)
                 }
+                // else{
+                //     newColor.push(value)
+                // }
 
             });
 

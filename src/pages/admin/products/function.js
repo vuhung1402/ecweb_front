@@ -1,6 +1,16 @@
 import { endpoint } from "@api/api"
 import { useUserPackageHook } from "@redux/hooks/userHook"
 import { message } from "antd"
+import axios from "axios";
+
+const token = localStorage.getItem("token");
+const axiosInstance = axios.create({
+    baseURL: 'http://localhost:5000',
+    headers:{
+        'Content-Type': 'application/json',
+        "token" : `${token}`,
+    }
+})
 
 export const updateOnlShopStatus = async (id, onlShop) => {
     const body = {
@@ -13,6 +23,7 @@ export const updateOnlShopStatus = async (id, onlShop) => {
             method: 'POST',
             body: JSON.stringify(body),
             headers: {
+                "token" : `${token}`,
                 'Content-Type': 'application/json',
             }
         });
@@ -21,7 +32,7 @@ export const updateOnlShopStatus = async (id, onlShop) => {
             throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        return data?.success;
+        return data;
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
@@ -83,6 +94,7 @@ export const addCategory = async (name) => {
             method: 'POST',
             body: JSON.stringify(body),
             headers: {
+                "token" : `${token}`,
                 'Content-Type': 'application/json',
             }
         });
@@ -91,7 +103,7 @@ export const addCategory = async (name) => {
             throw new Error('Network response was not ok');
         }
         const data = await response.json();
-        return data?.success;
+        return data;
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
@@ -108,6 +120,7 @@ export const deleteCategory = async (category_id) => {
             method: 'POST',
             body: JSON.stringify(body),
             headers: {
+                "token" : `${token}`,
                 'Content-Type': 'application/json',
             }
         });
@@ -134,6 +147,7 @@ export const editCategory = async (name, category_id) => {
             method: 'POST',
             body: JSON.stringify(body),
             headers: {
+                "token" : `${token}`,
                 'Content-Type': 'application/json',
             }
         });
@@ -160,6 +174,7 @@ export const addSubCategory = async (name_sub_category, id) => {
             method: 'POST',
             body: JSON.stringify(body),
             headers: {
+                "token" : `${token}`,
                 'Content-Type': 'application/json',
             }
         });
@@ -187,6 +202,7 @@ export const handleEditSubCategory = async (name, category_id, sub_category_id) 
             method: 'POST',
             body: JSON.stringify(body),
             headers: {
+                "token" : `${token}`,
                 'Content-Type': 'application/json',
             }
         });
@@ -213,6 +229,7 @@ export const deleteSubCategory = async (category_id, sub_category_id) => {
             method: 'POST',
             body: JSON.stringify(body),
             headers: {
+                "token" : `${token}`,
                 'Content-Type': 'application/json',
             }
         });
@@ -222,6 +239,92 @@ export const deleteSubCategory = async (category_id, sub_category_id) => {
         }
         const data = await response.json();
         return data?.success;
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+        console.error('Error:', error);
+    }
+}
+
+export const productDetail = async (product_id) => {
+    try {
+        const response = await fetch(`${endpoint}/product/getProductDetail/${product_id}`, {
+            method: 'GET',
+            headers: {
+                "token" : `${token}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!response.ok) {
+            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+        console.error('Error:', error);
+    }
+}
+
+export const addProduct = async (body) => {
+    console.log("addProduct: ", body);
+    try {
+        const response = await axiosInstance.post(`/admin/add_product`, body);
+        // if (!response.ok) {
+        //     message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+        //     throw new Error('Network response was not ok');
+        // }
+        // const data = await response.json();
+        // return data;
+        console.log({response});
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+        console.error('Error:', error);
+    }
+}
+
+export const deleteProduct = async (product_id) => {
+    const body = {
+        product_id
+    }
+
+    try {
+        const response = await fetch(`${endpoint}/admin/delete_product`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                "token" : `${token}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!response.ok) {
+            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+        console.error('Error:', error);
+    }
+}
+
+export const updateProduct = async () => {
+    try {
+        const response = await fetch(`${endpoint}/admin/delete_product`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                "token" : `${token}`,
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!response.ok) {
+            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);

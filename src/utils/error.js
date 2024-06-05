@@ -1,0 +1,1 @@
+export const TOKEN_INVALID = "Token is invalid";

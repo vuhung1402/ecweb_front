@@ -37,13 +37,17 @@ const Login = () => {
         }).then((json) => {
             // setResponse(json)
             if(json?.success){
-                dispatch(userPackage(json))
-                message.success("Đăng nhập thành công")
-                navigate('/')
+                dispatch(userPackage(json));
+                localStorage.setItem("token", json?.Token);
+                console.log({json});
+                message.success("Đăng nhập thành công");
+                navigate('/');
             }else{
+                message.error(json?.message);
                 setNotify(json)
             }
         }).catch((error) => {
+            message.error("Trang web đang được bảo trì, vui lòng quay lại sau");
             console.error("Error: ", error)
         })
     }
@@ -58,14 +62,6 @@ const Login = () => {
                 <input placeholder="Email" className=" w-full outline-none border p-3 mb-4" value={loginInfor.email} onChange={e => setLoginInfor({...loginInfor, email:e.target.value})}/>
 
                 <input placeholder="Mật khẩu" type="password" className=" w-full outline-none border p-3" value={loginInfor.password} onChange={e => setLoginInfor({...loginInfor, password: e.target.value})}/>
-
-                {
-                    notify && 
-                    (
-                        <p className={`${notify?.color}`}>{notify?.message}</p>
-                    )
-                }
-
 
                 <div className=" mt-5 flex items-center"> 
                     <button onClick={handleLogin} type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xl px-5 py-5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Đăng nhập</button>

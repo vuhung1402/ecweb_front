@@ -5,7 +5,7 @@ import ColorInfo from "./ColorInfo";
 import { Button } from "antd";
 
 const AddProduct = React.forwardRef((props, ref) => {
-    const { color, imageList, idCategory, idSubCategory, category, code, name, price, description, total, colorUid } = props;
+    const { color, imageList, idCategory, idSubCategory, category, code, name, price, description, total, colorUid, addLoading } = props;
     const { handleAddColor, handleAddSize, handleDeleteColor, handleDeleteSize, handleChangeInfo, handleExportData, handleEditColor } = props;
     const { handleEditSize, handleSelectCategory, onOk, onCancel } = props
 
@@ -75,8 +75,8 @@ const AddProduct = React.forwardRef((props, ref) => {
                     />
                 </div>
                 <div className=" flex gap-3 justify-end items-center mt-5">
-                    <Button onClick={onCancel}>HUỶ</Button>
-                    <Button onClick={onOk} type="primary" >XÁC NHẬN</Button>
+                    <Button onClick={onCancel}>QUAY LẠI</Button>
+                    <Button onClick={onOk} loading={addLoading} type="primary" >XÁC NHẬN</Button>
                 </div>
             </div>
         </div>
