@@ -9,14 +9,14 @@ const Products = () => {
     const location = useLocation()
     const [data, setData] = useState([])
 
-    console.log("location key: ", location?.state?.key)
-    console.log("location value: ", location?.state?.value)
-    console.log("location search: ", location.search)
+    // console.log("location key: ", location?.state?.key)
+    // console.log("location value: ", location?.state?.value)
+    // console.log("location search: ", location.search)
 
     useEffect(() => {
         const regex = /[?&]sort_by=([^&]*)/;
         const match = regex.exec(location?.search);
-        console.log("match: ", match)
+        // console.log("match: ", match)
 
         fetch(`${endpoint}/product/getAllProductList/${location?.state?.key ? location?.state?.key : 'all'}/${match?.[1].length > 0 ? `${location?.state?.value}` : `1`}`, {
             method: "GET",
@@ -31,7 +31,7 @@ const Products = () => {
         }).then((json) => {
             if(json?.success){
                 setData(json?.productListAll_DataFormat)
-                console.log("JSON: ", json)
+                // console.log("JSON: ", json)
             }
 
         }).catch((error) => {
@@ -74,8 +74,8 @@ const Products = () => {
     const onClick = (item) => {
         //call api
         //api tra du lieu thanh cong set vao state data
-        console.log("item: ", item)
-        console.log("Item key from filter:", item?.item?.props?.route);
+        // console.log("item: ", item)
+        // console.log("Item key from filter:", item?.item?.props?.route);
         navigate(
             {
                 pathname: `/products/${item?.item?.props?.route}`,
@@ -94,7 +94,7 @@ const Products = () => {
         //api tra thanh cong set lai vao state data
         //navigate(`/products/${location?.state?.key}?sort=${option.label}`)
         //call api lai va set lai data
-        console.log("Option: ", option)
+        // console.log("Option: ", option)
         navigate(
             {
                 pathname: `${location?.pathname}`,

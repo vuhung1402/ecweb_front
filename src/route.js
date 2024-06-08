@@ -27,7 +27,7 @@ const AppRoutes = [
         defaultLayout: true,
     },
     {
-        path: 'admin/product/new',
+        path: 'admin/product/:type',
         Component: Page?.NewProduct,
         defaultLayout: false,
     },

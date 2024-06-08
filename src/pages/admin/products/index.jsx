@@ -23,21 +23,30 @@ const Products = (props) => {
         modalType: '',
         products: [],
         dataTest: [],
+        skeletonLoading: false,
     });
 
     const getData = async () => {
+        setState(prev => ({ ...prev, skeletonLoading: true }));
         const categories = await getCategories();
         state.activeKey = localStorage.getItem('category_id') ? localStorage.getItem('category_id') : categories?.[0]?.category_id;
         const products = await getProducts(state.activeKey);
-        state.category = categories;
-        state.products = products;
-        setState((prev) => ({ ...prev }));
+        setState((prev) => (
+            {
+                ...prev,
+                activeKey: localStorage.getItem('category_id') ? localStorage.getItem('category_id') : categories?.[0]?.category_id,
+                category: categories,
+                products: products,
+                skeletonLoading: false,
+            }
+        ));
     };
 
     const filterData = async (idSubCategory) => {
+        setState(prev => ({ ...prev, skeletonLoading: true }));
         const productFilter = await getProducts(idSubCategory);
-        state.products = productFilter;
-        setState((prev) => ({ ...prev }));
+        // state.products = productFilter;
+        setState((prev) => ({ ...prev, skeletonLoading: false, products: productFilter }));
     }
 
     // goi ham de get data
@@ -53,26 +62,26 @@ const Products = (props) => {
 
     const onEdit = (targetKey, action) => {
         const modalType = action === 'add' ? 'create' : 'delete';
-        console.log({targetKey});
+        // console.log({targetKey});
         handleOpenModal(modalType, targetKey);
         setState((prev) => ({ ...prev }));
     };
 
     const handleOpenModal = (type, targetKey) => {
-        console.log({targetKey})
+        // console.log({targetKey})
         state.isModalOpen = !state.isModalOpen;
         state.modalType = type;
-        if(type === 'delete'){
+        if (type === 'delete') {
             state.deleteTab = targetKey;
         }
-        if(type === 'edit'){
+        if (type === 'edit') {
             state.activeKey = targetKey;
         }
         setState((prev) => ({ ...prev }))
     };
-    console.log("state.activeKey ", state.activeKey)
+    // console.log("state.activeKey ", state.activeKey)
     const handleDelteCategory = async () => {
-        console.log("handleDelteCategory state.activeKey ", state.deleteTab)
+        // console.log("handleDelteCategory state.activeKey ", state.deleteTab)
         const isDelete = await deleteCategory(state.deleteTab);
         if (isDelete) {
             message.success("Xoá danh mục thành công!!");
@@ -145,6 +154,7 @@ const Products = (props) => {
                                         key: item?.category_id,
                                         children: (
                                             <ProductList
+                                                skeletonLoading={state.skeletonLoading}
                                                 filterData={filterData}
                                                 products={state.products}
                                                 idCategory={item?.category_id}

@@ -4,12 +4,17 @@ import { Popover, Image, Checkbox } from "antd";
 
 const SelectImage = (props) => {
 
-    const { imageList, onSelectImage, colorId } = props;
+    const { imageList, onSelectImage, colorId, imageUid } = props;
 
     const [state, setState] = useState({
         selectedImage: '',
         open: false,
     });
+
+    useEffect(() => {
+        state.selectedImage = imageUid;
+        setState(prev => ({...prev}));
+    },[imageList])
 
     // useEffect(() => {
     //     const handleClickOutside = (event) => {
@@ -48,7 +53,7 @@ const SelectImage = (props) => {
                 content={
                     <div className="border-t w-96 max-w-[30vw] h-auto py-2 max-h-[30vh] flex justify-center flex-wrap gap-3 overflow-y-auto scrollbar-hide">
                         {imageList.map((item, index) => {
-                            console.log(item, state.selectedImage);
+                            // console.log(item, state.selectedImage);
                             return (
                                 <div className="flex flex-col items-center gap-2" key={`img-select-${index}`}>
                                     <Image

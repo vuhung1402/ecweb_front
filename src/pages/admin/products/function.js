@@ -314,9 +314,9 @@ export const deleteProduct = async (product_id) => {
     }
 }
 
-export const updateProduct = async () => {
+export const updateProduct = async (body) => {
     try {
-        const response = await fetch(`${endpoint}/admin/delete_product`, {
+        const response = await fetch(`${endpoint}/admin/update_product`, {
             method: 'POST',
             body: JSON.stringify(body),
             headers: {

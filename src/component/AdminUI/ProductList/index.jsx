@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Popconfirm, Popover, Space, Switch, Table, Tag, message } from 'antd';
+import { Button, Popconfirm, Popover, Skeleton, Space, Switch, Table, Tag, message } from 'antd';
 import DeleteIcon from "@icon/deleteIcon.svg"
 import EditIcon from "@icon/edit.svg"
 import DropDownSubCategory from '../DropDownSubCategory';
@@ -12,9 +12,10 @@ import { clear } from '@redux/actions';
 import { TOKEN_INVALID } from '@utils/error';
 
 const ProductList = (props) => {
-    const { idCategory, subCategory, products } = props;
+    const { idCategory, subCategory, products, skeletonLoading } = props;
     const { handleOpenModal, handleChangeSubCategory, getData, filterData } = props; // function
 
+    console.log({skeletonLoading});
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -46,27 +47,35 @@ const ProductList = (props) => {
     }, [subCategory?.length]);
 
     const handleDetail = async (product_id) => {
-        const product = await productDetail(product_id);
-        console.log({product});
+        navigate(
+            {
+                pathname: `/admin/product/edit`,
+            },
+            {
+                state: {
+                    product_id,
+                }
+            }
+        );
         // call api get product detail
         // then, set state -> detailData
         // set modal open
     };
 
     const onConfirm = async (product_id) => {
-        setState(prev => ({...prev, confirmLoading:true}));
+        setState(prev => ({ ...prev, confirmLoading: true }));
         // console.log("onConfirm: ", product_id);
         const result = await deleteProduct(product_id);
         if (result?.success) {
             await getData();
-            setState(prev => ({...prev, confirmLoading:false}));
+            setState(prev => ({ ...prev, confirmLoading: false }));
             message.success(result?.message);
         } else {
-            if(result?.message === TOKEN_INVALID){
+            if (result?.message === TOKEN_INVALID) {
                 message?.info("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại!");
                 navigate("/login");
-            }else{
-                setState(prev => ({...prev, confirmLoading:false}));
+            } else {
+                setState(prev => ({ ...prev, confirmLoading: false }));
                 message?.error("Không thành công!");
             }
         }
@@ -197,14 +206,18 @@ const ProductList = (props) => {
                     getData={getData}
                 />
             </div>
-            <Table
-                columns={columns}
-                dataSource={products}
-                pagination={{
-                    hideOnSinglePage: true,
-                    pageSize: 30
-                }}
-            />
+            {
+                !skeletonLoading &&
+                <Table
+                    columns={columns}
+                    dataSource={products}
+                    pagination={{
+                        hideOnSinglePage: true,
+                        pageSize: 30
+                    }}
+                />
+            }
+            <Skeleton loading={skeletonLoading} />
         </div>
     )
 }

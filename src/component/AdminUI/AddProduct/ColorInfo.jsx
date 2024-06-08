@@ -60,6 +60,7 @@ const ColorInfo = (props) => {
                                     <SelectImage
                                         colorId={item?._id}
                                         imageList={imageList}
+                                        imageUid={item?.image?.uid}
                                         onSelectImage={handleEditColor}
                                     />
                                     <div

@@ -31,7 +31,7 @@ const CheckOut = () => {
         }).then((json) => {
             if(json?.success){
                 setData(json?.data)
-                console.log("json: ", json?.data)
+                // console.log("json: ", json?.data)
             }
             // console.log("json: ", json)
         }).catch((error) => {

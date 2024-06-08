@@ -7,7 +7,7 @@ const ForgotPass = () => {
     const emailRef = useRef()
 
     const handleResetPass = () => {
-        console.log("email: ", emailRef.current.value)
+        // console.log("email: ", emailRef.current.value)
         const body = {
             email: emailRef.current.value
         }

@@ -34,7 +34,7 @@ function SignUp(){
            console.log("e: ", e);
         })
         
-        console.log("inforUser: ", inforUser)
+        // console.log("inforUser: ", inforUser)
     }
 
     return(

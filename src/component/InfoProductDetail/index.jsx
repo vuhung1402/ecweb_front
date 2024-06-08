@@ -22,7 +22,7 @@ const InfoProductDetail = ({ data }) => {
             if (data?.array_color?.length > 0) {
                 data?.array_color?.map((item) => {
                     const sizeArray = addKeyToArraySize(item?.array_sizes)
-                    console.log(sizeArray)
+                    // console.log(sizeArray)
                     color.push({
                         code: item?.code_color,
                         name: item?.name_color,
@@ -55,7 +55,7 @@ const InfoProductDetail = ({ data }) => {
     }
 
     const handleChangeNameColor = (name) => {
-        console.log(name);
+        // console.log(name);
         setState(prev => ({ ...prev, textColor: name }));
     };
 
@@ -69,7 +69,7 @@ const InfoProductDetail = ({ data }) => {
         if (item.invalid) return;
 
         const objectColor = state.color?.find(itemColor => itemColor?.code === item.code);
-        console.log("ObjectColor from InfoProductDetail: ", objectColor);
+        // console.log("ObjectColor from InfoProductDetail: ", objectColor);
         state.sizes = objectColor?.sizes;
         state.selectColor = item;
         state.selectSize = {};

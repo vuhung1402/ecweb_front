@@ -39,7 +39,7 @@ const Login = () => {
             if(json?.success){
                 dispatch(userPackage(json));
                 localStorage.setItem("token", json?.Token);
-                console.log({json});
+                // console.log({json});
                 message.success("Đăng nhập thành công");
                 navigate('/');
             }else{

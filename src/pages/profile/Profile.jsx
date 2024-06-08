@@ -42,7 +42,7 @@ const Profile = () => {
                 setInfor(json)
             } else {
                 // myAlert()
-                console.log("false")
+                // console.log("false")
             }
         }).catch((error) => {
             console.error("Error: ", error)

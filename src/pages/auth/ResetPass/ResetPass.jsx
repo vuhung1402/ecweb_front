@@ -13,8 +13,8 @@ const ResetPass = () => {
     const params = useParams()
 
     const handleChangePass = () => {
-        console.log("new pass: ", newPassRef.current.value)
-        console.log("confirm pass: ", confirmPassRef.current.value)
+        // console.log("new pass: ", newPassRef.current.value)
+        // console.log("confirm pass: ", confirmPassRef.current.value)
 
         const body = {
             password: newPassRef.current.value,
@@ -34,7 +34,7 @@ const ResetPass = () => {
             return response.json()
         }).then((json) => {
             setNotify(json)
-            console.log("Response: ", json)
+            // console.log("Response: ", json)
             if(json?.success){
                 navigate('/login')
             }

@@ -9,7 +9,7 @@ const CardProduct = ({ data }) => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        setImg(data?.image)
+        setImg(data?.image?.url)
     }, [data])
 
     const item = {
@@ -58,23 +58,18 @@ const CardProduct = ({ data }) => {
         setImg(img)
     }
 
-    const VND = new Intl.NumberFormat('vi-VN', {
-        style: 'currency',
-        currency: 'VND',
-    })
-
     const [isHover, setIsHover] = useState(false)
 
     const [img, setImg] = useState(data?.image)
 
     const onMouseEnter = () => {
         setIsHover(true)
-        setImg(data?.imageHover)
+        setImg(data?.imageHover?.url)
     }
 
     const onMouseLeave = () => {
         setIsHover(false)
-        setImg(data?.image)
+        setImg(data?.image.url)
     }
 
     const handleNavigate = (route, id) => {
@@ -109,7 +104,7 @@ const CardProduct = ({ data }) => {
                                 {
                                     data?.color?.map((item, index) => {
                                         return (
-                                            <div style={{ backgroundColor: item?.code_color }} onMouseLeave={() => setImg(data?.image)} onMouseEnter={() => handleColorHover(item, item?.image)} key={`color-${index}`} className={` cursor-pointer mr-2 border px-2 py-1 w-[20px] h-[20px] rounded-full`}></div>
+                                            <div style={{ backgroundColor: item?.code_color }} onMouseLeave={() => setImg(data?.image?.url)} onMouseEnter={() => handleColorHover(item, item?.image?.url)} key={`color-${index}`} className={` cursor-pointer mr-2 border px-2 py-1 w-[20px] h-[20px] rounded-full`}></div>
                                         )
                                     })
                                 }

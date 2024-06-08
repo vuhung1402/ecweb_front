@@ -14,23 +14,21 @@ const getBase64 = (file) =>
 
 const UploadImage = React.forwardRef((props, ref) => {
 
-    const { handleExportData } = props;
+    const { handleExportData, imageList, mainImage, hoverImage } = props;
 
     const [state, setState] = useState({
         mainImage: '',
         hoverImage: '',
-    })
+    });
 
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
-    const [fileList, setFileList] = useState([
-        // {
-        //     url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        // },
-        // {
-        //     url: 'https://thethaovanhoa.mediacdn.vn/372676912336973824/2023/10/3/alchemy-of-souls-16963118894912050652322.jpg'
-        // }
-    ]);
+    const [fileList, setFileList] = useState([]);
+
+    useEffect(() => {
+        setFileList(imageList);
+        setState(prev => ({...prev, mainImage: mainImage, hoverImage: hoverImage}))
+    },[imageList])
 
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {

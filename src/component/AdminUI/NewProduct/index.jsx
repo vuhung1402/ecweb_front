@@ -5,8 +5,8 @@ import { handleUploadListImage, handleUploadToFirebase, uuid } from "@utils/func
 
 import "./style.scss"
 import { category } from "@pages/admin/products/mock";
-import { useNavigate } from "react-router-dom";
-import { addProduct } from "@pages/admin/products/function";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { addProduct, productDetail, updateProduct } from "@pages/admin/products/function";
 import { TOKEN_INVALID } from "@utils/error";
 import { LOGIN_AGAIN } from "@utils/message";
 
@@ -15,11 +15,13 @@ const NewProduct = (props) => {
     const { open, type, idCategory, idSubCategory, detailData } = props;
     const { handleCloseModalProduct } = props;
 
+    const params = useParams();
+    const location = useLocation();
     const uploadImageRef = useRef(null);
     const navigate = useNavigate();
 
     const [state, setState] = useState({
-        addLoading: false, 
+        addLoading: false,
         color: [],
         codeProduct: '',
         nameProduct: '',
@@ -32,8 +34,8 @@ const NewProduct = (props) => {
         idCategory: '',
         idSubCategory: '',
         total: '',
-        colorUid:'',
-        
+        colorUid: '',
+
     });
 
     useEffect(() => {
@@ -45,10 +47,30 @@ const NewProduct = (props) => {
 
     // mode edit
     useEffect(() => {
-        if (type === 'edit' && Object.keys(detailData).length > 0) {
-            // state.color = detailData?.color;
+        console.log("params?.type ", params?.type);
+        if (params?.type === 'edit') {
+            getDetail()
         };
-    }, [type, detailData]);
+    }, [params?.type]);
+
+    const getDetail = async () => {
+        const detail = await productDetail(location.state?.product_id);
+        const product = detail?.product;
+        setState(prev => ({
+            ...prev,
+            color : product?.array_color,
+            fileList: product?.array_image,
+            idCategory: product?.category_id,
+            codeProduct: product?.code,
+            description: product?.description,
+            hoverImage: product?.image_hover?.uid,
+            nameProduct: product?.name,
+            price: product?.price,
+            mainImage: product?.primary_image?.uid,
+            idSubCategory: product?.sub_category_id,
+            total: product?.total_number,
+        }));
+    }
 
     useEffect(() => {
         const element = document.getElementsByClassName('ant-modal-content');
@@ -224,64 +246,64 @@ const NewProduct = (props) => {
     }
 
     const onOk = async () => {
-        setState(prev => ({...prev, addLoading: true}));
+        setState(prev => ({ ...prev, addLoading: true }));
         const { description, nameProduct, codeProduct, price, fileList, color, mainImage, hoverImage, idCategory, idSubCategory, total } = state;
 
-        if(fileList?.length === 0){
-            setState(prev => ({...prev, addLoading: false}));
+        if (fileList?.length === 0) {
+            setState(prev => ({ ...prev, addLoading: false }));
             message.error("Vui Lòng thêm ảnh cho sản phẩm");
             return;
         }
-        if(description.length === 0){
-            setState(prev => ({...prev, addLoading: false}));
+        if (description.length === 0) {
+            setState(prev => ({ ...prev, addLoading: false }));
             message.error("Vui Lòng thêm mô tả cho sản phẩm");
             return;
         }
-        if(nameProduct.length === 0){
-            setState(prev => ({...prev, addLoading: false}));
+        if (nameProduct.length === 0) {
+            setState(prev => ({ ...prev, addLoading: false }));
             message.error("Vui Lòng thêm tên cho sản phẩm");
             return;
         }
-        if(codeProduct.length === 0){
-            setState(prev => ({...prev, addLoading: false}));
+        if (codeProduct.length === 0) {
+            setState(prev => ({ ...prev, addLoading: false }));
             message.error("Vui Lòng thêm mã cho sản phẩm");
             return;
         }
-        if(price.length === 0){
-            setState(prev => ({...prev, addLoading: false}));
+        if (price.length === 0) {
+            setState(prev => ({ ...prev, addLoading: false }));
             message.error("Vui Lòng thêm giá cho sản phẩm");
             return;
         }
-        if(mainImage.length === 0){
-            setState(prev => ({...prev, addLoading: false}));
+        if (mainImage.length === 0) {
+            setState(prev => ({ ...prev, addLoading: false }));
             message.error("Vui Lòng chọn ảnh chính cho sản phẩm");
             return;
         }
-        if(hoverImage.length === 0){
-            setState(prev => ({...prev, addLoading: false}));
+        if (hoverImage.length === 0) {
+            setState(prev => ({ ...prev, addLoading: false }));
             message.error("Vui Lòng chọn ảnh reivew cho sản phẩm");
             return;
         }
-        if(idCategory.length === 0){
-            setState(prev => ({...prev, addLoading: false}));
+        if (idCategory.length === 0) {
+            setState(prev => ({ ...prev, addLoading: false }));
             message.error("Vui Lòng chọn danh mục cho sản phẩm");
             return;
         }
-        if(idSubCategory.length === 0){
-            setState(prev => ({...prev, addLoading: false}));
+        if (idSubCategory.length === 0) {
+            setState(prev => ({ ...prev, addLoading: false }));
             message.error("Vui Lòng chọn danh mục phụ cho sản phẩm");
             return;
         }
-        if(total.length === 0){
-            setState(prev => ({...prev, addLoading: false}));
+        if (total.length === 0) {
+            setState(prev => ({ ...prev, addLoading: false }));
             message.error("Vui Lòng thêm số lượng trong kho hàng cho sản phẩm");
             return;
         }
 
-        handleUploadListImage(fileList, color, hoverImage, mainImage)
+        handleUploadListImage(fileList, color, hoverImage, mainImage, params?.type)
             .then(array_image => {
-                console.log({array_image});
                 const body = {
+                    product_id: location.state?.product_id,
                     name: nameProduct,
                     total,
                     codeProduct: codeProduct,
@@ -293,25 +315,29 @@ const NewProduct = (props) => {
                     description,
                     imagePrimaryAndHover: array_image.imgReview,
                 };
-        
+                console.log('body: ', body);
+                if(params?.type === 'edit'){
+                    console.log("body edit type: ", body);
+                    return updateProduct(body);
+                };
                 return addProduct(body);
             })
             .then(result => {
-                if(result?.success){
-                    setState(prev => ({...prev, addLoading: false}));
+                if (result?.success) {
+                    setState(prev => ({ ...prev, addLoading: false }));
                     message.success("Thành công!");
                 } else {
-                    if(result?.message === TOKEN_INVALID){
+                    if (result?.message === TOKEN_INVALID) {
                         navigate("/login");
                         message?.info(LOGIN_AGAIN);
                     } else {
-                        setState(prev => ({...prev, addLoading: false}));
+                        setState(prev => ({ ...prev, addLoading: false }));
                         message.error(result?.message);
                     }
                 }
             })
             .catch(error => {
-                setState(prev => ({...prev, addLoading: false}));
+                setState(prev => ({ ...prev, addLoading: false }));
                 message.error("Đã xảy ra lỗi khi xử lý ảnh.");
                 console.error(error);
             });
@@ -334,7 +360,7 @@ const NewProduct = (props) => {
             idSubCategory: '',
         }));
         navigate({
-            pathname:'/admin',
+            pathname: '/admin',
             search: `?url=${0}`
         });
     };
@@ -355,6 +381,8 @@ const NewProduct = (props) => {
                         children: (
                             <AddProduct
                                 // category={state.category}
+                                mainImage={state.mainImage}
+                                hoverImage={state.hoverImage}
                                 addLoading={state.addLoading}
                                 colorUid={state.colorUid}
                                 ref={uploadImageRef}

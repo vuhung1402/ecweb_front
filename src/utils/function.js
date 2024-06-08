@@ -15,9 +15,9 @@ export const formatCurrencyVN = (number) => {
     return `${formattedNumber}₫`;
 };
 
-export const getNotInvalidColor = (colorArray) =>{
-    for(let i = 0; i < colorArray?.length; i++){
-        if(!colorArray[i]?.invalid){
+export const getNotInvalidColor = (colorArray) => {
+    for (let i = 0; i < colorArray?.length; i++) {
+        if (!colorArray[i]?.invalid) {
             return colorArray[i];
         }
     }
@@ -25,7 +25,7 @@ export const getNotInvalidColor = (colorArray) =>{
 
 export const addKeyToArraySize = (sizeArray) => {
     return sizeArray?.map((item) => {
-        return{
+        return {
             ...item,
             invalid: item?.total_number_with_size === 0
         };
@@ -35,7 +35,7 @@ export const addKeyToArraySize = (sizeArray) => {
 
 export const uuid = () => {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        const r = Math.random() * 16 | 0, 
+        const r = Math.random() * 16 | 0,
             v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
@@ -53,31 +53,45 @@ export const handleUploadToFirebase = async (url) => {
     }
 };
 
-export const handleUploadListImage = (list, color, idImgHover, idPrimaryImg) => {
+export const handleUploadListImage = async (list, color, idImgHover, idPrimaryImg, type) => {
     const imgReview = {};
     const result = [];
     const newColor = [];
 
     return Promise.all(list.map(async (item) => {
         try {
-            const url = await handleUploadToFirebase(item?.originFileObj);
-            const data = {
-                uid: item?.uid,
-                url
-            };
+            if (item?.originFileObj) {
+                const url = await handleUploadToFirebase(item?.originFileObj);
+                const data = {
+                    uid: item?.uid,
+                    url
+                };
+                result.push(data);
 
-            result.push(data);
+                if (data?.url?.length > 0) {
+                    if (item?.uid === idImgHover) imgReview.image_hover = data;
 
-            if (data?.url?.length > 0) {
-                if(item?.uid === idImgHover) imgReview.image_hover = data;
+                    if (item?.uid === idPrimaryImg) imgReview.primary_image = data;
 
-                if(item?.uid === idPrimaryImg) imgReview.primary_image = data;
-
+                    color?.forEach(value => {
+                        if (value?.image?.uid === item?.uid) {
+                            const colorModified = {
+                                ...value,
+                                image: data,
+                            };
+                            newColor.push(colorModified);
+                        }
+                    });
+                }
+            }else{
+                result.push(item);
+                if (item?.uid === idImgHover) imgReview.image_hover = item;
+                if (item?.uid === idPrimaryImg) imgReview.primary_image = item;
                 color?.forEach(value => {
                     if (value?.image?.uid === item?.uid) {
                         const colorModified = {
                             ...value,
-                            image: data,
+                            image: item,
                         };
                         newColor.push(colorModified);
                     }

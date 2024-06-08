@@ -5,7 +5,7 @@ import ColorInfo from "./ColorInfo";
 import { Button } from "antd";
 
 const AddProduct = React.forwardRef((props, ref) => {
-    const { color, imageList, idCategory, idSubCategory, category, code, name, price, description, total, colorUid, addLoading } = props;
+    const { color, imageList, idCategory, idSubCategory, category, code, name, price, description, total, colorUid, addLoading, hoverImage, mainImage } = props;
     const { handleAddColor, handleAddSize, handleDeleteColor, handleDeleteSize, handleChangeInfo, handleExportData, handleEditColor } = props;
     const { handleEditSize, handleSelectCategory, onOk, onCancel } = props
 
@@ -59,6 +59,9 @@ const AddProduct = React.forwardRef((props, ref) => {
                     // category={category}
                     />
                     <UploadImage
+                        mainImage={mainImage}
+                        hoverImage={hoverImage}
+                        imageList = {imageList}
                         ref={ref}
                         handleExportData={handleExportData}
                     />

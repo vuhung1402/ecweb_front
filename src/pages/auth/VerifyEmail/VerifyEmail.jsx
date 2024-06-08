@@ -17,10 +17,10 @@ const VerifyEmail = () => {
 			try {
 				const url = `https://ecweb-backend.onrender.com/api/v1/users/${param.id}/verify/${param.token}/`;
 				const { data } = await axios.post(url);
-				console.log(data);
+				// console.log(data);
 				setValidUrl(true);
 			} catch (error) {
-				console.log(error);
+				// console.log(error);
 				setValidUrl(false);
 			}
 		};
