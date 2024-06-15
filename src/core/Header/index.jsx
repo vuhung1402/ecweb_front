@@ -8,6 +8,7 @@ import SearchBox from "../../component/SearchBox/SearchBox"
 import CartPopUp from "../../component/CartPopUp/CartPopUp"
 import { clear } from "../../redux/actions"
 import { endpoint } from "../../api/api"
+import { message } from "antd"
 
 const Header = () => {
     const user = useUserPackageHook()
@@ -40,7 +41,7 @@ const Header = () => {
     const navigate = useNavigate()
 
     const handleAccount = () => {
-        if (user?.Token) {
+        if (user?.accessToken) {
             setAccount(!account)
             setSearchBox(false)
             setCartPopUp(false)
@@ -52,6 +53,8 @@ const Header = () => {
     const handleLogOut = () => {
         dispatch(clear())
         setAccount(!account)
+        message.success("Đăng xuất thành công");
+        localStorage.removeItem("token");
         navigate('/')
     }
 

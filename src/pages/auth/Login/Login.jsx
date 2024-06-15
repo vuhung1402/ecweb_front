@@ -37,8 +37,10 @@ const Login = () => {
         }).then((json) => {
             // setResponse(json)
             if(json?.success){
+                console.log({json})
                 dispatch(userPackage(json));
-                localStorage.setItem("token", json?.Token);
+                console.log("json?.accessToken ", json?.accessToken);
+                localStorage.setItem("token", json?.accessToken);
                 // console.log({json});
                 message.success("Đăng nhập thành công");
                 navigate('/');
