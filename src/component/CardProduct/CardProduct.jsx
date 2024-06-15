@@ -51,7 +51,7 @@ const CardProduct = ({ data }) => {
                     </div>
                     <div
                         onClick={() => handleNavigate(`/product-detail/${data?.name}`, data?.id)}
-                        className="hover:text-blue-500 cursor-pointer text-sm font-normal"
+                        className="hover:text-blue-500 cursor-pointer text-sm font-normal transition-all"
                     >
                         {data?.name}
                     </div>
@@ -68,7 +68,7 @@ const CardProduct = ({ data }) => {
                                     onMouseLeave={() => setImg(data?.image?.url)}
                                     onMouseEnter={() => handleColorHover(item?.image?.url)}
                                     key={`color-${index}`}
-                                    className={` cursor-pointer mr-2 border px-2 py-1 w-[20px] h-[20px] rounded-full`}
+                                    className={` cursor-pointer mr-2 border px-2 py-1 w-[24px] h-[24px] rounded-full`}
                                 ></div>
                             );
                         })}
