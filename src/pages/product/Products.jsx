@@ -1,9 +1,9 @@
+import React, { useEffect, useState } from "react"
+
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import Filter from "../../component/Filter/Filter"
 import ProductList from "../../component/ProductList/ProductList"
-import React, { useEffect, useState } from "react"
 import { endpoint } from "../../api/api"
-import { Skeleton } from "antd"
 
 const Products = () => {
     const navigate = useNavigate();
@@ -11,15 +11,10 @@ const Products = () => {
     const location = useLocation();
     const [data, setData] = useState();
 
-    // console.log("location key: ", location?.state?.key)
-    // console.log("location value: ", location?.state?.value)
-    // console.log("location search: ", location.search)
-
     useEffect(() => {
         const regex = /[?&]sort_by=([^&]*)/;
         const match = regex.exec(location?.search);
         setData(undefined);
-        // console.log("match: ", match)
 
         fetch(`${endpoint}/product/getAllProductList/${location?.state?.key ? location?.state?.key : 'all'}/${match?.[1].length > 0 ? `${location?.state?.value}` : `1`}`, {
             method: "GET",
@@ -34,7 +29,6 @@ const Products = () => {
         }).then((json) => {
             if(json?.success){
                 setData(json?.productListAll_DataFormat)
-                // console.log("JSON: ", json)
             }
 
         }).catch((error) => {
