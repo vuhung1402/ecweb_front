@@ -47,8 +47,8 @@ const ImagePreview = ({ imageArray }) => {
     }, []);
 
     return (
-        <div className=" flex gap-3 h-fit">
-            <div className=" flex flex-col gap-3 sticky top-20 h-fit">
+        <div className="flex gap-3 h-fit w-full">
+            <div className="flex flex-col gap-3 sticky top-20 h-fit">
                 {
                     imageArray?.map((item, index) => {
                         const imageHref = `#image-${index}`
@@ -58,11 +58,11 @@ const ImagePreview = ({ imageArray }) => {
                     })
                 }
             </div>
-            <div className=" flex flex-col gap-3">
+            <div className="flex flex-col gap-3 flex-grow px-6">
                 {
                     imageArray?.map((item, index) => {
                         return (
-                            <div id={`image-${index}`} className=" w-[635px] h-[635px]"><img src={item?.url} /></div>
+                            <div id={`image-${index}`} className="w-full"><img src={item?.url} className="w-full" /></div>
                         )
                     })
                 }
