@@ -26,13 +26,13 @@ const ProductDetail = () => {
     }, [])
 
     return (
-        <div className="w-screen h-screen">
+        <div className="w-full h-full">
             <div className="w-full mb-5">
                 <div className="px-[85px] w-full h-[40px] flex items-center bg-[rgb(245,245,245)]">
                     <MyBreadCrumb />
                 </div>
                 <div className="px-[85px] flex pt-7 w-full">
-                    <div className="w-2/3 h-fit">
+                    <div className="w-2/3 min-w-[67%] h-fit">
                         <ImagePreview imageArray={state.data?.array_image} />
                     </div>
                     <div className="flex flex-grow">

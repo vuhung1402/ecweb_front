@@ -9,10 +9,8 @@ const DefaulLayout = ({ children }) => {
                     <Header />
                 </section>
             </header>
-            <div style={{height: 'calc(100vh - 80px)'}} className=''>
-                <section className=''>
-                    {children}
-                </section>
+            <div style={{height: 'calc(100vh - 80px)'}} className='w-full'>
+                {children}
             </div>
         </div>
     )
