@@ -1,0 +1,12 @@
+.card-product {
+
+    .hover-img {
+        opacity: 0;
+    }
+
+    .card-img-wrapper:hover {
+        .hover-img {
+            opacity: 1;
+        }
+    }
+}
