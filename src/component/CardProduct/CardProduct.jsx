@@ -15,8 +15,11 @@ const CardProduct = ({ data }) => {
 
     const handleNavigate = (route, id) => {
         navigate(
-            { pathname: route }, { state: { key: id }
-        });
+            { pathname: route },
+            {
+                state: { key: id }
+            }
+        );
     };
 
     return (

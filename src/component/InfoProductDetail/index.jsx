@@ -83,6 +83,18 @@ const InfoProductDetail = ({ data }) => {
         setState((prev) => ({ ...prev }));
     }
 
+    const handleAddToCart = () => {
+        const cart = {
+            number: state.number,
+            color: state.color,
+            sizes: state.sizes,
+            selectColor: state.selectColor,
+            textColor: state.textColor,
+            selectSize: state.selectSize
+        }
+        console.log({ cart });
+    }
+
     return (
         <div className=" w-full sticky h-fit top-20">
             <div className=" text-[20px] font-semibold py-3 border-b-[1px]">{data?.name}</div>
@@ -149,42 +161,21 @@ const InfoProductDetail = ({ data }) => {
             </div>
 
             <div className="w-full bg-[#0d4cdd] mt-3 flex items-center justify-center h-[50px] cursor-pointer">
-                <div className=" text-white font-medium select-none">Thêm vào giỏ</div>
+                <div
+                    onClick={handleAddToCart}
+                    className=" text-white font-medium select-none"
+                >
+                    Thêm vào giỏ
+                </div>
             </div>
 
             <div className=" mt-5">
                 <div className=" text-[14px] font-bold">Mô tả</div>
-                <div className=" mt-3">
-                    <div className=" text-[14px] font-bold">Chất liệu:</div>
-                    <div>
-                        Cotton 2c với định lượng 250gsm
-                        Chất liệu dày dặn, thoáng mát, bề mặt mịn.
-                    </div>
-                </div>
-                <div className=" mt-3">
-                    <div className=" text-[14px] font-bold">Form dáng:</div>
-                    <div>
-                        Baby tee
-                    </div>
-                </div>
 
-                <div className=" mt-3">
-                    <div className=" text-[14px] font-bold">Chi tiết:</div>
-                    <div>
-                        Phần bo cổ áo được may theo kĩ thuật mắc xích với phối màu tương phản so với thân áo
-                        Thân trước được in "Apple"
-                    </div>
-                </div>
-
-                <div className=" mt-3">
-                    <div className=" text-[14px] font-bold">Size: </div>
-                    <div>
-                        Nếu bạn đang gặp khó khăn trong việc chọn size thì hãy nhắn tin cho Fearless để được tư vấn nhé.
-                    </div>
-                    <div className="">
-                        <img src="https://file.hstatic.net/200000691337/file/baby_tee_f8ecfd1ef52042b9997497ae80eb6396_grande.jpg" />
-                    </div>
-                </div>
+                <div
+                    className=" mt-4"
+                    dangerouslySetInnerHTML={{ __html: data?.description }}
+                />
             </div>
         </div>
     )

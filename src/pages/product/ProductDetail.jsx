@@ -5,11 +5,25 @@ import InfoProductDetail from "../../component/InfoProductDetail"
 import Footer from "../../core/Footer"
 import React, { useEffect, useState } from "react"
 import { endpoint } from "../../api/api"
+import { getDetailProduct } from "./function"
 
 
 const ProductDetail = () => {
+    const [state, setState] = useState({
+        data: undefined,
 
+    })
     const location = useLocation()
+
+    const getData = async () => {
+        const data = await getDetailProduct(location?.state?.key);
+        state.data = data?.product;
+        setState((prev) => ({...prev}));
+    }
+
+    useState(() => {
+        getData();
+    }, [])
     // const [data, setData] = useState({})
 
     // useEffect(() => {
@@ -110,10 +124,10 @@ const ProductDetail = () => {
                 </div>
                 <div className=" px-[85px] flex pt-7">
                     <div className=" w-2/3 h-fit">
-                        <ImagePreview imageArray={data?.array_image} />
+                        <ImagePreview imageArray={state.data?.array_image} />
                     </div>
                     <div className=" flex flex-grow">
-                        <InfoProductDetail data={data} />
+                        <InfoProductDetail data={state.data} />
                     </div>
                 </div>
             </div>

@@ -53,7 +53,7 @@ const ImagePreview = ({ imageArray }) => {
                     imageArray?.map((item, index) => {
                         const imageHref = `#image-${index}`
                         return (
-                            <a onClick={() => handleNavigateImage(imageHref, `small-image-${index}`)} href={imageHref} id={`small-image-${index}`} className={`w-[64px] h-[64px] cursor-pointer ${Number(imageId) === index ? 'border': ''}`}><img src={item} /></a>
+                            <a onClick={() => handleNavigateImage(imageHref, `small-image-${index}`)} href={imageHref} id={`small-image-${index}`} className={`w-[64px] h-[64px] cursor-pointer ${Number(imageId) === index ? 'border': ''}`}><img src={item?.url} /></a>
                         )
                     })
                 }
@@ -62,7 +62,7 @@ const ImagePreview = ({ imageArray }) => {
                 {
                     imageArray?.map((item, index) => {
                         return (
-                            <div id={`image-${index}`} className=" w-[635px] h-[635px]"><img src={item} /></div>
+                            <div id={`image-${index}`} className=" w-[635px] h-[635px]"><img src={item?.url} /></div>
                         )
                     })
                 }
