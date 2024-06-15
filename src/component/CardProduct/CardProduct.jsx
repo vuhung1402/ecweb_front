@@ -32,7 +32,7 @@ const CardProduct = ({ data }) => {
                         data?.discount && (
                             <div
                                 className="w-[50px] h-[24px] border border-[#ededed] absolute bg-white z-50 top-3 left-3 flex items-center justify-center text-red-400 text-[12px]">
-                                    -12%
+                                    {`-${data?.discount}%`}
                             </div>
                         )
                     }

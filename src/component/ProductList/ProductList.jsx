@@ -16,7 +16,7 @@ const ProductList = ({ handleSelect, data }) => {
         <div className="bg-white w-full">
             <div className=" px-4 py-16 sm:px-6 sm:py-10 lg:w-full lg:px-8">
                 <div className="flex justify-between items-center">
-                    <h2 className="select-none text-2xl font-bold text-gray-900 mb-4">Sản phẩm</h2>
+                    <h2 className="select-none text-2xl font-medium text-gray-900 mb-4">Sản phẩm</h2>
                     <ProductFilter handleSelect={handleSelect} />
                 </div>
 
