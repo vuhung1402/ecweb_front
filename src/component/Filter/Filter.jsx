@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react"
 import { Menu } from 'antd'
 import { endpoint } from '../../api/api';
 
+import './style.scss';
+
 function Filter({onClick}){
 
     const [category, setCategory] = useState([])
@@ -28,7 +30,7 @@ function Filter({onClick}){
     }, [])
 
     return(
-        <div className='p-5'>
+        <div className='p-5 category-menu'>
             <Menu
               onClick={onClick}
               className='!border-none font-medium text-[14px] tracking-widest uppercase select-none'

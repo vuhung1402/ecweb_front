@@ -1,12 +1,11 @@
 import React from "react";
 import Header from "./Header";
-import Footer from "./Footer";
 
 const DefaulLayout = ({ children }) => {
     return (
-        <>
-            <header className="">
-                <section className='w-full'>
+        <div className="w-screen h-screen">
+            <header className="h-fit">
+                <section className='w-full h-full'>
                     <Header />
                 </section>
             </header>
@@ -15,7 +14,7 @@ const DefaulLayout = ({ children }) => {
                     {children}
                 </section>
             </div>
-        </>
+        </div>
     )
 }
 

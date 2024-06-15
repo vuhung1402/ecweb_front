@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { useRef, useState } from "react"
+import { useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
@@ -58,7 +58,7 @@ const Header = () => {
         navigate('/')
     }
 
-    const classNameOfMenu = "w-[140px] px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]";
+    const classNameOfMenu = "px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]";
 
     const handleNavigate = (route, key) => {
         navigate(
@@ -79,21 +79,21 @@ const Header = () => {
             <div>LOGO</div>
             <nav class="menu">
                 <ul>
-                    <li className="px-3 cursor-pointer"><div onClick={() => navigate("/")}>TRANG CHỦ</div></li>
-                    <li className="px-3 cursor-pointer">
+                    <li className="px-3 cursor-pointer main-menu"><div onClick={() => navigate("/")}>TRANG CHỦ</div></li>
+                    <li className="px-3 cursor-pointer main-menu">
                         <div onClick={() => handleNavigate('/products/all')}>SẢN PHẨM ▾</div>
-                        <ul>
+                        <ul className="sub-menu">
                             {
                                 category?.map((item) => {
                                     return (
                                         <li>
                                             <div
-                                                className="w-[105px] px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]"
+                                                className="px-4 py-2 flex items-center gap-10 justify-between cursor-pointer hover:text-[rgb(0,4,255)]"
                                             >
                                                 <div>{item?.label}</div>
                                                 <div>▾</div>
                                             </div>
-                                            <ul className=" border">
+                                            <ul className="border third-menu">
                                                 {
                                                     item?.children?.map((children) => {
                                                         return (
@@ -111,24 +111,24 @@ const Header = () => {
 
                         </ul>
                     </li>
-                    <li className="px-3 cursor-pointer"><div>CỬA HÀNG</div></li>
-                    <li className="px-3 cursor-pointer z-[999]">
+                    <li className="px-3 cursor-pointer main-menu"><div>CỬA HÀNG</div></li>
+                    <li className="px-3 cursor-pointer z-[999] main-menu">
                         <div>CHÍNH SÁCH ▾</div>
-                        <ul>
+                        <ul className="sub-menu text-[14px]">
                             <li>
-                                <div className="w-[180px] px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">CHÍNH SÁCH ĐỔI TRẢ</div>
+                                <div className="px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">CHÍNH SÁCH ĐỔI TRẢ</div>
                             </li>
                             <li>
-                                <div className="w-[180px] px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">CHÍNH SÁCH BẢO MẬT</div>
+                                <div className="px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">CHÍNH SÁCH BẢO MẬT</div>
                             </li>
                             <li>
-                                <div className="w-[180px] px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">CHÍNH SÁCH GIAO HÀNG</div>
+                                <div className="px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">CHÍNH SÁCH GIAO HÀNG</div>
                             </li>
                             <li>
-                                <div className="w-[180px] px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">PHƯƠNG THỨC THANH TOÁN</div>
+                                <div className="px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">PHƯƠNG THỨC THANH TOÁN</div>
                             </li>
                             <li>
-                                <div className="w-[180px] px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">HƯỚNG DẪN MUA HÀNG</div>
+                                <div className="px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">HƯỚNG DẪN MUA HÀNG</div>
                             </li>
                         </ul>
                     </li>

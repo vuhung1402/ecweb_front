@@ -1,34 +1,10 @@
-html{
-    height: 100%;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-ul {
-    list-style: none;
-}
-
-body {
-    height: 100%;
-    font-size: 1rem;
-    line-height: 1.6;
-    background-color: #ffffff;
-}
-
-// nav style
-
 header{
     height: 80px;
     z-index: 9999999;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 0.5px solid rgb(157, 155, 155);
-    padding: 2rem;
+    padding:0 2rem;
 }
 
 .logo {
@@ -37,55 +13,73 @@ header{
 }
 
 .menu {
-    // background: #222;
-    font-size: 14px;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    height: 100%;
 }
 
 .menu ul {
-    all: unset;
-    list-style: none;
     display: flex;
     flex-wrap: wrap;
     background: #ffffff;
+    height: 100%;
 }
-.menu ul li {
+
+.menu .main-menu {
     position: relative;
+    float: none;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    z-index: 999;
 }
-.menu ul li a {
-    display: block;
-    padding: 10px;
+
+.main-menu:hover {
+    .sub-menu {
+        transform: rotate3d(0,0,0,0deg);
+        -webkit-transform: rotate3d(0,0,0,0deg);
+        -moz-transform: rotate3d(0,0,0,0deg);
+        -o-transform: rotate3d(0,0,0,0deg);
+        -ms-transform: rotate3d(0,0,0,0deg);
+    }
+}
+
+.sub-menu {
+    position: absolute;
+    min-width: 120px;
+    height: fit-content !important;
+    top: 100%;
+    margin-top: -2px;
+    border-top: 2px solid #5c5c5c;
+    transform-origin: 0 0 0;
+    transition: all .5s ease;
+    transform: rotate3d(1,0,0,-90deg);
+    -webkit-transform: rotate3d(1,0,0,-90deg);
 }
 
 /* Style the submenus */
 .menu ul li ul {
     position: absolute;
     display: none;
-    flex-direction: column;
     box-shadow: 2px 4px 12px rgba(0,0,0,.1);
 }
 
 .menu ul ul li {
     width: max-content;
     min-width: 100%;
-    max-width: 200px;
     border-bottom: 1px solid rgb(246, 248, 248);
 }
 
-.menu ul li ul li ul {
+.menu .third-menu {
+    margin-top: -2px;
     box-shadow: 2px 4px 12px rgba(0,0,0,.1);
-}
-
-.menu ul a {
-    all: unset;
-    // color: #fff;
-    cursor: pointer;
-}
-.menu ul a:hover {
-    color: rgb(0, 4, 255);
+    border-top: 2px solid #5c5c5c;
+    height: fit-content;
+    z-index: 999;
 }
 
 .menu ul li:hover > ul {
-    display: flex; /* Show submenus on hover */
+    display: flex;
 }
 
 /* Style the third-level submenu */
