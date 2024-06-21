@@ -4,8 +4,14 @@ import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { endpoint } from "../../api/api"
 import UpdateAddress from "../UpdateAddress/UpdateAddress";
 import { message } from "antd";
+import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
+import { logAgain } from "@utils/function";
+import { useNavigate } from "react-router-dom";
+import { FAIL, SUCCESS } from "@utils/message";
 
 const AddressInfor = ({address, getDataAddress}) => {
+    const navigate = useNavigate();
+    const token = localStorage.getItem("token");
     const user = useUserPackageHook();
     const [state, setState] = useState({
         updateAddress: false,
@@ -32,11 +38,12 @@ const AddressInfor = ({address, getDataAddress}) => {
     }
 
     const handleSaveAddress = () => {
-        fetch(`${endpoint}/users/update_address/${user?.data}/${address?._id}/`, {
+        fetch(`${endpoint}/users/update_address/${address?._id}/`, {
             method: "POST",
             body:JSON.stringify(state?.inforAdress),
             headers: {
                 'Content-Type': 'application/json',
+                'token': token,
             },
         }).then((response) => {
             if(!response.ok){
@@ -45,8 +52,15 @@ const AddressInfor = ({address, getDataAddress}) => {
             return response.json()
         }).then((json) => {
             if(json?.success){
-                message.success("Cập nhật thành công")
+                message.success(SUCCESS)
                 getDataAddress()
+            }else{
+                if(json?.message === TOKEN_INVALID || json?.message === NOT_AUTHENTICATION){
+                    logAgain();
+                    navigate("/login");
+                }else{
+                    message.error(FAIL);
+                }
             }
             
         }).catch((error) => {
@@ -67,10 +81,11 @@ const AddressInfor = ({address, getDataAddress}) => {
 
 
     const handleDelete = () => {
-        fetch(`${endpoint}/users/delete_address/${user?.data}/${address?._id}/`, {
+        fetch(`${endpoint}/users/delete_address/${address?._id}/`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
+                'token': token,
             },
         }).then((response) => {
             if(!response.ok){
@@ -80,7 +95,14 @@ const AddressInfor = ({address, getDataAddress}) => {
         }).then((json) => {
             if(json?.success){
                 getDataAddress()
-                message.success("Đã xoá địa chỉ")
+                message.success(SUCCESS)
+            }else{
+                if(json?.message === TOKEN_INVALID || json?.message === NOT_AUTHENTICATION){
+                    logAgain();
+                    navigate("/login");
+                }else{
+                    message.error(FAIL);
+                }
             }
             
         }).catch((error) => {

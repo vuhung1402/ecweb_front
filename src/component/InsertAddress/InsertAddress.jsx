@@ -2,10 +2,15 @@ import React ,{ useRef, useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { endpoint } from "../../api/api"
 import { message } from "antd"
+import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"
+import { logAgain } from "@utils/function"
+import { useNavigate } from "react-router-dom"
+import { SUCCESS } from "@utils/message"
 
 
 const InsertAddress = ({setAddAddress, getDataAddress}) => {
-    
+    const token = localStorage.getItem("token");
+    const navigate = useNavigate();
     const [isDefault, setIsDefault] = useState(false) 
     const nameRef = useRef()
     const streetRef = useRef()
@@ -21,11 +26,12 @@ const InsertAddress = ({setAddAddress, getDataAddress}) => {
             isDefault: isDefault
         }
 
-        fetch(`${endpoint}/users/insert_address/${user?.data}/`, {
+        fetch(`${endpoint}/users/insert_address/`, {
             method: "POST",
             body: JSON.stringify(body),
             headers: {
                 'Content-Type': 'application/json',
+                'token': token,
             },
         }).then((response) => {
             if(!response.ok){
@@ -35,7 +41,14 @@ const InsertAddress = ({setAddAddress, getDataAddress}) => {
         }).then((json) => {
             if(json?.success){
                 getDataAddress()
-                message.success("Thêm địa chỉ thành công")
+                message.success(SUCCESS)
+            }else{
+                if(json?.message === TOKEN_INVALID || json?.message === NOT_AUTHENTICATION){
+                    logAgain();
+                    navigate("/login");
+                }else{
+                    message.error(FAIL);
+                }
             }
             
         }).catch((error) => {

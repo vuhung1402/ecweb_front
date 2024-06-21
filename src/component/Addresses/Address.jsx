@@ -8,42 +8,31 @@ import { useDispatch } from "react-redux"
 import { clear } from "../../redux/actions"
 import InsertAddress from "../InsertAddress/InsertAddress"
 import Loading from "../Loading/Loading"
+import SildeBar from "@pages/profile/SildeBar"
+import { logAgain } from "@utils/function"
+import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"
 
 const Address = () => {
+    const token = localStorage.getItem("token");
     const dispatch = useDispatch()
     const data = useUserPackageHook()
     const navigate = useNavigate()
     const user = useUserPackageHook();
 
-    const [address, setAddress] = useState([])
+    const [address, setAddress] = useState(undefined)
 
     // console.log(data?.accessToken)
 
     useEffect(() => {
-        fetch(`${endpoint}/users/get_address/${user?.data}/`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then((response) => {
-            if (!response.ok) {
-                throw new Error("Netword response not ok")
-            }
-            return response.json()
-        }).then((json) => {
-            console.log(json)
-            setAddress(json)
-
-        }).catch((error) => {
-            console.error("Error: ", error)
-        })
+        getDataAddress();
     }, [])
 
     const getDataAddress = () => {
-        fetch(`${endpoint}/users/get_address/${user?.data}/`, {
+        fetch(`${endpoint}/users/get_address/`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
+                'token': token,
             },
         }).then((response) => {
             if (!response.ok) {
@@ -51,9 +40,12 @@ const Address = () => {
             }
             return response.json()
         }).then((json) => {
-            console.log(json)
-            setAddress(json)
-
+            if(json?.message === TOKEN_INVALID || json?.message === NOT_AUTHENTICATION){
+                logAgain();
+                navigate("/login");
+            }else{
+                setAddress(json)
+            }
         }).catch((error) => {
             console.error("Error: ", error)
         })
@@ -71,7 +63,7 @@ const Address = () => {
     return (
         <div>
             {
-                address?.length === 0 ? <Loading /> :
+                address === undefined ? <Loading /> :
                     (
                         <>
                             <div className=" flex flex-col items-center justify-center font-semibold text-5xl gap-8 p-5 border-b-[1px]">
@@ -79,12 +71,7 @@ const Address = () => {
                                 <span className="bg-black p-[1.5px] w-14 flex items-center justify-center"></span>
                             </div>
                             <div className=" flex">
-                                <div className=" w-1/4 p-5">
-                                    <p className=" uppercase font-bold mb-3">Tài khoản</p>
-                                    <div className=" mt-2"><a href="/account" className=" hover:text-blue-500 cursor-pointer">Thông tin tài khoản</a></div>
-                                    <div className=" mt-2"><a href="/address" className=" hover:text-blue-500 cursor-pointer">Danh sách địa chỉ</a></div>
-                                    <div onClick={() => handleLogOut()} className=" mt-2"><a className=" hover:text-blue-500 cursor-pointer">Đăng xuất</a></div>
-                                </div>
+                                <SildeBar/>
 
                                 <div className="w-3/4 p-5 flex">
 

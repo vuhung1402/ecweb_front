@@ -18,11 +18,11 @@ export const statusOrder = [
     },
     {
         key: '4',
-        name: 'Đã giao',
+        name: 'Đã giao hàng',
     },
     {
         key: '5',
-        name: 'Đơn huỷ',
+        name: 'Đã huỷ',
     },
     {
         key: '6',

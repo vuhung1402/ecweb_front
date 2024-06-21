@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { endpoint } from "../../api/api"
 import React, { useEffect, useState } from "react"
+import { formatCurrencyVN } from "@utils/function"
 
 const CheckOut = () => {
 
@@ -87,7 +88,7 @@ const CheckOut = () => {
                         </div>
                     </div>
                     <div className=" flex flex-col justify-center items-center">
-                        <div>{VND.format(295000)}</div>
+                        <div>{formatCurrencyVN(295000)}</div>
                     </div>
                 </div>
                 <div className="flex items-center gap-4 border-b-[1px] p-2">
@@ -98,18 +99,18 @@ const CheckOut = () => {
                 <div className=" py-3 border-b-[1px] flex flex-col gap-3">
                     <div className=" flex items-center justify-between">
                         <p>Tạm tính</p>
-                        <p className=" font-bold">{VND.format(295000)}</p>
+                        <p className=" font-bold">{formatCurrencyVN(295000)}</p>
                     </div>
 
                     <div className=" flex items-center justify-between">
                         <p>Phí vận chuyển</p>
-                        <p className=" font-bold">{VND.format(295000)}</p>
+                        <p className=" font-bold">{formatCurrencyVN(295000)}</p>
                     </div>
                 </div>
 
                 <div className=" flex items-center justify-between py-3">
                     <p className=" text-lg">Tổng cộng</p>
-                    <p className=" text-2xl font-bold">{VND.format(295000)}</p>
+                    <p className=" text-2xl font-bold">{formatCurrencyVN(295000)}</p>
                 </div>
             </div>
         </div>

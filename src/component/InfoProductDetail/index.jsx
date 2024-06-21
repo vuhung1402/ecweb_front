@@ -1,4 +1,4 @@
-import { message } from "antd"
+import { Button, message } from "antd"
 import { useEffect, useState } from "react"
 import { VND, addKeyToArraySize, formatCurrencyVN, getNotInvalidColor } from "../../utils/function"
 import IconClose from "@icon/iconClose.svg"
@@ -14,6 +14,7 @@ const InfoProductDetail = ({ data }) => {
         selectColor: {},
         textColor: '',
         selectSize: {},
+        loadingAddCart: false,
     });
 
     useEffect(() => {
@@ -83,16 +84,19 @@ const InfoProductDetail = ({ data }) => {
         setState((prev) => ({ ...prev }));
     }
 
-    const handleAddToCart = () => {
+    const handleAddToCart = async () => {
         const cart = {
-            number: state.number,
-            color: state.color,
-            sizes: state.sizes,
-            selectColor: state.selectColor,
-            textColor: state.textColor,
-            selectSize: state.selectSize
+            product_id: data?.product_id,
+            size: state.selectSize?.name_size,
+            color: state.selectColor?.name,
+            codeColor: state.selectColor?.code,
+            sl: state.number,
         }
         console.log({ cart });
+        setState((prev) => ({...prev, loadingAddCart:true}));
+        setTimeout(() => {
+            setState((prev) => ({...prev, loadingAddCart:false}));
+        }, 1000)
     }
 
     return (
@@ -160,14 +164,23 @@ const InfoProductDetail = ({ data }) => {
                 </div>
             </div>
 
-            <div className="w-full bg-[#0d4cdd] mt-3 flex items-center justify-center h-[50px] cursor-pointer">
+            {/* <div className="w-full mt-3 flex items-center justify-center h-[50px] cursor-pointer">
                 <div
                     onClick={handleAddToCart}
                     className=" text-white font-medium select-none"
                 >
                     Thêm vào giỏ
                 </div>
-            </div>
+                <Button type="primary">Primary Button</Button>
+            </div> */}
+            <Button
+                onClick={handleAddToCart}
+                loading={state.loadingAddCart}
+                type="primary"
+                className=" w-full mt-3 p-4 !h-auto font-medium"
+            >
+                Thêm vào giỏ hàng
+            </Button>
 
             <div className=" mt-5">
                 <div className=" text-[14px] font-bold">Mô tả</div>

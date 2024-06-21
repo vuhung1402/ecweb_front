@@ -51,10 +51,10 @@ const Header = () => {
     }
 
     const handleLogOut = () => {
+        localStorage.removeItem("token");
         dispatch(clear())
         setAccount(!account)
         message.success("Đăng xuất thành công");
-        localStorage.removeItem("token");
         navigate('/')
     }
 
@@ -181,6 +181,7 @@ const Header = () => {
                                     onClick={() => {
                                         navigate("/account")
                                         setAccount(!account)
+                                        localStorage.setItem("sildeBar", "/account");
                                     }}
                                     className=" hover:text-blue-300 cursor-pointer"
                                 >

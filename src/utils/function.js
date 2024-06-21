@@ -1,6 +1,8 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../firebase/firebase";
 import { message } from "antd";
+import { useNavigate } from "react-router-dom";
+import { LOGIN_AGAIN } from "./message";
 
 export const formatCurrencyVN = (number) => {
     if (isNaN(number)) return "";
@@ -83,7 +85,7 @@ export const handleUploadListImage = async (list, color, idImgHover, idPrimaryIm
                         }
                     });
                 }
-            }else{
+            } else {
                 result.push(item);
                 if (item?.uid === idImgHover) imgReview.image_hover = item;
                 if (item?.uid === idPrimaryImg) imgReview.primary_image = item;
@@ -104,3 +106,9 @@ export const handleUploadListImage = async (list, color, idImgHover, idPrimaryIm
         return { result, newColor, imgReview };
     });
 };
+
+
+export const logAgain = () => {
+    message?.info(LOGIN_AGAIN);
+    localStorage.removeItem("token");
+}
