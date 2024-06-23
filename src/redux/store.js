@@ -1,12 +1,13 @@
 import { applyMiddleware, createStore, combineReducers } from "redux";
-import { userReducer, addressReducer } from "./reducer"
+import { userReducer, addressReducer, numOfCartReducer } from "./reducer"
 import thunk from "redux-thunk"
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 const reducers = combineReducers({
     userReducer: userReducer,
-    addressReducer: addressReducer
+    addressReducer: addressReducer,
+    numOfCartReducer: numOfCartReducer,
 })
 
 const persistConfig = {

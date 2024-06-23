@@ -1,4 +1,4 @@
-import { USER_PACKAGE, CLEAR, ADDRESS } from "./constants";
+import { USER_PACKAGE, CLEAR, ADDRESS, NUM_OF_CART } from "./constants";
 
 const userState = {
     user: {}
@@ -39,6 +39,28 @@ export const addressReducer = (state = addressState, action) =>
         }
         default:
             return state
+    }
+}
+
+const numOfCartState = {
+    numOfCart :  localStorage.getItem("numOfCart") ? localStorage.getItem("numOfCart") : 0
+}
+
+export const numOfCartReducer = (state = numOfCartState, action) =>
+{
+    switch (action.type)
+    {
+        case NUM_OF_CART:{
+            return {...state, numOfCart: action.payload}
+        }
+        case CLEAR:{
+            return {
+                numOfCart : 0
+            }
+        }
+        default:{
+            return state
+        }
     }
 }
 
