@@ -1,12 +1,17 @@
 import { Button, message } from "antd"
 import { useEffect, useState } from "react"
-import { VND, addKeyToArraySize, formatCurrencyVN, getNotInvalidColor } from "../../utils/function"
+import { VND, addKeyToArraySize, formatCurrencyVN, getNotInvalidColor, logAgain } from "../../utils/function"
 import IconClose from "@icon/iconClose.svg"
 import React from "react"
+import { addToCart, quantityCart } from "@pages/product/function"
+import { FAIL, SUCCESS } from "@utils/message"
+import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"
+import { useNavigate } from "react-router-dom"
+import { useDispatch } from "react-redux"
+import { numOfCartPackage } from "@redux/actions"
 
 
 const InfoProductDetail = ({ data }) => {
-
     const [state, setState] = useState({
         number: 1,
         color: [],
@@ -16,6 +21,9 @@ const InfoProductDetail = ({ data }) => {
         selectSize: {},
         loadingAddCart: false,
     });
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (data) {
@@ -27,6 +35,7 @@ const InfoProductDetail = ({ data }) => {
                     color.push({
                         code: item?.code_color,
                         name: item?.name_color,
+                        image: item?.image?.url,
                         invalid: item?.total_number_with_color === 0,
                         sizes: sizeArray,
                     });
@@ -86,17 +95,37 @@ const InfoProductDetail = ({ data }) => {
 
     const handleAddToCart = async () => {
         const cart = {
+            code: data?.code,
             product_id: data?.product_id,
+            product_name: data?.name,
             size: state.selectSize?.name_size,
+            image_hover: state.selectColor?.image,
             color: state.selectColor?.name,
-            codeColor: state.selectColor?.code,
-            sl: state.number,
+            quantity: state.number,
+            price_per_one: data?.price,
         }
         console.log({ cart });
         setState((prev) => ({...prev, loadingAddCart:true}));
-        setTimeout(() => {
+        const result = await addToCart(cart);
+        const numOfCart = await quantityCart();
+        console.log("numOfCart: ", numOfCart);
+        if(result?.success){
+            message.success(SUCCESS)
+            dispatch(numOfCartPackage(numOfCart))
             setState((prev) => ({...prev, loadingAddCart:false}));
-        }, 1000)
+        }else{
+            if(result?.message === TOKEN_INVALID || result?.message === NOT_AUTHENTICATION){
+                logAgain();
+                navigate('/login');
+            }else{
+                message.error(result?.message);
+                setState((prev) => ({...prev, loadingAddCart:false}));
+            }
+        }
+        // setState((prev) => ({...prev, loadingAddCart:true}));
+        // setTimeout(() => {
+        //     setState((prev) => ({...prev, loadingAddCart:false}));
+        // }, 1000)
     }
 
     return (

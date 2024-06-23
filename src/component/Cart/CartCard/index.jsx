@@ -1,17 +1,44 @@
-import { formatCurrencyVN } from "@utils/function";
+import { formatCurrencyVN, logAgain } from "@utils/function";
 import React, { useEffect, useState } from "react";
+import { deleteItemCart } from "../function";
+import { Button, message } from "antd";
+import { FAIL, SUCCESS } from "@utils/message";
+import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
+import { useNavigate } from "react-router-dom";
+import { CloseCircleOutlined, CloseOutlined } from "@ant-design/icons";
 
 const CartCard = (props) => {
     const { data } = props;
-
+    const { getData } = props;
+    const navigate = useNavigate();
     const [state, setState] = useState({
-        quantity:'',
+        quantity: '',
+        isLoadingDelete: false,
     })
 
     useEffect(() => {
         state.quantity = data?.quantity;
         setState((prev) => ({ ...prev }))
     }, []);
+
+    const handleDelete = async () => {
+        setState((prev) => ({ ...prev, isLoadingDelete:true }));
+        const result = await deleteItemCart(data?._id);
+        if (result?.success) {
+            getData();
+            setState((prev) => ({ ...prev, isLoadingDelete:false }));
+            message.success(SUCCESS);
+        } else {
+            if (result?.message === TOKEN_INVALID || result?.message === NOT_AUTHENTICATION) {
+                logAgain();
+                navigate('/login');
+            } else {
+                setState((prev) => ({ ...prev, isLoadingDelete:false }));
+                message.error(FAIL);
+            }
+        }
+    }
+
     return (
         <div className="p-1 border-b-[1px] flex justify-between">
             <div className=" flex items-center">
@@ -31,9 +58,11 @@ const CartCard = (props) => {
                 </div>
             </div>
             <div className=" flex flex-col justify-between items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                </svg>
+                <Button
+                    onClick={handleDelete}
+                    loading={state.isLoadingDelete}
+                    icon={<CloseOutlined />}
+                />
                 <div className=" font-semibold">{formatCurrencyVN(data?.price_per_one)}</div>
             </div>
         </div>
