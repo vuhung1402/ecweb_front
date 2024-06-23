@@ -3,16 +3,16 @@ import { useUserPackageHook } from "@redux/hooks/userHook"
 import { message } from "antd"
 import axios from "axios";
 
-const token = localStorage.getItem("token");
-const axiosInstance = axios.create({
-    baseURL: 'http://localhost:5000',
-    headers:{
-        'Content-Type': 'application/json',
-        "token" : `${token}`,
-    }
-})
+// const axiosInstance = axios.create({
+//     baseURL: 'http://localhost:5000',
+//     headers:{
+//         'Content-Type': 'application/json',
+//         "token" : `${token}`,
+//     }
+// })
 
 export const updateOnlShopStatus = async (id, onlShop) => {
+    const token = localStorage.getItem("token");
     const body = {
         id,
         onlShop,
@@ -40,6 +40,7 @@ export const updateOnlShopStatus = async (id, onlShop) => {
 }
 
 export const getProducts = async (id) => {
+    const token = localStorage.getItem("token");
     try {
         const response = await fetch(`${endpoint}/admin/admin_to_get_product_list/${id}`, {
             method: 'GET',
@@ -64,6 +65,7 @@ export const getProducts = async (id) => {
 }
 
 export const getCategories = async () => {
+    const token = localStorage.getItem("token");
     try {
         const response = await fetch(`${endpoint}/admin/Admin_get_all_category`, {
             method: 'GET',
@@ -85,6 +87,7 @@ export const getCategories = async () => {
 }
 
 export const addCategory = async (name) => {
+    const token = localStorage.getItem("token");
     const body = {
         name,
     }
@@ -111,6 +114,7 @@ export const addCategory = async (name) => {
 }
 
 export const deleteCategory = async (category_id) => {
+    const token = localStorage.getItem("token");
     const body = {
         category_id
     }
@@ -137,6 +141,7 @@ export const deleteCategory = async (category_id) => {
 }
 
 export const editCategory = async (name, category_id) => {
+    const token = localStorage.getItem("token");
     const body = {
         name,
         category_id,
@@ -164,6 +169,7 @@ export const editCategory = async (name, category_id) => {
 }
 
 export const addSubCategory = async (name_sub_category, id) => {
+    const token = localStorage.getItem("token");
     const body = {
         name_sub_category,
         id,
@@ -191,6 +197,7 @@ export const addSubCategory = async (name_sub_category, id) => {
 }
 
 export const handleEditSubCategory = async (name, category_id, sub_category_id) => {
+    const token = localStorage.getItem("token");
     const body = {
         name,
         category_id,
@@ -219,6 +226,7 @@ export const handleEditSubCategory = async (name, category_id, sub_category_id) 
 }
 
 export const deleteSubCategory = async (category_id, sub_category_id) => {
+    const token = localStorage.getItem("token");
     const body = {
         category_id,
         sub_category_id,
@@ -246,6 +254,7 @@ export const deleteSubCategory = async (category_id, sub_category_id) => {
 }
 
 export const productDetail = async (product_id) => {
+    const token = localStorage.getItem("token");
     try {
         const response = await fetch(`${endpoint}/product/getProductDetail/${product_id}`, {
             method: 'GET',
@@ -267,6 +276,7 @@ export const productDetail = async (product_id) => {
 }
 
 export const addProduct = async (body) => {
+    const token = localStorage.getItem("token");
     try {
         const response = await fetch(`${endpoint}/admin/add_product`, {
             method: 'POST',
@@ -289,6 +299,7 @@ export const addProduct = async (body) => {
 }
 
 export const deleteProduct = async (product_id) => {
+    const token = localStorage.getItem("token");
     const body = {
         product_id
     }
@@ -315,6 +326,7 @@ export const deleteProduct = async (product_id) => {
 }
 
 export const updateProduct = async (body) => {
+    const token = localStorage.getItem("token");
     try {
         const response = await fetch(`${endpoint}/admin/update_product`, {
             method: 'POST',
