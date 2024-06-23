@@ -11,6 +11,7 @@ import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"
 import { useDispatch } from "react-redux"
 import { quantityCart } from "@pages/product/function"
 import { numOfCartPackage } from "@redux/actions"
+import { Button } from "antd"
 
 const Cart = () => {
     const navigate = useNavigate();
@@ -38,6 +39,10 @@ const Cart = () => {
             }
         }
         setState((prev) => ({ ...prev }));
+    }
+
+    const handleCheckout = () => {
+        navigate("/checkout/1");
     }
 
     return (
@@ -68,12 +73,23 @@ const Cart = () => {
                             Phí vận chuyển sẽ được tính ở trang thanh toán.
                             Bạn cũng có thể nhập mã giảm giá ở trang thanh toán.
                         </div>
-                        <button className=" uppercase bg-red-600 w-full p-3 text-white">Thanh toán</button>
+                        <Button
+                            onClick={handleCheckout}
+                            className=" w-full mt-3 p-4 !h-auto font-medium uppercase text-xl"
+                            type="primary"
+                        >
+                            Thanh toán
+                        </Button>
                         <div className=" flex text-sm items-center justify-center gap-1 text-blue-600 py-3">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
                             </svg>
-                            <a>Tiếp tục mua hàng</a>
+                            <div
+                                className=" cursor-pointer"
+                                onClick={() => navigate("/products/all")}
+                            >
+                                Tiếp tục mua hàng
+                            </div>
 
                         </div>
                     </div>

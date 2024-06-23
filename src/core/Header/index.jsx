@@ -12,6 +12,7 @@ import { Badge, Popover, message } from "antd"
 import { useNumOfCartPackageHook } from "@redux/hooks/numOfCart"
 import { quantityCart } from "@pages/product/function"
 import { set } from "firebase/database"
+import { TOKEN_INVALID } from "@utils/error"
 
 const Header = () => {
     const user = useUserPackageHook();
@@ -48,8 +49,12 @@ const Header = () => {
     const setLocalStorageQuantiyCart = async () => {
         if (user?.accessToken) {
             const numOfCart = await quantityCart();
+            if(numOfCart?.message === TOKEN_INVALID){
+                dispatch(numOfCartPackage(0));
+            }else{
+                dispatch(numOfCartPackage(numOfCart));
+            }
             console.log("numOfCart: ", numOfCart);
-            dispatch(numOfCartPackage(numOfCart));
         }
     }
 
