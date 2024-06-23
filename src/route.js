@@ -62,6 +62,11 @@ const AppRoutes = [
         defaultLayout: true,
     },
     {
+        path: '/orderDetail/:id',
+        Component: Page?.OrderDetailUserPage,
+        defaultLayout: true,
+    },
+    {
         path: '/checkout/:code',
         Component: Page?.CheckOutPage,
         defaultLayout: true,
