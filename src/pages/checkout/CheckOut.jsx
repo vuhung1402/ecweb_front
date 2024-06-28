@@ -51,7 +51,7 @@ const CheckOut = () => {
     }
 
     return (
-        <div className=" flex h-full">
+        <div className=" flex h-full p-3">
             {/* <Order data = {data} /> */}
             <div className=" w-3/4 p-5 border-r-[1px]">
                 <div className=" mb-5">
@@ -127,7 +127,7 @@ const CheckOut = () => {
                 </div>
             </div>
 
-            <div className=" w-2/4 bg-[#fafafa] p-3 h-full">
+            <div className=" w-2/4 bg-[#fafafa] border-r border-t border-b p-3 h-full">
                 <div
                     style={{
                         height: 'calc(100% - 202px)'
