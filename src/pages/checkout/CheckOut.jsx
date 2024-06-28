@@ -51,7 +51,7 @@ const CheckOut = () => {
     }
 
     return (
-        <div className=" flex">
+        <div className=" flex h-full">
             {/* <Order data = {data} /> */}
             <div className=" w-3/4 p-5 border-r-[1px]">
                 <div className=" mb-5">
@@ -127,28 +127,46 @@ const CheckOut = () => {
                 </div>
             </div>
 
-            <div className=" w-2/4 bg-[#fafafa] p-3">
-                <ProductCard />
-                <div className="flex items-center gap-4 border-b-[1px] p-2">
-                    <input placeholder="Mã giảm giá" className="  outline-none border px-3 py-2 rounded-sm w-2/3" />
-                    <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 w-1/3 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-3 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Sử dụng</button>
+            <div className=" w-2/4 bg-[#fafafa] p-3 h-full">
+                <div
+                    style={{
+                        height: 'calc(100% - 202px)'
+                    }}
+                    className="overflow-y-auto"
+                >
+                    <ProductCard />
+                    <ProductCard />
+                    <ProductCard />
+                    <ProductCard />
+                    <ProductCard />
+                    <ProductCard />
+                    <ProductCard />
+                    <ProductCard />
+                    <ProductCard />
+                    <ProductCard />
                 </div>
-
-                <div className=" py-3 border-b-[1px] flex flex-col gap-3">
-                    <div className=" flex items-center justify-between">
-                        <p>Tạm tính</p>
-                        <p className=" font-bold">{formatCurrencyVN(295000)}</p>
+                <div className="">
+                    <div className="flex items-center gap-4 border-b-[1px] p-2">
+                        <input placeholder="Mã giảm giá" className="  outline-none border px-3 py-2 rounded-sm w-2/3" />
+                        <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 w-1/3 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-3 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Sử dụng</button>
                     </div>
 
-                    <div className=" flex items-center justify-between">
-                        <p>Phí vận chuyển</p>
-                        <p className=" font-bold">{formatCurrencyVN(295000)}</p>
-                    </div>
-                </div>
+                    <div className=" py-3 border-b-[1px] flex flex-col gap-3">
+                        <div className=" flex items-center justify-between">
+                            <p>Tạm tính</p>
+                            <p className=" font-bold">{formatCurrencyVN(295000)}</p>
+                        </div>
 
-                <div className=" flex items-center justify-between py-3">
-                    <p className=" text-lg">Tổng cộng</p>
-                    <p className=" text-2xl font-bold">{formatCurrencyVN(295000)}</p>
+                        <div className=" flex items-center justify-between">
+                            <p>Phí vận chuyển</p>
+                            <p className=" font-bold">{formatCurrencyVN(295000)}</p>
+                        </div>
+                    </div>
+
+                    <div className=" flex items-center justify-between py-3">
+                        <p className=" text-lg">Tổng cộng</p>
+                        <p className=" text-2xl font-bold">{formatCurrencyVN(295000)}</p>
+                    </div>
                 </div>
             </div>
         </div>
