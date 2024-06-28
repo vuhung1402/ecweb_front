@@ -6,6 +6,8 @@ import PaymentInfor from "./paymentInfor";
 import UserInfo from "./userInfo";
 import SupportInfo from "./supportInfo";
 
+import OrderStatus from "@component/OrderStatus";
+
 const OderDetail = () => {
     return (
         <>
@@ -30,7 +32,8 @@ const OderDetail = () => {
                             <div className=" font-medium">WN0301936174</div>
                         </div>
                         <div>16/06/2024 10:23</div>
-                        <div className=" text-green-600 font-medium">Đã giao hàng</div>
+                        <OrderStatus />
+                        {/* <div className=" text-green-600 font-medium">Đã giao hàng</div> */}
                     </div>
                     <ProductCard />
                     <PaymentInfor />
