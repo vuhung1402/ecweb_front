@@ -3,7 +3,6 @@ import { message } from "antd";
 
 export const getCart = async () => {
     const token = localStorage.getItem("token");
-    console.log({token});
     try {
         const response = await fetch(`${endpoint}/cart/cart_show`, {
             method: 'GET',

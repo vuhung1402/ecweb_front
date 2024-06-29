@@ -17,7 +17,7 @@ const OrderStatus = (props) => {
     ];
 
     return (
-        <div className="flex items-start h-[80px]">
+        <div className="flex items-center justify-center h-[80px]">
             {orderStatus.map((item, index) => {
                 return (
                     <div key={`order-status=${index}`} className="flex items-center h-full">

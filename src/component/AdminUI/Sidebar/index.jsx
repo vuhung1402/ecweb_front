@@ -39,7 +39,7 @@ const SildeBar = ({tab, handleChangeTab}) => {
     ];
 
     return(
-        <div className="w-full h-full flex flex-col items-center pt-5 gap-5">
+        <div className="w-full h-auto flex flex-col items-center pt-5 gap-5">
             <div className="flex items-center w-[85%] gap-4 p-2">
                 <Avatar icon={<UserOutlined />} />
                 <div>User 1</div>

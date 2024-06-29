@@ -26,7 +26,7 @@ const OderDetail = () => {
                         />
                         <div className=" uppercase font-medium">Chi tiết đơn hàng</div>
                     </div>
-                    <div>
+                    <div className=" flex flex-col gap-3">
                         <div className=" flex gap-3">
                             <div>Mã đơn hàng:</div>
                             <div className=" font-medium">WN0301936174</div>

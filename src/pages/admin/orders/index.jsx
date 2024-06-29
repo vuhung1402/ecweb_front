@@ -10,7 +10,7 @@ const Orders = () => {
                 items={statusOrder.map((item) => {
                     return{
                         label: item?.name,
-                        key: item?.key,
+                        key: item?.status,
                         children:(
                             <OrderList/>
                         )

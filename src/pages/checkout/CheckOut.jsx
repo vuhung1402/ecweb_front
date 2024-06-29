@@ -43,8 +43,6 @@ const CheckOut = () => {
     }
 
     const handleSelectAddressInfo = (value, option) => {
-        console.log({ value });
-        console.log({ option });
         state.idAdress = value;
         state.addressInfo = option?.label;
         setState((prev) => ({ ...prev }));

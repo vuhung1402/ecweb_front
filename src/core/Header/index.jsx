@@ -54,7 +54,6 @@ const Header = () => {
             }else{
                 dispatch(numOfCartPackage(numOfCart));
             }
-            console.log("numOfCart: ", numOfCart);
         }
     }
 

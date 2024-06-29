@@ -47,7 +47,6 @@ const NewProduct = (props) => {
 
     // mode edit
     useEffect(() => {
-        console.log("params?.type ", params?.type);
         if (params?.type === 'edit') {
             getDetail()
         };
@@ -315,9 +314,7 @@ const NewProduct = (props) => {
                     description,
                     imagePrimaryAndHover: array_image.imgReview,
                 };
-                console.log('body: ', body);
                 if(params?.type === 'edit'){
-                    console.log("body edit type: ", body);
                     return updateProduct(body);
                 };
                 return addProduct(body);

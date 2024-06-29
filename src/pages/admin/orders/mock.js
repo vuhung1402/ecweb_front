@@ -1,36 +1,68 @@
 
 export const statusOrder = [
     {
-        key: '0',
+        status: 0,
         name: 'Tất cả',
     },
     {
-        key: '1',
+        status: 1,
         name: 'Chờ xác nhận',
+        nextStatus: [
+            {
+                status: 2,
+                label: 'Xác nhận',
+            }
+        ],
     },
     {
-        key: '2',
+        status: 2,
         name: 'Đã xác nhận',
+        nextStatus: [
+            {
+                status: 3,
+                label:'Giao hàng',
+            }
+        ],
     },
     {
-        key: '3',
+        status: 3,
         name: 'Đang giao hàng',
+        nextStatus: [
+            {
+                status: 4,
+                label: 'Thành công',
+            },
+            {
+                status: 7,
+                label: 'Không thành công',
+            },
+        ],
     },
     {
-        key: '4',
+        status: 4,
         name: 'Đã giao hàng',
     },
     {
-        key: '5',
+        status: 5,
         name: 'Đã huỷ',
     },
     {
-        key: '6',
+        status: 6,
         name: 'Trả hàng/Hoàn tiền',
     },
     {
-        key: '7',
+        status: 7,
         name: 'Giao hàng không thành công',
+        nextStatus: [
+            {
+                status: 3,
+                label:'Giao hàng',
+            },
+            {
+                status: 5,
+                label: 'Huỷ',
+            },
+        ],
     },
 ];
 

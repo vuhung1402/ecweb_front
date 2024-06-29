@@ -21,8 +21,6 @@ const Address = () => {
 
     const [address, setAddress] = useState(undefined)
 
-    // console.log(data?.accessToken)
-
     useEffect(() => {
         getDataAddress();
     }, [])

@@ -4,7 +4,6 @@ import React from "react"
 
 const Home = () => {
     const user = useUserPackageHook()
-    // console.log("user: ", user)
     return(
         <div>
             {/* <Category/> */}

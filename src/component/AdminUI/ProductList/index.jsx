@@ -15,7 +15,6 @@ const ProductList = (props) => {
     const { idCategory, subCategory, products, skeletonLoading } = props;
     const { handleOpenModal, handleChangeSubCategory, getData, filterData } = props; // function
 
-    console.log({skeletonLoading});
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -64,7 +63,6 @@ const ProductList = (props) => {
 
     const onConfirm = async (product_id) => {
         setState(prev => ({ ...prev, confirmLoading: true }));
-        // console.log("onConfirm: ", product_id);
         const result = await deleteProduct(product_id);
         if (result?.success) {
             await getData();

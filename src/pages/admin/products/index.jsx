@@ -62,7 +62,6 @@ const Products = (props) => {
 
     const onEdit = (targetKey, action) => {
         const modalType = action === 'add' ? 'create' : 'delete';
-        // console.log({targetKey});
         handleOpenModal(modalType, targetKey);
         setState((prev) => ({ ...prev }));
     };

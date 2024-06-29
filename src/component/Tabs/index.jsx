@@ -18,7 +18,6 @@ const TabCategory = ({data}) => {
     }, [data]);
 
     const onChange = (newActiveKey) => {
-        // console.log("newActiveKey: ", newActiveKey);
         state.activeKey = newActiveKey;
         setState((prev) => ({ ...prev }))
     };

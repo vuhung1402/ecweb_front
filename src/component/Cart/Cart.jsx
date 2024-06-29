@@ -6,12 +6,13 @@ import { useNavigate } from "react-router-dom"
 import { formatCurrencyVN, logAgain } from "@utils/function"
 import CartCard from "./CartCard"
 import { data } from "@pages/admin/user/mock"
-import { getCart } from "./function"
+import { deleteItemCart, getCart } from "./function"
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"
 import { useDispatch } from "react-redux"
 import { quantityCart } from "@pages/product/function"
 import { numOfCartPackage } from "@redux/actions"
-import { Button } from "antd"
+import { Button, message } from "antd"
+import { FAIL, SUCCESS } from "@utils/message"
 
 const Cart = () => {
     const navigate = useNavigate();
@@ -19,6 +20,9 @@ const Cart = () => {
     const [state, setState] = useState({
         data: undefined,
         quantity: '',
+        selectedItem: [],
+        totalPrice: 0,
+        isLoadingDelete: false,
     });
 
     useEffect(() => {
@@ -42,22 +46,66 @@ const Cart = () => {
     }
 
     const handleCheckout = () => {
-        navigate("/checkout/1");
+        console.log("state?.selectedItem: ", state?.selectedItem);
+        // navigate("/checkout/1");
+    }
+
+    const handleSelectItem = (e, item) => {
+        if (e.target.checked) {
+            state.totalPrice += item?.price_per_item;
+            state.selectedItem?.push(item)
+        } else {
+            state.totalPrice -= item?.price_per_item;
+            state.selectedItem?.pop(item)
+        }
+        setState((prev) => ({ ...prev }));
+    }
+
+    const handleDeleteItem = async (id) => {
+        const result = await deleteItemCart(id);
+        if (result?.success) {
+            await getData();
+            const findItem = state.selectedItem.findIndex((item) => item?._id === id);
+            if(findItem !== -1){
+                const newTotalPrice = state?.totalPrice - state?.selectedItem[findItem]?.price_per_item;
+                const newSelected = state.selectedItem?.filter((_, index) => index !== findItem);
+                
+                setState((prev) => ({
+                    ...prev,
+                    selectedItem: newSelected,
+                    totalPrice:  newTotalPrice,
+                }));
+            }
+            message.success(SUCCESS);
+        } else {
+            if (result?.message === TOKEN_INVALID || result?.message === NOT_AUTHENTICATION) {
+                logAgain();
+                navigate('/login');
+            } else {
+                message.error(FAIL);
+            }
+        }
     }
 
     return (
-        <div className=" px-8 mb-1">
+        <div className=" h-full px-8 mb-1">
             <div className=" flex flex-col items-center justify-center font-semibold text-5xl gap-2 p-5 border-b-[1px]">
                 <div className=" font-semibold text-3xl">Giỏ hàng của bạn</div>
                 <span className="bg-black p-[1.5px] w-14"></span>
             </div>
             <div className=" flex p-4">
-                <div className=" w-1/2 h-[500px] overflow-y-auto">
+                <div className=" w-1/2 h-[400px] overflow-y-auto">
                     {state.data?.items?.length === 0 && <div className="">Giỏ hàng của bạn đang trống</div>}
                     {
                         state.data?.items?.map((item) => {
                             return (
-                                <CartCard data={item} getData={getData} />
+                                <CartCard
+                                    data={item}
+                                    getData={getData}
+                                    handleSelectItem={handleSelectItem}
+                                    handleDeleteItem={handleDeleteItem}
+                                    isLoadingDelete={state?.isLoadingDelete}
+                                />
                             )
                         })
                     }
@@ -67,7 +115,7 @@ const Cart = () => {
                         <h1 className=" border-b-[1px] text-lg font-semibold py-3">Thông tin đơn hàng</h1>
                         <div className=" flex items-center justify-between border-b-[1px] py-3">
                             <p className=" font-bold">Tổng tiền:</p>
-                            <p className=" text-red-600 font-semibold">{formatCurrencyVN(state.data?.total_price)}</p>
+                            <p className=" text-red-600 font-semibold">{formatCurrencyVN(state.totalPrice)}</p>
                         </div>
                         <div className=" text-sm py-3">
                             Phí vận chuyển sẽ được tính ở trang thanh toán.
