@@ -21,3 +21,26 @@ export const getAddressInfo = async () => {
         console.error('Error:', error);
     }
 }
+
+export const order = async (body) => {
+    const token = localStorage.getItem("token");
+    try {
+        const response = await fetch(`${endpoint}/order/add_order`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                'Content-Type': 'application/json',
+                'token': token,
+            }
+        });
+        if (!response.ok) {
+            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+        console.error('Error:', error);
+    }
+}

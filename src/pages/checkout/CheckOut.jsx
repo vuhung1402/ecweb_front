@@ -1,23 +1,28 @@
-import { useNavigate, useParams } from "react-router-dom"
+import { useLocation, useNavigate, useParams } from "react-router-dom"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { endpoint } from "../../api/api"
 import React, { useEffect, useState } from "react"
 import { formatCurrencyVN, logAgain } from "@utils/function"
-import { Button, Radio, Select, Space } from "antd"
-import { getAddressInfo } from "./function"
+import { Button, Radio, Select, Space, message } from "antd"
+import { getAddressInfo, order } from "./function"
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"
 import { paymentMethod } from "./mock"
 import ProductCard from "./productCard"
+import { FAIL } from "@utils/message"
 
 const CheckOut = () => {
     const { code } = useParams();
     const user = useUserPackageHook();
     const navigate = useNavigate();
+    const location = useLocation();
+
     const [state, setState] = useState({
         addresses: undefined,
-        paymentMethod: 'shipCode',
+        paymentMethod: 0,
         addressInfo: '',
-        idAdress: ''
+        order: {},
+        idAdress: '',
+        isOrderLoading: false,
     })
 
     const getData = async () => {
@@ -28,9 +33,13 @@ const CheckOut = () => {
         } else {
             state.addresses = result;
             const index = result?.findIndex((item) => item?.isDefault);
-            state.idAdress = result[index]?._id
+            state.idAdress = result[index]?._id;
+            state.addressInfo = `${result[index]?.name}, ${result[index]?.number}, ${result[index]?.street}`
         }
-        setState((prev) => ({ ...prev }));
+        setState((prev) => ({
+            ...prev,
+            order: location?.state?.order,
+        }));
     }
 
     useEffect(() => {
@@ -46,6 +55,27 @@ const CheckOut = () => {
         state.idAdress = value;
         state.addressInfo = option?.label;
         setState((prev) => ({ ...prev }));
+    }
+
+    const handleOrder = async () => {
+        setState((prev) => ({...prev , isOrderLoading:true}))
+        const body = {
+            order: state?.order,
+            address: state?.addressInfo,
+            type_pay: state?.paymentMethod,
+        }
+        console.log("body: ", body);
+        const response = await order(body);
+        if (response?.success) {
+            navigate('/order');
+        } else {
+            if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
+                logAgain();
+                navigate('/login');
+            } else {
+                message.error(FAIL);
+            }
+        }
     }
 
     return (
@@ -119,6 +149,8 @@ const CheckOut = () => {
                     <Button
                         type="primary"
                         className=" uppercase p-3 !font-semibold !h-auto"
+                        loading={state.isOrderLoading}
+                        onClick={handleOrder}
                     >
                         Hoàn tất đơn hàng
                     </Button>
@@ -132,16 +164,15 @@ const CheckOut = () => {
                     }}
                     className="overflow-y-auto"
                 >
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
+                    {
+                        state?.order?.items?.map((item) => {
+                            return (
+                                <ProductCard
+                                    data={item}
+                                />
+                            )
+                        })
+                    }
                 </div>
                 <div className="">
                     <div className="flex items-center gap-4 border-b-[1px] p-2">
@@ -152,18 +183,18 @@ const CheckOut = () => {
                     <div className=" py-3 border-b-[1px] flex flex-col gap-3">
                         <div className=" flex items-center justify-between">
                             <p>Tạm tính</p>
-                            <p className=" font-bold">{formatCurrencyVN(295000)}</p>
+                            <p className=" font-bold">{formatCurrencyVN(state?.order?.total_price)}</p>
                         </div>
 
-                        <div className=" flex items-center justify-between">
+                        {/* <div className=" flex items-center justify-between">
                             <p>Phí vận chuyển</p>
                             <p className=" font-bold">{formatCurrencyVN(295000)}</p>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className=" flex items-center justify-between py-3">
                         <p className=" text-lg">Tổng cộng</p>
-                        <p className=" text-2xl font-bold">{formatCurrencyVN(295000)}</p>
+                        <p className=" text-2xl font-bold text-red-500">{formatCurrencyVN(state?.order?.total_price)}</p>
                     </div>
                 </div>
             </div>
