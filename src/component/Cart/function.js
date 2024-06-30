@@ -49,3 +49,30 @@ export const deleteItemCart = async (id) => {
         console.error('Error:', error);
     }
 }
+
+export const checkout = async (items) => {
+    const token = localStorage.getItem("token");
+    const body = {
+        items,
+    }
+
+    try {
+        const response = await fetch(`${endpoint}/cart/check_out`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                "token": token,
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!response.ok) {
+            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+        console.error('Error:', error);
+    }
+}

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom"
 import { formatCurrencyVN, logAgain } from "@utils/function"
 import CartCard from "./CartCard"
 import { data } from "@pages/admin/user/mock"
-import { deleteItemCart, getCart } from "./function"
+import { checkout, deleteItemCart, getCart } from "./function"
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"
 import { useDispatch } from "react-redux"
 import { quantityCart } from "@pages/product/function"
@@ -45,8 +45,28 @@ const Cart = () => {
         setState((prev) => ({ ...prev }));
     }
 
-    const handleCheckout = () => {
+    const handleCheckout = async () => {
         console.log("state?.selectedItem: ", state?.selectedItem);
+        const response = await checkout(state?.selectedItem);
+        if(response?.success){
+            navigate(
+                {
+                    pathname: `/checkout/${response?.order?.order_id}`
+                },
+                {
+                    state: {
+                        order: response?.order,
+                    }
+                }
+            )
+        }else {
+            if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
+                logAgain();
+                navigate('/login');
+            } else {
+                message.error(FAIL);
+            }
+        }
         // navigate("/checkout/1");
     }
 
