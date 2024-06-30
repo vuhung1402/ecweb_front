@@ -92,9 +92,34 @@ const OrderList = () => {
         <div
             className=" w-full flex flex-col gap-4"
         >
+            <div className="w-full flex justify-end items-center gap-3">
+                <div className=" flex gap-2">
+                    <Select
+                        style={{
+                            width: 200,
+                        }}
+                        value={state.selectValue}
+                        onSelect={handleSelect}
+                        optionFilterProp="children"
+                        filterOption={(input, option) => (option?.label ?? '').includes(input)}
+                        filterSort={(optionA, optionB) =>
+                            (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
+                        }
+                        options={optionSearchOrder}
+                    />
+                    <Input
+                        placeholder={state.placeholder || 'Mã đơn hàng'} prefix={<SearchOutlined />}
+                    />
+                </div>
+                <Button type="primary">Áp dụng</Button>
+            </div>
             <Table
                 columns={columns}
                 dataSource={data}
+                pagination={{
+                    hideOnSinglePage: true,
+                    pageSize: 30
+                }}
             />
         </div>
     )
