@@ -3,9 +3,10 @@ import { optionSearchOrder, statusOrder } from "@pages/admin/orders/mock";
 import { Button, Input, Select, Space, Table, Tag } from "antd";
 import React, { useState } from "react";
 import CardOrder from "./CardOrder";
-import OrderDetail from "./OrderDetail";
+import OrderDetail from "../../../pages/admin/OrderDetail";
 import { formatCurrencyVN } from "@utils/function";
 import { status } from "@api/api";
+import { useNavigate } from "react-router-dom";
 
 const OrderList = () => {
     const [state, setState] = useState({
@@ -14,6 +15,8 @@ const OrderList = () => {
         isDetaile: false,
         codeOrder: '',
     })
+
+    const navigate = useNavigate();
 
     const columns = [
         {
@@ -52,7 +55,11 @@ const OrderList = () => {
                 const findStatus = statusOrder.find((item) => item?.status === record?.status)
                 return (
                     <Space size="middle">
-                        <Button>Chi Tiết</Button>
+                        <Button
+                        onClick={() => navigate('/admin/orderDetail/1')}
+                        >
+                            Chi Tiết
+                        </Button>
                         {
                             findStatus?.nextStatus?.map((item) => {
                                 return (

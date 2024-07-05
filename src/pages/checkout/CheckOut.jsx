@@ -93,7 +93,7 @@ const CheckOut = () => {
                             optionFilterProp="label"
                             options={state.addresses?.map((item) => ({
                                 value: item?._id,
-                                label: `${item?.name}, ${item?.number}, ${item?.street}`,
+                                label: `${item?.name} / ${item?.number} / ${item?.street}`,
                             }))}
                         />
                     </div>

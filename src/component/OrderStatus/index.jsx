@@ -7,7 +7,7 @@ import IconOrderFinish from '@icon/iconOrderFinish.svg';
 
 const OrderStatus = (props) => {
 
-    const { status = 0 } = props;
+    const { status } = props;
 
     const orderStatus = [
         { label: 'Đặt hàng thành công', icon : <IconOrderSuccess /> },
@@ -23,14 +23,14 @@ const OrderStatus = (props) => {
                     <div key={`order-status=${index}`} className="flex items-center h-full">
                         <div
                             style={{
-                                opacity: index > status ? '0.5' : '1'
+                                opacity: index >= status ? '0.5' : '1'
                             }}
                             className="flex flex-col gap-3 items-center text-xs"
                         >
                             <div className="">{item.icon}</div>
                             <div className="w-20 text-center text-red-500 font-medium">{item.label}</div>
                         </div>
-                        {index !== 3 && (
+                        {index !== 4 && (
                             <div className="w-[30px] h-[1px] border-dashed border-t-2 border-red-500"></div>
                         )}
                     </div>
