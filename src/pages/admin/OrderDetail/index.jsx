@@ -1,7 +1,7 @@
 import React from "react";
-import CardProduct from "../CardProduct";
-import PaymentInfo from "../PaymentInfo";
-import PaymentMethod from "../PaymentMethod";
+import CardProduct from "../../../component/AdminUI/OrderList/CardProduct";
+import PaymentInfo from "../../../component/AdminUI/OrderList/PaymentInfo";
+import PaymentMethod from "../../../component/AdminUI/OrderList/PaymentMethod";
 import { Button } from "antd";
 
 const OrderDetail = (props) => {

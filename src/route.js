@@ -86,6 +86,11 @@ const AppRoutes = [
         Component: Page?.NotFoundPage,
         defaultLayout: false,
     },
+    {
+        path: '/admin/orderDetail/:id',
+        Component: Page?.AdminOrderDetailPage,
+        defaultLayout: true,
+    },
 
 ]
 
