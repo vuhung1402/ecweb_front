@@ -1,5 +1,6 @@
 .tableOrder {
-    height: calc(100% - 34px) !important;
+    height: calc(100% - 66px) !important;
+    overflow-y: auto;
 }
 
 .ant-spin-container {
@@ -16,8 +17,4 @@
 
 .ant-table-content{
     height: 100% !important;
-}
-
-.ant-spin-nested-loading {
-    height: calc(100% - 34px) !important;
 }

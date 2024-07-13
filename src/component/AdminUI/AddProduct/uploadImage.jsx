@@ -90,13 +90,6 @@ const UploadImage = React.forwardRef((props, ref) => {
             setChildState(prev => ({ ...prev }));
         }, [parentState]);
 
-        const style = {
-            display: 'inline-block',
-            width: '102px',
-            height: '102px',
-            verticalAlign: 'top',
-        };
-
         const handleSelectImage = (type, uid) => {
             const value = childState[type] === uid ? '' : uid;
             setChildState(prev => ({ ...prev, [type]: value }));
@@ -119,49 +112,48 @@ const UploadImage = React.forwardRef((props, ref) => {
                 className='flex flex-col items-center gap-2'
             >
                 <div
-                    style={style}
                     {...attributes}
                     {...listeners}
                 >
                     {file.status === 'error' && isDragging ? originNode.props.children : originNode}
-                </div>
-                <Popover
-                    trigger={"click"}
-                    arrow={false}
-                    id='popover-select-image'
-                    title="Chọn ảnh hiển thị"
-                    rootClassName='popover-upload-image'
-                    content={
-                        <div className='flex flex-col gap-3 text-xs font-medium'>
-                            <Checkbox
-                                checked={file?.uid === childState.mainImage}
-                                onChange={() => handleSelectImage('mainImage', file?.uid)}
-                            >
-                                Ảnh chính
-                            </Checkbox>
-                            <Checkbox
-                                checked={file?.uid === childState.hoverImage}
-                                onChange={() => handleSelectImage('hoverImage', file?.uid)}
-                            >
-                                Ảnh preview
-                            </Checkbox>
-                            <div className='w-full flex justify-end'>
-                                <Button
-                                    type='primary'
-                                    onClick={handleUpdate}
+                    <Popover
+                        trigger={"click"}
+                        arrow={false}
+                        id='popover-select-image'
+                        title="Chọn ảnh hiển thị"
+                        rootClassName='popover-upload-image'
+                        content={
+                            <div className='flex flex-col gap-3 text-xs font-medium'>
+                                <Checkbox
+                                    checked={file?.uid === childState.mainImage}
+                                    onChange={() => handleSelectImage('mainImage', file?.uid)}
                                 >
-                                    Cập nhật
-                                </Button>
+                                    Ảnh chính
+                                </Checkbox>
+                                <Checkbox
+                                    checked={file?.uid === childState.hoverImage}
+                                    onChange={() => handleSelectImage('hoverImage', file?.uid)}
+                                >
+                                    Ảnh preview
+                                </Checkbox>
+                                <div className='w-full flex justify-end'>
+                                    <Button
+                                        type='primary'
+                                        onClick={handleUpdate}
+                                    >
+                                        Cập nhật
+                                    </Button>
+                                </div>
                             </div>
-                        </div>
-                    }
-                >
-                    <Button
-                        className='w-[102px]'
+                        }
                     >
-                        Tùy chỉnh
-                    </Button>
-                </Popover>
+                        <Button
+                            className='w-[102px] mt-2'
+                        >
+                            Tùy chỉnh
+                        </Button>
+                    </Popover>
+                </div>
             </div>
         );
     };
@@ -186,7 +178,7 @@ const UploadImage = React.forwardRef((props, ref) => {
                     <DraggableUploadListItem originNode={originNode} file={file} parentState={state} />
                 )}
             >
-                {fileList.length >= 8 ? null : uploadButton}
+                {uploadButton}
             </Upload>
             {previewImage && (
                 <div>

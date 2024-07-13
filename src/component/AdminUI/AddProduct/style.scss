@@ -6,6 +6,10 @@
     .ant-tooltip {
         display: none;
     }
+
+    .ant-upload-list-item-container {
+        height: auto !important;
+    }
 }
 
 .popover-upload-image {

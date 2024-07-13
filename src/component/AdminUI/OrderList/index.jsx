@@ -175,13 +175,13 @@ const OrderList = (props) => {
                 <Button type="primary">Áp dụng</Button>
             </div>
             <Table
-                // rootClassName="tableOrder"
-                className=" flex flex-grow"
+                rootClassName="tableOrder"
+                // className="flex-grow"
                 columns={columns}
                 dataSource={orders}
                 pagination={{
                     hideOnSinglePage: true,
-                    pageSize: 10
+                    pageSize: 20
                 }}
             />
         </div>
