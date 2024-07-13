@@ -93,7 +93,7 @@ const Admin = () => {
                 />
             </div>
             <div id="resizeHandler" className='resize-handler z-20' />
-            <div className='flex flex-grow flex-col'>
+            <div className='flex flex-grow flex-col h-auto'>
                 {renderTab}
             </div>
         </div>

@@ -5,7 +5,7 @@ import { formatCurrencyVN } from "@utils/function";
 
 
 const PaymentInfo = (props) => {
-    const { address, totalPrice } = props;
+    const { address, totalPrice, name, phone, price_pay } = props;
     return (
         <div className=" w-full border rounded-md px-2 py-2 flex flex-col gap-2">
             <div className=" py-2 border-b-[1px] text-center font-medium">Thông tin đơn hàng</div>
@@ -18,7 +18,7 @@ const PaymentInfo = (props) => {
                             width: 'calc(100% - 120px)'
                         }}
                     >
-                        {address?.split('/')?.[0]}
+                        {name}
                     </div>
                 </div>
                 <div className=" w-full flex gap-3 ">
@@ -29,7 +29,7 @@ const PaymentInfo = (props) => {
                             width: 'calc(100% - 120px)'
                         }}
                     >
-                        {address?.split('/')?.[1]}
+                        {phone}
                     </div>
                 </div>
                 <div className=" w-full flex gap-3 ">
@@ -40,7 +40,7 @@ const PaymentInfo = (props) => {
                             width: 'calc(100% - 120px)'
                         }}
                     >
-                        {address?.split('/')?.[2]}
+                        {address}
                     </div>
                 </div>
             </div>
@@ -86,7 +86,7 @@ const PaymentInfo = (props) => {
                         //     width: 'calc(100% - 120px)'
                         // }}
                     >
-                        {formatCurrencyVN(totalPrice)}
+                        {formatCurrencyVN(price_pay)}
                     </div>
                 </div>
             </div>

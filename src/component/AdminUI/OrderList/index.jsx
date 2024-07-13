@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { updateStatuOrder } from "@pages/admin/orders/function";
 import { FAIL, SUCCESS } from "@utils/message";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
+import './style.scss'
 
 const OrderList = (props) => {
     const { orders, tab } = props;
@@ -33,14 +34,14 @@ const OrderList = (props) => {
         const response = await updateStatuOrder(user_id, Order_id, new_status_order);
         if (response?.success) {
             await getData(`?status=${tab}`);
-            setState((prev) => ({ ...prev, isConfirmLoading:false }))
+            setState((prev) => ({ ...prev, isConfirmLoading: false }))
             message.success(SUCCESS);
         } else {
             if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                 logAgain();
                 navigate('/login');
             } else {
-                setState((prev) => ({ ...prev, isConfirmLoading:false }))
+                setState((prev) => ({ ...prev, isConfirmLoading: false }))
                 message.success(FAIL);
             }
         }
@@ -84,7 +85,16 @@ const OrderList = (props) => {
                 return (
                     <Space size="middle">
                         <Button
-                            onClick={() => navigate(`/admin/orderDetail/${record?.Order_id}`)}
+                            onClick={() => navigate(
+                                {
+                                    pathname : `/admin/orderDetail/${record?.Order_id}`
+                                },
+                                {
+                                    state:{
+                                        user_id: record?.user_id,
+                                    }
+                                }
+                            )}
                         >
                             Chi Tiết
                         </Button>
@@ -93,9 +103,9 @@ const OrderList = (props) => {
                                 return (
                                     <Popconfirm
                                         title="Đổi trạng thái"
-                                        description = "Bạn muốn đổi trạng thái của đơn hàng?"
-                                        cancelText = "Huỷ"
-                                        okText = "Xác nhận"
+                                        description="Bạn muốn đổi trạng thái của đơn hàng?"
+                                        cancelText="Huỷ"
+                                        okText="Xác nhận"
                                         onConfirm={() => updateStatus(record?.user_id, record?.Order_id, item?.status)}
                                         okButtonProps={{
                                             loading: state?.isConfirmLoading,
@@ -138,7 +148,10 @@ const OrderList = (props) => {
 
     return (
         <div
-            className=" w-full flex flex-col gap-4"
+            className=" w-full h-full flex flex-col gap-4"
+            style={{
+                height: 'calc(100vh - 80px)'
+            }}
         >
             <div className="w-full flex justify-end items-center gap-3">
                 <div className=" flex gap-2">
@@ -162,11 +175,13 @@ const OrderList = (props) => {
                 <Button type="primary">Áp dụng</Button>
             </div>
             <Table
+                // rootClassName="tableOrder"
+                className=" flex flex-grow"
                 columns={columns}
                 dataSource={orders}
                 pagination={{
                     hideOnSinglePage: true,
-                    pageSize: 30
+                    pageSize: 10
                 }}
             />
         </div>
