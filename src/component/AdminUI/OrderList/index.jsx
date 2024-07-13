@@ -175,13 +175,14 @@ const OrderList = (props) => {
                 <Button type="primary">Áp dụng</Button>
             </div>
             <Table
-                rootClassName="tableOrder"
+                rootClassName={`${orders.length > 13 ? 'tableOrderWithPagination' : 'tableOrder'}`}
                 // className="flex-grow"
                 columns={columns}
+                // sticky={true}
                 dataSource={orders}
                 pagination={{
                     hideOnSinglePage: true,
-                    pageSize: 20
+                    pageSize: 13
                 }}
             />
         </div>

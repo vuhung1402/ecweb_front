@@ -1,6 +1,11 @@
 .tableOrder {
     height: calc(100% - 66px) !important;
-    overflow-y: auto;
+    // overflow-y: auto;
+}
+
+.tableOrderWithPagination {
+    height: calc(100% - 130px) !important;
+    // overflow-y: auto;
 }
 
 .ant-spin-container {
@@ -9,6 +14,7 @@
 
 .ant-table {
     height: 100% !important;
+    overflow-y: auto;
 }
 
 .ant-table-container { 
