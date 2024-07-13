@@ -159,7 +159,7 @@ const ProductList = (props) => {
             setState(prev => ({ ...prev, switchLoading: { status: false, id: '' } }));
             message.success("Thành công!!");
         } else {
-            if (isUpdateOnlShop?.message === "You're not authenticated") {
+            if (isUpdateOnlShop?.message === TOKEN_INVALID || isUpdateOnlShop?.message === "You're not authenticated") {
                 message.info("Phiên đăng nhập hết hạn!!");
                 navigate('/login');
             } else {

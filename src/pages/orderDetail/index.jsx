@@ -27,7 +27,7 @@ const OderDetail = () => {
     const getData = async () => {
         const response = await getOrderDetail(param?.id);
         if (response?.success) {
-            setState((prev) => ({ ...prev, data: response?.order_detail }))
+            setState((prev) => ({ ...prev, data: response?.formatted_order_detail }))
         } else {
             if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                 logAgain();
@@ -80,7 +80,7 @@ const OderDetail = () => {
                                 })
                             }
                             <PaymentInfor data={state?.data?.total_price} />
-                            <UserInfo data={state?.data?.address} />
+                            <UserInfo address={state?.data?.address} phone = {state?.data?.phone} name = {state?.data?.name}  />
                             {/* <SupportInfo/> */}
                         </div>
                     </div>

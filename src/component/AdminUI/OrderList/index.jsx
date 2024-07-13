@@ -1,22 +1,50 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { optionSearchOrder, statusOrder } from "@pages/admin/orders/mock";
-import { Button, Input, Select, Space, Table, Tag } from "antd";
+import { Button, Input, message, Popconfirm, Select, Space, Table, Tag } from "antd";
 import React, { useState } from "react";
 import CardOrder from "./CardOrder";
 import OrderDetail from "../../../pages/admin/OrderDetail";
-import { formatCurrencyVN } from "@utils/function";
+import { formatCurrencyVN, logAgain } from "@utils/function";
 import { status } from "@api/api";
 import { useNavigate } from "react-router-dom";
+import { updateStatuOrder } from "@pages/admin/orders/function";
+import { FAIL, SUCCESS } from "@utils/message";
+import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 
-const OrderList = () => {
+const OrderList = (props) => {
+    const { orders, tab } = props;
+    const { getData } = props;
+
     const [state, setState] = useState({
         placeholder: '',
         selectValue: '1',
         isDetaile: false,
         codeOrder: '',
+        isConfirmLoading: false,
     })
 
     const navigate = useNavigate();
+
+    const updateStatus = async (user_id, Order_id, new_status_order) => {
+        setState((prev => ({
+            ...prev,
+            isConfirmLoading: true,
+        })));
+        const response = await updateStatuOrder(user_id, Order_id, new_status_order);
+        if (response?.success) {
+            await getData(`?status=${tab}`);
+            setState((prev) => ({ ...prev, isConfirmLoading:false }))
+            message.success(SUCCESS);
+        } else {
+            if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
+                logAgain();
+                navigate('/login');
+            } else {
+                setState((prev) => ({ ...prev, isConfirmLoading:false }))
+                message.success(FAIL);
+            }
+        }
+    }
 
     const columns = [
         {
@@ -56,14 +84,27 @@ const OrderList = () => {
                 return (
                     <Space size="middle">
                         <Button
-                        onClick={() => navigate('/admin/orderDetail/1')}
+                            onClick={() => navigate(`/admin/orderDetail/${record?.Order_id}`)}
                         >
                             Chi Tiết
                         </Button>
                         {
                             findStatus?.nextStatus?.map((item) => {
                                 return (
-                                    <Button>{item?.label}</Button>
+                                    <Popconfirm
+                                        title="Đổi trạng thái"
+                                        description = "Bạn muốn đổi trạng thái của đơn hàng?"
+                                        cancelText = "Huỷ"
+                                        okText = "Xác nhận"
+                                        onConfirm={() => updateStatus(record?.user_id, record?.Order_id, item?.status)}
+                                        okButtonProps={{
+                                            loading: state?.isConfirmLoading,
+                                        }}
+                                    >
+                                        <Button>
+                                            {item?.label}
+                                        </Button>
+                                    </Popconfirm>
                                 )
                             })
                         }
@@ -122,7 +163,7 @@ const OrderList = () => {
             </div>
             <Table
                 columns={columns}
-                dataSource={data}
+                dataSource={orders}
                 pagination={{
                     hideOnSinglePage: true,
                     pageSize: 30

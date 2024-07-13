@@ -1,6 +1,13 @@
 import React from "react";
 
-const PaymentMethod = () => {
+const PaymentMethod = (props) => {
+    const { typePay } = props;
+
+    const paymentMethdod = {
+        0: "Nhận tiền khi giao hàng",
+        1: "Đã thanh toán bằng momo"
+    }[typePay]
+
     return (
         <div className=" border rounded-sm p-3">
             <div className=" text-center border-b-[1px] py-2  font-medium text-xl">
@@ -8,11 +15,11 @@ const PaymentMethod = () => {
             </div>
             <div className="flex items-center justify-between">
                 <div className=" font-medium">
-                    Chuyển khoản ngân hàng
+                    {paymentMethdod}
                 </div>
-                <div className=" text-green-500">
+                {/* <div className=" text-green-500">
                     Đã chuyển tiền
-                </div>
+                </div> */}
             </div>
         </div>
     )

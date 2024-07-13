@@ -20,6 +20,9 @@ const CheckOut = () => {
         addresses: undefined,
         paymentMethod: 0,
         addressInfo: '',
+        phone: '', 
+        name: '',
+        street:'',
         order: {},
         idAdress: '',
         isOrderLoading: false,
@@ -35,6 +38,9 @@ const CheckOut = () => {
             const index = result?.findIndex((item) => item?.isDefault);
             state.idAdress = result[index]?._id;
             state.addressInfo = `${result[index]?.name}, ${result[index]?.number}, ${result[index]?.street}`
+            state.name = result[index]?.name;
+            state.phone = result[index]?.number;
+            state.street = result[index]?.street;
         }
         setState((prev) => ({
             ...prev,
@@ -54,6 +60,9 @@ const CheckOut = () => {
     const handleSelectAddressInfo = (value, option) => {
         state.idAdress = value;
         state.addressInfo = option?.label;
+        state.name = option?.name;
+        state.phone = option?.phone;
+        state.street = option?.street;
         setState((prev) => ({ ...prev }));
     }
 
@@ -61,8 +70,11 @@ const CheckOut = () => {
         setState((prev) => ({...prev , isOrderLoading:true}))
         const body = {
             order: state?.order,
-            address: state?.addressInfo,
+            address: state?.street,
+            phone: state.phone,
+            name: state.name,
             type_pay: state?.paymentMethod,
+            shipping_code: 0
         }
         console.log("body: ", body);
         const response = await order(body);
@@ -93,7 +105,10 @@ const CheckOut = () => {
                             optionFilterProp="label"
                             options={state.addresses?.map((item) => ({
                                 value: item?._id,
-                                label: `${item?.name} / ${item?.number} / ${item?.street}`,
+                                label: `${item?.name}, ${item?.number}, ${item?.street}`,
+                                phone: item?.number,
+                                name: item?.name,
+                                street: item?.street,
                             }))}
                         />
                     </div>

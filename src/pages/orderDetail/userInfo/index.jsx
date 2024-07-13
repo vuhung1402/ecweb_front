@@ -3,7 +3,7 @@ import React from "react";
 import LocationIcon from "@icon/locatioin.svg"
 
 const UserInfo = (props) => {
-    const { data } = props;
+    const { address, phone, name } = props;
 
     return (
         <div className=" w-full p-3 flex flex-col gap-3 border rounded-lg">
@@ -13,16 +13,16 @@ const UserInfo = (props) => {
             <div className=" flex flex-col gap-2">
                 <div className=" flex gap-2">
                     <UserOutlined />
-                    <div>{data?.split('/')[0]}</div>
+                    <div>{name}</div>
                 </div>
                 <div className=" flex gap-2">
                     <PhoneOutlined />
-                    <div>{data?.split('/')[1]}</div>
+                    <div>{phone}</div>
                 </div>
                 <div className=" flex gap-2">
                     <LocationIcon />
                     <div>
-                        {data?.split('/')[2]}
+                        {address}
                     </div>
                 </div>
             </div>

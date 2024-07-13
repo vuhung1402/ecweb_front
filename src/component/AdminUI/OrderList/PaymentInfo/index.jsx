@@ -1,53 +1,93 @@
 import React from "react";
+import { PhoneOutlined, UserOutlined } from "@ant-design/icons";
+import LocationIcon from "@icon/locatioin.svg"
+import { formatCurrencyVN } from "@utils/function";
 
-const PaymentInfo = () => {
+
+const PaymentInfo = (props) => {
+    const { address, totalPrice } = props;
     return (
-        <div className=" border rounded-md px-2 py-2 flex flex-col gap-2">
+        <div className=" w-full border rounded-md px-2 py-2 flex flex-col gap-2">
             <div className=" py-2 border-b-[1px] text-center font-medium">Thông tin đơn hàng</div>
             <div className=" w-full flex flex-col gap-2 border-b-[1px] py-2">
-                <div className=" flex ">
-                    <div className="w-[120px] font-medium">Tên:</div>
+                <div className=" flex gap-3">
+                    <div className=" font-medium"><UserOutlined /></div>
                     <div
                         className=" whitespace-normal break-words"
                         style={{
                             width: 'calc(100% - 120px)'
                         }}
                     >
-                        123
+                        {address?.split('/')?.[0]}
                     </div>
                 </div>
-                <div className=" w-full flex ">
-                    <div className="w-[120px] font-medium">Địa chỉ:</div>
+                <div className=" w-full flex gap-3 ">
+                    <div className=" font-medium"><PhoneOutlined /></div>
                     <div
                         className=" whitespace-normal break-words"
                         style={{
                             width: 'calc(100% - 120px)'
                         }}
                     >
-                        1231312312312312312312313131312313123
+                        {address?.split('/')?.[1]}
                     </div>
                 </div>
-                <div className=" w-full flex ">
-                    <div className="w-[120px] font-medium">Số điện thoại:</div>
+                <div className=" w-full flex gap-3 ">
+                    <div className=" font-medium"><LocationIcon /></div>
                     <div
                         className=" whitespace-normal break-words"
                         style={{
                             width: 'calc(100% - 120px)'
                         }}
                     >
-                        123
+                        {address?.split('/')?.[2]}
                     </div>
                 </div>
             </div>
-            <div className=" w-full flex ">
-                <div className="w-[120px] font-medium text-2xl">Tổng tiền:</div>
-                <div
-                    className=" font-medium text-red-600 text-2xl whitespace-normal break-words"
-                    style={{
-                        width: 'calc(100% - 120px)'
-                    }}
-                >
-                    123
+            <div className=" w-full flex flex-col gap-2">
+                <div className=" w-full flex gap-3 items-center justify-between">
+                    <div className=" font-medium">Tổng tiền sản phẩm:</div>
+                    <div
+                        className=" font-medium text-xl whitespace-normal break-words"
+                        // style={{
+                        //     width: 'calc(100% - 120px)'
+                        // }}
+                    >
+                        {formatCurrencyVN(totalPrice)}
+                    </div>
+                </div>
+                <div className=" w-full flex gap-3 items-center justify-between">
+                    <div className=" font-medium">Giảm giá:</div>
+                    <div
+                        className=" font-medium text-xl whitespace-normal break-words"
+                        // style={{
+                        //     width: 'calc(100% - 120px)'
+                        // }}
+                    >
+                        {formatCurrencyVN(0)}
+                    </div>
+                </div>
+                <div className=" w-full flex gap-3 items-center justify-between">
+                    <div className=" font-medium">Phí vận chuyển:</div>
+                    <div
+                        className=" font-medium text-xl whitespace-normal break-words"
+                        // style={{
+                        //     width: 'calc(100% - 120px)'
+                        // }}
+                    >
+                        {formatCurrencyVN(0)}
+                    </div>
+                </div>
+                <div className=" w-full flex gap-3 items-center justify-between">
+                    <div className=" font-medium">Tổng tiền:</div>
+                    <div
+                        className=" font-medium text-xl text-green-500 whitespace-normal break-words"
+                        // style={{
+                        //     width: 'calc(100% - 120px)'
+                        // }}
+                    >
+                        {formatCurrencyVN(totalPrice)}
+                    </div>
                 </div>
             </div>
         </div>

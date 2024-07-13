@@ -17,8 +17,8 @@ const Order = () => {
         data: undefined,
     })
 
-    const getData = async () => {
-        const result = await getOrderList();
+    const getData = async (query) => {
+        const result = await getOrderList(query);
         if(result?.success){
             setState((prev) => ({...prev, data: result?.format_order_list}))
         }else{
@@ -32,9 +32,12 @@ const Order = () => {
     }
 
     useState(() => {
-        getData();
+        getData(`?status=0`);
     }, [])
 
+    const handleChangeTab = async (key) => {
+        await getData(`?status=${key}`)
+    }
 
     return (
         <>
@@ -55,6 +58,7 @@ const Order = () => {
                             <SildeBar />
                             <div className=" w-3/4 h-full">
                                 <Tabs
+                                    onChange={handleChangeTab}
                                     items={statusOrder.map((item) => {
                                         return {
                                             key: item?.key,

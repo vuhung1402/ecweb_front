@@ -9,8 +9,12 @@ export const statusOrder = [
         nextStatus: [
             {
                 status: 2,
-                label: 'Xác nhận',
-            }
+                label: 'Xác nhận đơn hàng',
+            },
+            {
+                status: 5,
+                label: 'Huỷ đơn hàng',
+            },
         ],
     },
     {
@@ -59,7 +63,7 @@ export const statusOrder = [
             },
             {
                 status: 5,
-                label: 'Huỷ',
+                label: 'Huỷ đơn hàng',
             },
         ],
     },

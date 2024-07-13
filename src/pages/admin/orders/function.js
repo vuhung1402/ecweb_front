@@ -1,13 +1,13 @@
 import { endpoint } from "@api/api";
 import { message } from "antd";
 
-export const getCart = async () => {
+export const getOrderList = async (query) => {
     const token = localStorage.getItem("token");
     try {
-        const response = await fetch(`${endpoint}/cart/cart_show`, {
-            method: 'GET',
+        const response = await fetch(`${endpoint}/admin/get_full_order_table${query}`, {
+            method: 'POST',
             headers: {
-                "token": token,
+                "token" : `${token}`,
                 'Content-Type': 'application/json',
             }
         });
@@ -23,14 +23,20 @@ export const getCart = async () => {
     }
 }
 
-export const getOrderList = async (query) => {
+export const updateStatuOrder = async (user_id, Order_id, new_status_order) => {
+    const body = {
+        Order_id,
+        user_id,
+        new_status_order,
+    }
+
     const token = localStorage.getItem("token");
     try {
-        const response = await fetch(`${endpoint}/order/get_list_detail_user${query}`, {
-            method: 'GET',
-            // body: JSON.stringify(body),
+        const response = await fetch(`${endpoint}/admin/update_status_order`, {
+            method: 'POST',
+            body: JSON.stringify(body),
             headers: {
-                "token": token,
+                "token" : `${token}`,
                 'Content-Type': 'application/json',
             }
         });
