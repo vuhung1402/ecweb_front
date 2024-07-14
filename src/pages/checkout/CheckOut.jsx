@@ -78,6 +78,7 @@ const CheckOut = () => {
         }
         console.log("body: ", body);
         const response = await order(body);
+        console.log({response});
         if (response?.success) {
             if(response?.paymentUrl){
                 window.open(response?.paymentUrl, '_blank')
