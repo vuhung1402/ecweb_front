@@ -1,7 +1,13 @@
 export const statusOrder = [
     {
         status: 0,
-        name: 'Tất cả',
+        name: 'Chờ thanh toán',
+        nextStatus: [
+            {
+                status: 5,
+                label: 'Huỷ đơn hàng',
+            },
+        ],
     },
     {
         status: 1,

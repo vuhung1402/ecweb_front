@@ -79,7 +79,11 @@ const CheckOut = () => {
         console.log("body: ", body);
         const response = await order(body);
         if (response?.success) {
-            navigate('/order');
+            if(response?.paymentUrl){
+                window.open(response?.paymentUrl, '_blank')
+            }else{
+                navigate('/order');
+            }
         } else {
             if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                 logAgain();

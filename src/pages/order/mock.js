@@ -3,7 +3,7 @@ import { Space, Tag } from "antd";
 export const statusOrder = [
     {
         key: 0,
-        name: 'Tất cả',
+        name: 'Chờ thanh toán',
     },
     {
         key: 1,

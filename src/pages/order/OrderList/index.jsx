@@ -50,10 +50,10 @@ const OrderList = (props) => {
         },
         {
             title: 'Giá tiền',
-            dataIndex: 'total_price',
+            dataIndex: 'price_pay',
             render: (_, record) => {
                 return (
-                    <div>{formatCurrencyVN(record?.total_price)}</div>
+                    <div>{formatCurrencyVN(record?.price_pay)}</div>
                 )
             },
         },
