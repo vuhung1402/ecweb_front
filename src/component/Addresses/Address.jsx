@@ -25,8 +25,8 @@ const Address = () => {
         getDataAddress();
     }, [])
 
-    const getDataAddress = () => {
-        fetch(`${endpoint}/users/get_address/`, {
+    const getDataAddress = async () => {
+        await fetch(`${endpoint}/users/get_address/`, {
             method: "GET",
             headers: {
                 'Content-Type': 'application/json',
