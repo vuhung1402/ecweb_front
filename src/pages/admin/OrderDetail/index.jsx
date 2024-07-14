@@ -92,7 +92,7 @@ const OrderDetail = (props) => {
                                     </div>
                                     <div className=" flex flex-col w-1/2 gap-3">
                                         <PaymentInfo address={state?.data?.address} totalPrice={state.data?.total_price} name={state.data?.name} phone={state.data?.phone} price_pay={state.data?.price_pay} />
-                                        <PaymentMethod typePay={state.data?.type_pay} />
+                                        <PaymentMethod typePay={state.data?.type_pay} status = {state?.data?.status} />
                                     </div>
                                 </div>
                             </div>

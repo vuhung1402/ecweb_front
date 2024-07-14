@@ -1,11 +1,11 @@
 import React from "react";
 
 const PaymentMethod = (props) => {
-    const { typePay } = props;
+    const { typePay, status } = props;
 
     const paymentMethdod = {
         0: "Nhận tiền khi giao hàng",
-        1: "Đã thanh toán bằng momo"
+        1: "Thanh toán bằng momo"
     }[typePay]
 
     return (
@@ -17,6 +17,19 @@ const PaymentMethod = (props) => {
                 <div className=" font-medium">
                     {paymentMethdod}
                 </div>
+                {
+                    (typePay === 0 && status === 4) &&
+                    <div className=" text-green-500">
+                        Đã nhận tiền
+                    </div>
+                }
+                {
+                    (typePay === 1 && status > 0) &&
+                        <div className=" text-green-500">
+                            Đã thanh toán 
+                        </div>
+                }
+
                 {/* <div className=" text-green-500">
                     Đã chuyển tiền
                 </div> */}
