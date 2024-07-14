@@ -15,6 +15,7 @@ const Order = () => {
     const navigate = useNavigate();
     const [state, setState] = useState({
         data: undefined,
+        tabKey: 0,
     })
 
     const getData = async (query) => {
@@ -36,7 +37,8 @@ const Order = () => {
     }, [])
 
     const handleChangeTab = async (key) => {
-        await getData(`?status=${key}`)
+        setState((prev) => ({...prev, data: undefined, tabKey: key}));
+        await getData(`?status=${key}`);
     }
 
     return (
@@ -59,6 +61,7 @@ const Order = () => {
                             <div className=" w-3/4 h-full">
                                 <Tabs
                                     onChange={handleChangeTab}
+                                    activeKey={state.tabKey}
                                     items={statusOrder.map((item) => {
                                         return {
                                             key: item?.key,
