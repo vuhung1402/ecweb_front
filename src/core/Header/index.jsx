@@ -151,6 +151,10 @@ const Header = () => {
         };
     };
 
+    const handleNavbarClick = (item) => {
+        console.log({item});
+    };
+
     return (
         <header className="relative bg-white px-4 md:px-20 lg:px-40">
             <div className="relative cursor-pointer hidden md:flex">
@@ -168,6 +172,7 @@ const Header = () => {
                         theme="light"
                         openKeys={state.navbarMobileOpenkey}
                         items={menuContent}
+                        onClick={handleNavbarClick}
                         onOpenChange={handleNavBarChange}
                     />
                 }            
@@ -186,9 +191,9 @@ const Header = () => {
                         <div onClick={() => handleNavigate('/products/all')}>SẢN PHẨM ▾</div>
                         <ul className="sub-menu">
                             {
-                                category?.map((item) => {
+                                category?.map((item, index) => {
                                     return (
-                                        <li className="relative">
+                                        <li className="relative" key={`category-navbar-${index}`}>
                                             <div
                                                 className="px-4 py-2 flex items-center gap-10 justify-between cursor-pointer hover:text-[rgb(0,4,255)]"
                                             >
@@ -197,10 +202,15 @@ const Header = () => {
                                             </div>
                                             <ul className="border third-menu">
                                                 {
-                                                    item?.children?.map((children) => {
+                                                    item?.children?.map((children, index) => {
                                                         return (
-                                                            <li>
-                                                                <div onClick={() => handleNavigate(`/products/${children?.route}`, children?.key)} className={`${classNameOfMenu}`}>{children?.label}</div>
+                                                            <li key={`category-children-${index}`}>
+                                                                <div
+                                                                    onClick={() => handleNavigate(`/products/${children?.route}`, children?.key)}
+                                                                    className={`${classNameOfMenu}`}
+                                                                >
+                                                                    {children?.label}
+                                                                </div>
                                                             </li>
                                                         )
                                                     })
@@ -210,7 +220,6 @@ const Header = () => {
                                     )
                                 })
                             }
-
                         </ul>
                     </li>
                     <li className="px-3 cursor-pointer main-menu"><div>CỬA HÀNG</div></li>
@@ -219,7 +228,7 @@ const Header = () => {
                         <ul className="sub-menu text-[14px]">
                             {policyTitle.map((item, index) => {
                                 return (
-                                    <li key={`policy-header-menu-${item}`}>
+                                    <li key={`policy-header-menu-${index}`}>
                                         <div className="px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">{item.label}</div>
                                     </li>
                                 )
