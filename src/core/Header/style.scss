@@ -4,7 +4,19 @@ header{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding:0 2rem;
+}
+
+.navbar-mobile {
+    height: calc(100vh - 70px);
+
+    .ant-popover-content {
+        height: 100%;
+    }
+
+    .ant-popover-inner {
+        height: 100%;
+        padding: 0px !important;
+    }
 }
 
 .logo {

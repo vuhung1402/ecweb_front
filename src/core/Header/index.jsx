@@ -1,30 +1,51 @@
-import React, { useEffect } from "react"
-import { useState } from "react"
-import { useUserPackageHook } from "../../redux/hooks/userHook"
-import { useNavigate } from "react-router-dom"
-import { useDispatch } from "react-redux"
-import './style.scss'
-import SearchBox from "../../component/SearchBox/SearchBox"
-import CartPopUp from "../../component/CartPopUp/CartPopUp"
-import { clear, numOfCartPackage } from "../../redux/actions"
-import { endpoint } from "../../api/api"
-import { Badge, Popover, message } from "antd"
+import React, { useEffect, useState } from "react";
+import { useUserPackageHook } from "@redux/hooks/userHook";
 import { useNumOfCartPackageHook } from "@redux/hooks/numOfCart"
-import { quantityCart } from "@pages/product/function"
-import { set } from "firebase/database"
-import { TOKEN_INVALID } from "@utils/error"
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Badge, Popover, message, Menu } from "antd"
+
+import HeaderSearch from "@component/HeaderSearch";
+
+import { clear, numOfCartPackage } from "@redux/actions";
+import { quantityCart } from "@pages/product/function";
+import { endpoint } from "@api/api";
+import { TOKEN_INVALID } from "@utils/error";
+import { getLevelKeys } from "@utils/function";
+
+import IconUser from '@icon/iconUserHeader.svg';
+import IconCart from '@icon/iconCart.svg';
+import IconBars from '@icon/iconBars.svg';
+
+import './style.scss';
+
+const policyTitle = [
+    {key: 'policy-title-1' , label: 'CHÍNH SÁCH ĐỔI TRẢ'},
+    {key: 'policy-title-2' , label: 'CHÍNH SÁCH BẢO MẬT'},
+    {key: 'policy-title-3' , label: 'CHÍNH SÁCH GIAO HÀNG'},
+    {key: 'policy-title-4' , label: 'PHƯƠNG THỨC THANH TOÁN'},
+    {key: 'policy-title-5' , label: 'HƯỚNG DẪN MUA HÀNG'},
+];
+
+const accountMenuClassName = 'cursor-pointer hover:bg-[rgb(239,239,239)] rounded-md px-3 py-[5px] transition-colors duration-200';
 
 const Header = () => {
     const user = useUserPackageHook();
-    const numOfCart = useNumOfCartPackageHook()
-    const [searchBox, setSearchBox] = useState(false)
+    const numOfCart = useNumOfCartPackageHook();
+
     const [account, setAccount] = useState(false)
-    // const [cartPopUp, setCartPopUp] = useState(false)
     const [category, setCategory] = useState([])
 
     const [state, setState] = useState({
         popOverAcc: false,
-    })
+        searchBox: false,
+        account: false,
+        category: [],
+        navbarMobileOpenkey: ''
+    });
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`${endpoint}/category/getAllCategories`, {
@@ -44,44 +65,32 @@ const Header = () => {
         }).catch((error) => {
             console.error("Error: ", error)
         })
-    }, [])
+    }, []);
 
     const setLocalStorageQuantiyCart = async () => {
         if (user?.accessToken) {
             const numOfCart = await quantityCart();
+
             if(numOfCart?.message === TOKEN_INVALID){
                 dispatch(numOfCartPackage(0));
-            }else{
+            } else {
                 dispatch(numOfCartPackage(numOfCart));
-            }
-        }
-    }
+            };
+        };
+    };
 
     useEffect(() => {
         setLocalStorageQuantiyCart();
-    }, [user?.accessToken])
-
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-
-    const handleAccount = () => {
-        if (user?.accessToken) {
-            setAccount(!account)
-            setSearchBox(false)
-            setCartPopUp(false)
-        } else {
-            navigate('/login')
-        }
-    }
+    }, [user?.accessToken]);
 
     const handleLogOut = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("numOfCart");
-        dispatch(clear())
-        setAccount(!account)
+        dispatch(clear());
+        setAccount(!account);
         message.success("Đăng xuất thành công");
-        navigate('/')
-    }
+        navigate('/');
+    };
 
     const handlepopOverAcc = () => {
         if (user?.accessToken) {
@@ -91,38 +100,95 @@ const Header = () => {
             navigate("/login");
             state.popOverAcc = !state.popOverAcc;
             setState((prev) => ({ ...prev }));
-        }
-    }
+        };
+    };
 
     const classNameOfMenu = "px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]";
 
     const handleNavigate = (route, key) => {
         navigate(
-            {
-                pathname: route
-            },
-            {
-                state: {
-                    key: key,
-                }
-            }
+            { pathname: route },
+            { state: { key: key }}
         );
-    }
+    };
 
+    const menuContent = [
+        {
+            key: 'header-menu-1',
+            label: 'TRANG CHỦ',
+        },
+        {
+            key: 'header-menu-2',
+            label: 'SẢN PHẨM',
+            children: category,
+        },
+        {
+            key: 'header-menu-3',
+            label: 'CỬA HÀNG',
+        },
+        {
+            key: 'header-menu-4',
+            label: 'CỬA HÀNG',
+            children: policyTitle,
+        },
+    ];
+
+    const handleNavBarChange = (openKeys) => {
+        const levelKeys = getLevelKeys(menuContent);
+        const currentOpenKey = openKeys.find((key) => state.navbarMobileOpenkey.indexOf(key) === -1);
+        // open
+        if (currentOpenKey !== undefined) {
+            const repeatIndex = openKeys.filter((key) => key !== currentOpenKey).findIndex((key) => levelKeys[key] === levelKeys[currentOpenKey]);
+            setState(prev => ({
+                ...prev,
+                navbarMobileOpenkey: openKeys.filter((_, index) => index !== repeatIndex).filter((key) => levelKeys[key] <= levelKeys[currentOpenKey])
+            }));
+        } else {
+            setState(prev => ({
+                ...prev,
+                navbarMobileOpenkey: openKeys
+            }));
+        };
+    };
 
     return (
-        <header className="z-[999]">
-            <div>LOGO</div>
-            <nav class="menu">
-                <ul>
-                    <li className="px-3 cursor-pointer main-menu"><div onClick={() => navigate("/")}>TRANG CHỦ</div></li>
+        <header className="relative bg-white px-4 md:px-20 lg:px-40">
+            <div className="relative cursor-pointer hidden md:flex">
+                <HeaderSearch />
+            </div>
+
+            <Popover
+                trigger={"click"}
+                rootClassName="w-screen navbar-mobile"
+                arrow={false}
+                content={
+                    <Menu
+                        className="font-medium w-full h-full overflow-y-auto"
+                        mode="inline"
+                        theme="light"
+                        openKeys={state.navbarMobileOpenkey}
+                        items={menuContent}
+                        onOpenChange={handleNavBarChange}
+                    />
+                }            
+            >
+                <div className="flex md:hidden cursor-pointer">
+                    <IconBars />
+                </div>
+            </Popover>
+
+            <nav className="menu hidden md:flex">
+                <ul className="font-medium">
+                    <li className="px-3 cursor-pointer main-menu">
+                        <div onClick={() => navigate("/")}>TRANG CHỦ</div>
+                    </li>
                     <li className="px-3 cursor-pointer main-menu">
                         <div onClick={() => handleNavigate('/products/all')}>SẢN PHẨM ▾</div>
                         <ul className="sub-menu">
                             {
                                 category?.map((item) => {
                                     return (
-                                        <li>
+                                        <li className="relative">
                                             <div
                                                 className="px-4 py-2 flex items-center gap-10 justify-between cursor-pointer hover:text-[rgb(0,4,255)]"
                                             >
@@ -151,79 +217,57 @@ const Header = () => {
                     <li className="px-3 cursor-pointer z-[999] main-menu">
                         <div>CHÍNH SÁCH ▾</div>
                         <ul className="sub-menu text-[14px]">
-                            <li>
-                                <div className="px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">CHÍNH SÁCH ĐỔI TRẢ</div>
-                            </li>
-                            <li>
-                                <div className="px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">CHÍNH SÁCH BẢO MẬT</div>
-                            </li>
-                            <li>
-                                <div className="px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">CHÍNH SÁCH GIAO HÀNG</div>
-                            </li>
-                            <li>
-                                <div className="px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">PHƯƠNG THỨC THANH TOÁN</div>
-                            </li>
-                            <li>
-                                <div className="px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">HƯỚNG DẪN MUA HÀNG</div>
-                            </li>
+                            {policyTitle.map((item, index) => {
+                                return (
+                                    <li key={`policy-header-menu-${item}`}>
+                                        <div className="px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">{item.label}</div>
+                                    </li>
+                                )
+                            })}
                         </ul>
                     </li>
                 </ul>
             </nav>
-            <div className=" flex justify-between w-[132px]">
-                <div className=" relative cursor-pointer">
-                    <div onClick={() => {
-                        setSearchBox(!searchBox)
-                        setAccount(false)
-                        // setCartPopUp(false)
-                    }}>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                        </svg>
-                    </div>
-                    {
-                        searchBox &&
-                        (
-                            <div className=" absolute bg-white rounded-md shadow-slate-600 border top-10 right-1 w-[370px]">
-                                <SearchBox />
-                            </div>
-                        )
-                    }
-                </div>
-                <div className=" cursor-pointer relative">
+            <div className="flex items-center gap-5">
+                <div className="cursor-pointer relative">
                     <Popover
                         className="style"
+                        arrow={false}
+                        placement="bottomRight"
                         content={
-                            <div className="">
-                                {/* <div className=" uppercase text-center font-semibold p-2 border-b-[1px]">Thông tin tài khoản</div> */}
-                                {
-                                    user?.isAdmin &&
+                            <div className="flex flex-col gap-2">
+                                {user?.isAdmin && (
                                     <div
                                         onClick={() => {
                                             navigate("/admin")
                                             setAccount(!account)
                                         }}
-                                        className=" hover:text-blue-300 cursor-pointer"
+                                        className={accountMenuClassName}
                                     >
                                         Trang quản lý
                                     </div>
-                                }
+                                )}
                                 {
-                                    user?.accessToken &&
-                                    <>
-                                        <div
-                                            onClick={() => {
-                                                navigate("/account")
-                                                setAccount(!account)
-                                                localStorage.setItem("sildeBar", "/account");
-                                            }}
-                                            className=" hover:text-blue-300 cursor-pointer"
-                                        >
-                                            Tài khoản của tôi
-                                        </div>
-                                        <div onClick={handleLogOut} className="hover:text-blue-300 cursor-pointer">Đăng xuất</div>
-                                    </>
-                                }
+                                    user?.accessToken && (
+                                        <>
+                                            <div
+                                                onClick={() => {
+                                                    navigate("/account")
+                                                    setAccount(!account)
+                                                    localStorage.setItem("sildeBar", "/account");
+                                                }}
+                                                className={accountMenuClassName}
+                                            >
+                                                Tài khoản của tôi
+                                            </div>
+                                            <div
+                                                onClick={handleLogOut}
+                                                className={accountMenuClassName}
+                                            >
+                                                Đăng xuất
+                                            </div>
+                                        </>
+                                    )}
                             </div>
                         }
                         title="Thông tin tài khoản"
@@ -232,32 +276,21 @@ const Header = () => {
                         onOpenChange={handlepopOverAcc}
                     >
                         <div>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                            </svg>
+                            <IconUser />
                         </div>
                     </Popover>
                 </div>
-                <div className=" relative cursor-pointer" >
+                <div className="relative cursor-pointer flex items-center justify-center">
                     <Badge count={numOfCart}>
-                        <div onClick={() => {
+                        <div
+                            onClick={() => {
                             setAccount(false);
                             setSearchBox(false);
                             navigate('/cart');
                         }}>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
-                            </svg>
+                            <IconCart />
                         </div>
                     </Badge>
-                    {/* {
-                        cartPopUp &&
-                        (
-                            <div className=" absolute top-10 w-[450px] right-0 bg-white rounded border p-2 z-[999]">
-                                <CartPopUp />
-                            </div>
-                        )
-                    } */}
                 </div>
             </div>
         </header>

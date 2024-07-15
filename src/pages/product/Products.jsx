@@ -81,11 +81,11 @@ const Products = () => {
     }
 
     return (
-        <div className=" flex">
+        <div className="flex h-full">
             <div className=" w-1/4">
                 <Filter onClick={onClick} />
             </div>
-            <div className=" flex flex-grow w-full">
+            <div className="flex flex-grow w-full overflow-y-auto">
                 <ProductList handleSelect={handleSelect} data = {data} />
             </div>
         </div>
