@@ -294,7 +294,7 @@ const Header = () => {
                         <div
                             onClick={() => {
                             setAccount(false);
-                            setSearchBox(false);
+                            // setSearchBox(false);
                             navigate('/cart');
                         }}>
                             <IconCart />
