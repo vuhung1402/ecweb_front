@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const endpoint = "https://ecweb-backend.onrender.com/api/v1"
 
 export const status = {
@@ -8,3 +10,10 @@ export const status = {
     "completed": "Đã nhận hàng",
     "canceled": "Huỷ đơn"
 }
+
+export const axiosInstance = axios.create({
+    baseURL: endpoint,
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
