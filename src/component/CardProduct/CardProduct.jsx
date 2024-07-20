@@ -1,6 +1,10 @@
 import React, { useState } from "react";
-import { formatCurrencyVN } from "@utils/function";
 import { useNavigate } from "react-router-dom";
+import { Card } from "antd";
+
+import { formatCurrencyVN } from "@utils/function";
+
+const { Meta } = Card;
 
 import './style.scss';
 
@@ -23,16 +27,12 @@ const CardProduct = ({ data }) => {
     };
 
     return (
-        <>
-            <div className="w-[250px] h-auto p-2 card-product relative">
-                {
-                    data?.discount && (
-                        <div
-                            className="w-[50px] h-[24px] border border-[#ededed] absolute bg-white z-50 top-3 left-3 flex items-center justify-center text-red-400 text-[12px] font-medium">
-                                {`-${'25'}%`}
-                        </div>
-                    )
-                }
+        <Card
+            hoverable
+            rootClassName="card-product relative h-auto"
+            className="border border-[#f0f0f0]"
+            style={{width: 250}}
+            cover={
                 <div
                     onClick={() => handleNavigate(`/product-detail/${data?.name}`, data?.id)}
                     className="h-[250px] w-full flex justify-center relative card-img-wrapper"
@@ -42,36 +42,46 @@ const CardProduct = ({ data }) => {
                         src={img.length ? img : data?.image.url}
                     />
                     <img
-                        className={`w-auto h-full cursor-pointer absolute transition-opacity duration-300 hover-img`}
+                        className={`w-auto h-full cursor-pointer top-0 absolute transition-all duration-300 hover-img`}
                         src={data?.imageHover?.url}
                     />
                 </div>
-                <div
-                    onClick={() => handleNavigate(`/product-detail/${data?.name}`, data?.id)}
-                    className="hover:text-blue-500 cursor-pointer text-sm font-normal transition-all tracking-wider"
-                >
-                    {data?.name}
-                </div>
-                <div className="font-normal text-sm tracking-wider">
-                    {formatCurrencyVN(data?.price)}
-                </div>
-                <div className="mt-1 flex gap-3">
-                    {data?.color?.map((item, index) => {
-                        return (
-                            <div
-                                style={{
-                                    backgroundColor: item?.code_color,
-                                }}
-                                onMouseLeave={() => setImg('')}
-                                onMouseEnter={() => handleColorHover(item?.image?.url)}
-                                key={`color-${index}`}
-                                className={`cursor-pointer mr-2 hover:border border-black px-2 py-1 w-[24px] h-[24px] rounded-full`}
-                            ></div>
-                        );
-                    })}
-                </div>
-            </div>
-        </>
+            }
+        >
+            <Meta
+                title={data?.name}
+                description={
+                    <>
+                        <div className="font-normal text-sm tracking-wider">
+                            {formatCurrencyVN(data?.price)}
+                        </div>
+                        <div className="mt-2 flex gap-3">
+                            {data?.color?.map((item, index) => {
+                                return (
+                                    <div
+                                        style={{
+                                            backgroundColor: item?.code_color,
+                                        }}
+                                        onMouseLeave={() => setImg('')}
+                                        onMouseEnter={() => handleColorHover(item?.image?.url)}
+                                        key={`color-${index}`}
+                                        className={`cursor-pointer mr-2 hover:border border-black px-2 py-1 w-[24px] h-[24px] rounded-full`}
+                                    ></div>
+                                );
+                            })}
+                        </div>
+                    </>
+                }
+            />
+            {
+                data?.discount && (
+                    <div
+                        className="w-[50px] h-[24px] border border-[#ededed] absolute bg-white z-50 top-3 left-3 flex items-center justify-center text-red-400 text-[12px] font-bold">
+                            {`-${'25'}%`}
+                    </div>
+                )
+            }
+        </Card>
     );
 };
 
