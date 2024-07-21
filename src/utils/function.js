@@ -3,6 +3,7 @@ import { storage } from "../firebase/firebase";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { LOGIN_AGAIN } from "./message";
+import { tokenGHN } from "@api/api";
 
 export const formatCurrencyVN = (number) => {
     if (isNaN(number)) return "";
@@ -129,3 +130,75 @@ export const getLevelKeys = (items1) => {
     func(items1);
     return key;
 };
+
+export const getProvinces = async () => {
+    try {
+        const response = await fetch(`https://online-gateway.ghn.vn/shiip/public-api/master-data/province`, {
+            method: 'GET',
+            // body: JSON.stringify(body),
+            headers: {
+                "token": tokenGHN,
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!response.ok) {
+            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+        console.error('Error:', error);
+    }
+}
+
+export const getDistricts = async (province_id) => {
+    const body = {
+        province_id
+    }
+    try {
+        const response = await fetch(`https://online-gateway.ghn.vn/shiip/public-api/master-data/district`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                "token": tokenGHN,
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!response.ok) {
+            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+        console.error('Error:', error);
+    }
+}
+
+export const getWards = async (district_id) => {
+    const body = {
+        district_id
+    }
+    try {
+        const response = await fetch(`https://online-gateway.ghn.vn/shiip/public-api/master-data/ward`, {
+            method: 'POST',
+            body: JSON.stringify(body),
+            headers: {
+                "token": tokenGHN,
+                'Content-Type': 'application/json',
+            }
+        });
+        if (!response.ok) {
+            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+        console.error('Error:', error);
+    }
+}

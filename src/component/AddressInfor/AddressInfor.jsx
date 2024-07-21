@@ -9,30 +9,38 @@ import { logAgain } from "@utils/function";
 import { useNavigate } from "react-router-dom";
 import { FAIL, SUCCESS } from "@utils/message";
 
-const AddressInfor = ({ address, getDataAddress }) => {
+const AddressInfor = (props) => {
+    const { address, addressId, name, number, street, isDefault, provinceID, provinceName, districtID } = props;
+    const { districtName, wardCode, wardName, provinces, districts, wards } = props;
+    const { getDataAddress, copyAddress, onChangeInfor, onSelectProvince, onSelectDistrict, onSelectWard } = props;
+
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
-    const user = useUserPackageHook();
     const [state, setState] = useState({
         isLoading: false,
         isDeleteLoading: false,
-        updateAddress: false,
         inforAdress: {
             name: "",
             street: "",
             number: "",
+            provinceName: '',
+            provinceID: '',
+            districtName: '',
+            districtID: '',
+            wardName: '',
+            wardCode: '',
             isDefault: false
         }
     })
 
-    useEffect(() => {
-        if (address) {
-            state.inforAdress.name = address?.name;
-            state.inforAdress.street = address?.street;
-            state.inforAdress.number = address?.number;
-            state.inforAdress.isDefault = address?.isDefault;
-        }
-    }, [address])
+    // useEffect(() => {
+    //     if (address) {
+    //         state.inforAdress.name = address?.name;
+    //         state.inforAdress.street = address?.street;
+    //         state.inforAdress.number = address?.number;
+    //         state.inforAdress.isDefault = address?.isDefault;
+    //     }
+    // }, [address])
 
     const handleUpdateInfor = (e, key) => {
         state.inforAdress[key] = key === "isDefault" ? e.target.checked : e.target.value;
@@ -42,52 +50,60 @@ const AddressInfor = ({ address, getDataAddress }) => {
     const handleSaveAddress = async () => {
         setState((prev) => ({ ...prev, isLoading: true }));
 
-        await fetch(`${endpoint}/users/update_address/${address?._id}/`, {
-            method: "POST",
-            body: JSON.stringify(state?.inforAdress),
-            headers: {
-                'Content-Type': 'application/json',
-                'token': token,
-            },
-        }).then((response) => {
-            if (!response.ok) {
-                throw new Error("Netword response not ok")
-            }
-            return response.json()
-        }).then((json) => {
-            if (json?.success) {
-                setState((prev) => ({ ...prev, isLoading: false }));
-                getDataAddress();
-                message.success(SUCCESS);
-            } else {
-                if (json?.message === TOKEN_INVALID || json?.message === NOT_AUTHENTICATION) {
-                    logAgain();
-                    navigate("/login");
-                } else {
-                    setState((prev) => ({ ...prev, isLoading: false }));
-                    message.error(FAIL);
-                }
-            }
+        const body = {
+            name,
+            number,
+            street,
+            isDefault,
+            provinceID,
+            provinceName,
+            districtID,
+            districtName,
+            wardCode,
+            wardName
+        }
 
-        }).catch((error) => {
-            console.error("Error: ", error)
-        })
+        console.log({body});
+
+        // await fetch(`${endpoint}/users/update_address/${address?._id}/`, {
+        //     method: "POST",
+        //     body: JSON.stringify(body),
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'token': token,
+        //     },
+        // }).then((response) => {
+        //     if (!response.ok) {
+        //         throw new Error("Netword response not ok")
+        //     }
+        //     return response.json()
+        // }).then((json) => {
+        //     if (json?.success) {
+        //         setState((prev) => ({ ...prev, isLoading: false }));
+        //         getDataAddress();
+        //         message.success(SUCCESS);
+        //     } else {
+        //         if (json?.message === TOKEN_INVALID || json?.message === NOT_AUTHENTICATION) {
+        //             logAgain();
+        //             navigate("/login");
+        //         } else {
+        //             setState((prev) => ({ ...prev, isLoading: false }));
+        //             message.error(FAIL);
+        //         }
+        //     }
+
+        // }).catch((error) => {
+        //     console.error("Error: ", error)
+        // })
     }
 
     const handleUpdate = () => {
-        if (state.updateAddress) {
-            state.inforAdress.name = address?.name;
-            state.inforAdress.street = address?.street;
-            state.inforAdress.number = address?.number;
-            state.inforAdress.isDefault = address?.isDefault;
-        }
-        state.updateAddress = !state.updateAddress;
-        setState(prev => ({ ...prev }));
+        copyAddress(address);
     }
 
 
     const handleDelete = async () => {
-        setState((prev) => ({...prev, isDeleteLoading: true}));
+        setState((prev) => ({ ...prev, isDeleteLoading: true }));
         await fetch(`${endpoint}/users/delete_address/${address?._id}/`, {
             method: "POST",
             headers: {
@@ -102,14 +118,14 @@ const AddressInfor = ({ address, getDataAddress }) => {
         }).then((json) => {
             if (json?.success) {
                 getDataAddress()
-                setState((prev) => ({...prev, isDeleteLoading: false}));
+                setState((prev) => ({ ...prev, isDeleteLoading: false }));
                 message.success(SUCCESS)
             } else {
                 if (json?.message === TOKEN_INVALID || json?.message === NOT_AUTHENTICATION) {
                     logAgain();
                     navigate("/login");
                 } else {
-                    setState((prev) => ({...prev, isDeleteLoading: false}));
+                    setState((prev) => ({ ...prev, isDeleteLoading: false }));
                     message.error(FAIL);
                 }
             }
@@ -160,9 +176,28 @@ const AddressInfor = ({ address, getDataAddress }) => {
 
             {/* {updateAddress ? <UpdateAddress/> : <AddressInfor/>} */}
             {
-                state.updateAddress ?
+                addressId === address?._id ?
 
-                    <UpdateAddress isLoading={state.isLoading} address={address} inforAdress={state.inforAdress} handleUpdateInfor={handleUpdateInfor} handleSaveAddress={handleSaveAddress} /> :
+                    <UpdateAddress
+                        name={name}
+                        provinces={provinces}
+                        districts={districts}
+                        wards={wards}
+                        street={street}
+                        number={number}
+                        provinceID={provinceID}
+                        districtID={districtID}
+                        wardCode={wardCode}
+                        isDefault={isDefault}
+                        isLoading={state.isLoading}
+                        inforAdress={state.inforAdress}
+                        handleUpdateInfor={handleUpdateInfor}
+                        handleSaveAddress={handleSaveAddress}
+                        onChangeInfor={onChangeInfor}
+                        onSelectProvince={onSelectProvince}
+                        onSelectDistrict={onSelectDistrict}
+                        onSelectWard={onSelectWard}
+                    /> :
 
                     (
                         <div className=" p-3 flex flex-col gap-3 bg-[#fafafa]">

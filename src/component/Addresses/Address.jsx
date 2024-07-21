@@ -9,7 +9,7 @@ import { clear } from "../../redux/actions"
 import InsertAddress from "../InsertAddress/InsertAddress"
 import Loading from "../Loading/Loading"
 import SildeBar from "@pages/profile/SildeBar"
-import { logAgain } from "@utils/function"
+import { getDistricts, getProvinces, getWards, logAgain } from "@utils/function"
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"
 
 const Address = () => {
@@ -20,9 +20,28 @@ const Address = () => {
     const user = useUserPackageHook();
 
     const [address, setAddress] = useState(undefined)
+    const [addAddress, setAddAddress] = useState(false);
+
+    const [state, setState] = useState({
+        addressId: '',
+        provinceID: undefined,
+        provinceName: undefined,
+        districtID: undefined,
+        districtName: undefined,
+        wardCode: undefined,
+        wardName: undefined,
+        provinces: undefined,
+        districts: undefined,
+        wards: undefined,
+        name: undefined,
+        street: undefined,
+        number: undefined,
+        isDefault: false,
+    })
 
     useEffect(() => {
         getDataAddress();
+        getProvinceData();
     }, [])
 
     const getDataAddress = async () => {
@@ -38,10 +57,10 @@ const Address = () => {
             }
             return response.json()
         }).then((json) => {
-            if(json?.message === TOKEN_INVALID || json?.message === NOT_AUTHENTICATION){
+            if (json?.message === TOKEN_INVALID || json?.message === NOT_AUTHENTICATION) {
                 logAgain();
                 navigate("/login");
-            }else{
+            } else {
                 setAddress(json)
             }
         }).catch((error) => {
@@ -49,14 +68,58 @@ const Address = () => {
         })
     }
 
-    const [updateAddress, setUpdateAddress] = useState(false)
-    const [addAddress, setAddAddress] = useState(false)
-
-    const handleLogOut = () => {
-        dispatch(clear())
-        navigate('/')
+    const getProvinceData = async () => {
+        const response = await getProvinces();
+        if (response?.code === 200) {
+            setState((prev) => ({ ...prev, provinces: response?.data }))
+        }
     }
 
+    const onSelectProvince = async (value, option) => {
+        setState((prev) => ({ ...prev, provinceID: value, provinceName: option?.label }));
+        const response = await getDistricts(value);
+        if (response?.code === 200) {
+            setState((prev) => ({ ...prev, districts: response?.data }))
+        }
+    }
+
+    const onSelectDistrict = async (value, option) => {
+        setState((prev) => ({ ...prev, districtID: value, districtName: option?.label }));
+        const response = await getWards(value);
+        if (response?.code === 200) {
+            setState((prev) => ({ ...prev, wards: response?.data }));
+        }
+    }
+
+    const onSelectWard = async (value, option) => {
+        setState((prev) => ({ ...prev, wardCode: value, wardName: option?.label }))
+    }
+
+    const onChangeInfor = (value, type) => {
+        setState((prev) => ({
+            ...prev,
+            [type]: value,
+        }))
+    }
+
+    const copyAddress = (address) => {
+        const isDisplayEdit = state.addressId === address?._id;
+        
+        setState((prev) => ({
+            ...prev,
+            addressId: isDisplayEdit ? '' : address?._id,
+            name: isDisplayEdit ? '' : address?.name,
+            street: isDisplayEdit ? '' : address?.street,
+            number: isDisplayEdit ? '' : address?.number,
+            isDefault: isDisplayEdit ? '' : address?.isDefault,
+            // provinceID: isDisplayEdit ? '' : address?.provinceID,
+            // provinceName: isDisplayEdit ? '' : address?.provinceName,
+            // districtID: isDisplayEdit ? '' : address?.districtID,
+            // districtName: isDisplayEdit ? '' : address?.districtName,
+            // wardCode: isDisplayEdit ? '' : address?.wardCode,
+            // wardName: isDisplayEdit ? '' : address?.wardName,
+        }));
+    };
 
     return (
         <div>
@@ -69,13 +132,39 @@ const Address = () => {
                                 <span className="bg-black p-[1.5px] w-14 flex items-center justify-center"></span>
                             </div>
                             <div className=" flex">
-                                <SildeBar/>
+                                <SildeBar />
 
                                 <div className="w-3/4 p-5 flex">
 
                                     <div className=" w-1/2">
                                         {/* {updateAddress ? <UpdateAddress/> : <AddressInfor/>} */}
-                                        {address?.map((item) => { return <AddressInfor address={item} getDataAddress = {getDataAddress} /> })}
+                                        {address?.map((item) => {
+                                            return (
+                                                <AddressInfor
+                                                    addressId={state.addressId}
+                                                    provinces={state.provinces}
+                                                    districts={state.districts}
+                                                    wards={state.wards}
+                                                    address={item}
+                                                    name={state.name}
+                                                    street={state.street}
+                                                    number={state.number}
+                                                    isDefault={state.isDefault}
+                                                    provinceID={state.provinceID}
+                                                    provinceName={state.provinceName}
+                                                    districtID={state.districtID}
+                                                    districtName={state.districtName}
+                                                    wardCode={state.wardCode}
+                                                    wardName={state.wardName}
+                                                    getDataAddress={getDataAddress}
+                                                    copyAddress={copyAddress}
+                                                    onChangeInfor={onChangeInfor}
+                                                    onSelectProvince={onSelectProvince}
+                                                    onSelectDistrict={onSelectDistrict}
+                                                    onSelectWard={onSelectWard}
+                                                />
+                                            )
+                                        })}
 
                                     </div>
 
@@ -85,7 +174,27 @@ const Address = () => {
                                             {
                                                 addAddress &&
                                                 (
-                                                    <InsertAddress setAddAddress={setAddAddress} getDataAddress = {getDataAddress} />
+                                                    <InsertAddress
+                                                        setAddAddress={setAddAddress}
+                                                        getDataAddress={getDataAddress}
+                                                        name={state.name}
+                                                        number={state.number}
+                                                        street={state.street}
+                                                        isDefault={state.isDefault}
+                                                        provinces={state.provinces}
+                                                        provinceID={state.provinceID}
+                                                        provinceName={state.provinceName}
+                                                        wards={state.wards}
+                                                        wardCode={state.wardCode}
+                                                        wardName={state.wardName}
+                                                        districts={state.districts}
+                                                        districtID={state.districtID}
+                                                        districtName={state.districtName}
+                                                        onSelectProvince={onSelectProvince}
+                                                        onSelectDistrict={onSelectDistrict}
+                                                        onSelectWard={onSelectWard}
+                                                        onChangeInfor={onChangeInfor}
+                                                    />
                                                 )
                                             }
                                         </div>
