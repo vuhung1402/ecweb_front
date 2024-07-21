@@ -5,7 +5,7 @@ import PaymentMethod from "../../../component/AdminUI/OrderList/PaymentMethod";
 import { Button, message, Popconfirm } from "antd";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { data } from "../user/mock";
-import { getOrderDetail, updateStatuOrder } from "./function";
+import { getOrderDetail, refundMoney, updateStatuOrder } from "./function";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { logAgain } from "@utils/function";
 import { FAIL, SUCCESS } from "@utils/message";
@@ -40,6 +40,23 @@ const OrderDetail = (props) => {
     const updateStatus = async (user_id, Order_id, new_status_order) => {
         setState((prev) => ({ ...prev, isLoading: true }))
         const response = await updateStatuOrder(user_id, Order_id, new_status_order)
+        if (response?.success) {
+            message?.success(SUCCESS)
+            setState((prev) => ({ ...prev, isLoading: false }))
+        } else {
+            if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
+                logAgain();
+                navigate('/login');
+            } else {
+                message.error(FAIL);
+                setState((prev) => ({ ...prev, isLoading: false }))
+            }
+        }
+    }
+
+    const handleRedundMoney = async () => {
+        setState((prev) => ({ ...prev, isLoading: true }))
+        const response = await refundMoney(state.data?.Order_id);
         if (response?.success) {
             message?.success(SUCCESS)
             setState((prev) => ({ ...prev, isLoading: false }))
@@ -92,7 +109,7 @@ const OrderDetail = (props) => {
                                     </div>
                                     <div className=" flex flex-col w-1/2 gap-3">
                                         <PaymentInfo address={state?.data?.address} totalPrice={state.data?.total_price} name={state.data?.name} phone={state.data?.phone} price_pay={state.data?.price_pay} />
-                                        <PaymentMethod typePay={state.data?.type_pay} status = {state?.data?.status} />
+                                        <PaymentMethod typePay={state.data?.type_pay} status={state?.data?.status} />
                                     </div>
                                 </div>
                             </div>
@@ -119,6 +136,25 @@ const OrderDetail = (props) => {
                                         </Popconfirm>
                                     )
                                 })
+                            }
+                            {
+                                (state.data?.type_pay === 1 && state?.data?.status !== 0) &&
+                                <Popconfirm
+                                    title="Hoàn tiền"
+                                    description="Bạn muốn hoàn tiền đơn hàng này?"
+                                    cancelText="Huỷ"
+                                    okText="Xác nhận"
+                                    onConfirm={handleRedundMoney}
+                                    okButtonProps={{
+                                        loading: state.isLoading
+                                    }}
+                                >
+                                    <Button
+                                        type="primary"
+                                    >
+                                        Hoàn tiền
+                                    </Button>
+                                </Popconfirm>
                             }
                         </div>
                     </div>
