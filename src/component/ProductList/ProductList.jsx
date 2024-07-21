@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import CardProduct from "../CardProduct/CardProduct"
 import Loading from "../Loading/Loading"
 import ProductFilter from "../ProductFilter/ProductFilter"
-import { Empty } from "antd"
+import { Empty, List } from "antd"
 
 const ProductList = ({ handleSelect, data }) => {
 
@@ -20,13 +20,34 @@ const ProductList = ({ handleSelect, data }) => {
 
                 {data === undefined && (
                     <div className="w-full h-full">
-                         <Loading />
+                        <Loading />
                     </div>
                 )}
 
-                {data?.length === 0 && <Empty />}
+                {/* {data?.length === 0 && <Empty />} */}
 
-                <div className=" grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-4 xl:gap-x-10">
+                <List
+                    pagination = {{
+                        hideOnSinglePage: true,
+                        pageSize: 16
+                    }}
+                    grid={{
+                        gutter: 20,
+                        xs: 1,
+                        sm:2,
+                        xl:3,
+                    }}
+                    dataSource={data}
+                    renderItem={(item) => (
+                        <List.Item>
+                            <div>
+                                <CardProduct data={item} />
+                            </div>
+                        </List.Item>
+                    )}
+                />
+
+                {/* <div className=" grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-4 xl:gap-x-10">
                     {
                         data?.map((item, index) => {
                             return (
@@ -36,7 +57,7 @@ const ProductList = ({ handleSelect, data }) => {
                             )
                         })
                     }
-                </div>
+                </div> */}
 
             </div>
         </div>

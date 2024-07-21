@@ -10,6 +10,8 @@ import { formatCurrencyVN } from '@utils/function';
 import { useDispatch } from 'react-redux';
 import { clear } from '@redux/actions';
 import { TOKEN_INVALID } from '@utils/error';
+import './style.scss'
+import Loading from '@component/Loading/Loading';
 
 const ProductList = (props) => {
     const { idCategory, subCategory, products, skeletonLoading } = props;
@@ -182,40 +184,50 @@ const ProductList = (props) => {
     };
 
     return (
-        <div>
-            <div className='flex gap-3 items-center justify-between mb-3 px-2'>
-                <div className=' flex items-center gap-3'>
-                    <Button onClick={() => handleOpenModal('edit', idCategory)} icon={<EditOutlined />} type='primary' >
-                        Sửa danh mục
-                    </Button>
-
-                    <Button onClick={() => navigate('/admin/product/new')} icon={<PlusOutlined />} type='primary' >
-                        Thêm sản phẩm
-                    </Button>
-                </div>
-                <DropDownSubCategory
-                    name={state.name}
-                    idCategory={idCategory}
-                    subCategory={subCategory}
-                    idSubCategory={state.idSubCategory}
-                    handleChangeSubCategory={handleChangeSubCategory}
-                    handleSelect={handleSelect}
-                    onNameChange={onNameChange}
-                    getData={getData}
-                />
-            </div>
+        <div
+            style={{
+                height: 'calc(100vh - 80px)'
+            }}
+        >
             {
-                !skeletonLoading &&
-                <Table
-                    columns={columns}
-                    dataSource={products}
-                    pagination={{
-                        hideOnSinglePage: true,
-                        pageSize: 30
-                    }}
-                />
+                products === undefined ? <Loading /> :
+                    <>
+                        <div className='flex gap-3 items-center justify-between mb-3 px-2'>
+                            <div className=' flex items-center gap-3'>
+                                <Button onClick={() => handleOpenModal('edit', idCategory)} icon={<EditOutlined />} type='primary' >
+                                    Sửa danh mục
+                                </Button>
+
+                                <Button onClick={() => navigate('/admin/product/new')} icon={<PlusOutlined />} type='primary' >
+                                    Thêm sản phẩm
+                                </Button>
+                            </div>
+                            <DropDownSubCategory
+                                name={state.name}
+                                idCategory={idCategory}
+                                subCategory={subCategory}
+                                idSubCategory={state.idSubCategory}
+                                handleChangeSubCategory={handleChangeSubCategory}
+                                handleSelect={handleSelect}
+                                onNameChange={onNameChange}
+                                getData={getData}
+                            />
+                        </div>
+                        {
+                            !skeletonLoading &&
+                            <Table
+                                rootClassName={`${products.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
+                                columns={columns}
+                                dataSource={products}
+                                pagination={{
+                                    hideOnSinglePage: true,
+                                    pageSize: 10
+                                }}
+                            />
+                        }
+                        <Skeleton loading={skeletonLoading} />
+                    </>
             }
-            <Skeleton loading={skeletonLoading} />
         </div>
     )
 }
