@@ -17,11 +17,11 @@ const Products = (props) => {
     const [state, setState] = useState({
         isModalOpen: false,
         isModalDeleteOpen: false,
-        category: [],
+        category: undefined,
         deleteTab: '',
         activeKey: '',
         modalType: '',
-        products: [],
+        products: undefined,
         dataTest: [],
         skeletonLoading: false,
     });
@@ -56,8 +56,12 @@ const Products = (props) => {
 
     const onChangeTab = (newActiveKey) => {
         localStorage.setItem('category_id', newActiveKey);
-        state.activeKey = newActiveKey;
-        setState((prev) => ({ ...prev }))
+        // state.activeKey = newActiveKey;
+        setState((prev) => ({ 
+            ...prev, 
+            activeKey: newActiveKey, 
+            products: undefined,
+         }))
     };
 
     const onEdit = (targetKey, action) => {
@@ -139,7 +143,7 @@ const Products = (props) => {
     return (
         <>
             {
-                !state.category ? <Loading /> :
+                state.category === undefined ? <Loading /> :
                     (
                         <div className="w-full h-full p-4">
                             <Tabs
