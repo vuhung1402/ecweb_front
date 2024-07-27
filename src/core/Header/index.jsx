@@ -103,32 +103,26 @@ const Header = () => {
         };
     };
 
-    const classNameOfMenu = "px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]";
-
-    const handleNavigate = (route, key) => {
-        navigate(
-            { pathname: route },
-            { state: { key: key }}
-        );
-    };
-
     const menuContent = [
         {
             key: 'header-menu-1',
             label: 'TRANG CHỦ',
+            route: '/'
         },
         {
-            key: 'header-menu-2',
+            key: 'product',
+            type: 'product',
             label: 'SẢN PHẨM',
             children: category,
         },
         {
             key: 'header-menu-3',
             label: 'CỬA HÀNG',
+            route: '/store'
         },
         {
             key: 'header-menu-4',
-            label: 'CỬA HÀNG',
+            label: 'CHÍNH SÁCH',
             children: policyTitle,
         },
     ];
@@ -152,7 +146,31 @@ const Header = () => {
     };
 
     const handleNavbarClick = (item) => {
-        console.log({item});
+        const sidebarElement = document.getElementById('navbar-mobile');
+
+        if (sidebarElement) {
+            const clickEvent = new MouseEvent('click', {
+                bubbles: true,
+                cancelable: true,
+                view: window
+            });
+            sidebarElement.dispatchEvent(clickEvent);
+        };
+
+        if (item.keyPath[item.keyPath?.length - 1] === 'product') {
+            navigate(
+                { pathname: `/products/${item?.item?.props?.route}` },
+                { state: { key: item?.key }}
+            );
+
+            return;
+        };
+
+        navigate({
+            pathname: item?.item?.props?.route,
+        });
+
+
     };
 
     return (
@@ -177,66 +195,24 @@ const Header = () => {
                     />
                 }            
             >
-                <div className="flex md:hidden cursor-pointer">
+                <div id="navbar-mobile" className="flex md:hidden cursor-pointer">
                     <IconBars />
                 </div>
             </Popover>
 
-            <nav className="menu hidden md:flex">
-                <ul className="font-medium">
-                    <li className="px-3 cursor-pointer main-menu">
-                        <div onClick={() => navigate("/")}>TRANG CHỦ</div>
-                    </li>
-                    <li className="px-3 cursor-pointer main-menu">
-                        <div onClick={() => handleNavigate('/products/all')}>SẢN PHẨM ▾</div>
-                        <ul className="sub-menu">
-                            {
-                                category?.map((item, index) => {
-                                    return (
-                                        <li className="relative" key={`category-navbar-${index}`}>
-                                            <div
-                                                className="px-4 py-2 flex items-center gap-10 justify-between cursor-pointer hover:text-[rgb(0,4,255)]"
-                                            >
-                                                <div>{item?.label}</div>
-                                                <div>▾</div>
-                                            </div>
-                                            <ul className="border third-menu">
-                                                {
-                                                    item?.children?.map((children, index) => {
-                                                        return (
-                                                            <li key={`category-children-${index}`}>
-                                                                <div
-                                                                    onClick={() => handleNavigate(`/products/${children?.route}`, children?.key)}
-                                                                    className={`${classNameOfMenu}`}
-                                                                >
-                                                                    {children?.label}
-                                                                </div>
-                                                            </li>
-                                                        )
-                                                    })
-                                                }
-                                            </ul>
-                                        </li>
-                                    )
-                                })
-                            }
-                        </ul>
-                    </li>
-                    <li className="px-3 cursor-pointer main-menu"><div>CỬA HÀNG</div></li>
-                    <li className="px-3 cursor-pointer z-[999] main-menu">
-                        <div>CHÍNH SÁCH ▾</div>
-                        <ul className="sub-menu text-[14px]">
-                            {policyTitle.map((item, index) => {
-                                return (
-                                    <li key={`policy-header-menu-${index}`}>
-                                        <div className="px-4 py-2 flex items-center justify-between cursor-pointer hover:text-[rgb(0,4,255)]">{item.label}</div>
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
+            <div className="h-full hidden md:flex flex-grow">
+                <Menu
+                    className="font-medium flex items-center justify-center"
+                    rootClassName="!border-none w-full"
+                    mode="horizontal"
+                    theme="light"
+                    items={menuContent}
+                    multiple={false}
+                    onClick={handleNavbarClick}
+                    onOpenChange={handleNavBarChange}
+                />
+            </div>
+
             <div className="flex items-center gap-5">
                 <div className="cursor-pointer relative">
                     <Popover
