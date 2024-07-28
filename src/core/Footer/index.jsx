@@ -22,7 +22,7 @@ const Footer = () => {
                     </Space.Compact>
                 </div>
             </div>
-            <div className="px-6 xl:px-0 mx-auto w-full max-w-screen-xl py-6 lg:py-8">
+            <div className="px-6 mx-auto w-full max-w-screen-xl py-6 lg:py-8">
                 <div className="md:flex md:justify-between">
                     <div className="mb-6 md:mb-0 flex flex-col gap-3">
                         <span className="text-[20px] font-medium whitespace-nowrap dark:text-white uppercase">
