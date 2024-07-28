@@ -29,7 +29,10 @@ const policyTitle = [
 
 const accountMenuClassName = 'cursor-pointer hover:bg-[rgb(239,239,239)] rounded-md px-3 py-[5px] transition-colors duration-200';
 
-const Header = () => {
+const Header = (props) => {
+
+    const { visible = true, handleMobileNavOpenChange } = props;
+
     const user = useUserPackageHook();
     const numOfCart = useNumOfCartPackageHook();
 
@@ -169,12 +172,10 @@ const Header = () => {
         navigate({
             pathname: item?.item?.props?.route,
         });
-
-
     };
 
     return (
-        <header className="relative bg-white px-4 md:px-20 lg:px-40">
+        <header className={`relative w-full bg-white px-4 md:px-20 lg:px-40 ${visible ? 'header-visible' : 'header-hidden'}`}>
             <div className="relative cursor-pointer hidden md:flex">
                 <HeaderSearch />
             </div>
@@ -183,6 +184,7 @@ const Header = () => {
                 trigger={"click"}
                 rootClassName="w-screen navbar-mobile"
                 arrow={false}
+                onOpenChange={handleMobileNavOpenChange}
                 content={
                     <Menu
                         className="font-medium w-full h-full overflow-y-auto"

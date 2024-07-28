@@ -4,7 +4,7 @@ const AppRoutes = [
     {
         path: '/',
         Component: Page?.HomePage,
-        defaultLayout: true,
+        defaultLayout: false,
     },
     {
         path: '/login',

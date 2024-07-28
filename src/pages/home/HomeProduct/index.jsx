@@ -17,7 +17,7 @@ const HomeProduct = (props) => {
                 {products.map((item, index) => {
                     return (
                         <div key={item?.id}>
-                            <MotionBox animation={fadeIn(0.3 + (0.2 * index))} className="relative">
+                            <MotionBox animation={fadeIn(0.3 + (0.1 * index))} className="relative">
                                 <CardProduct data={item}/>
                             </MotionBox>
                         </div>

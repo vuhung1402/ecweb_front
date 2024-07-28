@@ -3,9 +3,11 @@ import { Button } from "antd";
 import MotionBox from "@component/MotionBox";
 import { fadeIn } from "@utils/animation";
 
+import Header from "@core/Header";
 import HomeProduct from "./HomeProduct";
 import ShopCategory from "./ShopCategory";
 import Sponsor from "./Sponsor";
+import Footer from "@core/Footer";
 
 import { getProducts } from "./function";
 
@@ -16,6 +18,8 @@ const Home = () => {
 
     const [state, setState] = useState({
         products: [],
+        position: window.scrollY,
+        visible: false,
     });
 
     const handleGetProducts = async () => {
@@ -24,30 +28,36 @@ const Home = () => {
     };
 
     useEffect(() => {
-        const header = document.getElementById('app-header');
         handleGetProducts();
-
-        if (header) header.style.display = 'none';
-
-        const handleScroll = () => {
-            if (window.scrollY >= window.innerHeight - 300) {
-                if (header) header.style.display = 'block';
-            } else {
-                if (header) header.style.display = 'none';
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
     }, []);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            let moving = window.scrollY;
+            setState(prev => ({...prev, position: moving, visible: moving < 60 ? false : state.position > moving}));
+        };
+
+        document.addEventListener("scroll", handleScroll);
+
+        return () => {
+            document.removeEventListener("scroll", handleScroll);
+        };
+    });
+
+    const handleMobileNavOpenChange = (event) => {
+        document.body.style.overflow = event ? 'hidden' : 'auto';
+    };
+
     return (
-        <div className="w-full">
+        <div className="w-screen h-screen">
+            <div className="flex top-0 fixed w-full justify-center z-[999]" id="app-header">
+                <Header
+                    visible={state.visible}
+                    handleMobileNavOpenChange={handleMobileNavOpenChange}
+                />
+            </div>
             <div
-                className="w-full h-screen relative"
+                className="w-full h-full relative"
                 style={{
                     backgroundImage: `url(${HomePageImage})`,
                     backgroundSize: 'cover',
@@ -81,6 +91,9 @@ const Home = () => {
             </div>
             <div className="w-full">
                 <Sponsor />
+            </div>
+            <div className="w-full">
+                <Footer />
             </div>
         </div>
     )

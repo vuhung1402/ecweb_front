@@ -30,7 +30,7 @@ const Sponsor = () => {
     return (
         <div className="sponsor">
             <div className="scroller" data-speed="fast">
-                <ul className="tag-list scroller__inner text-[30px] sm:text-[55px]">
+                <ul className="tag-list scroller__inner text-[30px] sm:text-[50px]">
                     <li>Manchester United</li>
                     <li>QH Shop</li>
                     <li>Barcelona</li>

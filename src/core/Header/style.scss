@@ -1,5 +1,5 @@
 header{
-    height: 80px;
+    height: 60px;
     z-index: 9999999;
     display: flex;
     justify-content: space-between;
@@ -26,4 +26,14 @@ header{
 .logo {
     font-size: 1.5rem;
     font-weight: 700;
+}
+
+.header-visible {
+    top: 0;
+    transition: top 0.4s ease-out;
+}
+  
+.header-hidden {
+    top: -80px;
+    transition: top 0.4s ease-out;
 }

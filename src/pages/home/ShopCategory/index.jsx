@@ -23,19 +23,19 @@ const ShopCategory = () => {
                         <Button>T-Shirt</Button>
                     </div>
                 </MotionBox>
-                <MotionBox animation={fadeIn(0.7)}>
+                <MotionBox animation={fadeIn(0.6)}>
                     <div className="w-[300px] h-[300px] flex flex-col items-center justify-center hover:scale-105 transition-all duration-200 cursor-pointer">
                         <IconJacket />
                         <Button>Jacket</Button>
                     </div>
                 </MotionBox>
-                <MotionBox animation={fadeIn(0.9)}>
+                <MotionBox animation={fadeIn(0.7)}>
                     <div className="w-[300px] h-[300px] flex flex-col items-center justify-center hover:scale-105 transition-all duration-200 cursor-pointer">
                         <IconPant />
                         <Button>Pant</Button>
                     </div>
                 </MotionBox>
-                <MotionBox animation={fadeIn(1.1)}>
+                <MotionBox animation={fadeIn(0.8)}>
                     <div className="w-[300px] h-[300px] flex flex-col items-center justify-center hover:scale-105 transition-all duration-200 cursor-pointer">
                         <IconCap />
                         <Button>Cap</Button>
