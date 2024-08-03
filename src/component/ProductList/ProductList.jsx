@@ -14,9 +14,9 @@ const ProductList = (props) => {
 
     return (
         <div className="bg-white w-full">
-            <div className="px-4 py-16 sm:px-6 sm:py-10 w-full lg:px-8 h-full">
-                <div className="flex justify-between items-center mb-4">
-                    <h2 className="select-none text-2xl font-bold text-gray-900 uppercase tracking-widest">Sản phẩm</h2>
+            <div className="px-4 sm:px-6 sm:py-10 w-full lg:px-8 h-full">
+                <div className="flex flex-col gap-3 sm:flex-row justify-between sm:items-center mb-4">
+                    <h2 className="select-none hidden sm:block text-2xl font-bold text-gray-900 uppercase tracking-widest">Sản phẩm</h2>
                     <ProductFilter handleSelect={handleSelect} />
                 </div>
 
