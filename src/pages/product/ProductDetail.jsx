@@ -73,7 +73,7 @@ const ProductDetail = () => {
                             </div>
                         ) :
                         (
-                            <div className="px-[85px] flex flex-col me:flex-row pt-7 w-full">
+                            <div className="px-10 me:px-[85px] flex flex-col me:flex-row pt-7 w-full">
                                 <div className="w-full me:w-2/3 me:min-w-[67%] h-fit">
                                     <ImagePreview
                                         imageArray={state.data?.array_image}
