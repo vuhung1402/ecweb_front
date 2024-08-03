@@ -95,8 +95,8 @@ const Products = () => {
     }
 
     return (
-        <div className="flex h-full">
-            <div className=" w-1/4">
+        <div className="flex flex-col lg:flex-row h-full">
+            <div className="w-full lg:w-1/4">
                 <Filter onClick={onClick} />
             </div>
             <div className="flex flex-grow w-full overflow-y-auto">

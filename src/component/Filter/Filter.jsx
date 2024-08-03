@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react"
 
 import { Menu } from 'antd'
 import { endpoint } from '../../api/api';
+import useWindowSize from "../../hooks/useWindowSize";
 
 import './style.scss';
 
 function Filter({ onClick }) {
 
-    const [category, setCategory] = useState([])
+    const [category, setCategory] = useState([]);
+
+    const iw = useWindowSize().width;
 
     useEffect(() => {
         fetch(`${endpoint}/category/getAllCategories`, {
@@ -27,17 +30,18 @@ function Filter({ onClick }) {
         }).catch((error) => {
             console.error("Error: ", error)
         })
-    }, [])
+    }, []);
 
+    const menuMode = iw > 1024 ? 'vertical' : 'horizontal';
+    
     return (
-        <div className='p-5 category-menu'>
+        <div className='p-5 category-menu w-full'>
             <Menu
                 onClick={onClick}
-                mode = "vertical"
-                className='!border-none font-medium text-[14px] tracking-widest uppercase select-none'
+                mode={menuMode}
+                className='!border-none font-bold text-[14px] tracking-widest uppercase select-none bg-[#f5f5f5]'
                 items={category}
                 multiple={false}
-                // mode='inline'
             />
         </div>
     )
