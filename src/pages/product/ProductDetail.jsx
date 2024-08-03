@@ -13,7 +13,7 @@ const ProductDetail = () => {
     const [state, setState] = useState({
         data: undefined,
         isLoadingPage: false,
-
+        currentImg: '',
     })
     const location = useLocation()
 
@@ -30,7 +30,11 @@ const ProductDetail = () => {
                 data: data?.product
             }))
         }
-    }
+    };
+
+    const handleGotoImage = (uid) => {
+        setState(prev => ({...prev, currentImg: uid}));
+    };
 
     const breadCrumb = [
         {
@@ -69,12 +73,18 @@ const ProductDetail = () => {
                             </div>
                         ) :
                         (
-                            <div className="px-[85px] flex pt-7 w-full">
-                                <div className="w-2/3 min-w-[67%] h-fit">
-                                    <ImagePreview imageArray={state.data?.array_image} />
+                            <div className="px-[85px] flex flex-col me:flex-row pt-7 w-full">
+                                <div className="w-full me:w-2/3 me:min-w-[67%] h-fit">
+                                    <ImagePreview
+                                        imageArray={state.data?.array_image}
+                                        currentImg={state.currentImg}
+                                    />
                                 </div>
                                 <div className="flex flex-grow">
-                                    <InfoProductDetail data={state.data} />
+                                    <InfoProductDetail
+                                        data={state.data}
+                                        handleGotoImage={handleGotoImage}
+                                    />
                                 </div>
                             </div>
                         )

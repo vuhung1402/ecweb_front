@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux"
 import { numOfCartPackage } from "@redux/actions"
 
 
-const InfoProductDetail = ({ data }) => {
+const InfoProductDetail = ({ data, handleGotoImage }) => {
     const [state, setState] = useState({
         number: 1,
         color: [],
@@ -35,6 +35,7 @@ const InfoProductDetail = ({ data }) => {
                         code: item?.code_color,
                         name: item?.name_color,
                         image: item?.image?.url,
+                        imageUid: item?.image?.uid,
                         invalid: item?.total_number_with_color === 0,
                         sizes: sizeArray,
                     });
@@ -80,6 +81,7 @@ const InfoProductDetail = ({ data }) => {
         state.sizes = objectColor?.sizes;
         state.selectColor = item;
         state.selectSize = {};
+        handleGotoImage(item?.imageUid)
         setState((prev) => ({ ...prev }));
     };
 
@@ -125,16 +127,15 @@ const InfoProductDetail = ({ data }) => {
 
     return (
         <div className=" w-full sticky h-fit top-20">
-            <div className=" text-[20px] font-semibold py-3 border-b-[1px]">{data?.name}</div>
-            <div className=" text-red-500 text-[18px] font-semibold opacity-[0.92] border-b-[1px] py-3">
+            <div className="text-3xl me:text-[20px] font-semibold py-3 border-b-[1px]">{data?.name}</div>
+            <div className="text-red-500 text-[18px] font-bold opacity-[0.92] border-b-[1px] py-3">
                 {formatCurrencyVN(data?.price)}
             </div>
-            <div id="text-name-color" className="text-[13px] font-light my-2" >{state.textColor?.toUpperCase()}</div>
-            <div className="pb-2 cursor-default flex gap-3 items-center">
+            <div id="text-name-color" className="text-[13px] font-light my-3" >{state.textColor?.toUpperCase()}</div>
+            <div className="mb-3 cursor-default flex gap-3 items-center">
                 {
                     state.color?.map((item, index) => {
                         return (
-
                             <div
                                 onMouseEnter={() => handleChangeNameColor(item?.name)}
                                 onClick={() => handleSelectColor(item)}
@@ -174,14 +175,14 @@ const InfoProductDetail = ({ data }) => {
                 })}
             </div>
 
-            <div className="flex items-center mt-4">
-                <div onClick={() => handleNumber("minus")} className="p-3 bg-[rgb(245,245,245)]">
+            <div className="flex gap-3 items-center mt-4">
+                <div onClick={() => handleNumber("minus")} className="p-3 bg-[rgb(245,245,245)] cursor-pointer hover:bg-opacity-60">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
                     </svg>
                 </div>
                 <input min={1} className=" outline-none border-none shadow-transparent w-28 text-center" value={state.number} type="number" />
-                <div onClick={() => handleNumber("plus")} className=" p-3 bg-[rgb(245,245,245)]">
+                <div onClick={() => handleNumber("plus")} className=" p-3 bg-[rgb(245,245,245)] cursor-pointer hover:bg-opacity-60">
                     <svg width="15" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                     </svg>
@@ -201,7 +202,7 @@ const InfoProductDetail = ({ data }) => {
                 onClick={handleAddToCart}
                 loading={state.loadingAddCart}
                 type="primary"
-                className=" w-full mt-3 p-4 !h-auto font-medium"
+                className=" w-full mt-3 p-4 !h-auto font-bold uppercase"
             >
                 Thêm vào giỏ hàng
             </Button>

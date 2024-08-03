@@ -1,8 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Carousel } from "antd";
 
-const ImagePreview = ({ imageArray }) => {
-    const [imageId, setImageId] = useState()
-    
+import './style.scss';
+
+const ImagePreview = ({ imageArray, currentImg }) => {
+    const [imageId, setImageId] = useState();
+
+    const carouselRef = useRef();
 
     const handleScroll = () => {
         const elements = document.querySelectorAll('div[id^="image-"]');
@@ -22,10 +26,12 @@ const ImagePreview = ({ imageArray }) => {
         });
     };
 
-    const handleNavigateImage = (href, id) => {
+    const handleNavigateImage = (id) => {
         const link = document.getElementById(id);
+        console.log({link});
         link.addEventListener('click', function (e) {
             e.preventDefault();
+            console.log(id?.split('-')[2]);
             setImageId(id?.split('-')[2])
             const targetId = link.getAttribute("href").slice(1);
             const targetElement = document.getElementById(targetId);
@@ -46,19 +52,32 @@ const ImagePreview = ({ imageArray }) => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    useEffect(() => {
+        if (!currentImg || !imageArray) return;
+
+        const index = imageArray.findIndex(item => item?.uid === currentImg);
+        if (index !== -1) {
+            carouselRef.current.goTo(index);
+            const targetElement = document.getElementById(`image-${index}`);
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: "smooth" });
+            };
+        };
+    },[currentImg]);
+
     return (
         <div className="flex gap-3 h-fit w-full">
-            <div className="flex flex-col gap-3 sticky top-20 h-fit">
+            <div className="hidden me:flex flex-col gap-3 sticky top-20 h-fit">
                 {
                     imageArray?.map((item, index) => {
                         const imageHref = `#image-${index}`
                         return (
-                            <a onClick={() => handleNavigateImage(imageHref, `small-image-${index}`)} href={imageHref} id={`small-image-${index}`} className={`w-[64px] h-[64px] cursor-pointer ${Number(imageId) === index ? 'border': ''}`}><img src={item?.url} /></a>
+                            <a onClick={() => handleNavigateImage(`small-image-${index}`)} href={imageHref} id={`small-image-${index}`} className={`w-[64px] h-[64px] cursor-pointer ${Number(imageId) === index ? 'border': ''}`}><img src={item?.url} /></a>
                         )
                     })
                 }
             </div>
-            <div className="flex flex-col gap-3 flex-grow px-6">
+            <div className="hidden me:flex flex-col gap-3 flex-grow px-6">
                 {
                     imageArray?.map((item, index) => {
                         return (
@@ -67,6 +86,19 @@ const ImagePreview = ({ imageArray }) => {
                     })
                 }
             </div>
+            <Carousel
+                rootClassName="w-full slide-show block me:hidden"
+                dots={{className: 'text-black'}}
+                ref={carouselRef}
+            >
+                {
+                    imageArray?.map((item, index) => {
+                        return (
+                           <img src={item?.url} className="w-full h-auto" />
+                        )
+                    })
+                }
+            </Carousel>
         </div>
     )
 }
