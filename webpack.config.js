@@ -22,6 +22,7 @@ module.exports = {
             "@utils": path.resolve(__dirname, "src", "utils"),
             "@redux": path.resolve(__dirname,"src", "redux"),
             "@api": path.resolve(__dirname,"src", "api"),
+            "@hooks": path.resolve(__dirname,"src", "hoooks"),
         }
     },
     module: {

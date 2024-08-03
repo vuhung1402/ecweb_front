@@ -187,7 +187,7 @@ const Header = (props) => {
                 onOpenChange={handleMobileNavOpenChange}
                 content={
                     <Menu
-                        className="font-medium w-full h-full overflow-y-auto"
+                        className="font-bold w-full h-full overflow-y-auto"
                         mode="inline"
                         theme="light"
                         openKeys={state.navbarMobileOpenkey}
@@ -204,7 +204,7 @@ const Header = (props) => {
 
             <div className="h-full hidden md:flex flex-grow">
                 <Menu
-                    className="font-medium flex items-center justify-center"
+                    className="font-bold flex items-center justify-center"
                     rootClassName="!border-none w-full"
                     mode="horizontal"
                     theme="light"
