@@ -33,8 +33,7 @@ const Orders = () => {
     }
 
     useEffect(() => {
-        getData(`?status=${localStorage.getItem("orderTab")}`);
-        setState((prev) => ({ ...prev, tab: Number(localStorage.getItem("orderTab")) }))
+        getData(`?status=0`);
     }, [])
 
     const onChangeTab = async (key) => {
