@@ -28,20 +28,8 @@ const ImagePreview = ({ imageArray, currentImg }) => {
 
     const handleNavigateImage = (id) => {
         const link = document.getElementById(id);
-        console.log({link});
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            console.log(id?.split('-')[2]);
-            setImageId(id?.split('-')[2])
-            const targetId = link.getAttribute("href").slice(1);
-            const targetElement = document.getElementById(targetId);
-
-            if (targetElement) {
-                targetElement.scrollIntoView({ behavior: "smooth" });
-            };
-        });
-
-    }
+        if (link) link.scrollIntoView({ behavior: "smooth" });
+    };
 
     useEffect(() => {
         const watchScroll = () => {
@@ -70,9 +58,8 @@ const ImagePreview = ({ imageArray, currentImg }) => {
             <div className="hidden me:flex flex-col gap-3 sticky top-20 h-fit">
                 {
                     imageArray?.map((item, index) => {
-                        const imageHref = `#image-${index}`
                         return (
-                            <a onClick={() => handleNavigateImage(`small-image-${index}`)} href={imageHref} id={`small-image-${index}`} className={`w-[64px] h-[64px] cursor-pointer ${Number(imageId) === index ? 'border': ''}`}><img src={item?.url} /></a>
+                            <a onClick={() => handleNavigateImage(`image-${index}`)} id={`small-image-${index}`} className={`w-[64px] h-[64px] cursor-pointer ${Number(imageId) === index ? 'border': ''}`}><img src={item?.url} /></a>
                         )
                     })
                 }
