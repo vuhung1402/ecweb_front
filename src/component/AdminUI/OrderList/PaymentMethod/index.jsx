@@ -24,10 +24,17 @@ const PaymentMethod = (props) => {
                     </div>
                 }
                 {
-                    (typePay === 1 && status > 0) &&
-                        <div className=" text-green-500">
-                            Đã thanh toán 
-                        </div>
+                    (typePay === 1 && status > 0 && status <= 4) &&
+                    <div className=" text-green-500">
+                        Đã thanh toán
+                    </div>
+                }
+
+                {
+                    (typePay === 1 && (status === 5 || status === 6)) &&
+                    <div className=" text-green-500">
+                        Đã hoàn tiền
+                    </div>
                 }
 
                 {/* <div className=" text-green-500">

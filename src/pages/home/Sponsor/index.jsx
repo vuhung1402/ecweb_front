@@ -5,10 +5,11 @@ import "./style.scss";
 const Sponsor = () => {
     useEffect(() => {
         const scrollers = document.querySelectorAll(".scroller");
-
-        if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-            addAnimation();
-        }
+        addAnimation();
+        // if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        //     console.log("sponsor")
+        //     addAnimation();
+        // }
 
         function addAnimation() {
             scrollers.forEach((scroller) => {

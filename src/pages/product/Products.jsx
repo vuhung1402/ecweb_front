@@ -9,12 +9,20 @@ const Products = () => {
     const navigate = useNavigate();
     const params = useParams();
     const location = useLocation();
-    const [data, setData] = useState();
+    // const [data, setData] = useState();
+
+    const [state, setState] = useState({
+        data: [],
+        isLoadingPage: false,
+    })
 
     useEffect(() => {
         const regex = /[?&]sort_by=([^&]*)/;
         const match = regex.exec(location?.search);
-        setData(undefined);
+        setState((prev) => ({
+            ...prev,
+            isLoadingPage: true,
+        }))
 
         fetch(`${endpoint}/product/getAllProductList/${location?.state?.key ? location?.state?.key : 'all'}/${match?.[1].length > 0 ? `${location?.state?.value}` : `1`}`, {
             method: "GET",
@@ -22,13 +30,18 @@ const Products = () => {
                 'Content-Type': 'application/json',
             },
         }).then((response) => {
-            if(!response.ok){
+            if (!response.ok) {
                 throw new Error("Netword response not ok")
             }
             return response.json()
         }).then((json) => {
-            if(json?.success){
-                setData(json?.productListAll_DataFormat)
+            if (json?.success) {
+                // setData(json?.productListAll_DataFormat)
+                setState((prev) => ({
+                    ...prev,
+                    data: json?.productListAll_DataFormat,
+                    isLoadingPage: false
+                }))
             }
 
         }).catch((error) => {
@@ -40,8 +53,9 @@ const Products = () => {
 
     //khi nhan vao danh muc
     const onClick = (item) => {
-        if(params?.category !== item?.item?.props?.route){
-            setData(undefined); 
+        console.log({item})
+        if (params?.category !== item?.item?.props?.route) {
+            // setData(undefined); 
         }
         //call api
         //api tra du lieu thanh cong set vao state data
@@ -86,7 +100,7 @@ const Products = () => {
                 <Filter onClick={onClick} />
             </div>
             <div className="flex flex-grow w-full overflow-y-auto">
-                <ProductList handleSelect={handleSelect} data = {data} />
+                <ProductList handleSelect={handleSelect} data={state.data} isLoadingPage={state.isLoadingPage} />
             </div>
         </div>
     )

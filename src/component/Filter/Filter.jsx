@@ -5,7 +5,7 @@ import { endpoint } from '../../api/api';
 
 import './style.scss';
 
-function Filter({onClick}){
+function Filter({ onClick }) {
 
     const [category, setCategory] = useState([])
 
@@ -21,7 +21,7 @@ function Filter({onClick}){
             }
             return response.json()
         }).then((json) => {
-            if(json?.success){
+            if (json?.success) {
                 setCategory(json?.formattedData)
             }
         }).catch((error) => {
@@ -29,13 +29,15 @@ function Filter({onClick}){
         })
     }, [])
 
-    return(
+    return (
         <div className='p-5 category-menu'>
             <Menu
-              onClick={onClick}
-              className='!border-none font-medium text-[14px] tracking-widest uppercase select-none'
-              items={category}
-              mode='inline'
+                onClick={onClick}
+                mode = "vertical"
+                className='!border-none font-medium text-[14px] tracking-widest uppercase select-none'
+                items={category}
+                multiple={false}
+                // mode='inline'
             />
         </div>
     )

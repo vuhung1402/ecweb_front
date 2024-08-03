@@ -11,9 +11,10 @@ import { updateStatuOrder } from "@pages/admin/orders/function";
 import { FAIL, SUCCESS } from "@utils/message";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import './style.scss'
+import Loading from "@component/Loading/Loading";
 
 const OrderList = (props) => {
-    const { orders, tab } = props;
+    const { orders, tab, isLoadingList } = props;
     const { getData } = props;
 
     const [state, setState] = useState({
@@ -87,10 +88,10 @@ const OrderList = (props) => {
                         <Button
                             onClick={() => navigate(
                                 {
-                                    pathname : `/admin/orderDetail/${record?.Order_id}`
+                                    pathname: `/admin/orderDetail/${record?.Order_id}`
                                 },
                                 {
-                                    state:{
+                                    state: {
                                         user_id: record?.user_id,
                                     }
                                 }
@@ -117,6 +118,10 @@ const OrderList = (props) => {
                                     </Popconfirm>
                                 )
                             })
+                        }
+
+                        {
+                            
                         }
                     </Space>
                 )
@@ -174,17 +179,20 @@ const OrderList = (props) => {
                 </div>
                 <Button type="primary">Áp dụng</Button>
             </div>
-            <Table
-                rootClassName={`${orders.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
-                // className="flex-grow"
-                columns={columns}
-                // sticky={true}
-                dataSource={orders}
-                pagination={{
-                    hideOnSinglePage: true,
-                    pageSize: 10
-                }}
-            />
+            {
+                isLoadingList ? <Loading /> :
+                    <Table
+                        rootClassName={`${orders.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
+                        // className="flex-grow"
+                        columns={columns}
+                        // sticky={true}
+                        dataSource={orders}
+                        pagination={{
+                            hideOnSinglePage: true,
+                            pageSize: 10
+                        }}
+                    />
+            }
         </div>
     )
 }

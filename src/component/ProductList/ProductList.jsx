@@ -4,7 +4,9 @@ import Loading from "../Loading/Loading"
 import ProductFilter from "../ProductFilter/ProductFilter"
 import { Empty, List } from "antd"
 
-const ProductList = ({ handleSelect, data }) => {
+const ProductList = (props) => {
+    const { data, isLoadingPage } = props;
+    const { handleSelect } = props;
 
     //truyen props dataSample
 
@@ -18,46 +20,36 @@ const ProductList = ({ handleSelect, data }) => {
                     <ProductFilter handleSelect={handleSelect} />
                 </div>
 
-                {data === undefined && (
+                {isLoadingPage && (
                     <div className="w-full h-full">
                         <Loading />
                     </div>
                 )}
 
-                {/* {data?.length === 0 && <Empty />} */}
-
-                <List
-                    pagination = {{
-                        hideOnSinglePage: true,
-                        pageSize: 16
-                    }}
-                    grid={{
-                        gutter: 20,
-                        xs: 1,
-                        sm:2,
-                        xl:3,
-                    }}
-                    dataSource={data}
-                    renderItem={(item) => (
-                        <List.Item>
-                            <div>
-                                <CardProduct data={item} />
-                            </div>
-                        </List.Item>
-                    )}
-                />
-
-                {/* <div className=" grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-4 xl:gap-x-10">
-                    {
-                        data?.map((item, index) => {
-                            return (
-                                <div key={`product-card-${index}`}>
-                                    <CardProduct data={item} />
-                                </div>
-                            )
-                        })
-                    }
-                </div> */}
+                {
+                    !isLoadingPage && (
+                        <List
+                            pagination={{
+                                hideOnSinglePage: true,
+                                pageSize: 16
+                            }}
+                            grid={{
+                                gutter: 20,
+                                xs: 1,
+                                sm: 2,
+                                xl: 3,
+                            }}
+                            dataSource={data}
+                            renderItem={(item) => (
+                                <List.Item>
+                                    <div>
+                                        <CardProduct data={item} />
+                                    </div>
+                                </List.Item>
+                            )}
+                        />
+                    )
+                }
 
             </div>
         </div>

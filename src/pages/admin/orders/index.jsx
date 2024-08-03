@@ -14,6 +14,7 @@ const Orders = () => {
     const [state, setState] = useState({
         data: undefined,
         tab: 0,
+        isLoadingList: false,
     })
     const navigate = useNavigate();
 
@@ -32,12 +33,15 @@ const Orders = () => {
     }
 
     useEffect(() => {
-        getData(`?status=0`);
+        getData(`?status=${localStorage.getItem("orderTab")}`);
+        setState((prev) => ({ ...prev, tab: Number(localStorage.getItem("orderTab")) }))
     }, [])
 
     const onChangeTab = async (key) => {
-        setState((prev)  => ({ ...prev, tab: key }));
+        setState((prev) => ({ ...prev, tab: key, isLoadingList: true }));
+        localStorage.setItem("orderTab", key);
         await getData(`?status=${key}`);
+        setState((prev) => ({ ...prev, tab: key, isLoadingList: false }));
     }
 
     return (
@@ -48,12 +52,18 @@ const Orders = () => {
                     <div className="w-full h-full p-4">
                         <Tabs
                             onChange={onChangeTab}
+                            activeKey={state.tab}
                             items={statusOrder.map((item) => {
                                 return {
                                     label: item?.name,
                                     key: item?.status,
                                     children: (
-                                        <OrderList orders = {state.data} tab = {state?.tab} getData = {getData} />
+                                        <OrderList
+                                            orders={state.data}
+                                            tab={state?.tab}
+                                            isLoadingList={state.isLoadingList}
+                                            getData={getData}
+                                        />
                                     )
                                 }
                             })}

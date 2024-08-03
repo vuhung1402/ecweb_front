@@ -42,14 +42,14 @@ const SildeBar = ({tab, handleChangeTab}) => {
         <div className="w-full h-auto flex flex-col items-center pt-5 gap-5">
             <div className="flex items-center w-[85%] gap-4 p-2">
                 <Avatar icon={<UserOutlined />} />
-                <div>User 1</div>
+                {/* <div>User 1</div> */}
             </div>
             {sidebarTitle.map((item, index) => {
                 return (
                     <div
                         onClick={() => handleChangeTab(index)}
                         className={`flex gap-2 items-center w-[85%] p-2 cursor-pointer hover:bg-[rgb(219,219,219)] 
-                                    rounded-lg transition-all duration-300 ${tab === index ? ' bg-black opacity-60 text-white' : 'opacity-100'}`}
+                                    rounded-lg transition-all duration-300 ${Number(tab) === index ? ' bg-black opacity-60 text-white' : 'opacity-100'}`}
                         key={`sidebar-${index}`}
                     >
                         {item.icon}

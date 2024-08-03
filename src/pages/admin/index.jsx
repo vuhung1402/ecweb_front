@@ -27,10 +27,10 @@ const Admin = () => {
     },[])
 
     useEffect(() => {
-        state.tab = localStorage.getItem('currentTab');
+        // state.tab = localStorage.getItem('currentTab');
         const activeTab = localStorage.getItem('activeTab');
         activeTab?.length > 0 ? navigate({search: activeTab}) : navigate({search: `?url=${state.tab}`});
-        setState((prev) => ({ ...prev }));
+        setState((prev) => ({ ...prev, tab: localStorage.getItem('currentTab') }));
     },[])
 
     const handleChangeTab = (tab) => {
