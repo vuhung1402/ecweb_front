@@ -7,7 +7,7 @@ const Footer = () => {
     return(
         <div className="bg-white border-t-2 w-full">
             <div className="bg-[#f3f3f3] w-full">
-                <div className="flex flex-col px-6 sm:flex-row max-w-xl xl:max-w-7xl text-base items-center gap-4 border-b-[1px] mx-auto py-3">
+                <div className="flex flex-col px-6 sm:flex-row max-w-7xl text-base items-center gap-4 border-b-[1px] mx-auto py-3">
                     <div className="flex items-center gap-2">
                         <IconMail />
                         <div>Đăng ký nhận tin</div>
