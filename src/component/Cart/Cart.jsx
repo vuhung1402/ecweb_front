@@ -108,13 +108,16 @@ const Cart = () => {
     }
 
     return (
-        <div className=" h-full px-8 mb-1">
-            <div className=" flex flex-col items-center justify-center font-semibold text-5xl gap-2 p-5 border-b-[1px]">
-                <div className=" font-semibold text-3xl">Giỏ hàng của bạn</div>
+        <div className="w-full h-full px-4 md:px-8 mb-1">
+            <div className="w-full flex flex-col items-center justify-center font-semibold text-5xl gap-2 p-5 border-b-[1px]">
+                <div className="font-semibold text-3xl text-center">Giỏ hàng của bạn</div>
                 <span className="bg-black p-[1.5px] w-14"></span>
             </div>
-            <div className=" flex p-4">
-                <div className=" w-1/2 h-[400px] overflow-y-auto">
+            <div
+                className="flex flex-col md:flex-row px-5 md:px-0 py-4"
+                style={{height: 'calc(100% - 88px)'}}
+            >
+                <div className="w-full md:w-2/3 md:h-full md:overflow-y-auto">
                     {state.data?.items?.length === 0 && <div className="">Giỏ hàng của bạn đang trống</div>}
                     {
                         state.data?.items?.map((item) => {
@@ -130,12 +133,12 @@ const Cart = () => {
                         })
                     }
                 </div>
-                <div className=" w-1/2 px-4 sticky">
-                    <div className=" w-3/4 p-5 border">
+                <div className="w-full md:w-1/3 md:pl-4 md:sticky">
+                    <div className="w-full p-5 border">
                         <h1 className=" border-b-[1px] text-lg font-semibold py-3">Thông tin đơn hàng</h1>
                         <div className=" flex items-center justify-between border-b-[1px] py-3">
                             <p className=" font-bold">Tổng tiền:</p>
-                            <p className=" text-red-600 font-semibold">{formatCurrencyVN(state.totalPrice)}</p>
+                            <p className="text-red-600 text-xl font-semibold">{formatCurrencyVN(state.totalPrice)}</p>
                         </div>
                         <div className=" text-sm py-3">
                             Phí vận chuyển sẽ được tính ở trang thanh toán.
@@ -143,7 +146,7 @@ const Cart = () => {
                         </div>
                         <Button
                             onClick={handleCheckout}
-                            className=" w-full mt-3 p-4 !h-auto font-medium uppercase text-xl"
+                            className="w-full mt-3 p-3 !h-auto font-medium uppercase text-xl"
                             type="primary"
                         >
                             Thanh toán

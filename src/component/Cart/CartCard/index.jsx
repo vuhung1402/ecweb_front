@@ -25,7 +25,7 @@ const CartCard = (props) => {
     }
 
     return (
-        <div className="p-1 border-b-[1px] flex justify-between">
+        <div className="py-5 px-1 border-b-[1px] flex justify-between">
             <div className=" flex gap-2 items-center">
                 <Checkbox onChange={(e) => handleSelectItem(e, data)} />
                 <div className=" flex gap-2">
@@ -34,11 +34,11 @@ const CartCard = (props) => {
                         <a className=" mb-1 hover:text-blue-500" href="#">{data?.product_name}</a>
                         <div className=" mb-1 text-sm font-light">{data?.color}/{data?.size}</div>
                         <div className=" flex items-center">
-                            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 font-bold">
+                            <button class="bg-gray-300 hover:bg-gray-400 transition-colors duration-200 text-gray-800 px-4 font-bold">
                                 -
                             </button>
                             <span className=" px-4 bg-[#f5f5f5]">{state?.quantity}</span>
-                            <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 font-bold">
+                            <button class="bg-gray-300 hover:bg-gray-400 transition-colors duration-200 text-gray-800 px-4 font-bold">
                                 +
                             </button>
                         </div>

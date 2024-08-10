@@ -4,7 +4,7 @@ import React from "react"
 
 const CartPage = () => {
     return(
-        <div className=" w-full h-full">
+        <div className="w-full h-full">
             <Cart/>
         </div>
     )
