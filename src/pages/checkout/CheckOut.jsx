@@ -3,12 +3,14 @@ import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { endpoint } from "../../api/api"
 import React, { useEffect, useState } from "react"
 import { formatCurrencyVN, logAgain } from "@utils/function"
-import { Button, Input, Radio, Select, Space, message } from "antd"
+import { Button, Input, Radio, Select, Space, message, Collapse } from "antd"
 import { getAddressInfo, order } from "./function"
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"
 import { paymentMethod } from "./mock"
 import ProductCard from "./productCard"
 import { FAIL } from "@utils/message"
+import IconCart from '@icon/iconCart.svg';
+import useWindowSize from "../../hooks/useWindowSize";
 
 import './style.scss';
 
@@ -17,6 +19,8 @@ const CheckOut = () => {
     const user = useUserPackageHook();
     const navigate = useNavigate();
     const location = useLocation();
+
+    const iw = useWindowSize().width;
 
     const [state, setState] = useState({
         addresses: undefined,
@@ -28,6 +32,7 @@ const CheckOut = () => {
         order: {},
         idAdress: '',
         isOrderLoading: false,
+        isCollapse: true,
     })
 
     const getData = async () => {
@@ -97,9 +102,13 @@ const CheckOut = () => {
         }
     }
 
+    const handleChangeCollapse = (status) => {
+        setState(prev => ({...prev, isCollapse: status.length === 0}));
+    };
+
     return (
-        <div className="w-full flex h-full p-3 checkout-page">
-            <div className="w-2/3 p-5 border-r-[1px]">
+        <div className="w-full flex flex-col-reverse me:flex-row p-3 checkout-page me:h-full">
+            <div className="w-full mx-auto max-w-[640px] me:max-w-none me:mx-0 me:w-2/3 p-5 me:border-r-[1px]">
                 <div className="mb-5">
                     <h1 className="text-lg py-4 font-medium tracking-wide">Thông tin giao hàng</h1>
                     <div className="">
@@ -169,12 +178,38 @@ const CheckOut = () => {
                 </div>
             </div>
 
-            <div className="w-1/3 bg-[#fafafa] border-r border-t border-b p-3 h-full">
+            <div className="w-full mx-auto max-w-[640px] me:max-w-none me:mx-0 me:w-1/3 bg-[#fafafa] rounded-md border-l me:border-l-0 border-r border-t border-b p-3">
+                <Collapse
+                    expandIcon={() => (
+                        <IconCart className="!text-[#76a9fa]" />
+                    )}
+                    onChange={handleChangeCollapse}
+                    items={[{
+                        key: 'checkout-collapse-1',
+                        label: 'Hiển thị thông tin đơn hàng',
+                        children: (
+                            <div>
+                                {
+                                    state?.order?.items?.map((item) => {
+                                        return (
+                                            <ProductCard
+                                                data={item}
+                                            />
+                                        )
+                                    })             
+                                }
+                            </div>
+                        ),
+                        extra: formatCurrencyVN(state?.order?.total_price),
+                        headerClass: 'italic'
+                    }]}
+                    rootClassName="block me:hidden"
+                />
                 <div
                     style={{
                         height: 'calc(100% - 202px)'
                     }}
-                    className="overflow-y-auto"
+                    className="hidden me:block overflow-y-auto"
                 >
                     {
                         state?.order?.items?.map((item) => {
@@ -183,11 +218,11 @@ const CheckOut = () => {
                                     data={item}
                                 />
                             )
-                        })
+                        })             
                     }
                 </div>
-                <div className="">
-                    <div className="flex items-center gap-4 border-b-[1px] p-2">
+                <div>
+                    <div className="flex items-center gap-4 border-b-[1px] py-2">
                         <Input
                             placeholder="Mã giảm giá"
                             type=""
@@ -201,7 +236,7 @@ const CheckOut = () => {
                         </Button>
                     </div>
 
-                    <div className=" py-3 border-b-[1px] flex flex-col gap-3">
+                    <div className={`${iw < 960 ? state.isCollapse ? 'hidden' : 'flex' : 'flex'} py-3 border-b-[1px] flex-col gap-3`}>
                         <div className=" flex items-center justify-between">
                             <p>Tạm tính</p>
                             <p className=" font-bold">{formatCurrencyVN(state?.order?.total_price)}</p>
@@ -209,7 +244,7 @@ const CheckOut = () => {
 
                     </div>
 
-                    <div className=" flex items-center justify-between py-3">
+                    <div className={`${iw < 960 ? state.isCollapse ? 'hidden' : 'flex' : 'flex'} items-center justify-between py-3`}>
                         <p className=" text-lg">Tổng cộng</p>
                         <p className=" text-2xl font-bold text-red-500">{formatCurrencyVN(state?.order?.total_price)}</p>
                     </div>
