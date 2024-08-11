@@ -1,11 +1,12 @@
 import React, { useEffect, useRef, useState } from "react"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { endpoint } from "../../api/api"
-import { Button, message, Select } from "antd"
+import { Button, Input, message, Select } from "antd"
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"
 import { getDistricts, getProvinces, getWards, logAgain } from "@utils/function"
 import { useNavigate } from "react-router-dom"
 import { SUCCESS } from "@utils/message"
+import { HomeOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons"
 
 
 const InsertAddress = (props) => {
@@ -75,18 +76,28 @@ const InsertAddress = (props) => {
 
     return (
         <>
-            <input
+            <Input
                 value={name}
-                className="p-3 text-sm outline-none border"
+                type=""
+                className="text-sm outline-none border"
                 onChange={(e) => onChangeInfor(e.target.value, 'name')}
                 placeholder="Họ và tên"
+                prefix={<UserOutlined className="opacity-60"/>}
+                classNames={{
+                    input: '!px-2'
+                }}
             />
 
-            <input
+            <Input
                 value={number}
-                className="p-3 text-sm outline-none border"
+                type=""
+                className="text-sm outline-none border"
                 onChange={(e) => onChangeInfor(e.target.value, 'number')}
                 placeholder="Số điện thoại"
+                prefix={<PhoneOutlined className="opacity-60"/>}
+                classNames={{
+                    input: '!px-2'
+                }}
             />
 
             <Select
@@ -98,10 +109,12 @@ const InsertAddress = (props) => {
                     label: item?.ProvinceName,
                     value: item?.ProvinceID,
                 }))}
+                suffixIcon={<HomeOutlined />}
             />
 
             <Select
                 showSearch
+                suffixIcon={<HomeOutlined />}
                 value={districtID}
                 placeholder='Quận, Huyện'
                 onSelect={onSelectDistrict}
@@ -113,6 +126,7 @@ const InsertAddress = (props) => {
 
             <Select
                 showSearch
+                suffixIcon={<HomeOutlined />}
                 value={wardCode}
                 placeholder='Phường, Xã'
                 onSelect={onSelectWard}
@@ -122,15 +136,20 @@ const InsertAddress = (props) => {
                 }))}
             />
 
-            <input
+            <Input
                 value={street}
-                className="p-3 text-sm outline-none border"
+                type=""
+                prefix={<HomeOutlined className="opacity-60"/>}
+                className="text-sm outline-none border"
+                classNames={{
+                    input: '!px-2'
+                }}
                 onChange={(e) => onChangeInfor(e.target.value, 'street')}
                 placeholder="tên đường, số nhà"
             />
 
             <div class="flex items-center mb-2">
-                <input value={isDefault} onChange={(e) => onChangeInfor(e.target.checked, 'isDefault')} id="default-checkbox" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 outline-none" />
+                <input value={isDefault} onChange={(e) => onChangeInfor(e.target.checked, 'isDefault')} id="default-checkbox" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 outline-none cursor-pointer" />
                 <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Đặt làm địa chỉ mặc định</label>
             </div>
 
@@ -138,14 +157,14 @@ const InsertAddress = (props) => {
                 <Button
                     loading={isLoading}
                     onClick={addAddress} type="primary"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xl px-5 py-3 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    className="font-bold"
                 >
                     Thêm mới
                 </Button>
-                <div className=" ml-2 flex gap-2">
+                <div className="ml-2 flex gap-2 text-sm">
                     <div className="">hoặc</div>
                     <p
-                        onClick={() => setAddAddress(false)} className="hover:text-blue-500 cursor-pointer"
+                        onClick={() => setAddAddress(false)} className="hover:text-blue-500 cursor-pointer font-bold opacity-60"
                     >
                         Huỷ
                     </p>

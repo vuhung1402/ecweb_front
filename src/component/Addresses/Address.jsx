@@ -11,6 +11,7 @@ import Loading from "../Loading/Loading"
 import SildeBar from "@pages/profile/SildeBar"
 import { getDistricts, getProvinces, getWards, logAgain } from "@utils/function"
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"
+import { Button } from "antd"
 
 const Address = () => {
     const token = localStorage.getItem("token");
@@ -122,21 +123,23 @@ const Address = () => {
     };
 
     return (
-        <div>
+        <div className="w-full h-full">
             {
                 address === undefined ? <Loading /> :
                     (
                         <>
-                            <div className=" flex flex-col items-center justify-center font-semibold text-5xl gap-8 p-5 border-b-[1px]">
-                                <h1>Thông tin địa chỉ</h1>
+                            <div className="flex flex-col items-center justify-center font-semibold gap-8 p-5 border-b-[1px]">
+                                <h1 className="text-center text-[30px]">Thông tin địa chỉ</h1>
                                 <span className="bg-black p-[1.5px] w-14 flex items-center justify-center"></span>
                             </div>
-                            <div className=" flex">
-                                <SildeBar />
+                            <div className="flex flex-col md:flex-row w-full md:w-[750px] me:w-[970px] xl:w-[1170px] mx-auto">
+                                <div className="w-full md:w-1/4 px-5 md:px-0">
+                                    <SildeBar />
+                                </div>
 
-                                <div className="w-3/4 p-5 flex">
+                                <div className="w-full me:w-3/4 p-5 flex flex-col me:flex-row gap-3">
 
-                                    <div className=" w-1/2">
+                                    <div className="w-full me:w-7/12">
                                         {/* {updateAddress ? <UpdateAddress/> : <AddressInfor/>} */}
                                         {address?.map((item) => {
                                             return (
@@ -168,9 +171,16 @@ const Address = () => {
 
                                     </div>
 
-                                    <div className=" w-1/2 px-3">
-                                        <div className="px-3 flex flex-col gap-3">
-                                            <button type="button" onClick={() => setAddAddress(!addAddress)} class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xl px-5 py-3 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Nhập địa chỉ mới</button>
+                                    <div className="w-full me:w-5/12 me:px-3">
+                                        <div className="me:px-3 flex flex-col gap-3">
+                                            <Button
+                                                onClick={() => setAddAddress(!addAddress)}
+                                                type="primary"
+                                                className="font-bold w-fit"
+                                                size="large"
+                                            >
+                                                Nhập địa chỉ mới
+                                            </Button>
                                             {
                                                 addAddress &&
                                                 (

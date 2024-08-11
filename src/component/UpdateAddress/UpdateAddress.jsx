@@ -8,10 +8,11 @@ const UpdateAddress = (props) => {
     const { handleSaveAddress, onChangeInfor, onSelectProvince, onSelectDistrict, onSelectWard } = props;
 
     return (
-        <div className="p-3 flex flex-col gap-3 bg-[#fafafa]">
+        <div className="p-3 flex flex-col gap-3 bg-[#fafafa] text-sm">
             <Input
                 onChange={(e) => onChangeInfor(e.target.value, "name")}
                 value={name}
+                type=""
                 // className="p-3 text-sm outline-none"
                 placeholder="Họ và tên"
             />
@@ -19,6 +20,7 @@ const UpdateAddress = (props) => {
             <Input
                 onChange={(e) => onChangeInfor(e.target.value, "number")}
                 value={number}
+                type=""
                 // className="p-3 text-sm outline-none"
                 placeholder="Số điện thoại"
             />
@@ -59,6 +61,7 @@ const UpdateAddress = (props) => {
             <Input
                 onChange={(e) => onChangeInfor(e.target.value, "street")}
                 value={street}
+                type=""
                 // className="p-3 text-sm outline-none"
                 placeholder="tên đường, số nhà, phường/xã, quận/huyện, thành phố/tỉnh"
             />
@@ -70,21 +73,22 @@ const UpdateAddress = (props) => {
                     id="default-checkbox"
                     type="checkbox"
                     value={isDefault}
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 outline-none"
+                    className="w-4 h-4 cursor-pointer text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 outline-none"
                 />
                 <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Đặt làm địa chỉ mặc định</label>
             </div>
 
-            <div className=" mt-5 flex items-center">
+            <div className="mt-5 flex items-center">
                 <Button
                     onClick={handleSaveAddress}
                     loading={isLoading}
-                    type="primary" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-xl px-5 py-3 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                    type="primary"
+                    className="font-bold"
                 >
                     Cập nhật
                 </Button>
                 <div className=" ml-2">
-                    <div className=" cursor-pointer mr-2">hoặc  <a className="hover:text-blue-500" >Huỷ</a></div>
+                    <div className=" cursor-pointer mr-2">hoặc  <a className="hover:text-blue-500 font-bold opacity-60">Huỷ</a></div>
                 </div>
             </div>
         </div>
