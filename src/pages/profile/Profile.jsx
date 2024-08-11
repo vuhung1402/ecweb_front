@@ -66,25 +66,27 @@ const Profile = () => {
     }
 
     return (
-        <div>
+        <div className="w-full h-full">
             {
                 !infor ? <Loading /> :
                     (
                         <div>
-                            <div className=" flex flex-col items-center justify-center font-semibold text-5xl gap-8 p-5 border-b-[1px]">
-                                <h1>Tài khoản của bạn</h1>
+                            <div className=" flex flex-col items-center justify-center font-semibold text-[30px] gap-8 p-5 border-b-[1px]">
+                                <h1 className="text-center">Tài khoản của bạn</h1>
                                 <span className="bg-black p-[1.5px] w-14 flex items-center justify-center"></span>
                             </div>
-                            <div className=" flex">
-                                <SildeBar/>
-                                <div className=" w-3/4 p-5 mb-7">
-                                    <div className=" uppercase font-bold mb-3 border-b-[1px] pb-1">Thông tin tài khoản</div>
+                            <div className="flex flex-col md:flex-row w-full md:w-[750px] me:w-[970px] xl:w-[1170px] mx-auto">
+                                <div className="w-full md:w-1/4 px-5 md:px-0">
+                                    <SildeBar />
+                                </div>
+                                <div className="w-full me:w-3/4 p-5 flex flex-col gap-3">
+                                    <div className="uppercase font-extrabold mb-3 border-b-[1px] pb-1">Thông tin tài khoản</div>
 
                                     <div>
                                         {infor?.name && <p className=" font-medium">{infor?.name}</p>}
                                         {infor?.address && <div className=" text-sm">{infor?.address}</div>}
                                         {infor?.email && <div className=" text-sm">{infor?.email}</div>}
-                                        <div className=" mt-1"><a className="hover:text-blue-500 cursor-pointer text-gray-500">Xem địa chỉ</a></div>
+                                        <div className="mt-1"><a className="hover:text-blue-500 text-sm font-bold cursor-pointer text-gray-500">Xem địa chỉ</a></div>
                                     </div>
                                 </div>
                             </div>
