@@ -52,12 +52,14 @@ const Order = () => {
                             height: 'calc(100% - 80px)'
                         }}
                     >
-                        {/* <div className=" flex flex-col items-center justify-center font-semibold text-5xl gap-3 p-5 border-b-[1px]">
+                        <div className=" flex flex-col items-center justify-center font-semibold text-5xl gap-3 p-5 border-b-[1px]">
                         <h1>Lịch sử mua hàng</h1>
                         <span className="bg-black p-[1.5px] w-14 flex items-center justify-center"></span>
-                        </div> */}
-                        <div className=" flex">
-                            <SildeBar />
+                        </div>
+                        <div className="flex flex-col md:flex-row w-full md:w-[750px] me:w-[970px] xl:w-[1170px] mx-auto">
+                            <div className="md:w-1/4 px-5 md:px-0">
+                                <SildeBar />
+                            </div>
                             <div className=" w-3/4 h-full">
                                 <Tabs
                                     onChange={handleChangeTab}

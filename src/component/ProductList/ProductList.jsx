@@ -1,16 +1,15 @@
-import React, { useState } from "react"
-import CardProduct from "../CardProduct/CardProduct"
-import Loading from "../Loading/Loading"
-import ProductFilter from "../ProductFilter/ProductFilter"
-import { Empty, List } from "antd"
+import React from "react";
+import { List } from "antd";
+
+import CardProduct from "@component/CardProduct/CardProduct";
+import Loading from "@component/Loading/Loading";
+import ProductFilter from "@component/ProductFilter/ProductFilter";
 
 const ProductList = (props) => {
     const { data, isLoadingPage } = props;
     const { handleSelect } = props;
 
     //truyen props dataSample
-
-    const [products, setProducts] = useState()
 
     return (
         <div className="bg-white w-full">

@@ -3,57 +3,52 @@ import React, { useEffect, useState } from "react"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 import Filter from "../../component/Filter/Filter"
 import ProductList from "../../component/ProductList/ProductList"
-import { endpoint } from "../../api/api"
+import { getCategories, getProducts } from "./function"
 
 const Products = () => {
     const navigate = useNavigate();
     const params = useParams();
     const location = useLocation();
-    // const [data, setData] = useState();
 
     const [state, setState] = useState({
         data: [],
-        isLoadingPage: false,
-    })
+        isLoadingPage: true,
+        category: [],
+    });
 
-    useEffect(() => {
+    const handleGetProduct = async () => {
         const regex = /[?&]sort_by=([^&]*)/;
         const match = regex.exec(location?.search);
-        setState((prev) => ({
-            ...prev,
-            isLoadingPage: true,
-        }))
+        const key = location?.state?.key ? location?.state?.key : 'all';
+        const modeFilter = match?.[1].length > 0 ? `${location?.state?.value}` : `1`;
 
-        fetch(`${endpoint}/product/getAllProductList/${location?.state?.key ? location?.state?.key : 'all'}/${match?.[1].length > 0 ? `${location?.state?.value}` : `1`}`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then((response) => {
-            if (!response.ok) {
-                throw new Error("Netword response not ok")
-            }
-            return response.json()
-        }).then((json) => {
-            if (json?.success) {
-                // setData(json?.productListAll_DataFormat)
-                setState((prev) => ({
-                    ...prev,
-                    data: json?.productListAll_DataFormat,
-                    isLoadingPage: false
-                }))
-            }
+        const res = await getProducts(key, modeFilter);
+        if (res?.success) {
+            setState(prev => ({...prev, data: res?.productListAll_DataFormat, isLoadingPage: false}));
+        };
+    };
 
-        }).catch((error) => {
-            console.error("Error: ", error)
-        })
+    // get categories
+    useEffect(() => {
+        async function handleGetCategories() {
+            const res = await getCategories();
+            if (res?.success) {
+                setState(prev => ({...prev, category: res?.formattedData}));
+            };
+        };
+
+        handleGetCategories();
+    },[]);
+
+    // get products
+    useEffect(() => {
+        handleGetProduct();
     }, [location.search, location?.state?.key, location?.state?.value])
 
     //khi moi load trang lan dau thi phai check url co danh muc hay param dang sau khong neu co lay de filter
 
     //khi nhan vao danh muc
     const onClick = (item) => {
-        console.log({item})
         if (params?.category !== item?.item?.props?.route) {
             // setData(undefined); 
         }
@@ -92,15 +87,22 @@ const Products = () => {
                 }
             }
         )
-    }
+    };
 
     return (
         <div className="flex flex-col lg:flex-row h-full">
             <div className="w-full lg:w-1/4">
-                <Filter onClick={onClick} />
+                <Filter
+                    category={state.category}
+                    onClick={onClick}
+                />
             </div>
             <div className="flex flex-grow w-full overflow-y-auto">
-                <ProductList handleSelect={handleSelect} data={state.data} isLoadingPage={state.isLoadingPage} />
+                <ProductList
+                    handleSelect={handleSelect}
+                    data={state.data}
+                    isLoadingPage={state.isLoadingPage}
+                />
             </div>
         </div>
     )

@@ -1,36 +1,13 @@
-import React, { useEffect, useState } from "react"
+import React from "react";
 
-import { Menu } from 'antd'
-import { endpoint } from '../../api/api';
+import { Menu } from 'antd';
 import useWindowSize from "../../hooks/useWindowSize";
 
 import './style.scss';
 
-function Filter({ onClick }) {
-
-    const [category, setCategory] = useState([]);
+function Filter({ onClick, category }) {
 
     const iw = useWindowSize().width;
-
-    useEffect(() => {
-        fetch(`${endpoint}/category/getAllCategories`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then((response) => {
-            if (!response.ok) {
-                throw new Error("Netword response not ok")
-            }
-            return response.json()
-        }).then((json) => {
-            if (json?.success) {
-                setCategory(json?.formattedData)
-            }
-        }).catch((error) => {
-            console.error("Error: ", error)
-        })
-    }, []);
 
     const menuMode = iw > 1024 ? 'vertical' : 'horizontal';
     
@@ -44,7 +21,7 @@ function Filter({ onClick }) {
                 multiple={false}
             />
         </div>
-    )
-}
+    );
+};
 
-export default Filter
+export default Filter;
