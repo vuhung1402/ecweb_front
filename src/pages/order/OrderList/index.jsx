@@ -1,6 +1,5 @@
 import React from "react";
-import OrderCard from "../OrderCard";
-import { Button, Image, Space, Table, Tag } from "antd";
+import { Table } from "antd";
 import { useNavigate } from "react-router-dom";
 import { formatCurrencyVN } from "@utils/function";
 import { statusOrder } from "../mock";
@@ -10,34 +9,13 @@ const OrderList = (props) => {
 
     const navigate = useNavigate();
 
-    // const dataSource = [
-    //     {
-    //         order_id: '111',
-    //         order_date: '30/06/2024',
-    //         totalPrice: 10000,
-    //         status: 1,
-    //     },
-    //     {
-    //         order_id: '112',
-    //         order_date: '30/06/2024',
-    //         totalPrice: 10000,
-    //         status: 1,
-    //     },
-    //     {
-    //         order_id: '113',
-    //         order_date: '30/06/2024',
-    //         totalPrice: 10000,
-    //         status: 1,
-    //     },
-    // ];
-
     const columns = [
         {
             title: 'Mã đơn hàng',
             dataIndex: 'Order_id',
             render: (_, record) => {
                 return (
-                    <div className=" hover:text-blue-500 cursor-pointer text-xl">
+                    <div className=" hover:text-blue-500 cursor-pointer">
                         {record?.Order_id}
                     </div>
                 )
@@ -74,23 +52,20 @@ const OrderList = (props) => {
 
     return (
         <div className="w-full overflow-y-auto h-[400px]">
-            {/* <OrderCard/>
-            <OrderCard/>
-            <OrderCard/>
-            <OrderCard/>
-            <OrderCard/> */}
             <Table
-                onRow={(record, rowIndex) => {
+                onRow={(record) => {
                     return {
                         onClick: () => handleSelectRow(record?.Order_id)
                     }
                 }}
                 dataSource={data}
                 columns={columns}
+                bordered
                 pagination={{
                     hideOnSinglePage: true,
                     pageSize: 10
                 }} 
+                className="font-bold"
             />
         </div>
     )
