@@ -1,6 +1,15 @@
 import { endpoint, axiosInstance } from "@api/api";
 import { message } from "antd";
 
+export const getDetailProduct = async (id) => {
+    try {
+        const response = await axiosInstance.get(`/product/getProductDetail/${id}`);
+        return response.data;
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+    }
+};
+
 export const addToCart = async (body) => {
     const token = localStorage.getItem("token");
     try {
@@ -45,21 +54,3 @@ export const quantityCart = async () => {
         console.error('Error:', error);
     }
 }
-
-export const getProducts = async (key, modeFilter) => {
-    try {
-        const response = await axiosInstance.get(`/product/getAllProductList/${key}/${modeFilter}`);
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-    }
-};
-
-export const getCategories = async () => {
-    try {
-        const response = await axiosInstance.get(`/category/getAllCategories`);
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-    }
-};

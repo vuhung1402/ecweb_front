@@ -119,19 +119,15 @@ const InfoProductDetail = ({ data, handleGotoImage }) => {
                 setState((prev) => ({...prev, loadingAddCart:false}));
             }
         }
-        // setState((prev) => ({...prev, loadingAddCart:true}));
-        // setTimeout(() => {
-        //     setState((prev) => ({...prev, loadingAddCart:false}));
-        // }, 1000)
     }
 
     return (
-        <div className=" w-full sticky h-fit top-20">
-            <div className="text-3xl me:text-[20px] font-semibold py-3 border-b-[1px]">{data?.name}</div>
+        <div className="w-full sticky h-fit top-20">
+            <div className="text-3xl me:text-[20px] font-bold py-3 border-b-[1px]">{data?.name}</div>
             <div className="text-red-500 text-[18px] font-bold opacity-[0.92] border-b-[1px] py-3">
                 {formatCurrencyVN(data?.price)}
             </div>
-            <div id="text-name-color" className="text-[13px] font-light my-3" >{state.textColor?.toUpperCase()}</div>
+            <div id="text-name-color" className="text-xs font-bold opacity-60 my-3" >{state.textColor?.toUpperCase()}</div>
             <div className="mb-3 cursor-default flex gap-3 items-center">
                 {
                     state.color?.map((item, index) => {
@@ -189,15 +185,6 @@ const InfoProductDetail = ({ data, handleGotoImage }) => {
                 </div>
             </div>
 
-            {/* <div className="w-full mt-3 flex items-center justify-center h-[50px] cursor-pointer">
-                <div
-                    onClick={handleAddToCart}
-                    className=" text-white font-medium select-none"
-                >
-                    Thêm vào giỏ
-                </div>
-                <Button type="primary">Primary Button</Button>
-            </div> */}
             <Button
                 onClick={handleAddToCart}
                 loading={state.loadingAddCart}
