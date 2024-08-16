@@ -13,9 +13,7 @@ import { endpoint } from "@api/api";
 import { TOKEN_INVALID } from "@utils/error";
 import { getLevelKeys } from "@utils/function";
 
-import IconUser from '@icon/iconUserHeader.svg';
-import IconCart from '@icon/iconCart.svg';
-import IconBars from '@icon/iconBars.svg';
+import { MenuOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 
 import './style.scss';
 
@@ -198,7 +196,7 @@ const Header = (props) => {
                 }            
             >
                 <div id="navbar-mobile" className="flex md:hidden cursor-pointer">
-                    <IconBars />
+                    <MenuOutlined />
                 </div>
             </Popover>
 
@@ -263,7 +261,7 @@ const Header = (props) => {
                         onOpenChange={handlepopOverAcc}
                     >
                         <div>
-                            <IconUser />
+                            <UserOutlined className="text-lg" />
                         </div>
                     </Popover>
                 </div>
@@ -275,7 +273,7 @@ const Header = (props) => {
                             // setSearchBox(false);
                             navigate('/cart');
                         }}>
-                            <IconCart />
+                            <ShoppingCartOutlined className="text-xl"/>
                         </div>
                     </Badge>
                 </div>

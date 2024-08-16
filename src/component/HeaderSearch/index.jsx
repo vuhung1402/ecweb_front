@@ -1,6 +1,6 @@
 import React from "react";
 
-import IconSearch from '@icon/iconSearch.svg';
+import { SearchOutlined } from "@ant-design/icons";
 
 const HeaderSearch = (props) => {
 
@@ -9,7 +9,7 @@ const HeaderSearch = (props) => {
     return (
         <div className="">
             <div>
-                <IconSearch />
+                <SearchOutlined classID="text-xl" />
             </div>
         </div>
     );
