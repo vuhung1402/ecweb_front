@@ -65,7 +65,7 @@ const ProductDetail = () => {
                 {
                     state.isLoadingPage ?
                         (
-                            <div className="w-full h-full pt-6">
+                            <div className="w-full min-h-screen h-full flex items-center justify-center">
                                 <Loading />
                             </div>
                         ) :

@@ -8,7 +8,7 @@ import { Badge, Popover, message, Menu } from "antd"
 import HeaderSearch from "@component/HeaderSearch";
 
 import { clear, numOfCartPackage } from "@redux/actions";
-import { quantityCart } from "@pages/product/function";
+import { quantityCart } from "@pages/Product/function";
 import { endpoint } from "@api/api";
 import { TOKEN_INVALID } from "@utils/error";
 import { getLevelKeys } from "@utils/function";

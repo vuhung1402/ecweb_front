@@ -5,7 +5,6 @@ import { useDispatch } from "react-redux"
 import { userPackage } from "../../../redux/actions"
 import { endpoint } from "../../../api/api"
 import { Button, Input, message } from "antd"
-import { quantityCart } from "@pages/product/function"
 
 const Login = () => {
     const user = useUserPackageHook()
