@@ -5,6 +5,7 @@ import DefaulLayout from './core';
 import { Fragment } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AppRoutes from './route';
+import NotFoundPage from '@pages/NotFoundPage';
 
 function App() {
   return (
@@ -26,6 +27,10 @@ function App() {
                     />
                 )
             })}
+            <Route
+                path='*'
+                element={<NotFoundPage />}
+            />
         </Routes>
     </BrowserRouter>
   );
