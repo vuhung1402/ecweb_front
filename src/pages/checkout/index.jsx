@@ -1,22 +1,30 @@
-import { useLocation, useNavigate, useParams } from "react-router-dom"
-import { useUserPackageHook } from "../../redux/hooks/userHook"
-import { endpoint } from "../../api/api"
-import React, { useEffect, useState } from "react"
-import { formatCurrencyVN, logAgain } from "@utils/function"
-import { Button, Input, Radio, Select, Space, message, Collapse } from "antd"
-import { getAddressInfo, order } from "./function"
-import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"
-import { paymentMethod } from "./mock"
-import ProductCard from "./productCard"
-import { FAIL } from "@utils/message"
-import IconCart from '@icon/iconCart.svg';
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Button, Input, Radio, Select, Space, message, Collapse } from "antd";
+
+import ProductCard from "./productCard";
+import { formatCurrencyVN, logAgain } from "@utils/function";
+import { getAddressInfo, order } from "./function";
 import useWindowSize from "../../hooks/useWindowSize";
+import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
+import { FAIL } from "@utils/message";
+
+import IconCart from '@icon/iconCart.svg';
 
 import './style.scss';
 
+const paymentMethod = [
+    {
+        value: 0,
+        name:'Thanh toán khi giao hàng',
+    },
+    {
+        value: 1,
+        name:'Thanh toán bằng momo',
+    },
+];
+
 const CheckOut = () => {
-    const { code } = useParams();
-    const user = useUserPackageHook();
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -33,7 +41,7 @@ const CheckOut = () => {
         idAdress: '',
         isOrderLoading: false,
         isCollapse: true,
-    })
+    });
 
     const getData = async () => {
         const result = await getAddressInfo();
@@ -53,11 +61,11 @@ const CheckOut = () => {
             ...prev,
             order: location?.state?.order,
         }));
-    }
+    };
 
     useEffect(() => {
         getData();
-    }, [])
+    }, []);
 
     const handleSelectPaymentMethod = (e) => {
         state.paymentMethod = e.target.value;
@@ -83,9 +91,7 @@ const CheckOut = () => {
             type_pay: state?.paymentMethod,
             shipping_code: 0
         }
-        console.log("body: ", body);
         const response = await order(body);
-        console.log({response});
         if (response?.success) {
             if(response?.paymentUrl){
                 window.open(response?.paymentUrl, '_blank')
@@ -166,7 +172,6 @@ const CheckOut = () => {
                     >
                         Giỏ hàng
                     </div>
-                    {/* <button className=" uppercase bg-blue-600 p-3 text-white">Hoàn tất đơn hàng</button> */}
                     <Button
                         type="primary"
                         className="uppercase p-3 font-bold !h-auto"
