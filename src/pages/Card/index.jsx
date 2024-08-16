@@ -1,20 +1,18 @@
-import React from "react"
-import { useUserPackageHook } from "../../redux/hooks/userHook"
-import { useEffect, useState } from "react"
-import { endpoint } from "../../api/api"
-import { useNavigate } from "react-router-dom"
-import { formatCurrencyVN, logAgain } from "@utils/function"
-import CartCard from "./CartCard"
-import { data } from "@pages/admin/user/mock"
-import { checkout, deleteItemCart, getCart } from "./function"
-import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"
-import { useDispatch } from "react-redux"
-import { quantityCart } from "@pages/product/function"
-import { numOfCartPackage } from "@redux/actions"
-import { Button, message } from "antd"
-import { FAIL, SUCCESS } from "@utils/message"
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { formatCurrencyVN, logAgain } from "@utils/function";
+import { useDispatch } from "react-redux";
+import { numOfCartPackage } from "@redux/actions";
+import { Button, message } from "antd";
 
-const Cart = () => {
+import CartCard from "@component/CartCard";
+
+import { checkout, deleteItemCart, getCart } from "./function";
+import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
+import { FAIL, SUCCESS } from "@utils/message";
+
+const CartPage = () => {
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [state, setState] = useState({
@@ -25,14 +23,8 @@ const Cart = () => {
         isLoadingDelete: false,
     });
 
-    useEffect(() => {
-        getData();
-    }, [])
-
     const getData = async () => {
         const cartItem = await getCart();
-        // state.data = cartItem;
-        // setState((prev) => ({ ...prev }));
         if (cartItem?.success) {
             state.data = cartItem;
             dispatch(numOfCartPackage(cartItem?.items?.length))
@@ -43,10 +35,13 @@ const Cart = () => {
             }
         }
         setState((prev) => ({ ...prev }));
-    }
+    };
+
+    useEffect(() => {
+        getData();
+    }, []);
 
     const handleCheckout = async () => {
-        console.log("state?.selectedItem: ", state?.selectedItem);
         const response = await checkout(state?.selectedItem);
         if(response?.success){
             navigate(
@@ -67,8 +62,7 @@ const Cart = () => {
                 message.error(FAIL);
             }
         }
-        // navigate("/checkout/1");
-    }
+    };
 
     const handleSelectItem = (e, item) => {
         if (e.target.checked) {
@@ -79,7 +73,7 @@ const Cart = () => {
             state.selectedItem?.pop(item)
         }
         setState((prev) => ({ ...prev }));
-    }
+    };
 
     const handleDeleteItem = async (id) => {
         const result = await deleteItemCart(id);
@@ -105,9 +99,9 @@ const Cart = () => {
                 message.error(FAIL);
             }
         }
-    }
+    };
 
-    return (
+    return(
         <div className="w-full h-full px-4 md:px-8 mb-1">
             <div className="w-full flex flex-col items-center justify-center font-semibold text-5xl gap-2 p-5 border-b-[1px]">
                 <div className="font-semibold text-3xl text-center">Giỏ hàng của bạn</div>
@@ -170,4 +164,4 @@ const Cart = () => {
     )
 }
 
-export default Cart
+export default CartPage
