@@ -102,6 +102,7 @@ const InsertAddress = (props) => {
 
             <Select
                 showSearch
+                optionFilterProp="label"
                 value={provinceID}
                 onSelect={onSelectProvince}
                 placeholder='Tỉnh, Thành Phố'
@@ -114,6 +115,7 @@ const InsertAddress = (props) => {
 
             <Select
                 showSearch
+                optionFilterProp="label"
                 suffixIcon={<HomeOutlined />}
                 value={districtID}
                 placeholder='Quận, Huyện'
@@ -126,6 +128,7 @@ const InsertAddress = (props) => {
 
             <Select
                 showSearch
+                optionFilterProp="label"
                 suffixIcon={<HomeOutlined />}
                 value={wardCode}
                 placeholder='Phường, Xã'
