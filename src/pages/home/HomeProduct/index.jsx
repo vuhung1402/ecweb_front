@@ -9,6 +9,7 @@ import CardProduct from "@component/CardProduct/CardProduct";
 const HomeProduct = (props) => {
 
     const { products } = props;
+    const { handleCLick } = props;
 
     return (
         <div className="w-full p-10 flex justify-center flex-col items-center gap-7">
@@ -26,6 +27,7 @@ const HomeProduct = (props) => {
             </div>
             <MotionBox animation={fadeIn(0.5)}>
                 <Button
+                    onClick={handleCLick}
                     className="uppercase font-medium"
                     type="primary"
                 >

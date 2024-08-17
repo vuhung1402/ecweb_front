@@ -50,7 +50,7 @@ const Products = () => {
     //khi nhan vao danh muc
     const onClick = (item) => {
         if (params?.category !== item?.item?.props?.route) {
-            // setData(undefined); 
+            setState((prev) => ({ ...prev, isLoadingPage: true }) )
         }
         //call api
         //api tra du lieu thanh cong set vao state data
@@ -70,6 +70,7 @@ const Products = () => {
 
     //khi chon dieu kien filter
     const handleSelect = (value, option) => {
+        setState((prev) => ({ ...prev, isLoadingPage: true }) )
         //call api filter truyen id danh muc voi option.label
         //api tra thanh cong set lai vao state data
         //navigate(`/products/${location?.state?.key}?sort=${option.label}`)
