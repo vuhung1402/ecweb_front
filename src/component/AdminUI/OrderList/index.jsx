@@ -65,7 +65,7 @@ const OrderList = (props) => {
             key: 'address',
             render: (_, record) => {
                 return (
-                    <div>{formatCurrencyVN(record?.total_price)}</div>
+                    <div>{formatCurrencyVN(record?.price_pay)}</div>
                 )
             }
         },
@@ -187,6 +187,7 @@ const OrderList = (props) => {
                         columns={columns}
                         // sticky={true}
                         dataSource={orders}
+                        bordered
                         pagination={{
                             hideOnSinglePage: true,
                             pageSize: 10
