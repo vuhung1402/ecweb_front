@@ -14,9 +14,10 @@ import { getProducts } from "./function";
 
 import HomePageImage from '@images/homepage.png';
 import IconArrowDown from '@icon/iconArrowDown.svg';
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
-
+    const navigate = useNavigate()
     const [state, setState] = useState({
         products: [],
         position: window.scrollY,
@@ -49,6 +50,10 @@ const Home = () => {
         document.body.style.overflow = event ? 'hidden' : 'auto';
     };
 
+    const handleCLick = () => {
+        navigate("/products/all")
+    }
+
     return (
         <div className="w-screen h-screen">
             {!state.products && (
@@ -78,7 +83,7 @@ const Home = () => {
                                 <p className="text-white text-center">new collection out now!</p>
                             </MotionBox>
                             <MotionBox animation={fadeIn(1)}>
-                                <Button className="uppercase font-bold mt-8 !px-[30px] !py-[20px] flex items-center text-[15px]">
+                                <Button onClick={handleCLick} className="uppercase font-bold mt-8 !px-[30px] !py-[20px] flex items-center text-[15px]">
                                     shop now
                                 </Button>
                             </MotionBox>
@@ -90,6 +95,7 @@ const Home = () => {
                     <div className="w-full">
                         <HomeProduct
                             products={state.products}
+                            handleCLick={handleCLick}
                         />
                     </div>
                     <div className="w-full">
