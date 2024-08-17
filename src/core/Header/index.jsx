@@ -8,7 +8,7 @@ import { Badge, Popover, message, Menu } from "antd"
 import HeaderSearch from "@component/HeaderSearch";
 
 import { clear, numOfCartPackage } from "@redux/actions";
-import { quantityCart } from "@pages/Product/function";
+import { getCategories, quantityCart } from "@pages/Product/function";
 import { endpoint } from "@api/api";
 import { TOKEN_INVALID } from "@utils/error";
 import { getLevelKeys } from "@utils/function";
@@ -48,24 +48,32 @@ const Header = (props) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const handleGetCategories = async () => {
+        const res = await getCategories();
+        if(res.success){
+            setState((prev) => ({...prev, category: res?.formattedData}))
+        }
+    }
+
     useEffect(() => {
-        fetch(`${endpoint}/category/getAllCategories`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then((response) => {
-            if (!response.ok) {
-                throw new Error("Netword response not ok")
-            }
-            return response.json()
-        }).then((json) => {
-            if (json?.success) {
-                setCategory(json?.formattedData)
-            }
-        }).catch((error) => {
-            console.error("Error: ", error)
-        })
+        // fetch(`${endpoint}/category/getAllCategories`, {
+        //     method: "GET",
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        // }).then((response) => {
+        //     if (!response.ok) {
+        //         throw new Error("Netword response not ok")
+        //     }
+        //     return response.json()
+        // }).then((json) => {
+        //     if (json?.success) {
+        //         setCategory(json?.formattedData)
+        //     }
+        // }).catch((error) => {
+        //     console.error("Error: ", error)
+        // })
+        handleGetCategories();
     }, []);
 
     const setLocalStorageQuantiyCart = async () => {
@@ -113,8 +121,13 @@ const Header = (props) => {
         {
             key: 'product',
             type: 'product',
-            label: 'SẢN PHẨM',
-            children: category,
+            label: (
+                <a href="/products/all">
+                    SẢN PHẨM
+                </a>
+            ),
+            route: '/products/all',
+            children: state.category,
         },
         {
             key: 'header-menu-3',
