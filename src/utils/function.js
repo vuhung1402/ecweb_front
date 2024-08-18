@@ -4,6 +4,12 @@ import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { LOGIN_AGAIN } from "./message";
 import { tokenGHN } from "@api/api";
+import { clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs) {
+    return twMerge(clsx(inputs));
+}
 
 export const formatCurrencyVN = (number) => {
     if (isNaN(number)) return "";
