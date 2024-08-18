@@ -1,7 +1,9 @@
+import React from "react";
+
 export const statusOrder = [
     {
         status: 0,
-        name: 'Chờ thanh toán',
+        name: <div className="font-bold">Chờ thanh toán</div>,
         nextStatus: [
             {
                 status: 5,
@@ -11,7 +13,7 @@ export const statusOrder = [
     },
     {
         status: 1,
-        name: 'Chờ xác nhận',
+        name: <div className="font-bold">Chờ xác nhận</div>,
         nextStatus: [
             {
                 status: 2,
@@ -25,7 +27,7 @@ export const statusOrder = [
     },
     {
         status: 2,
-        name: 'Đã xác nhận',
+        name: <div className="font-bold">Đã xác nhận</div>,
         nextStatus: [
             {
                 status: 3,
@@ -35,7 +37,7 @@ export const statusOrder = [
     },
     {
         status: 3,
-        name: 'Đang giao hàng',
+        name: <div className="font-bold">Đang giao hàng</div>,
         nextStatus: [
             {
                 status: 4,
@@ -49,19 +51,19 @@ export const statusOrder = [
     },
     {
         status: 4,
-        name: 'Đã giao hàng',
+        name: <div className="font-bold">Đã giao hàng</div>,
     },
     {
         status: 5,
-        name: 'Đã huỷ',
+        name: <div className="font-bold">Đã huỷ</div>,
     },
     {
         status: 6,
-        name: 'Trả hàng/Hoàn tiền',
+        name: <div className="font-bold">Trả hàng/Hoàn tiền</div>,
     },
     {
         status: 7,
-        name: 'Giao hàng không thành công',
+        name: <div className="font-bold">Giao hàng không thành công</div>,
         nextStatus: [
             {
                 status: 3,

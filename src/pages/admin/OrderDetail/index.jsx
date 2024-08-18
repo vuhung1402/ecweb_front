@@ -3,28 +3,28 @@ import CardProduct from "../../../component/AdminUI/OrderList/CardProduct";
 import PaymentInfo from "../../../component/AdminUI/OrderList/PaymentInfo";
 import PaymentMethod from "../../../component/AdminUI/OrderList/PaymentMethod";
 import { Button, message, Popconfirm } from "antd";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { data } from "../user/mock";
+import { useNavigate } from "react-router-dom";
 import { getOrderDetail, refundMoney, updateStatuOrder } from "./function";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { logAgain } from "@utils/function";
 import { FAIL, SUCCESS } from "@utils/message";
 import { statusOrder } from "../orders/mock";
-import { ArrowLeftOutlined } from "@ant-design/icons";
 import Loading from "@component/Loading/Loading";
 
 const OrderDetail = (props) => {
-    const { handleDetail } = props;
-    const params = useParams();
-    const location = useLocation();
+    const { userId, orderId } = props;
+
+    if (!userId && !orderId) return <div className="font-bold">Chi tiết sản phẩm sẽ hiển thị ở đây</div>
+
     const navigate = useNavigate();
+
     const [state, setState] = useState({
         data: undefined,
         isLoading: false,
-    })
+    });
 
     const getData = async () => {
-        const respone = await getOrderDetail(params?.id, location?.state?.user_id);
+        const respone = await getOrderDetail(orderId, userId);
         if (respone?.success) {
             setState((prev) => ({ ...prev, data: respone?.formatted_order_detail }));
         } else {
@@ -33,9 +33,9 @@ const OrderDetail = (props) => {
                 navigate('/login');
             } else {
                 message.error(FAIL);
-            }
-        }
-    }
+            };
+        };
+    };
 
     const updateStatus = async (user_id, Order_id, new_status_order) => {
         setState((prev) => ({ ...prev, isLoading: true }))
@@ -72,49 +72,35 @@ const OrderDetail = (props) => {
     }
 
     useEffect(() => {
+        state.data = undefined;
+        setState(prev => ({...prev}));
+        if (!userId || !orderId) return;
         getData();
-    }, [])
+    }, [userId, orderId])
 
     return (
         <>
             {
                 state.data === undefined ? <Loading /> :
-                    <div
-                        className=" w-full py-3 flex flex-col justify-between px-10"
-                        style={{
-                            height: 'calc(100vh - 78px)'
-                        }}
-                    >
-                        <div className="flex flex-col gap-2 px-10">
-                            <div className=" font-medium flex gap-3 items-center" >
-                                <div
-                                    onClick={() => navigate('/admin')}
-                                    className=" cursor-pointer"
-                                >
-                                    <ArrowLeftOutlined />
+                    <div className="w-full h-full p-4 flex flex-col gap-2 overflow-y-auto">
+                        <div className="w-full flex flex-col gap-2">
+                            <div className="w-full flex flex-col gap-3">
+                                <div className="w-full flex flex-wrap gap-2">
+                                    {
+                                        state?.data?.items?.map((item) => {
+                                            return (
+                                                <CardProduct dataDetail={item} />
+                                            )
+                                        })
+                                    }
                                 </div>
-                                <div>{state.data?.Order_id}</div>
-                            </div>
-
-                            <div className=" w-full">
-                                <div className=" flex justify-between">
-                                    <div className=" flex flex-col gap-2 h-[400px] w-1/2 overflow-y-auto scrollbar-hide">
-                                        {
-                                            state?.data?.items?.map((item) => {
-                                                return (
-                                                    <CardProduct dataDetail={item} />
-                                                )
-                                            })
-                                        }
-                                    </div>
-                                    <div className=" flex flex-col w-1/2 gap-3">
-                                        <PaymentInfo address={state?.data?.address} totalPrice={state.data?.total_price} name={state.data?.name} phone={state.data?.phone} price_pay={state.data?.price_pay} />
-                                        <PaymentMethod typePay={state.data?.type_pay} status={state?.data?.status} />
-                                    </div>
+                                <div className="flex flex-col w-full gap-3">
+                                    <PaymentInfo address={state?.data?.address} totalPrice={state.data?.total_price} name={state.data?.name} phone={state.data?.phone} price_pay={state.data?.price_pay} />
+                                    <PaymentMethod typePay={state.data?.type_pay} status={state?.data?.status} />
                                 </div>
                             </div>
                         </div>
-                        <div className=" flex gap-3 justify-end px-10">
+                        <div className=" flex gap-3 justify-end">
                             {
                                 statusOrder.find((item) => item.status === state.data?.status)?.nextStatus?.map((nextStatusItem) => {
                                     return (
@@ -130,6 +116,7 @@ const OrderDetail = (props) => {
                                         >
                                             <Button
                                                 type="primary"
+                                                className="font-bold"
                                             >
                                                 {nextStatusItem?.label}
                                             </Button>
@@ -151,6 +138,7 @@ const OrderDetail = (props) => {
                                 >
                                     <Button
                                         type="primary"
+                                        className="font-bold"
                                     >
                                         Hoàn tiền
                                     </Button>

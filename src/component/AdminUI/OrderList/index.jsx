@@ -2,10 +2,7 @@ import { SearchOutlined } from "@ant-design/icons";
 import { optionSearchOrder, statusOrder } from "@pages/admin/orders/mock";
 import { Button, Input, message, Popconfirm, Select, Space, Table, Tag } from "antd";
 import React, { useState } from "react";
-import CardOrder from "./CardOrder";
-import OrderDetail from "../../../pages/admin/OrderDetail";
 import { formatCurrencyVN, logAgain } from "@utils/function";
-import { status } from "@api/api";
 import { useNavigate } from "react-router-dom";
 import { updateStatuOrder } from "@pages/admin/orders/function";
 import { FAIL, SUCCESS } from "@utils/message";
@@ -15,7 +12,7 @@ import Loading from "@component/Loading/Loading";
 
 const OrderList = (props) => {
     const { orders, tab, isLoadingList } = props;
-    const { getData } = props;
+    const { getData, handleOrderDetail } = props;
 
     const [state, setState] = useState({
         placeholder: '',
@@ -86,16 +83,19 @@ const OrderList = (props) => {
                 return (
                     <Space size="middle">
                         <Button
-                            onClick={() => navigate(
-                                {
-                                    pathname: `/admin/orderDetail/${record?.Order_id}`
-                                },
-                                {
-                                    state: {
-                                        user_id: record?.user_id,
-                                    }
-                                }
-                            )}
+                            className="font-bold"
+                            type="primary"
+                            onClick={() => handleOrderDetail(record?.Order_id, record?.user_id)}
+                            // onClick={() => navigate(
+                            //     {
+                            //         pathname: `/admin/orderDetail/${record?.Order_id}`
+                            //     },
+                            //     {
+                            //         state: {
+                            //             user_id: record?.user_id,
+                            //         }
+                            //     }
+                            // )}
                         >
                             Chi Tiết
                         </Button>
@@ -112,29 +112,16 @@ const OrderList = (props) => {
                                             loading: state?.isConfirmLoading,
                                         }}
                                     >
-                                        <Button>
+                                        <Button danger={item.status === 5} className="font-bold">
                                             {item?.label}
                                         </Button>
                                     </Popconfirm>
                                 )
                             })
                         }
-
-                        {
-                            
-                        }
                     </Space>
                 )
             }
-        },
-    ];
-    const data = [
-        {
-            key: '1',
-            Order_id: '112',
-            order_date: '15/06/2024',
-            total_price: 200000,
-            status: 3,
         },
     ];
 
@@ -153,7 +140,7 @@ const OrderList = (props) => {
 
     return (
         <div
-            className=" w-full h-full flex flex-col gap-4"
+            className=" w-full h-full flex flex-col gap-4 order-list"
             style={{
                 height: 'calc(100vh - 80px)'
             }}
@@ -174,18 +161,24 @@ const OrderList = (props) => {
                         options={optionSearchOrder}
                     />
                     <Input
-                        placeholder={state.placeholder || 'Mã đơn hàng'} prefix={<SearchOutlined />}
+                        className="font-bold"
+                        placeholder={state.placeholder || 'Mã đơn hàng'}
+                        prefix={<SearchOutlined />}
                     />
                 </div>
-                <Button type="primary">Áp dụng</Button>
+                <Button
+                    type="primary"
+                    className="font-bold"
+                >
+                    Áp dụng
+                </Button>
             </div>
             {
                 isLoadingList ? <Loading /> :
                     <Table
                         rootClassName={`${orders.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
-                        // className="flex-grow"
+                        className="font-bold"
                         columns={columns}
-                        // sticky={true}
                         dataSource={orders}
                         bordered
                         pagination={{

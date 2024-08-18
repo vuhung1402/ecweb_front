@@ -1,21 +1,13 @@
-import React, { useState } from "react";
-import HomeIcon from "@icon/home.svg"
+import React from "react";
 import OrdersIcon from "@icon/iconOrder.svg"
 import UserIcon from "@icon/iconUser.svg"
 import ProductIcon from "@icon/iconProduct.svg"
 import TransactionIcon from "@icon/iconTransaction.svg"
 import InboxIcon from "@icon/iconInbox.svg"
-import { Avatar } from "antd"
-import { UserOutlined } from "@ant-design/icons"
-import NotifiIcon from "@icon/notifiIcon.svg"
 
 const SildeBar = ({tab, handleChangeTab}) => {
 
     const sidebarTitle = [
-        {
-            label: "Dashboard",
-            icon: <HomeIcon className="scale-75"/>,
-        },
         {
             label: "Orders",
             icon: <OrdersIcon className="scale-75"/>,
@@ -39,21 +31,17 @@ const SildeBar = ({tab, handleChangeTab}) => {
     ];
 
     return(
-        <div className="w-full h-auto flex flex-col items-center pt-5 gap-5">
-            <div className="flex items-center w-[85%] gap-4 p-2">
-                <Avatar icon={<UserOutlined />} />
-                {/* <div>User 1</div> */}
-            </div>
+        <div className="h-full w-fit flex flex-col border border-[rgb(229,230,230)] rounded-tl-md rounded-bl-md p-2 gap-2 bg-[rgba(229,237,255,0.3)]">
             {sidebarTitle.map((item, index) => {
                 return (
                     <div
+                        className={`w-full flex flex-nowrap whitespace-nowrap p-2 gap-2 items-center cursor-pointer text-[#00237a] font-medium hover:bg-[rgb(204,218,255)] rounded-md transition-colors duration-200 ${tab === index ? 'bg-[rgb(47,66,235)] !text-white' : ''}`}
                         onClick={() => handleChangeTab(index)}
-                        className={`flex gap-2 items-center w-[85%] p-2 cursor-pointer hover:bg-[rgb(219,219,219)] 
-                                    rounded-lg transition-all duration-300 ${Number(tab) === index ? ' bg-black opacity-60 text-white' : 'opacity-100'}`}
-                        key={`sidebar-${index}`}
                     >
-                        {item.icon}
-                        <div className="text-sm font-medium">{item.label}</div>
+                        <div className='flex w-8 h-8 gap-2 align-middle'>
+                            {item.icon}
+                        </div>
+                        <div className='text-sm font-bold'>{item.label}</div>
                     </div>
                 )
             })}

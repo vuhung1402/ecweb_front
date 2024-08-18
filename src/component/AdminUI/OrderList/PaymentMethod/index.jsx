@@ -9,12 +9,12 @@ const PaymentMethod = (props) => {
     }[typePay]
 
     return (
-        <div className=" border rounded-sm p-3">
-            <div className=" text-center border-b-[1px] py-2  font-medium text-xl">
+        <div className="border rounded-sm p-3">
+            <div className="text-center border-b-[1px] py-2 font-bold">
                 Phương thức thanh toán
             </div>
-            <div className="flex items-center justify-between">
-                <div className=" font-medium">
+            <div className="flex items-center justify-between py-2">
+                <div className="font-medium">
                     {paymentMethdod}
                 </div>
                 {
@@ -37,9 +37,6 @@ const PaymentMethod = (props) => {
                     </div>
                 }
 
-                {/* <div className=" text-green-500">
-                    Đã chuyển tiền
-                </div> */}
             </div>
         </div>
     )

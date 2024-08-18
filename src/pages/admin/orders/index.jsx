@@ -10,7 +10,10 @@ import { logAgain } from "@utils/function";
 import { FAIL } from "@utils/message";
 import Loading from "@component/Loading/Loading";
 
-const Orders = () => {
+const Orders = (props) => {
+
+    const { handleOrderDetail } = props;
+
     const [state, setState] = useState({
         data: undefined,
         tab: 0,
@@ -62,6 +65,7 @@ const Orders = () => {
                                             tab={state?.tab}
                                             isLoadingList={state.isLoadingList}
                                             getData={getData}
+                                            handleOrderDetail={handleOrderDetail}
                                         />
                                     )
                                 }
