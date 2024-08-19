@@ -9,13 +9,11 @@ const DropDownCategory = (props) => {
     }
 
     return (
-        < Select
+        <Select
             onSelect={onSelect}
             value={type === 'sub_category_id' ? idSubCategory : idCategory}
-            style={{
-                width: 200,
-            }}
             placeholder="Search to Select"
+            className='font-bold w-full'
             optionFilterProp="children"
             filterOption={(input, option) => (option?.label ?? '').includes(input)}
             filterSort={(optionA, optionB) =>

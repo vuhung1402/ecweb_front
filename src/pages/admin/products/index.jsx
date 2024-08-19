@@ -12,7 +12,7 @@ import Loading from "@component/Loading/Loading";
 
 const Products = (props) => {
 
-    const { url } = props;
+    const { handleDetail } = props;
 
     const [state, setState] = useState({
         isModalOpen: false,
@@ -148,6 +148,7 @@ const Products = (props) => {
                         <div className="w-full h-full p-4">
                             <Tabs
                                 type="editable-card"
+                                className="font-bold"
                                 onChange={onChangeTab}
                                 activeKey={state.activeKey}
                                 onEdit={onEdit}
@@ -167,6 +168,7 @@ const Products = (props) => {
                                                 handleChangeName={handleChangeName}
                                                 handleOpenModal={handleOpenModal}
                                                 getData={getData}
+                                                handleDetail={handleDetail}
                                             />
                                         )
                                     }

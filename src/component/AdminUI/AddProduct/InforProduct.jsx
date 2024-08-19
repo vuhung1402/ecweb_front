@@ -23,23 +23,21 @@ const InforProduct = (props) => {
     }, [idCategory])
 
     return (
-        <div id="infor-product" className=" w-full flex flex-col gap-4">
-            <div className=" flex gap-3 items-center justify-between">
-                <div className="flex gap-3 items-center">
-                    <div className=" w-28">Mã sản phẩm</div>
+        <div id="infor-product" className="w-full flex flex-col gap-4">
+            <div className="flex flex-col gap-3 w-full">
+                <div className="flex gap-3 items-center font-bold w-full">
+                    <div className="w-32 min-w-32">Mã sản phẩm</div>
                     <Input
                         value={code}
                         onChange={(e) => handleChangeInfo(e, 'codeProduct')}
+                        className="w-full"
                         type=""
                         placeholder="Mã sản phẩm"
-                        style={{
-                            width: '300px'
-                        }}
                     />
                 </div>
-                <div className=" flex gap-3 items-center">
-                    <div>Danh mục chính</div>
-                    <div>
+                <div className="flex gap-3 items-center w-full">
+                    <div className="font-bold w-32 min-w-32">Danh mục chính</div>
+                    <div className="w-full">
                         <DropDownCategory
                             idSubCategory={idSubCategory}
                             idCategory={idCategory}
@@ -51,22 +49,20 @@ const InforProduct = (props) => {
                 </div>
             </div>
 
-            <div className="flex gap-3 items-center justify-between">
-                <div className=" flex gap-3 items-center">
-                    <div className=" w-28">Tên sản phẩm</div>
+            <div className="flex flex-col gap-3 w-full">
+                <div className="flex gap-3 items-center font-bold w-full">
+                    <div className="w-32 min-w-32">Tên sản phẩm</div>
                     <Input
                         value={name}
                         onChange={(e) => handleChangeInfo(e, 'nameProduct')}
                         type=""
                         placeholder="Tên sản phẩm"
-                        style={{
-                            width: '300px'
-                        }}
+                        className="w-full"
                     />
                 </div>
-                <div className=" flex gap-3 items-center">
-                    <div>Danh mục phụ</div>
-                    <div>
+                <div className="flex gap-3 items- w-full font-bold">
+                    <div className="w-32 min-w-32">Danh mục phụ</div>
+                    <div className="w-full">
                         <DropDownCategory
                             idSubCategory={idSubCategory}
                             idCategory={idCategory}
@@ -78,35 +74,31 @@ const InforProduct = (props) => {
                 </div>
             </div>
 
-            <div className=" flex gap-3 items-center">
-                <div className=" w-28 hide">Giá tiền</div>
+            <div className="flex gap-3 items-center w-full font-bold">
+                <div className="w-32 min-w-32 hide">Giá tiền</div>
                 <InputNumber
                     value={price}
                     onChange={(e) => handleChangeInfo(e, 'price')}
-                    style={{
-                        width: '300px'
-                    }}
                     formatter={(value) => `VND ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                     parser={(value) => value?.replace(/\VND\s?|(,*)/g, '')}
+                    className="w-full"
                 />
             </div>
 
-            <div className=" flex gap-3 items-center">
-                <div className=" w-28 hide">Kho hàng</div>
+            <div className="flex gap-3 items-center w-full font-bold">
+                <div className="w-32 min-w-32 hide">Kho hàng</div>
                 <Input
                     value={total}
                     onChange={(e) => handleChangeInfo(e, 'total')}
                     type=""
                     placeholder="Số lượng hàng trong kho"
-                    style={{
-                        width: '300px'
-                    }}
+                    className="w-full"
                 />
             </div>
 
-            <div className=" flex gap-3 items-center w-full">
-                <div className=" w-28">Mô tả</div>
-                <div className=" flex flex-grow">
+            <div className="flex gap-3 items-center w-full font-bold">
+                <div className="w-32 min-w-32">Mô tả</div>
+                <div className="flex flex-grow">
                     <TextEditor value={description} handleChangeInfo={handleChangeInfo} />
                 </div>
             </div>

@@ -18,9 +18,9 @@ const ColorInfo = (props) => {
     }, [color?.length, color?.[colorUid]?.array_sizes?.length])
 
     return (
-        <div id="color-info" className="flex mt-14 gap-3">
-            <div className=" w-28">Màu</div>
-            <div className="flex flex-col gap-3">
+        <div id="color-info" className="flex mt-14 gap-3 font-bold w-full">
+            <div className="w-32 min-w-32">Màu</div>
+            <div className="flex flex-col gap-3 w-full">
                 <Button
                     icon={<PlusOutlined />}
                     type="primary"
@@ -29,51 +29,55 @@ const ColorInfo = (props) => {
                 >
                     Thêm màu
                 </Button>
-                <div className="flex flex-col gap-3">
+                <div className="flex flex-col gap-3 w-full">
                     {color?.map((item, index) => {
                         return (
                             <>
-                                <div className="flex gap-2 items-center" key={`color-${index}`}>
-                                    <ColorPicker
-                                        value={item?.code_color}
-                                        showText
-                                        onChange={(value, hex) => handleEditColor(hex, item?._id, 'code_color')}
-                                    />
-                                    <Input
-                                        value={item?.name_color}
-                                        onChange={(e) => handleEditColor(e.target.value, item?._id, 'name_color')}
-                                        type=""
-                                        placeholder="Tên màu"
-                                        style={{
-                                            width: '100px'
-                                        }}
-                                    />
-                                    <Input
-                                        value={item?.total_number_with_color}
-                                        onChange={(e) => handleEditColor(e.target.value, item?._id, 'total_number_with_color')}
-                                        type=""
-                                        placeholder="Số lượng"
-                                        style={{
-                                            width: '100px'
-                                        }}
-                                    />
-                                    <SelectImage
-                                        colorId={item?._id}
-                                        imageList={imageList}
-                                        imageUid={item?.image?.uid}
-                                        onSelectImage={handleEditColor}
-                                    />
-                                    <div
-                                        onClick={() => handleDeleteColor(item?._id)}
-                                        className=" cursor-pointer"
-                                    >
-                                        <DeleteIcon />
+                                <div className="flex flex-col gap-2" key={`color-${index}`}>
+                                    <div className="flex items-center gap-2">
+                                        <ColorPicker
+                                            value={item?.code_color}
+                                            showText
+                                            onChange={(value, hex) => handleEditColor(hex, item?._id, 'code_color')}
+                                        />
+                                        <Input
+                                            value={item?.name_color}
+                                            onChange={(e) => handleEditColor(e.target.value, item?._id, 'name_color')}
+                                            type=""
+                                            placeholder="Tên màu"
+                                            style={{
+                                                width: '100px'
+                                            }}
+                                        />
+                                        <Input
+                                            value={item?.total_number_with_color}
+                                            onChange={(e) => handleEditColor(e.target.value, item?._id, 'total_number_with_color')}
+                                            type=""
+                                            placeholder="Số lượng"
+                                            style={{
+                                                width: '60px'
+                                            }}
+                                        />
                                     </div>
-                                    <div
-                                        className="cursor-pointer"
-                                        onClick={() => handleAddSize(item?._id)}
-                                    >
-                                        <PlusIcon />
+                                    <div className="flex items-center gap-2">
+                                        <SelectImage
+                                            colorId={item?._id}
+                                            imageList={imageList}
+                                            imageUid={item?.image?.uid}
+                                            onSelectImage={handleEditColor}
+                                        />
+                                        <div
+                                            onClick={() => handleDeleteColor(item?._id)}
+                                            className=" cursor-pointer"
+                                        >
+                                            <DeleteIcon />
+                                        </div>
+                                        <div
+                                            className="cursor-pointer"
+                                            onClick={() => handleAddSize(item?._id)}
+                                        >
+                                            <PlusIcon />
+                                        </div>
                                     </div>
                                 </div>
                                 {item?.array_sizes?.length > 0 && item?.array_sizes?.map((itemSize, idx) => {
@@ -85,7 +89,7 @@ const ColorInfo = (props) => {
                                                 type=""
                                                 placeholder="Size"
                                                 style={{
-                                                    width: '150px'
+                                                    width: '100px'
                                                 }}
                                             />
                                             <Input
@@ -94,7 +98,7 @@ const ColorInfo = (props) => {
                                                 type=""
                                                 placeholder="Số lượng"
                                                 style={{
-                                                    width: '150px'
+                                                    width: '100px'
                                                 }}
                                             />
                                             <div

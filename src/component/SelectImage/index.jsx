@@ -16,21 +16,6 @@ const SelectImage = (props) => {
         setState(prev => ({...prev}));
     },[imageList])
 
-    // useEffect(() => {
-    //     const handleClickOutside = (event) => {
-    //         const element = document.getElementById('select-image-popover');
-    //         const titleElement = document.getElementById('select-image-text');
-    //         const imagePreview = document.querySelectorAll('.ant-image-preview-root');
-            
-    //         if (element && !element.contains(event.target) && !titleElement.contains(event.target) && !imagePreview?.[imagePreview.length - 1]?.contains(event.target)) {
-    //             setState(prev => ({...prev, open: false}));
-    //         };
-    //     };
-
-    //     document.addEventListener('click', handleClickOutside);
-    //     return () => document.removeEventListener('click', handleClickOutside);
-    // },[]);
-
     const handleClick = () => {
         state.open = !state.open;
         setState(prev => ({...prev}));
@@ -72,7 +57,7 @@ const SelectImage = (props) => {
                 }
             >
                 <div
-                    className="hover:text-blue-500 font-medium truncate cursor-pointer max-w-[180px] select-none"
+                    className="hover:text-blue-500 font-medium truncate cursor-pointer max-w-[150px] select-none"
                     onClick={handleClick}
                     id="select-image-text"
                 >

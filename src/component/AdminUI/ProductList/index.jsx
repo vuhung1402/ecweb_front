@@ -15,7 +15,7 @@ import Loading from '@component/Loading/Loading';
 
 const ProductList = (props) => {
     const { idCategory, subCategory, products, skeletonLoading } = props;
-    const { handleOpenModal, handleChangeSubCategory, getData, filterData } = props; // function
+    const { handleOpenModal, handleChangeSubCategory, getData, filterData, handleDetail } = props; // function
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -47,21 +47,21 @@ const ProductList = (props) => {
         setState((prev) => ({ ...prev }))
     }, [subCategory?.length]);
 
-    const handleDetail = async (product_id) => {
-        navigate(
-            {
-                pathname: `/admin/product/edit`,
-            },
-            {
-                state: {
-                    product_id,
-                }
-            }
-        );
+    // const handleDetail = async (product_id) => {
+        // navigate(
+        //     {
+        //         pathname: `/admin/product/edit`,
+        //     },
+        //     {
+        //         state: {
+        //             product_id,
+        //         }
+        //     }
+        // );
         // call api get product detail
         // then, set state -> detailData
         // set modal open
-    };
+    // };
 
     const onConfirm = async (product_id) => {
         setState(prev => ({ ...prev, confirmLoading: true }));
@@ -83,15 +83,15 @@ const ProductList = (props) => {
 
     const columns = [
         {
-            title: 'Mã sản phẩm',
+            title:<div className='font-bold'>Mã sản phẩm</div>,
             dataIndex: 'code',
         },
         {
-            title: 'Tên sản phẩm',
+            title: <div className='font-bold'>Tên sản phẩm</div>,
             dataIndex: 'name',
         },
         {
-            title: 'Giá tiền',
+            title: <div className='font-bold'>Giá tiền</div>,
             dataIndex: 'price',
             render: (_, record) => {
                 return (
@@ -100,15 +100,17 @@ const ProductList = (props) => {
             }
         },
         {
-            title: 'Ngày thêm sản phẩm',
+            title: <div className='font-bold'>Ngày thêm sản phẩm</div>,
             dataIndex: 'createDate',
+            responsive: ['xxl']
         },
         {
-            title: 'Trạng thái số lượng',
+            title: <div className='font-bold'>Trạng thái số lượng</div>,
             dataIndex: 'total_number',
+            responsive: ['xl']
         },
         {
-            title: 'Trạng thái bán hàng',
+            title: <div className='font-bold'>Trạng thái bán hàng</div>,
             dataIndex: 'onlShop',
             render: (_, record) => {
                 const obj = state.data?.find(item => item.product_id === record?.product_id);
@@ -122,14 +124,14 @@ const ProductList = (props) => {
             }
         },
         {
-            title: 'Action',
+            title: <div className='font-bold'>Action</div>,
             dataIndex: 'action',
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
                     <div
                         className='cursor-pointer'
-                        onClick={() => handleDetail(record?.product_id)}
+                        onClick={() => handleDetail(record?.product_id, 'edit')}
                     >
                         <EditIcon />
                     </div>
@@ -192,40 +194,48 @@ const ProductList = (props) => {
             {
                 products === undefined ? <Loading /> :
                     <>
-                        <div className='flex gap-3 items-center justify-between mb-3 px-2'>
-                            <div className=' flex items-center gap-3'>
-                                <Button onClick={() => handleOpenModal('edit', idCategory)} icon={<EditOutlined />} type='primary' >
+                        <div className='flex flex-col 2xl:flex-row gap-3 items-center justify-end 2xl:justify-between mb-3 px-2'>
+                            <div className='flex w-full items-center gap-3 justify-end 2xl:justify-normal'>
+                                <Button
+                                    className='font-bold'
+                                    onClick={() => handleOpenModal('edit', idCategory)}
+                                    icon={<EditOutlined />}
+                                    type='primary'
+                                >
                                     Sửa danh mục
                                 </Button>
 
-                                <Button onClick={() => navigate('/admin/product/new')} icon={<PlusOutlined />} type='primary' >
+                                <Button
+                                    className='font-bold'
+                                    onClick={() => navigate('/admin/product/new')}
+                                    icon={<PlusOutlined />}
+                                    type='primary'
+                                >
                                     Thêm sản phẩm
                                 </Button>
                             </div>
-                            <DropDownSubCategory
-                                name={state.name}
-                                idCategory={idCategory}
-                                subCategory={subCategory}
-                                idSubCategory={state.idSubCategory}
-                                handleChangeSubCategory={handleChangeSubCategory}
-                                handleSelect={handleSelect}
-                                onNameChange={onNameChange}
-                                getData={getData}
-                            />
+                            <div className='w-full flex justify-end'>
+                                <DropDownSubCategory
+                                    name={state.name}
+                                    idCategory={idCategory}
+                                    subCategory={subCategory}
+                                    idSubCategory={state.idSubCategory}
+                                    handleChangeSubCategory={handleChangeSubCategory}
+                                    handleSelect={handleSelect}
+                                    onNameChange={onNameChange}
+                                    getData={getData}
+                                />
+                            </div>
                         </div>
-                        {
-                            !skeletonLoading &&
-                            <Table
-                                rootClassName={`${products.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
-                                columns={columns}
-                                dataSource={products}
-                                pagination={{
-                                    hideOnSinglePage: true,
-                                    pageSize: 10
-                                }}
-                            />
-                        }
-                        <Skeleton loading={skeletonLoading} />
+                        <Table
+                            rootClassName={`${products.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
+                            columns={columns}
+                            dataSource={products}
+                            pagination={{
+                                hideOnSinglePage: true,
+                                pageSize: 10
+                            }}
+                        />
                     </>
             }
         </div>

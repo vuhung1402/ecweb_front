@@ -8,6 +8,7 @@ import Products from './products';
 import Transaction from './transaction';
 import ChatBox from './chatbox';
 import OrderDetail from './OrderDetail';
+import NewProduct from '@component/AdminUI/NewProduct';
 
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@component/Resizable';
 import { useUserPackageHook } from '@redux/hooks/userHook';
@@ -25,6 +26,8 @@ const Admin = () => {
         tab: 0,
         orderId: '',
         userId: '',
+        productId: '',
+        productType: '',
     });
 
     useEffect(() => {
@@ -74,6 +77,10 @@ const Admin = () => {
         });
     };
 
+    const handleDetail = (productId, type) => {
+        setState(prev => ({...prev, productId: productId, productType: type}));
+    };
+
     const renderTab = {
         0: (
             <Orders
@@ -81,7 +88,11 @@ const Admin = () => {
             />
         ),
         1: <User url={location.search} />,
-        2: <Products url={location.search} />,
+        2: (
+            <Products
+                handleDetail={handleDetail}
+            />
+        ),
         3: <Transaction url={location.search} />,
         4: <ChatBox url={location.search} />
     }[state.tab || 0];
@@ -94,34 +105,13 @@ const Admin = () => {
                 handleBack={handleBack}
             />
         ),
+        2: (
+            <NewProduct
+                productId={state.productId}
+                type={state.productType}
+            />
+        ),
     }[state.tab || 0];
-
-    useEffect(() => {
-        const resizer = document.getElementById('resizeHandler');
-        const element = document.getElementById('sidebar');
-        if (!resizer || !element) {
-            return;
-        }
-
-        const resize = (e) => {
-            const newWidth = e.pageX - element.getBoundingClientRect().left;
-            if (newWidth > 50) {
-                element.style.width = `${newWidth}px`;
-            };
-
-            setState(prev => ({...prev, isResize: true}));
-        };
-        const stopResize = () => {
-            setState(prev => ({...prev, isResize: false}));
-            window.removeEventListener('mousemove', resize);
-        };
-
-        resizer.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            window.addEventListener('mousemove', resize);
-            window.addEventListener('mouseup', stopResize);
-        });
-    }, []);
 
     return (
         <div className='w-screen h-screen p-4 flex'>

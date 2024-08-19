@@ -123,7 +123,7 @@ const UploadImage = React.forwardRef((props, ref) => {
                         title="Chọn ảnh hiển thị"
                         rootClassName='popover-upload-image'
                         content={
-                            <div className='flex flex-col gap-3 text-xs font-medium'>
+                            <div className='flex flex-col gap-3 text-xs font-bold'>
                                 <Checkbox
                                     checked={file?.uid === childState.mainImage}
                                     onChange={() => handleSelectImage('mainImage', file?.uid)}
@@ -148,7 +148,7 @@ const UploadImage = React.forwardRef((props, ref) => {
                         }
                     >
                         <Button
-                            className='w-[102px] mt-2'
+                            className='w-[102px] mt-2 font-bold'
                         >
                             Tùy chỉnh
                         </Button>
@@ -161,9 +161,9 @@ const UploadImage = React.forwardRef((props, ref) => {
     return (
         <div
             id='upload-image'
-            className=' flex items-center gap-3 mt-3'
+            className='flex items-center gap-3 mt-3'
         >
-            <div className=' w-28'>
+            <div className='w-32 min-w-32 font-bold'>
                 Ảnh
             </div>
 

@@ -1,7 +1,7 @@
 import { Modal, Tabs, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import AddProduct from "../AddProduct";
-import { handleUploadListImage, handleUploadToFirebase, uuid } from "@utils/function";
+import { handleUploadListImage, uuid } from "@utils/function";
 
 import "./style.scss"
 import { category } from "@pages/admin/products/mock";
@@ -12,8 +12,7 @@ import { LOGIN_AGAIN } from "@utils/message";
 
 const NewProduct = (props) => {
 
-    const { open, type, idCategory, idSubCategory, detailData } = props;
-    const { handleCloseModalProduct } = props;
+    const { open, type, idCategory, idSubCategory, productId } = props;
 
     const params = useParams();
     const location = useLocation();
@@ -47,13 +46,13 @@ const NewProduct = (props) => {
 
     // mode edit
     useEffect(() => {
-        if (params?.type === 'edit') {
+        if (type === 'edit') {
             getDetail()
         };
-    }, [params?.type]);
+    }, [type]);
 
     const getDetail = async () => {
-        const detail = await productDetail(location.state?.product_id);
+        const detail = await productDetail(productId);
         const product = detail?.product;
         setState(prev => ({
             ...prev,
@@ -82,12 +81,6 @@ const NewProduct = (props) => {
 
         if (modalBodyElement?.[0]) modalBodyElement?.[0]?.classList.add('scrollbar-hide');
     }, [open]);
-
-    const title = {
-        'delete': 'Bạn có chắc chắn muốn xoá!!',
-        'edit': 'Chỉnh sửa sản phẩm',
-        'create': 'Tạo mới sản phẩm',
-    }[type];
 
     const handleAddColor = () => {
         const { color } = state;
@@ -362,51 +355,36 @@ const NewProduct = (props) => {
         });
     };
 
-    const okText = {
-        'edit': 'Xác nhận',
-        'create': 'Thêm mới',
-    }[type];
+    if (!productId) return <div>Chi tiết sản phẩm sec hiển thị ở đây</div>
 
     return (
-        <div className="px-10 py-3 h-screen">
-            <Tabs
-                type="card"
-                items={[
-                    {
-                        label: `Sản phẩm mới`,
-                        key: 'addNewProduct',
-                        children: (
-                            <AddProduct
-                                // category={state.category}
-                                mainImage={state.mainImage}
-                                hoverImage={state.hoverImage}
-                                addLoading={state.addLoading}
-                                colorUid={state.colorUid}
-                                ref={uploadImageRef}
-                                description={state.description}
-                                total={state.total}
-                                price={state.price}
-                                code={state.codeProduct}
-                                name={state.nameProduct}
-                                idCategory={state.idCategory}
-                                idSubCategory={state.idSubCategory}
-                                imageList={state.fileList}
-                                color={state.color}
-                                handleAddColor={handleAddColor}
-                                handleAddSize={handleAddSize}
-                                handleDeleteColor={handleDeleteColor}
-                                handleDeleteSize={handleDeleteSize}
-                                handleChangeInfo={handleChangeInfo}
-                                handleExportData={handleExportData}
-                                handleEditColor={handleEditColor}
-                                handleEditSize={handleEditSize}
-                                handleSelectCategory={handleSelectCategory}
-                                onOk={onOk}
-                                onCancel={onCancel}
-                            />
-                        ),
-                    }
-                ]}
+        <div className="px-10 py-3 w-full h-full">
+            <AddProduct
+                mainImage={state.mainImage}
+                hoverImage={state.hoverImage}
+                addLoading={state.addLoading}
+                colorUid={state.colorUid}
+                ref={uploadImageRef}
+                description={state.description}
+                total={state.total}
+                price={state.price}
+                code={state.codeProduct}
+                name={state.nameProduct}
+                idCategory={state.idCategory}
+                idSubCategory={state.idSubCategory}
+                imageList={state.fileList}
+                color={state.color}
+                handleAddColor={handleAddColor}
+                handleAddSize={handleAddSize}
+                handleDeleteColor={handleDeleteColor}
+                handleDeleteSize={handleDeleteSize}
+                handleChangeInfo={handleChangeInfo}
+                handleExportData={handleExportData}
+                handleEditColor={handleEditColor}
+                handleEditSize={handleEditSize}
+                handleSelectCategory={handleSelectCategory}
+                onOk={onOk}
+                onCancel={onCancel}
             />
         </div>
     )
