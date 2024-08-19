@@ -27,6 +27,8 @@ const OrderDetail = (props) => {
         isLoading: false,
     });
 
+    const arrayNotShowRefund = [0,5];
+
     const getData = async () => {
         const respone = await getOrderDetail(orderId, userId);
         if (respone?.success) {
@@ -145,7 +147,7 @@ const OrderDetail = (props) => {
                                 })
                             }
                             {
-                                (state.data?.type_pay === 1 && state?.data?.status !== 0) &&
+                                (state.data?.type_pay === 1 && !arrayNotShowRefund.includes(state?.data?.status) ) &&
                                 <Popconfirm
                                     title="Hoàn tiền"
                                     description="Bạn muốn hoàn tiền đơn hàng này?"
