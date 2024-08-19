@@ -1,4 +1,5 @@
 import React from "react";
+import { Card, Tag } from "antd";
 
 const PaymentMethod = (props) => {
     const { typePay, status } = props;
@@ -9,36 +10,32 @@ const PaymentMethod = (props) => {
     }[typePay]
 
     return (
-        <div className="border rounded-sm p-3">
-            <div className="text-center border-b-[1px] py-2 font-bold">
-                Phương thức thanh toán
-            </div>
-            <div className="flex items-center justify-between py-2">
-                <div className="font-medium">
+        <Card title="Phương thức thanh toán">
+            <div className="flex items-center justify-between">
+                <Tag color="#2db7f5" className="font-bold">
                     {paymentMethdod}
-                </div>
+                </Tag>
                 {
                     (typePay === 0 && status === 4) &&
-                    <div className=" text-green-500">
+                    <Tag color="#87d068" className="font-bold">
                         Đã nhận tiền
-                    </div>
+                    </Tag>
                 }
                 {
                     (typePay === 1 && status > 0 && status <= 4) &&
-                    <div className=" text-green-500">
+                    <Tag color="#87d068" className="font-bold">
                         Đã thanh toán
-                    </div>
+                    </Tag>
                 }
-
                 {
                     (typePay === 1 && (status === 5 || status === 6)) &&
-                    <div className=" text-green-500">
+                    <div color="#87d068" className="font-bold">
                         Đã hoàn tiền
                     </div>
                 }
 
             </div>
-        </div>
+        </Card>
     )
 }
 

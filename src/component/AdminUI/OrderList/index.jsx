@@ -55,6 +55,7 @@ const OrderList = (props) => {
             title: 'Ngày đặt hàng',
             dataIndex: 'order_date',
             key: 'age',
+            responsive: ['sm']
         },
         {
             title: 'Giá tiền',
@@ -64,61 +65,22 @@ const OrderList = (props) => {
                 return (
                     <div>{formatCurrencyVN(record?.price_pay)}</div>
                 )
-            }
-        },
-        {
-            title: 'Trạng thái',
-            dataIndex: 'status',
-            render: (_, record) => {
-                return (
-                    <div>{statusOrder.find((item) => item?.status === record.status).name}</div>
-                )
-            }
+            },
+            responsive: ['md']
         },
         {
             title: 'Action',
             key: 'action',
             render: (_, record) => {
-                const findStatus = statusOrder.find((item) => item?.status === record?.status)
                 return (
                     <Space size="middle">
                         <Button
                             className="font-bold"
                             type="primary"
                             onClick={() => handleOrderDetail(record?.Order_id, record?.user_id)}
-                            // onClick={() => navigate(
-                            //     {
-                            //         pathname: `/admin/orderDetail/${record?.Order_id}`
-                            //     },
-                            //     {
-                            //         state: {
-                            //             user_id: record?.user_id,
-                            //         }
-                            //     }
-                            // )}
                         >
                             Chi Tiết
                         </Button>
-                        {
-                            findStatus?.nextStatus?.map((item) => {
-                                return (
-                                    <Popconfirm
-                                        title="Đổi trạng thái"
-                                        description="Bạn muốn đổi trạng thái của đơn hàng?"
-                                        cancelText="Huỷ"
-                                        okText="Xác nhận"
-                                        onConfirm={() => updateStatus(record?.user_id, record?.Order_id, item?.status)}
-                                        okButtonProps={{
-                                            loading: state?.isConfirmLoading,
-                                        }}
-                                    >
-                                        <Button danger={item.status === 5} className="font-bold">
-                                            {item?.label}
-                                        </Button>
-                                    </Popconfirm>
-                                )
-                            })
-                        }
                     </Space>
                 )
             }
@@ -145,7 +107,7 @@ const OrderList = (props) => {
                 height: 'calc(100vh - 80px)'
             }}
         >
-            <div className="w-full flex justify-end items-center gap-3">
+            <div className="w-full flex flex-col sm:flex-row justify-end sm:items-center gap-3">
                 <div className=" flex gap-2">
                     <Select
                         style={{

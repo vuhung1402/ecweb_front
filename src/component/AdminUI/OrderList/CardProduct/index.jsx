@@ -11,7 +11,7 @@ const CardProduct = (props) => {
     return (
         <div className="admin-card-product">
             <Card
-                style={{width: 200}}
+                style={{width: 150}}
                 cover={
                     <Image
                         src={dataDetail?.image_hover}
@@ -26,7 +26,7 @@ const CardProduct = (props) => {
                             <div>{dataDetail?.color}{dataDetail?.size ? `/${dataDetail?.size}` : ''}</div>
                             <div>{formatCurrencyVN(dataDetail?.price_per_one)}</div>
                             <div>Số lượng: {dataDetail?.quantity}</div>
-                            <div className="flex justify-end text-red-600 text-2xl">{formatCurrencyVN(dataDetail?.price_per_item)}</div>
+                            <div className="flex justify-end text-red-600 text-lg">{formatCurrencyVN(dataDetail?.price_per_item)}</div>
                         </div>
                     }
                 />

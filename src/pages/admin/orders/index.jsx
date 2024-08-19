@@ -54,6 +54,8 @@ const Orders = (props) => {
                     <div className="w-full h-full p-4">
                         <Tabs
                             onChange={onChangeTab}
+                            rootClassName="!w-full !max-w-full"
+                            className="!w-full !max-w-full"
                             activeKey={state.tab}
                             items={statusOrder.map((item) => {
                                 return {

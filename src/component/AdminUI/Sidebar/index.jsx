@@ -31,7 +31,7 @@ const SildeBar = ({tab, handleChangeTab}) => {
     ];
 
     return(
-        <div className="h-full w-fit flex flex-col border border-[rgb(229,230,230)] rounded-tl-md rounded-bl-md p-2 gap-2 bg-[rgba(229,237,255,0.3)]">
+        <div className="h-full w-full flex flex-col border border-[rgb(229,230,230)] rounded-tl-md rounded-bl-md p-2 gap-2 bg-[rgba(229,237,255,0.3)]">
             {sidebarTitle.map((item, index) => {
                 return (
                     <div
@@ -41,7 +41,7 @@ const SildeBar = ({tab, handleChangeTab}) => {
                         <div className='flex w-8 h-8 gap-2 align-middle'>
                             {item.icon}
                         </div>
-                        <div className='text-sm font-bold'>{item.label}</div>
+                        <div className='hidden md:flex text-sm font-bold'>{item.label}</div>
                     </div>
                 )
             })}

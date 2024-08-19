@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import CardProduct from "../../../component/AdminUI/OrderList/CardProduct";
 import PaymentInfo from "../../../component/AdminUI/OrderList/PaymentInfo";
 import PaymentMethod from "../../../component/AdminUI/OrderList/PaymentMethod";
-import { Button, message, Popconfirm } from "antd";
+import { Button, message, Popconfirm, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
 import { getOrderDetail, refundMoney, updateStatuOrder } from "./function";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
@@ -10,12 +10,16 @@ import { logAgain } from "@utils/function";
 import { FAIL, SUCCESS } from "@utils/message";
 import { statusOrder } from "../orders/mock";
 import Loading from "@component/Loading/Loading";
+import { LeftOutlined } from "@ant-design/icons";
+import useWindowSize from "../../../hooks/useWindowSize";
 
 const OrderDetail = (props) => {
     const { userId, orderId } = props;
-
+    const { handleBack } = props;
+    
     if (!userId && !orderId) return <div className="font-bold">Chi tiết sản phẩm sẽ hiển thị ở đây</div>
-
+    
+    const iw = useWindowSize().width;
     const navigate = useNavigate();
 
     const [state, setState] = useState({
@@ -84,8 +88,24 @@ const OrderDetail = (props) => {
                 state.data === undefined ? <Loading /> :
                     <div className="w-full h-full p-4 flex flex-col gap-2 overflow-y-auto">
                         <div className="w-full flex flex-col gap-2">
+                            <div className="w-full items-center flex justify-between">
+                                <div>
+                                    {iw < 960 && (
+                                        <div
+                                            className="w-fit px-4 py-1 flex items-center gap-3 font-bold hover:bg-[rgb(219,219,219)] rounded-md transition-colors duration-200 cursor-pointer"
+                                            onClick={handleBack}
+                                        >
+                                            <LeftOutlined />
+                                            <div>Trở về</div>
+                                        </div>
+                                    )}
+                                </div>
+                                <Tag color="green" className="font-bold">
+                                    {statusOrder.find((item) => item?.status === state.data.status).name}
+                                </Tag>
+                            </div>
                             <div className="w-full flex flex-col gap-3">
-                                <div className="w-full flex flex-wrap gap-2">
+                                <div className="w-full flex flex-wrap items-center justify-center gap-2">
                                     {
                                         state?.data?.items?.map((item) => {
                                             return (
@@ -100,7 +120,7 @@ const OrderDetail = (props) => {
                                 </div>
                             </div>
                         </div>
-                        <div className=" flex gap-3 justify-end">
+                        <div className="flex flex-col sm:flex-row gap-3 justify-end">
                             {
                                 statusOrder.find((item) => item.status === state.data?.status)?.nextStatus?.map((nextStatusItem) => {
                                     return (
