@@ -35,7 +35,7 @@ const SildeBar = ({tab, handleChangeTab}) => {
             {sidebarTitle.map((item, index) => {
                 return (
                     <div
-                        className={`w-full flex flex-nowrap whitespace-nowrap p-2 gap-2 items-center cursor-pointer text-[#00237a] font-medium hover:bg-[rgb(204,218,255)] rounded-md transition-colors duration-200 ${tab === index ? 'bg-[rgb(47,66,235)] !text-white' : ''}`}
+                        className={`w-full flex flex-nowrap whitespace-nowrap p-2 gap-2 items-center cursor-pointer text-[#00237a] font-medium hover:bg-[rgb(204,218,255)] rounded-md transition-colors duration-200 ${Number(tab) === Number(index) ? 'bg-[rgb(47,66,235)] !text-white' : ''}`}
                         onClick={() => handleChangeTab(index)}
                     >
                         <div className='flex w-8 h-8 gap-2 align-middle'>
