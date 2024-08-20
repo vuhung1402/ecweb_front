@@ -1,5 +1,5 @@
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import SildeBar from "@pages/profile/SildeBar";
+import SideBar from "@pages/Profile/SideBar";
 import React, { useEffect, useState } from "react";
 import ProductCard from "./productCard";
 import PaymentInfor from "./paymentInfor";

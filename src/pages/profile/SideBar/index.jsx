@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import IconStopCircle from '@icon/iconStopCircle.svg';
 
-const SildeBar = () => {
+const SideBar = () => {
     const navigate = useNavigate()
     const handleClick = (url) => {
         navigate(url);
@@ -38,4 +38,4 @@ const SildeBar = () => {
     )
 }
 
-export default SildeBar;
+export default SideBar;

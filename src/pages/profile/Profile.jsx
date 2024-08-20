@@ -1,69 +1,32 @@
-import { useDispatch } from "react-redux"
-import { clear } from "../../redux/actions"
-import { useNavigate } from "react-router-dom"
-import React, { useEffect, useState } from "react"
-import { useUserPackageHook } from "../../redux/hooks/userHook"
-import { endpoint } from "../../api/api"
-import Footer from "@core/Footer"
-import Loading from "../../component/Loading/Loading"
-import SildeBar from "./SildeBar"
-import { message } from "antd"
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { message } from "antd";
 
+import Footer from "@core/Footer";
+import Loading from "@component/Loading/Loading";
+import SideBar from "@pages/Profile/SideBar";
+
+import { getProfileInfo } from "@pages/Profile/function";
+import { TOKEN_INVALID } from "@utils/error";
 
 const Profile = () => {
-    const token = localStorage.getItem("token");
-    const dispatch = useDispatch()
+    const navigate = useNavigate();
 
-    const navigate = useNavigate()
-
-    const user = useUserPackageHook()
-
-    const [infor, setInfor] = useState()
-
-    const myAlert = () => {
-        const response = window.confirm("Vui lòng đăng nhập lại!!!");
-        if (response) {
-            dispatch(clear());
-            navigate("/login")
-        }
-    }
+    const [infor, setInfor] = useState();
 
     useEffect(() => {
-        fetch(`${endpoint}/users/get_info/`, {
-            method: "GET",
-            headers: {
-                'Content-Type': 'application/json',
-                'token': token,
-            },
-        }).then((response) => {
-            if (!response.ok) {
-                throw new Error("Netword response not ok")
+        async function getInfo(params) {
+            const res = await getProfileInfo();
+            if (res?.success) setInfor(res);
+            if (res?.message === TOKEN_INVALID) {
+                message.info("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại!");
+                localStorage.removeItem("token");
+                navigate("/login");
             }
-            return response.json()
-        }).then((json) => {
+        };
 
-            if (json?.success) {
-                setInfor(json)
-            } else {
-                if (json?.message === TOKEN_INVALID) {
-                    message?.info("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại!");
-                    localStorage.removeItem("token");
-                    navigate("/login");
-                } else {
-                    message?.error("Trang web đang bảo trì!");
-                } 
-            }
-        }).catch((error) => {
-            console.error("Error: ", error)
-        })
-    }, [])
-
-    const [content, setContent] = useState(1)
-
-    const handleLogOut = () => {
-        dispatch(clear())
-        navigate('/')
-    }
+        getInfo();
+    }, []);
 
     return (
         <div className="w-full h-full">
@@ -77,7 +40,7 @@ const Profile = () => {
                             </div>
                             <div className="flex flex-col md:flex-row w-full md:w-[750px] me:w-[970px] xl:w-[1170px] mx-auto">
                                 <div className="w-full md:w-1/4 px-5 md:px-0">
-                                    <SildeBar />
+                                    <SideBar />
                                 </div>
                                 <div className="w-full me:w-3/4 p-5 flex flex-col gap-3">
                                     <div className="uppercase font-extrabold mb-3 border-b-[1px] pb-1">Thông tin tài khoản</div>
@@ -95,7 +58,7 @@ const Profile = () => {
             }
             <div><Footer /></div>
         </div>
-    )
-}
+    );
+};
 
-export default Profile
+export default Profile;
