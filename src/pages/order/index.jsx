@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Tabs, message } from "antd";
 import { useNavigate } from "react-router-dom";
 
-import SideBar from "@pages/Profile/SideBar";
+import SideBar from "@pages/profile/SideBar";
 import Loading from "@component/Loading/Loading";
 import OrderList from "./OrderList";
 
