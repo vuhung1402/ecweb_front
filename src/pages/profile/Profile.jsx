@@ -4,9 +4,9 @@ import { message } from "antd";
 
 import Footer from "@core/Footer";
 import Loading from "@component/Loading/Loading";
-import SideBar from "@pages/profile/SideBar";
+import SideBar from "@pages/Profile/SideBar";
 
-import { getProfileInfo } from "@pages/profile/function";
+import { getProfileInfo } from "@pages/Profile/function";
 import { TOKEN_INVALID } from "@utils/error";
 
 const Profile = () => {
