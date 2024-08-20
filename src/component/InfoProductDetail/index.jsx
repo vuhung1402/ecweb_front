@@ -1,15 +1,17 @@
-import { Button, message } from "antd"
-import { useEffect, useState } from "react"
-import { VND, addKeyToArraySize, formatCurrencyVN, getNotInvalidColor, logAgain } from "../../utils/function"
-import IconClose from "@icon/iconClose.svg"
-import React from "react"
-import { addToCart, quantityCart } from "@pages/Product/function"
-import { FAIL, SUCCESS } from "@utils/message"
-import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"
-import { useNavigate } from "react-router-dom"
-import { useDispatch } from "react-redux"
-import { numOfCartPackage } from "@redux/actions"
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button, message } from "antd";
 
+import { useDispatch } from "react-redux";
+import { numOfCartPackage } from "@redux/actions";
+
+import { addKeyToArraySize, formatCurrencyVN, getNotInvalidColor, logAgain } from "@utils/function";
+
+import { addToCart, quantityCart } from "@pages/Product/function";
+import { SUCCESS } from "@utils/message";
+import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
+
+import IconClose from "@icon/iconClose.svg";
 
 const InfoProductDetail = ({ data, handleGotoImage }) => {
     const [state, setState] = useState({
