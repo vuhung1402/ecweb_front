@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "antd";
+import { useNavigate } from "react-router-dom";
 import MotionBox from "@component/MotionBox";
 import { fadeIn } from "@utils/animation";
 
@@ -14,7 +15,6 @@ import { getProducts } from "./function";
 
 import HomePageImage from '@images/homepage.png';
 import IconArrowDown from '@icon/iconArrowDown.svg';
-import { useNavigate } from "react-router-dom";
 
 const Home = () => {
     const navigate = useNavigate()
@@ -56,10 +56,10 @@ const Home = () => {
 
     return (
         <div className="w-screen h-screen">
-            {!state.products && (
+            {state.products.length === 0 && (
                 <Loading />
             )}
-            {state.products && (
+            {state.products.length > 0 && (
                 <>
                     <div className="flex top-0 fixed w-full justify-center z-[999]" id="app-header">
                         <Header
