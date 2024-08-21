@@ -173,7 +173,7 @@ const ProductList = (props) => {
     return (
         <div
             style={{
-                height: iw > 640 ? 'calc(100vh - 120px)' : 'calc(100vh - 230ưpx)'
+                height: iw > 640 ? 'calc(100vh - 120px)' : 'calc(100vh - 230px)'
             }}
         >
             {
