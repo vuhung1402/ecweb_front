@@ -12,6 +12,7 @@ import Loading from "@component/Loading/Loading";
 
 const Products = (props) => {
 
+    const { isModifiedProduct } = props;
     const { handleDetail } = props;
 
     const [state, setState] = useState({
@@ -27,7 +28,6 @@ const Products = (props) => {
     });
 
     const getData = async () => {
-        setState(prev => ({ ...prev, skeletonLoading: true }));
         const categories = await getCategories();
         state.activeKey = localStorage.getItem('category_id') ? localStorage.getItem('category_id') : categories?.[0]?.category_id;
         const products = await getProducts(state.activeKey);
@@ -42,12 +42,21 @@ const Products = (props) => {
         ));
     };
 
+    // get all when product has modified
+    useEffect(() => {
+        getData();
+    },[isModifiedProduct]);
+
     const filterData = async (idSubCategory) => {
-        setState(prev => ({ ...prev, skeletonLoading: true }));
+        state.skeletonLoading = true;
+        setState(prev => ({...prev}));
+        if (idSubCategory === '') {
+            getData();
+            return;
+        };
         const productFilter = await getProducts(idSubCategory);
-        // state.products = productFilter;
         setState((prev) => ({ ...prev, skeletonLoading: false, products: productFilter }));
-    }
+    };
 
     // goi ham de get data
     useEffect(() => {
@@ -56,7 +65,6 @@ const Products = (props) => {
 
     const onChangeTab = (newActiveKey) => {
         localStorage.setItem('category_id', newActiveKey);
-        // state.activeKey = newActiveKey;
         setState((prev) => ({ 
             ...prev, 
             activeKey: newActiveKey, 
@@ -71,7 +79,6 @@ const Products = (props) => {
     };
 
     const handleOpenModal = (type, targetKey) => {
-        // console.log({targetKey})
         state.isModalOpen = !state.isModalOpen;
         state.modalType = type;
         if (type === 'delete') {
@@ -82,9 +89,7 @@ const Products = (props) => {
         }
         setState((prev) => ({ ...prev }))
     };
-    // console.log("state.activeKey ", state.activeKey)
     const handleDelteCategory = async () => {
-        // console.log("handleDelteCategory state.activeKey ", state.deleteTab)
         const isDelete = await deleteCategory(state.deleteTab);
         if (isDelete) {
             message.success("Xoá danh mục thành công!!");
@@ -97,7 +102,6 @@ const Products = (props) => {
         setState((prev) => ({ ...prev }));
     }
 
-    // change tab name --> tạm ok // có api thì chỉ push name lên server
     const handleChangeName = async (name, type) => {
         const { activeKey, category } = state;
 
@@ -124,8 +128,6 @@ const Products = (props) => {
         };
         setState((prev) => ({ ...prev }));
     };
-
-    //---ok
 
     const handleChangeSubCategory = async (name, sub_category_id) => {
         const { activeKey } = state;

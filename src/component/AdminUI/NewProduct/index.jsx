@@ -1,23 +1,28 @@
-import { Modal, Tabs, message } from "antd";
 import React, { useEffect, useRef, useState } from "react";
-import AddProduct from "../AddProduct";
-import { handleUploadListImage, uuid } from "@utils/function";
+import { message } from "antd";
+import { useNavigate, useParams } from "react-router-dom";
 
-import "./style.scss"
-import { category } from "@pages/admin/products/mock";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import AddProduct from "../AddProduct";
+import Loading from "@component/Loading/Loading";
+
+import { handleUploadListImage, uuid } from "@utils/function";
+import useWindowSize from "@hooks/useWindowSize";
 import { addProduct, productDetail, updateProduct } from "@pages/admin/products/function";
 import { TOKEN_INVALID } from "@utils/error";
 import { LOGIN_AGAIN } from "@utils/message";
+import { LeftOutlined } from "@ant-design/icons";
+
+import "./style.scss";
 
 const NewProduct = (props) => {
 
     const { open, type, idCategory, idSubCategory, productId } = props;
+    const { handleModifiedProduct, handleBack } = props;
 
     const params = useParams();
-    const location = useLocation();
     const uploadImageRef = useRef(null);
     const navigate = useNavigate();
+    const iw = useWindowSize().width;
 
     const [state, setState] = useState({
         addLoading: false,
@@ -34,7 +39,7 @@ const NewProduct = (props) => {
         idSubCategory: '',
         total: '',
         colorUid: '',
-
+        isLoading: true,
     });
 
     useEffect(() => {
@@ -42,14 +47,20 @@ const NewProduct = (props) => {
         state.idCategory = idCategory;
         state.idSubCategory = idSubCategory;
         setState((prev) => ({ ...prev }))
-    }, [])
+    }, []);
 
     // mode edit
     useEffect(() => {
         if (type === 'edit') {
-            getDetail()
+            state.isLoading = true;
+            setState(prev => ({...prev}));
+            getDetail();
         };
-    }, [type]);
+
+        if (type === 'new') {
+            onCancel();
+        };
+    }, [productId, type]);
 
     const getDetail = async () => {
         const detail = await productDetail(productId);
@@ -67,6 +78,7 @@ const NewProduct = (props) => {
             mainImage: product?.primary_image?.uid,
             idSubCategory: product?.sub_category_id,
             total: product?.total_number,
+            isLoading: false,
         }));
     }
 
@@ -295,7 +307,7 @@ const NewProduct = (props) => {
         handleUploadListImage(fileList, color, hoverImage, mainImage, params?.type)
             .then(array_image => {
                 const body = {
-                    product_id: location.state?.product_id,
+                    product_id: productId,
                     name: nameProduct,
                     total,
                     codeProduct: codeProduct,
@@ -307,14 +319,16 @@ const NewProduct = (props) => {
                     description,
                     imagePrimaryAndHover: array_image.imgReview,
                 };
-                if(params?.type === 'edit'){
+                if(type === 'edit'){
                     return updateProduct(body);
                 };
+                onCancel();
                 return addProduct(body);
             })
             .then(result => {
                 if (result?.success) {
                     setState(prev => ({ ...prev, addLoading: false }));
+                    handleModifiedProduct();
                     message.success("Thành công!");
                 } else {
                     if (result?.message === TOKEN_INVALID) {
@@ -348,44 +362,60 @@ const NewProduct = (props) => {
             category: [],
             idCategory: '',
             idSubCategory: '',
+            total: '',
         }));
-        navigate({
-            pathname: '/admin',
-            search: `?url=${0}`
-        });
     };
 
-    if (!productId) return <div>Chi tiết sản phẩm sec hiển thị ở đây</div>
+    if (!productId && type !== 'new') return <div>Chi tiết sản phẩm sẽ hiển thị ở đây</div>
 
     return (
-        <div className="px-10 py-3 w-full h-full">
-            <AddProduct
-                mainImage={state.mainImage}
-                hoverImage={state.hoverImage}
-                addLoading={state.addLoading}
-                colorUid={state.colorUid}
-                ref={uploadImageRef}
-                description={state.description}
-                total={state.total}
-                price={state.price}
-                code={state.codeProduct}
-                name={state.nameProduct}
-                idCategory={state.idCategory}
-                idSubCategory={state.idSubCategory}
-                imageList={state.fileList}
-                color={state.color}
-                handleAddColor={handleAddColor}
-                handleAddSize={handleAddSize}
-                handleDeleteColor={handleDeleteColor}
-                handleDeleteSize={handleDeleteSize}
-                handleChangeInfo={handleChangeInfo}
-                handleExportData={handleExportData}
-                handleEditColor={handleEditColor}
-                handleEditSize={handleEditSize}
-                handleSelectCategory={handleSelectCategory}
-                onOk={onOk}
-                onCancel={onCancel}
-            />
+        <div className="px-3 sm:px-10 py-3 w-full h-full">
+            {state.isLoading && (
+                <Loading />
+            )}
+            {!state.isLoading && (
+                <div className="w-full h-full flex flex-col gap-3">
+                    <div>
+                        {iw < 960 && (
+                            <div
+                                className="w-fit px-4 py-1 flex items-center gap-3 font-bold hover:bg-[rgb(219,219,219)] rounded-md transition-colors duration-200 cursor-pointer"
+                                onClick={handleBack}
+                            >
+                                <LeftOutlined />
+                                <div>Trở về</div>
+                            </div>
+                        )}
+                    </div>
+                    <AddProduct
+                        mainImage={state.mainImage}
+                        hoverImage={state.hoverImage}
+                        addLoading={state.addLoading}
+                        colorUid={state.colorUid}
+                        ref={uploadImageRef}
+                        description={state.description}
+                        total={state.total}
+                        price={state.price}
+                        code={state.codeProduct}
+                        name={state.nameProduct}
+                        idCategory={state.idCategory}
+                        idSubCategory={state.idSubCategory}
+                        imageList={state.fileList}
+                        color={state.color}
+                        productId={productId}
+                        handleAddColor={handleAddColor}
+                        handleAddSize={handleAddSize}
+                        handleDeleteColor={handleDeleteColor}
+                        handleDeleteSize={handleDeleteSize}
+                        handleChangeInfo={handleChangeInfo}
+                        handleExportData={handleExportData}
+                        handleEditColor={handleEditColor}
+                        handleEditSize={handleEditSize}
+                        handleSelectCategory={handleSelectCategory}
+                        onOk={onOk}
+                        onCancel={onCancel}
+                    />
+                </div>
+            )}
         </div>
     )
 }

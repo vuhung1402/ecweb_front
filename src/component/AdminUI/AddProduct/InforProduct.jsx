@@ -25,7 +25,7 @@ const InforProduct = (props) => {
     return (
         <div id="infor-product" className="w-full flex flex-col gap-4">
             <div className="flex flex-col gap-3 w-full">
-                <div className="flex gap-3 items-center font-bold w-full">
+                <div className="flex flex-col sm:flex-row gap-3 sm:items-center font-bold w-full">
                     <div className="w-32 min-w-32">Mã sản phẩm</div>
                     <Input
                         value={code}
@@ -35,7 +35,7 @@ const InforProduct = (props) => {
                         placeholder="Mã sản phẩm"
                     />
                 </div>
-                <div className="flex gap-3 items-center w-full">
+                <div className="flex flex-col sm:flex-row gap-3 sm:items-center w-full">
                     <div className="font-bold w-32 min-w-32">Danh mục chính</div>
                     <div className="w-full">
                         <DropDownCategory
@@ -50,7 +50,7 @@ const InforProduct = (props) => {
             </div>
 
             <div className="flex flex-col gap-3 w-full">
-                <div className="flex gap-3 items-center font-bold w-full">
+                <div className="flex flex-col sm:flex-row gap-3 sm:items-center font-bold w-full">
                     <div className="w-32 min-w-32">Tên sản phẩm</div>
                     <Input
                         value={name}
@@ -60,7 +60,7 @@ const InforProduct = (props) => {
                         className="w-full"
                     />
                 </div>
-                <div className="flex gap-3 items- w-full font-bold">
+                <div className="flex flex-col sm:flex-row gap-3 sm:items-center w-full font-bold">
                     <div className="w-32 min-w-32">Danh mục phụ</div>
                     <div className="w-full">
                         <DropDownCategory
@@ -74,7 +74,7 @@ const InforProduct = (props) => {
                 </div>
             </div>
 
-            <div className="flex gap-3 items-center w-full font-bold">
+            <div className="flex flex-col sm:flex-row gap-3 sm:items-center w-full font-bold">
                 <div className="w-32 min-w-32 hide">Giá tiền</div>
                 <InputNumber
                     value={price}
@@ -85,7 +85,7 @@ const InforProduct = (props) => {
                 />
             </div>
 
-            <div className="flex gap-3 items-center w-full font-bold">
+            <div className="flex flex-col sm:flex-row gap-3 sm:items-center w-full font-bold">
                 <div className="w-32 min-w-32 hide">Kho hàng</div>
                 <Input
                     value={total}
@@ -96,7 +96,7 @@ const InforProduct = (props) => {
                 />
             </div>
 
-            <div className="flex gap-3 items-center w-full font-bold">
+            <div className="flex flex-col sm:flex-row gap-3 sm:items-center w-full font-bold">
                 <div className="w-32 min-w-32">Mô tả</div>
                 <div className="flex flex-grow">
                     <TextEditor value={description} handleChangeInfo={handleChangeInfo} />

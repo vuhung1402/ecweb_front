@@ -18,7 +18,7 @@ const ColorInfo = (props) => {
     }, [color?.length, color?.[colorUid]?.array_sizes?.length])
 
     return (
-        <div id="color-info" className="flex mt-14 gap-3 font-bold w-full">
+        <div id="color-info" className="flex flex-col sm:flex-row mt-14 gap-3 font-bold w-full">
             <div className="w-32 min-w-32">Màu</div>
             <div className="flex flex-col gap-3 w-full">
                 <Button

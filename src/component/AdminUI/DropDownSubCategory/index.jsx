@@ -21,8 +21,15 @@ const DropDownSubCategory = (props) => {
 
     useEffect(() => {
         //goi api lay subCategory
+        const defaultItem = [{
+            "sub_category_id": "",
+            "name": "Xem tất cả",
+        }];
+
+        const subItem = defaultItem.concat(subCategory)
+
         state.isLoading=false;
-        state.items = subCategory;
+        state.items = subItem;
         setState((prev) => ({ ...prev }))
     }, [subCategory, state.isModalOpen, idSubCategory])
 
@@ -78,18 +85,19 @@ const DropDownSubCategory = (props) => {
     }
 
     return (
-        <div className='flex items-center gap-3'>
+        <div className='w-full flex justify-end items-center gap-3'>
             <Select
                 onSelect={handleSelect}
                 value={idSubCategory}
-                style={{width: 300}}
+                className='w-full sm:w-[300px]'
+                // style={{width: 300, maxWidth: 300}}
                 placeholder="Danh mục phụ"
                 dropdownRender={(menu) => (
                     <>
                         {menu}
                         <Divider style={{margin: '8px 0'}}/>
 
-                        <Space style={{padding: '0 8px 4px'}}>
+                        <Space className='flex flex-col items-end sm:flex-row' style={{padding: '0 8px 4px'}}>
                             <Input
                                 className='input-dropdown-sub'
                                 placeholder="Nhập tên danh mục phụ mới"

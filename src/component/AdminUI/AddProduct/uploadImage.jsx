@@ -161,7 +161,7 @@ const UploadImage = React.forwardRef((props, ref) => {
     return (
         <div
             id='upload-image'
-            className='flex items-center gap-3 mt-3'
+            className='flex flex-col sm:flex-row sm:items-center gap-3 mt-3'
         >
             <div className='w-32 min-w-32 font-bold'>
                 Ảnh

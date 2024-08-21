@@ -1,24 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Popconfirm, Popover, Skeleton, Space, Switch, Table, Tag, message } from 'antd';
-import DeleteIcon from "@icon/deleteIcon.svg"
-import EditIcon from "@icon/edit.svg"
-import DropDownSubCategory from '../DropDownSubCategory';
-import { PlusOutlined, EditOutlined } from '@ant-design/icons'
-import { deleteProduct, productDetail, updateOnlShopStatus } from '@pages/admin/products/function';
+import { Button, Popconfirm, Space, Switch, Table, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { formatCurrencyVN } from '@utils/function';
-import { useDispatch } from 'react-redux';
-import { clear } from '@redux/actions';
-import { TOKEN_INVALID } from '@utils/error';
-import './style.scss'
+
 import Loading from '@component/Loading/Loading';
+import DropDownSubCategory from '../DropDownSubCategory';
+
+import { deleteProduct, updateOnlShopStatus } from '@pages/admin/products/function';
+import { PlusOutlined, EditOutlined } from '@ant-design/icons';
+import useWindowSize from '@hooks/useWindowSize';
+import { formatCurrencyVN } from '@utils/function';
+import { TOKEN_INVALID } from '@utils/error';
+import DeleteIcon from "@icon/deleteIcon.svg";
+import EditIcon from "@icon/edit.svg";
+
+import './style.scss';
 
 const ProductList = (props) => {
     const { idCategory, subCategory, products, skeletonLoading } = props;
     const { handleOpenModal, handleChangeSubCategory, getData, filterData, handleDetail } = props; // function
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const iw = useWindowSize().width;
 
     const [state, setState] = useState({
         data: [],
@@ -37,31 +39,12 @@ const ProductList = (props) => {
     })
 
     useEffect(() => {
-        // if(subCategory?.length === 0){
-        //     state.idSubCategory='';
-        // }
         state.idSubCategory = '';
         state.data = products;
         const subIndex = subCategory.findIndex(item => item?.sub_category_id === state.idSubCategory);
         state.name = subCategory?.[subIndex]?.name;
         setState((prev) => ({ ...prev }))
     }, [subCategory?.length]);
-
-    // const handleDetail = async (product_id) => {
-        // navigate(
-        //     {
-        //         pathname: `/admin/product/edit`,
-        //     },
-        //     {
-        //         state: {
-        //             product_id,
-        //         }
-        //     }
-        // );
-        // call api get product detail
-        // then, set state -> detailData
-        // set modal open
-    // };
 
     const onConfirm = async (product_id) => {
         setState(prev => ({ ...prev, confirmLoading: true }));
@@ -89,6 +72,7 @@ const ProductList = (props) => {
         {
             title: <div className='font-bold'>Tên sản phẩm</div>,
             dataIndex: 'name',
+            responsive: ['sm']
         },
         {
             title: <div className='font-bold'>Giá tiền</div>,
@@ -97,7 +81,8 @@ const ProductList = (props) => {
                 return (
                     <div>{formatCurrencyVN(record?.price)}</div>
                 )
-            }
+            },
+            responsive: ['md']
         },
         {
             title: <div className='font-bold'>Ngày thêm sản phẩm</div>,
@@ -188,14 +173,14 @@ const ProductList = (props) => {
     return (
         <div
             style={{
-                height: 'calc(100vh - 80px)'
+                height: iw > 640 ? 'calc(100vh - 120px)' : 'calc(100vh - 230ưpx)'
             }}
         >
             {
                 products === undefined ? <Loading /> :
                     <>
                         <div className='flex flex-col 2xl:flex-row gap-3 items-center justify-end 2xl:justify-between mb-3 px-2'>
-                            <div className='flex w-full items-center gap-3 justify-end 2xl:justify-normal'>
+                            <div className='flex flex-col sm:flex-row w-full sm:items-center gap-3 justify-end 2xl:justify-normal'>
                                 <Button
                                     className='font-bold'
                                     onClick={() => handleOpenModal('edit', idCategory)}
@@ -207,7 +192,7 @@ const ProductList = (props) => {
 
                                 <Button
                                     className='font-bold'
-                                    onClick={() => navigate('/admin/product/new')}
+                                    onClick={() => handleDetail('', 'new')}
                                     icon={<PlusOutlined />}
                                     type='primary'
                                 >
@@ -227,15 +212,20 @@ const ProductList = (props) => {
                                 />
                             </div>
                         </div>
-                        <Table
-                            rootClassName={`${products.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
-                            columns={columns}
-                            dataSource={products}
-                            pagination={{
-                                hideOnSinglePage: true,
-                                pageSize: 10
-                            }}
-                        />
+                        {skeletonLoading && (
+                            <Loading />
+                        )}
+                        {!skeletonLoading && (
+                            <Table
+                                rootClassName={`${products.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
+                                columns={columns}
+                                dataSource={products}
+                                pagination={{
+                                    hideOnSinglePage: true,
+                                    pageSize: 10
+                                }}
+                            />
+                        )}
                     </>
             }
         </div>

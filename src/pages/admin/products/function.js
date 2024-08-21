@@ -1,15 +1,5 @@
-import { endpoint } from "@api/api"
-import { useUserPackageHook } from "@redux/hooks/userHook"
+import { endpoint, axiosInstance } from "@api/api"
 import { message } from "antd"
-import axios from "axios";
-
-// const axiosInstance = axios.create({
-//     baseURL: 'http://localhost:5000',
-//     headers:{
-//         'Content-Type': 'application/json',
-//         "token" : `${token}`,
-//     }
-// })
 
 export const updateOnlShopStatus = async (id, onlShop) => {
     const token = localStorage.getItem("token");
@@ -276,27 +266,15 @@ export const productDetail = async (product_id) => {
 }
 
 export const addProduct = async (body) => {
-    const token = localStorage.getItem("token");
     try {
-        const response = await fetch(`${endpoint}/admin/add_product`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                "token" : `${token}`,
-                'Content-Type': 'application/json',
-            }
+        const response = await axiosInstance.post('/admin/add_product', JSON.stringify(body) ,{
+            requiresAuth: true,
         });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data;
+        return response.data;
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
-}
+    };
+};
 
 export const deleteProduct = async (product_id) => {
     const token = localStorage.getItem("token");

@@ -28,6 +28,7 @@ const Admin = () => {
         userId: '',
         productId: '',
         productType: '',
+        isModifiedProduct: false,
     });
 
     useEffect(() => {
@@ -78,7 +79,20 @@ const Admin = () => {
     };
 
     const handleDetail = (productId, type) => {
+        if (iw < 960) {
+            const left = document.getElementById('admin-order-left');
+            const right = document.getElementById('admin-order-right');
+
+            if (left && right) {
+                left.classList.add('hidden');
+                right.classList.remove('hidden');
+            }
+        };
         setState(prev => ({...prev, productId: productId, productType: type}));
+    };
+
+    const handleModifiedProduct = () => {
+        setState(prev => ({...prev, isModifiedProduct: !prev.isModifiedProduct}));
     };
 
     const renderTab = {
@@ -90,6 +104,7 @@ const Admin = () => {
         1: <User url={location.search} />,
         2: (
             <Products
+                isModifiedProduct={state.isModifiedProduct}
                 handleDetail={handleDetail}
             />
         ),
@@ -109,22 +124,25 @@ const Admin = () => {
             <NewProduct
                 productId={state.productId}
                 type={state.productType}
+                handleModifiedProduct={handleModifiedProduct}
+                handleBack={handleBack}
             />
         ),
     }[state.tab || 0];
 
     return (
-        <div className='w-screen h-screen p-4 flex'>
-            <div className='h-full w-[64px] md:w-[150px]'>
+        <div className='w-screen h-screen p-4 flex flex-col sm:flex-row'>
+            <div className='h-[66px] sm:h-full w-full sm:w-[64px] md:w-[150px]'>
                 <SildeBar
                     tab={state.tab}
                     handleChangeTab={handleChangeTab}
                 />
             </div>
             <div
-                className='h-full flex gap-[3px]'
+                className='flex gap-[3px]'
                 style={{
-                    width: iw > 768 ? 'calc(100vw - 182px)' : 'calc(100vw - 96px)'
+                    width: iw > 768 ? 'calc(100vw - 182px)' : iw > 640 ? 'calc(100vw - 96px)' : '100%',
+                    height: iw > 640 ? '100%' : 'calc(100% - 66px)'
                 }}
             >
                 <ResizablePanelGroup autoSaveId="window-layout" direction="horizontal">
