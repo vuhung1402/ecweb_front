@@ -147,7 +147,7 @@ const Admin = () => {
             >
                 <ResizablePanelGroup autoSaveId="window-layout" direction="horizontal">
                     <ResizablePanel defaultValue={60} minSize={40} id='admin-order-left'>
-                        <div className="h-full flex items-center justify-center border border-[rgb(229,230,230)] rounded-tr-md rounded-br-md">
+                        <div className="h-full flex items-center border border-[rgb(229,230,230)] rounded-tr-md rounded-br-md">
                             {renderTab}
                         </div>
                     </ResizablePanel>

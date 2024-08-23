@@ -28,7 +28,7 @@ const User = () => {
     }
 
     return (
-        <div className=" p-4 flex flex-col gap-3">
+        <div className="w-full h-full p-4 flex flex-col gap-3">
             <div className="w-full flex justify-end items-center gap-3">
                 <div className=" flex gap-2">
                     <Select

@@ -11,6 +11,7 @@ import Loading from "../Loading/Loading"
 import { getDistricts, getProvinces, getWards, logAgain } from "@utils/function"
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"
 import { Button } from "antd"
+import SideBar from "@pages/Profile/SideBar"
 
 const Address = () => {
     const token = localStorage.getItem("token");
@@ -133,7 +134,7 @@ const Address = () => {
                             </div>
                             <div className="flex flex-col md:flex-row w-full md:w-[750px] me:w-[970px] xl:w-[1170px] mx-auto">
                                 <div className="w-full md:w-1/4 px-5 md:px-0">
-                                    <SildeBar />
+                                    <SideBar />
                                 </div>
 
                                 <div className="w-full me:w-3/4 p-5 flex flex-col me:flex-row gap-3">

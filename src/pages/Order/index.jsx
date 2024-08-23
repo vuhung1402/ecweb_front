@@ -59,7 +59,7 @@ const Order = () => {
                         </div>
                         <div className="flex flex-col md:flex-row w-full md:w-[750px] me:w-[970px] xl:w-[1170px] mx-auto">
                             <div className="md:w-1/4 px-5 md:px-0">
-                                <SildeBar />
+                                <SideBar />
                             </div>
                             <div className="w-full md:w-3/4 px-5 md:px-0 h-full">
                                 <Tabs
