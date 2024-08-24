@@ -7,22 +7,20 @@ import { getDistricts, getProvinces, getWards, logAgain } from "@utils/function"
 import { useNavigate } from "react-router-dom"
 import { SUCCESS } from "@utils/message"
 import { HomeOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons"
+import { insertAddress } from "@pages/Addresses/function"
 
 
 const InsertAddress = (props) => {
     const { provinces, provinceName, provinceID, wards, wardCode, wardName, districts, districtID, districtName, name, number, street, isDefault } = props
     const { setAddAddress, getDataAddress, onSelectProvince, onSelectDistrict, onSelectWard, onChangeInfor } = props
-
-    const token = localStorage.getItem("token");
     const navigate = useNavigate();
-    // const [isDefault, setIsDefault] = useState(false)
-    const [isLoading, setIsLoading] = useState(false);
-    const nameRef = useRef()
-    const streetRef = useRef()
-    const phoneRef = useRef()
+
+    const [state, setState] = useState({
+        isLoading: false,
+    })
 
     const addAddress = async () => {
-        // setIsLoading(true);
+        setState((prev) => ({...prev, isLoading: true}));
         const body = {
             name,
             street,
@@ -38,40 +36,23 @@ const InsertAddress = (props) => {
 
         console.log({ body })
 
-        // await fetch(`${endpoint}/users/insert_address/`, {
-        //     method: "POST",
-        //     body: JSON.stringify(body),
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'token': token,
-        //     },
-        // }).then((response) => {
-        //     if (!response.ok) {
-        //         throw new Error("Netword response not ok")
-        //     }
-        //     return response.json()
-        // }).then((json) => {
-        //     if (json?.success) {
-        //         getDataAddress();
-        //         setIsLoading(false);
-        //         message.success(SUCCESS)
-        //     } else {
-        //         if (json?.message === TOKEN_INVALID || json?.message === NOT_AUTHENTICATION) {
-        //             logAgain();
-        //             navigate("/login");
-        //         } else {
-        //             setIsLoading(false);
-        //             message.error(FAIL);
-        //         }
-        //     }
-
-        // }).catch((error) => {
-        //     console.error("Error: ", error)
-        // })
-    }
-
-    const handleChange = (e) => {
-        setIsDefault(e.target.checked)
+        const res = await insertAddress(body);
+        if(res?.success){
+            message.success(res?.message);
+            getDataAddress();
+            setState((prev) => ({...prev, isLoading: false}));
+        }else{
+            if(res?.message === TOKEN_INVALID || res?.message === NOT_AUTHENTICATION){
+                logAgain();
+                navigate('/')
+            }
+        }
+        // {
+        //     "success": true,
+        //     "message": "Thêm thành công",
+        //     "color": "text-green-500"
+        // }
+        console.log(res);
     }
 
     return (
@@ -158,7 +139,7 @@ const InsertAddress = (props) => {
 
             <div className=" flex items-center">
                 <Button
-                    loading={isLoading}
+                    loading={state.isLoading}
                     onClick={addAddress} type="primary"
                     className="font-bold"
                 >

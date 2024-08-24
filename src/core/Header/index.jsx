@@ -97,7 +97,7 @@ const Header = (props) => {
         localStorage.removeItem("numOfCart");
         dispatch(clear());
         setAccount(!account);
-        message.success("Đăng xuất thành công");
+        message?.success("Đăng xuất thành công");
         navigate('/');
     };
 

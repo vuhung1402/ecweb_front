@@ -1,17 +1,19 @@
 import React from "react"
 import { useEffect, useState } from "react"
-import AddressInfor from "../AddressInfor/AddressInfor"
+import AddressInfor from "../../component/AddressInfor/AddressInfor"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
 import { endpoint } from "../../api/api"
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux"
 import { clear } from "../../redux/actions"
-import InsertAddress from "../InsertAddress/InsertAddress"
-import Loading from "../Loading/Loading"
+import InsertAddress from "../../component/InsertAddress/InsertAddress"
+import Loading from "../../component/Loading/Loading"
 import { getDistricts, getProvinces, getWards, logAgain } from "@utils/function"
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"
-import { Button } from "antd"
+import { Button, message } from "antd"
 import SideBar from "@pages/Profile/SideBar"
+import { updateAddress } from "./function"
+import { FAIL, SUCCESS } from "@utils/message"
 
 const Address = () => {
     const token = localStorage.getItem("token");
@@ -38,6 +40,7 @@ const Address = () => {
         street: undefined,
         number: undefined,
         isDefault: false,
+        isUpdateLoading: false,
     })
 
     useEffect(() => {
@@ -103,8 +106,11 @@ const Address = () => {
         }))
     }
 
-    const copyAddress = (address) => {
+    const copyAddress = async (address) => {
         const isDisplayEdit = state.addressId === address?._id;
+
+        const resDistricts = await getDistricts(Number(address?.provinceID));
+        const resWards = await getWards(Number(address?.districtID));
         
         setState((prev) => ({
             ...prev,
@@ -113,14 +119,55 @@ const Address = () => {
             street: isDisplayEdit ? '' : address?.street,
             number: isDisplayEdit ? '' : address?.number,
             isDefault: isDisplayEdit ? '' : address?.isDefault,
-            // provinceID: isDisplayEdit ? '' : address?.provinceID,
-            // provinceName: isDisplayEdit ? '' : address?.provinceName,
-            // districtID: isDisplayEdit ? '' : address?.districtID,
-            // districtName: isDisplayEdit ? '' : address?.districtName,
-            // wardCode: isDisplayEdit ? '' : address?.wardCode,
-            // wardName: isDisplayEdit ? '' : address?.wardName,
+            provinceID: isDisplayEdit ? '' : address?.provinceID,
+            provinceName: isDisplayEdit ? '' : address?.provinceName,
+            districtID: isDisplayEdit ? '' : address?.districtID,
+            districtName: isDisplayEdit ? '' : address?.districtName,
+            wardCode: isDisplayEdit ? '' : address?.wardCode,
+            wardName: isDisplayEdit ? '' : address?.wardName,
+            wards: resWards?.data,
+            districts: resDistricts?.data,
         }));
     };
+
+    const handleUpdateAddress = async () => {
+        setState((prev) => ({...prev, isUpdateLoading:true}))
+        const body = {
+            name: state.name,
+            street: state.street,
+            provinceID: state.provinceID,
+            provinceName: state.provinceName,
+            districtID: state.districtID,
+            districtName: state.districtName,
+            wardCode: state.wardCode,
+            wardName: state.wardName,
+            number: state.number,
+            isDefault: state.isDefault,
+        }
+
+        console.log({body});
+
+        const res = await updateAddress(body, state.addressId);
+        // {
+        //     "success": true,
+        //     "message": "Địa chỉ đã cập nhật thành công",
+        //     "color": "text-green-500"
+        // }
+        if(res?.success){
+            message.success(SUCCESS);
+            getDataAddress();
+            setState((prev) => ({ ...prev, isUpdateLoading: false }))
+        }else{
+            if(res?.message === TOKEN_INVALID || res?.message === NOT_AUTHENTICATION){
+                logAgain();
+                navigate('/')
+            }else{
+                message.error(FAIL)
+            }
+            setState((prev) => ({ ...prev, isUpdateLoading: false }))
+        }
+        console.log(res);
+    }
 
     return (
         <div className="w-full h-full">
@@ -159,12 +206,14 @@ const Address = () => {
                                                     districtName={state.districtName}
                                                     wardCode={state.wardCode}
                                                     wardName={state.wardName}
+                                                    isUpdateLoading={state.isUpdateLoading}
                                                     getDataAddress={getDataAddress}
                                                     copyAddress={copyAddress}
                                                     onChangeInfor={onChangeInfor}
                                                     onSelectProvince={onSelectProvince}
                                                     onSelectDistrict={onSelectDistrict}
                                                     onSelectWard={onSelectWard}
+                                                    handleUpdateAddress={handleUpdateAddress}
                                                 />
                                             )
                                         })}

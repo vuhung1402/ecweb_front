@@ -4,8 +4,11 @@ import { endpoint } from "../../api/api"
 import { Button, Input, Select } from "antd"
 
 const UpdateAddress = (props) => {
-    const { isLoading, name, number, street, isDefault, provinces, districts, wards, provinceID, districtID, wardCode } = props;
-    const { handleSaveAddress, onChangeInfor, onSelectProvince, onSelectDistrict, onSelectWard } = props;
+    const { isLoading, name, number, street, isDefault, provinces, districts, wards, provinceID, districtID, wardCode, address } = props;
+    const { provinceName, wardName, districtName, isUpdateLoading } = props;
+    const { onChangeInfor, onSelectProvince, onSelectDistrict, onSelectWard, handleUpdateAddress } = props;
+
+    console.log("provinceID, districtID, wardCode: ", provinceID, districtID, wardCode);
 
     return (
         <div className="p-3 flex flex-col gap-3 bg-[#fafafa] text-sm">
@@ -27,7 +30,8 @@ const UpdateAddress = (props) => {
 
             <Select
                 showSearch
-                value={provinceID}
+                optionFilterProp="label"
+                value={provinceName}
                 onSelect={onSelectProvince}
                 placeholder='Tỉnh, Thành Phố'
                 options={provinces?.map((item) => ({
@@ -38,7 +42,8 @@ const UpdateAddress = (props) => {
 
             <Select
                 showSearch
-                value={districtID}
+                optionFilterProp="label"
+                value={districtName}
                 placeholder='Quận, Huyện'
                 onSelect={onSelectDistrict}
                 options={districts?.map((item) => ({
@@ -49,7 +54,8 @@ const UpdateAddress = (props) => {
 
             <Select
                 showSearch
-                value={wardCode}
+                optionFilterProp="label"
+                value={wardName}
                 placeholder='Phường, Xã'
                 onSelect={onSelectWard}
                 options={wards?.map((item) => ({
@@ -80,8 +86,8 @@ const UpdateAddress = (props) => {
 
             <div className="mt-5 flex items-center">
                 <Button
-                    onClick={handleSaveAddress}
-                    loading={isLoading}
+                    onClick={handleUpdateAddress}
+                    loading={isUpdateLoading}
                     type="primary"
                     className="font-bold"
                 >

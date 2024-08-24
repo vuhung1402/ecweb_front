@@ -11,8 +11,8 @@ import { FAIL, SUCCESS } from "@utils/message";
 
 const AddressInfor = (props) => {
     const { address, addressId, name, number, street, isDefault, provinceID, provinceName, districtID } = props;
-    const { districtName, wardCode, wardName, provinces, districts, wards } = props;
-    const { getDataAddress, copyAddress, onChangeInfor, onSelectProvince, onSelectDistrict, onSelectWard } = props;
+    const { districtName, wardCode, wardName, provinces, districts, wards, isUpdateLoading } = props;
+    const { getDataAddress, copyAddress, onChangeInfor, onSelectProvince, onSelectDistrict, onSelectWard, handleUpdateAddress } = props;
 
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
@@ -179,20 +179,26 @@ const AddressInfor = (props) => {
                 addressId === address?._id ?
 
                     <UpdateAddress
+                        address={address}
+                        isUpdateLoading={isUpdateLoading}
                         name={name}
                         provinces={provinces}
                         districts={districts}
                         wards={wards}
                         street={street}
                         number={number}
+                        provinceName={provinceName}
                         provinceID={provinceID}
+                        districtName={districtName}
                         districtID={districtID}
+                        wardName={wardName}
                         wardCode={wardCode}
                         isDefault={isDefault}
                         isLoading={state.isLoading}
                         inforAdress={state.inforAdress}
                         handleUpdateInfor={handleUpdateInfor}
                         handleSaveAddress={handleSaveAddress}
+                        handleUpdateAddress={handleUpdateAddress}
                         onChangeInfor={onChangeInfor}
                         onSelectProvince={onSelectProvince}
                         onSelectDistrict={onSelectDistrict}
@@ -204,7 +210,7 @@ const AddressInfor = (props) => {
                             <div>{address?.name}</div>
                             <div className=" flex items-start">
                                 <p className=" w-[40%]">Địa chỉ:</p>
-                                <p className=" w-[60%] flex  flex-grow justify-start ">{address?.street}</p>
+                                <p className=" w-[60%] flex  flex-grow justify-start ">{address?.street}, {address?.wardName}, {address?.districtName}, {address?.provinceName}</p>
                             </div>
                             <div className=" flex items-start">
                                 <p className=" w-[40%]">Số điện thoại:</p>
