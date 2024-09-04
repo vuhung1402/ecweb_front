@@ -8,7 +8,7 @@ const AppRoutes = [
     },
     {
         path: '/login',
-        Component: Page?.LoginPage,
+        Component: Page?.AuthPage,
         defaultLayout: true,
     },
     {
@@ -41,13 +41,13 @@ const AppRoutes = [
         Component: Page?.ResetPass,
         defaultLayout: true,
     },
+    // {
+    //     path: '/forgotPass',
+    //     Component: Page?.ForgotPass,
+    //     defaultLayout: true,
+    // },
     {
-        path: '/forgotPass',
-        Component: Page?.ForgotPass,
-        defaultLayout: true,
-    },
-    {
-        path: '/verify/:id/verify/:token',
+        path: '/verify',
         Component: Page?.VerifyEmailPage,
         defaultLayout: false,
     },

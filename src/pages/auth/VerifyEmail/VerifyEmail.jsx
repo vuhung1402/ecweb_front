@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { useParams, useNavigate, Link } from "react-router-dom"
-import { Button, Result } from 'antd';
+import { Button, Input, Result } from 'antd';
 import axios from "axios"
 import styles from "./styles.module.css";
 import success from "../../../images/success.png";
 import NotFoundPage from "@pages/NotFoundPage";
+import Title from "antd/es/typography/Title";
 
 
 
@@ -31,6 +32,15 @@ const VerifyEmail = () => {
 
 	return (
 		<div>
+			<div>
+				<Title level={5}>
+					Nhập mã OTP của bạn vào đây
+				</Title>
+				<Input.OTP 
+					
+				/>
+				<Button>Gửi</Button>
+			</div>
 			{/* {validUrl ? (
 				<div className={styles.container}>
 					<img src={success} alt="success_img" className={styles.success_img} />
@@ -55,7 +65,7 @@ const VerifyEmail = () => {
 				]}
 			/> */}
 
-			<NotFoundPage/>
+			{/* <NotFoundPage/> */}
 		</div>
 	);
 

@@ -2,6 +2,8 @@ import axios from 'axios';
 
 export const endpoint = "https://ecweb-backend.onrender.com/api/v1"
 
+export const dateFormat = "DD/MM/YYYY"
+
 export const status = {
     "to-pay": "Chờ thanh toán",
     "to-confirm": "Chờ xác nhận",
