@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Button, Input, Radio, Select, Space, message, Collapse } from "antd";
 
 import ProductCard from "./productCard";
-import { formatCurrencyVN, logAgain } from "@utils/function";
+import { calculateShippingFee, formatCurrencyVN, logAgain } from "@utils/function";
 import { getAddressInfo, order } from "./function";
 import useWindowSize from "../../hooks/useWindowSize";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
@@ -16,11 +16,11 @@ import './style.scss';
 const paymentMethod = [
     {
         value: 0,
-        name:'Thanh toán khi giao hàng',
+        name: 'Thanh toán khi giao hàng',
     },
     {
         value: 1,
-        name:'Thanh toán bằng momo',
+        name: 'Thanh toán bằng momo',
     },
 ];
 
@@ -31,12 +31,14 @@ const CheckOut = () => {
     const iw = useWindowSize().width;
 
     const [state, setState] = useState({
+        price: 0,
+        shippingFee: 0,
         addresses: undefined,
         paymentMethod: 0,
         addressInfo: '',
-        phone: '', 
+        phone: '',
         name: '',
-        street:'',
+        street: '',
         order: {},
         idAdress: '',
         isOrderLoading: false,
@@ -49,18 +51,26 @@ const CheckOut = () => {
             logAgain();
             navigate("/login");
         } else {
-            state.addresses = result;
             const index = result?.findIndex((item) => item?.isDefault);
-            state.idAdress = result[index]?._id;
-            state.addressInfo = `${result[index]?.name}, ${result[index]?.number}, ${result[index]?.street}`
-            state.name = result[index]?.name;
-            state.phone = result[index]?.number;
-            state.street = result[index]?.street;
+            const res = await calculateShippingFee(result[index]?.districtID, result[index]?.wardCode);
+            let fee = 0;
+            if (res?.code === 200) {
+                fee = res?.data?.total;
+            }
+
+            setState((prev) => ({
+                ...prev,
+                shippingFee: fee,
+                addresses: result,
+                idAdress: result[index]?._id,
+                addressInfo: result[index],
+                name: result[index]?.name,
+                phone: result[index]?.number,
+                street: result[index]?.street,
+                order: location?.state?.order,
+                price: location?.state?.order?.total_price,
+            }));
         }
-        setState((prev) => ({
-            ...prev,
-            order: location?.state?.order,
-        }));
     };
 
     useEffect(() => {
@@ -72,30 +82,39 @@ const CheckOut = () => {
         setState((prev) => ({ ...prev }));
     }
 
-    const handleSelectAddressInfo = (value, option) => {
-        state.idAdress = value;
-        state.addressInfo = option?.label;
-        state.name = option?.name;
-        state.phone = option?.phone;
-        state.street = option?.street;
-        setState((prev) => ({ ...prev }));
+    const handleSelectAddressInfo = async (value, option) => {
+        const res = await calculateShippingFee(option?.districtID, option?.wardCode);
+        let fee = 0;
+        if (res?.code === 200) {
+            fee = res?.data?.total;
+        }
+        setState((prev) => ({
+            ...prev,
+            idAdress: value,
+            addressInfo: option?.addressInfor,
+            name: option?.name,
+            phone: option?.phone,
+            street: option?.street,
+            shippingFee: fee,
+        }));
     }
 
     const handleOrder = async () => {
-        setState((prev) => ({...prev , isOrderLoading:true}))
+        setState((prev) => ({ ...prev, isOrderLoading: true }))
         const body = {
             order: state?.order,
-            address: state?.street,
+            address: state?.addressInfo,
             phone: state.phone,
             name: state.name,
             type_pay: state?.paymentMethod,
-            shipping_code: 0
+            shipping_code: state.shippingFee
         }
+        console.log({body})
         const response = await order(body);
         if (response?.success) {
-            if(response?.paymentUrl){
+            if (response?.paymentUrl) {
                 window.open(response?.paymentUrl, '_blank')
-            }else{
+            } else {
                 navigate('/order');
             }
         } else {
@@ -109,7 +128,7 @@ const CheckOut = () => {
     }
 
     const handleChangeCollapse = (status) => {
-        setState(prev => ({...prev, isCollapse: status.length === 0}));
+        setState(prev => ({ ...prev, isCollapse: status.length === 0 }));
     };
 
     return (
@@ -127,7 +146,10 @@ const CheckOut = () => {
                             optionFilterProp="label"
                             options={state.addresses?.map((item) => ({
                                 value: item?._id,
-                                label: `${item?.name}, ${item?.number}, ${item?.street}`,
+                                label: `${item?.name}, ${item?.number}, ${item?.street}, ${item?.wardName}, ${item?.districtName}, ${item?.provinceName}`,
+                                wardCode: item?.wardCode,
+                                districtID: item?.districtID,
+                                addressInfor: item,
                                 phone: item?.number,
                                 name: item?.name,
                                 street: item?.street,
@@ -201,7 +223,7 @@ const CheckOut = () => {
                                                 data={item}
                                             />
                                         )
-                                    })             
+                                    })
                                 }
                             </div>
                         ),
@@ -223,7 +245,7 @@ const CheckOut = () => {
                                     data={item}
                                 />
                             )
-                        })             
+                        })
                     }
                 </div>
                 <div>
@@ -243,15 +265,18 @@ const CheckOut = () => {
 
                     <div className={`${iw < 960 ? state.isCollapse ? 'hidden' : 'flex' : 'flex'} py-3 border-b-[1px] flex-col gap-3`}>
                         <div className=" flex items-center justify-between">
-                            <p>Tạm tính</p>
-                            <p className=" font-bold">{formatCurrencyVN(state?.order?.total_price)}</p>
+                            <p>Phí vận chuyển</p>
+                            <p className=" font-bold">{formatCurrencyVN(state.shippingFee)}</p>
                         </div>
-
+                        <div className=" flex items-center justify-between">
+                            <p>Tạm tính</p>
+                            <p className=" font-bold">{formatCurrencyVN(state.price)}</p>
+                        </div>
                     </div>
 
                     <div className={`${iw < 960 ? state.isCollapse ? 'hidden' : 'flex' : 'flex'} items-center justify-between py-3`}>
                         <p className=" text-lg">Tổng cộng</p>
-                        <p className=" text-2xl font-bold text-red-500">{formatCurrencyVN(state?.order?.total_price)}</p>
+                        <p className=" text-2xl font-bold text-red-500">{formatCurrencyVN(state.price + state.shippingFee)}</p>
                     </div>
                 </div>
             </div>

@@ -3,7 +3,7 @@ import { storage } from "../firebase/firebase";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 import { LOGIN_AGAIN } from "./message";
-import { tokenGHN } from "@api/api";
+import { axiosInstance, from_district_id, tokenGHN } from "@api/api";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -207,4 +207,28 @@ export const getWards = async (district_id) => {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
     }
+}
+
+export const calculateShippingFee = async (to_district_id, to_ward_code) => {
+    const body ={
+        "service_type_id":2,
+        "insurance_value":500000,
+        "coupon": null,
+        "from_district_id":from_district_id,
+        "to_district_id":Number(to_district_id),
+        "to_ward_code":to_ward_code,
+        "height":15,
+        "length":15,
+        "weight":1000,
+        "width":15
+    }
+
+    try {
+        const response = await axiosInstance.post('https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee', JSON.stringify(body) ,{
+            GHN: true,
+        });
+        return response.data;
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+    };
 }

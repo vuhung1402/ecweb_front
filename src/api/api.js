@@ -13,6 +13,7 @@ export const status = {
 
 export const tokenGHN = '8cfe89c6-4644-11ef-80fb-0210414e18f9';
 export const idGHN = 5208167;
+export const from_district_id = 3695;
 
 export const axiosInstance = axios.create({
     baseURL: endpoint,
@@ -28,6 +29,10 @@ axiosInstance.interceptors.request.use((config) => {
             config.headers.token = `${token}`;
         };
     };
+    if(config.GHN){
+        config.headers.token = tokenGHN;
+        config.headers.shop_id = idGHN;
+    }
 
     return config;
 }, (error) => {

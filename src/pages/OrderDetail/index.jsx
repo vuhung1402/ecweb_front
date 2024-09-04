@@ -40,6 +40,14 @@ const OderDetail = () => {
         }
     }
 
+    // const handle = async (type_pay, user_id, Order_id, new_status_order) => {
+    //     if(type_pay === 1){
+    //         handleRedundMoney();
+    //     }else{
+    //         updateStatus(user_id, Order_id, new_status_order);
+    //     }
+    // }
+
     const handleRedundMoney = async () => {
         setState((prev) => ({ ...prev, isLoading: true }))
         const response = await refundMoney(state.data?.Order_id);
@@ -122,18 +130,21 @@ const OderDetail = () => {
                                     })
                                 }
 
-                                <PaymentInfor data={state?.data?.total_price} />
+                                <PaymentInfor data={state?.data?.total_price} status = {state.data?.status} shippingFee={state.data?.shipping_code} typePay={state.data?.type_pay} />
                                 <UserInfo address={state?.data?.address} phone={state?.data?.phone} name={state?.data?.name} />
                                 {/* <SupportInfo/> */}
                                 {
-                                    state.data?.status === 1 &&
+                                    state.data?.status === 1  &&
                                     <div className="flex gap-3 justify-end">
                                         <Popconfirm
-                                            title="Hoàn tiền"
-                                            description="Bạn muốn hoàn tiền đơn hàng này?"
+                                            title="Huỷ đơn hàng"
+                                            description="Bạn muốn huỷ đơn hàng này?"
                                             cancelText="Huỷ"
                                             okText="Xác nhận"
-                                            onConfirm={handleRedundMoney}
+                                            onConfirm={
+                                                // () =>handle(state.data?.type_pay, state.data?.user_id, state.data.Order_id, 5)
+                                                handleRedundMoney
+                                            }
                                             okButtonProps={{
                                                 loading: state.isLoading
                                             }}

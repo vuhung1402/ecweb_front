@@ -26,7 +26,7 @@ const PaymentInfo = (props) => {
                     </div>
                     <div className="w-full flex gap-3 text-sm font-bold">
                         <Tag color="cyan" className="w-7 h-5 flex items-center justify-center"><LocationIcon className="w-4 h-4" /></Tag>
-                        <Tag color="blue">{address}</Tag>
+                        <Tag color="blue">{address?.street}, {address?.wardName}, {address?.districtName}, {address?.provinceName}</Tag>
                     </div>
                 </div>
             </Card>

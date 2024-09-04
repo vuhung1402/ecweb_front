@@ -12,8 +12,8 @@ const ProductCard = (props) => {
                     <img className="h-[64px] w-[64px] border" src={data?.image_hover} />
                 </Badge>
                 <div className=" ml-3">
-                    <div className=" mb-1">FEARLESS corduroy daily cap</div>
-                    <div className=" mb-1 text-sm font-light">Đen/XL</div>
+                    <div className=" mb-1">{data?.product_name}</div>
+                    <div className=" mb-1 text-sm font-light">{data?.color}/{data?.size}</div>
                 </div>
             </div>
             <div className=" flex flex-col justify-center items-center">

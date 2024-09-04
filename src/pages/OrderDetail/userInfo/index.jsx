@@ -22,7 +22,7 @@ const UserInfo = (props) => {
                 <div className="font-bold flex gap-2">
                     <LocationIcon />
                     <div>
-                        {address}
+                        {address?.street}, {address?.wardName}, {address?.districtName}, {address?.provinceName}
                     </div>
                 </div>
             </div>
