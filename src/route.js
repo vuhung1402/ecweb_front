@@ -11,11 +11,11 @@ const AppRoutes = [
         Component: Page?.AuthPage,
         defaultLayout: true,
     },
-    {
-        path: '/register',
-        Component: Page?.SignUpPage,
-        defaultLayout: true,
-    },
+    // {
+    //     path: '/register',
+    //     Component: Page?.SignUpPage,
+    //     defaultLayout: true,
+    // },
     {
         path: '/store',
         Component: Page?.StorePage,
@@ -36,21 +36,21 @@ const AppRoutes = [
         Component: Page?.NewProduct,
         defaultLayout: false,
     },
-    {
-        path: '/resetPass/:id/resetPass/:token',
-        Component: Page?.ResetPass,
-        defaultLayout: true,
-    },
+    // {
+    //     path: '/resetPass/:id/resetPass/:token',
+    //     Component: Page?.ResetPass,
+    //     defaultLayout: true,
+    // },
     // {
     //     path: '/forgotPass',
     //     Component: Page?.ForgotPass,
     //     defaultLayout: true,
     // },
-    {
-        path: '/verify',
-        Component: Page?.VerifyEmailPage,
-        defaultLayout: false,
-    },
+    // {
+    //     path: '/verify',
+    //     Component: Page?.VerifyEmailPage,
+    //     defaultLayout: false,
+    // },
     {
         path: '/account',
         Component: Page?.ProfilePage,

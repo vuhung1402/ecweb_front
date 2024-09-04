@@ -7,7 +7,7 @@ import ForgotPass from "./ForgotPass/ForgotPass";
 const Auth = () => {
     const [state, setState] = useState(
         {
-            tab: 3,
+            tab: 0,
         }
     );
 
