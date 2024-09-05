@@ -219,6 +219,7 @@ const ProductList = (props) => {
                             <Table
                                 rootClassName={`${products.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
                                 columns={columns}
+                                bordered
                                 dataSource={products}
                                 pagination={{
                                     hideOnSinglePage: true,
