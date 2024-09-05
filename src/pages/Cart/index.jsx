@@ -30,12 +30,15 @@ const CartPage = () => {
         selectedItem: [],
         totalPrice: 0,
         isLoadingDelete: false,
+        quantity: 0,
     });
 
     const getData = async () => {
         const cartItem = await getCart();
         if (cartItem?.success) {
+            const quantity = cartItem?.items?.reduce((total, item) => total += item?.quantity,0);
             state.data = cartItem;
+            state.quantity = quantity;
             dispatch(numOfCartPackage(cartItem?.items?.length))
         } else {
             if (cartItem?.message === TOKEN_INVALID) {
@@ -121,7 +124,7 @@ const CartPage = () => {
                 <>
                     <div className="w-full flex flex-col items-center justify-center font-semibold text-5xl gap-2 p-5">
                         <div className="font-semibold text-3xl text-center">Giỏ hàng của bạn</div>
-                        <div className="font-semibold text-sm text-center opacity-60">{`Có ${state.data?.items?.length} sản phẩm trong giỏ hàng`}</div>
+                        <div className="font-semibold text-sm text-center opacity-60">{`Có ${state.quantity} sản phẩm trong giỏ hàng`}</div>
                         <span className="bg-black p-[1.5px] w-14"></span>
                     </div>
                     <div
