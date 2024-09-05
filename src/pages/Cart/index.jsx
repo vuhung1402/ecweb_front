@@ -111,9 +111,11 @@ const CartPage = () => {
     };
 
     return(
-        <div className="w-full xl:max-w-[1600px] px-[15px] xl:px-[85px] mx-auto">
+        <div className="w-full h-full xl:max-w-[1600px] px-[15px] xl:px-[85px] mx-auto">
             {!state.data && (
-                <Loading />
+                <div className="w-full h-full">
+                    <Loading />
+                </div>
             )}
             {state.data && (
                 <>
