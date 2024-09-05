@@ -4,6 +4,7 @@ import { formatCurrencyVN, logAgain } from "@utils/function";
 import { useDispatch } from "react-redux";
 import { numOfCartPackage } from "@redux/actions";
 import { Button, message } from "antd";
+import { SwapRightOutlined } from "@ant-design/icons";
 
 import CartCard from "@component/CartCard";
 import Loading from "@component/Loading/Loading";
@@ -11,6 +12,13 @@ import Loading from "@component/Loading/Loading";
 import { checkout, deleteItemCart, getCart } from "./function";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { FAIL, SUCCESS } from "@utils/message";
+
+const changeSizeRule = [
+    'Sản phẩm được hỗ trợ đổi size trong vòng 3 ngày kể từ ngày nhận được hàng',
+    'Sản phẩm còn đủ tem mác, phụ kiện đi kèm và chưa qua sử dụng, giặt ủi.',
+    'Chỉ hỗ trợ đổi size 01 lần/đơn hàng',
+    'Phí ship đổi size khách hàng sẽ thanh toán'
+];
 
 const CartPage = () => {
 
@@ -103,21 +111,21 @@ const CartPage = () => {
     };
 
     return(
-        <div className="w-full h-full px-4 md:px-8 mb-1">
+        <div className="w-full xl:max-w-[1600px] px-[15px] xl:px-[85px] mx-auto">
             {!state.data && (
                 <Loading />
             )}
             {state.data && (
                 <>
-                    <div className="w-full flex flex-col items-center justify-center font-semibold text-5xl gap-2 p-5 border-b-[1px]">
+                    <div className="w-full flex flex-col items-center justify-center font-semibold text-5xl gap-2 p-5">
                         <div className="font-semibold text-3xl text-center">Giỏ hàng của bạn</div>
+                        <div className="font-semibold text-sm text-center opacity-60">{`Có ${state.data?.items?.length} sản phẩm trong giỏ hàng`}</div>
                         <span className="bg-black p-[1.5px] w-14"></span>
                     </div>
                     <div
-                        className="flex flex-col md:flex-row px-5 md:px-0 py-4"
-                        style={{height: 'calc(100% - 88px)'}}
+                        className="flex flex-col md:flex-row gap-4"
                     >
-                        <div className="w-full md:w-2/3 md:h-full md:overflow-y-auto">
+                        <div className="w-full md:w-2/3 flex flex-col gap-3">
                             {state.data?.items?.length === 0 && <div className="">Giỏ hàng của bạn đang trống</div>}
                             {
                                 state.data?.items?.map((item) => {
@@ -132,15 +140,31 @@ const CartPage = () => {
                                     )
                                 })
                             }
+                            <div className="font-bold opacity-60 w-fit flex flex-col gap-2 justify-end uppercase text-base">
+                                <div className="">Chính sách đổi size</div>
+                                <div className="flex flex-col gap-1">
+                                    {changeSizeRule.map((item, index) => {
+                                        return (
+                                            <div
+                                                className="text-xs opacity-70 flex items-center gap-2"
+                                                key={`change-size-rule-${index}`}
+                                            >
+                                                <SwapRightOutlined />
+                                                {item}
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            </div>
                         </div>
                         <div className="w-full md:w-1/3 md:pl-4 md:sticky">
                             <div className="w-full p-5 border">
-                                <h1 className=" border-b-[1px] text-lg font-semibold py-3">Thông tin đơn hàng</h1>
-                                <div className=" flex items-center justify-between border-b-[1px] py-3">
-                                    <p className=" font-bold">Tổng tiền:</p>
-                                    <p className="text-red-600 text-xl font-semibold">{formatCurrencyVN(state.totalPrice)}</p>
+                                <h1 className="border-b-[1px] text-xl font-bold pb-5 tracking-wide opacity-90">Thông tin đơn hàng</h1>
+                                <div className="flex items-center justify-between border-b-[1px] py-3">
+                                    <p className="font-bold opacity-80">Tổng tiền:</p>
+                                    <p className="text-red-600 text-xl font-bold">{formatCurrencyVN(state.totalPrice)}</p>
                                 </div>
-                                <div className=" text-sm py-3">
+                                <div className="text-sm py-3 font-semibold opacity-70">
                                     Phí vận chuyển sẽ được tính ở trang thanh toán.
                                     Bạn cũng có thể nhập mã giảm giá ở trang thanh toán.
                                 </div>

@@ -1,8 +1,10 @@
-import { formatCurrencyVN } from "@utils/function";
 import React, { useEffect, useState } from "react";
-import { Button, Checkbox } from "antd";
 import { useNavigate } from "react-router-dom";
-import { CloseOutlined } from "@ant-design/icons";
+
+import { Button, Checkbox } from "antd";
+import { CloseOutlined, PlusOutlined, MinusOutlined } from "@ant-design/icons";
+
+import { formatCurrencyVN } from "@utils/function";
 
 const CartCard = (props) => {
     const { data, isLoadingDelete } = props;
@@ -25,33 +27,37 @@ const CartCard = (props) => {
     }
 
     return (
-        <div className="py-5 px-1 border-b-[1px] flex justify-between">
-            <div className=" flex gap-2 items-center">
+        <div className="py-5 px-1 border-b-[1px] border-opacity-70 flex justify-between">
+            <div className="flex gap-2 items-center">
                 <Checkbox onChange={(e) => handleSelectItem(e, data)} />
                 <div className=" flex gap-2">
                     <img className="h-[100px] w-[100px]" src={data?.image_hover} />
-                    <div className=" ml-3">
-                        <a className=" mb-1 hover:text-blue-500" href="#">{data?.product_name}</a>
-                        <div className=" mb-1 text-sm font-light">{data?.color}/{data?.size}</div>
-                        <div className=" flex items-center">
-                            <button class="bg-gray-300 hover:bg-gray-400 transition-colors duration-200 text-gray-800 px-4 font-bold">
-                                -
+                    <div className="ml-3 flex flex-col gap-2">
+                        <a className="hover:text-blue-500 font-bold opacity-85 cursor-pointer">{data?.product_name}</a>
+                        <div className="text-sm font-bold tracking-wider opacity-70">{`${data?.color} / ${data?.size}`}</div>
+                        <div className="flex items-center">
+                            <button
+                                className="w-[25px] h-[25px] flex items-center justify-center bg-gray-300 text-xs hover:bg-gray-400 transition-colors duration-200 text-gray-800 font-bold"
+                            >
+                                <MinusOutlined />
                             </button>
-                            <span className=" px-4 bg-[#f5f5f5]">{state?.quantity}</span>
-                            <button class="bg-gray-300 hover:bg-gray-400 transition-colors duration-200 text-gray-800 px-4 font-bold">
-                                +
+                            <span className="w-[35px] h-[25px] cursor-default flex items-center justify-center bg-[#f5f5f5] font-bold opacity-70 text-[15px]">{state?.quantity}</span>
+                            <button
+                                className="w-[25px] h-[25px] flex items-center justify-center bg-gray-300 text-xs hover:bg-gray-400 transition-colors duration-200 text-gray-800 font-bold"
+                            >
+                                <PlusOutlined />
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className=" flex flex-col justify-between items-center">
+            <div className="flex flex-col justify-between items-end">
                 <Button
                     onClick={() => handleDelete()}
                     loading={state.isLoadingDelete}
                     icon={<CloseOutlined />}
                 />
-                <div className=" font-semibold">{formatCurrencyVN(data?.price_per_one)}</div>
+                <div className="font-semibold text-[16px]">{formatCurrencyVN(data?.price_per_one)}</div>
             </div>
         </div>
     )
