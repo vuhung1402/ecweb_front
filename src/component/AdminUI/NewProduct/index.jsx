@@ -51,13 +51,16 @@ const NewProduct = (props) => {
 
     // mode edit
     useEffect(() => {
+        console.log('goes');
         if (type === 'edit') {
             state.isLoading = true;
             setState(prev => ({...prev}));
             getDetail();
         };
-
+        
         if (type === 'new') {
+            state.isLoading = false;
+            setState(prev => ({...prev}));
             onCancel();
         };
     }, [productId, type]);
