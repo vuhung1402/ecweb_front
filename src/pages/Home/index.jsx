@@ -50,6 +50,13 @@ const Home = () => {
         document.body.style.overflow = event ? 'hidden' : 'auto';
     };
 
+    const handleScrollToProduct = () => {
+        const homeProductElement = document.getElementById('home-product');
+        if (homeProductElement) {
+            homeProductElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
     const handleCLick = () => {
         navigate("/products/all")
     }
@@ -88,11 +95,14 @@ const Home = () => {
                                 </Button>
                             </MotionBox>
                             <MotionBox animation={fadeIn(1.5)}>
-                                <IconArrowDown className="mt-[60px] text-white"/>
+                                <IconArrowDown
+                                    className="mt-[60px] text-white cursor-pointer"
+                                    onClick={handleScrollToProduct}
+                                />
                             </MotionBox>
                         </div>
                     </div>
-                    <div className="w-full">
+                    <div id="home-product" className="w-full">
                         <HomeProduct
                             products={state.products}
                             handleCLick={handleCLick}

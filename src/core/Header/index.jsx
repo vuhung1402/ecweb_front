@@ -233,7 +233,7 @@ const Header = (props) => {
                         arrow={false}
                         placement="bottomRight"
                         content={
-                            <div className="flex flex-col gap-2">
+                            <div className="flex flex-col font-bold gap-2">
                                 {user?.isAdmin && (
                                     <div
                                         onClick={() => {

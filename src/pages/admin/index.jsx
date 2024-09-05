@@ -97,8 +97,7 @@ const Admin = () => {
     };
 
     const handleGoBack = () => {
-        console.log('running');
-        navigate(-1);
+        navigate('/');
     }
 
     const renderTab = {
