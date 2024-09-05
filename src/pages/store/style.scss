@@ -1,0 +1,11 @@
+.store-page {
+    .title-contact::after {
+        content: "";
+        display: block;
+        width: 50px;
+        height: 4px;
+        margin-top: 30px;
+        background: #252a2b;
+        margin-bottom: 50px;
+    }
+}
