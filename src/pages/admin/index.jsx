@@ -96,6 +96,11 @@ const Admin = () => {
         setState(prev => ({...prev, isModifiedProduct: !prev.isModifiedProduct}));
     };
 
+    const handleGoBack = () => {
+        console.log('running');
+        navigate(-1);
+    }
+
     const renderTab = {
         0: (
             <Orders
@@ -133,14 +138,17 @@ const Admin = () => {
 
     return (
         <div className='w-screen h-screen p-4 flex flex-col gap-2'>
-            <div className='flex items-center gap-3 text-sm font-bold opacity-80'>
+            <div
+                className='w-fit flex items-center gap-3 text-sm font-bold opacity-80 p-1 hover:bg-[#f1f5f9] transition-colors duration-200 cursor-pointer'
+                onClick={handleGoBack}
+            >
                 <ArrowLeftOutlined />
                 <div>Quay lại</div>
             </div>
             <div
                 className='w-full flex flex-col sm:flex-row'
                 style={{
-                    height: 'calc(100vh - 60px)'
+                    height: 'calc(100vh - 68px)'
                 }}
             >
                 <div className='h-[66px] sm:h-full w-full sm:w-[64px] md:w-[150px]'>
