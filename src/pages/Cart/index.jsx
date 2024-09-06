@@ -139,7 +139,6 @@ const CartPage = () => {
 
     const handleUpdateItem = async (id, quantity, type) => {
         if(quantity === 0) return;
-        console.log(type)
         // {
         //     "success": true,
         //     "message": "Cập nhật giỏ hàng thành công",
