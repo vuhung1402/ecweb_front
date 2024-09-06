@@ -1,14 +1,15 @@
-import { Tabs, message } from "antd";
 import React, { useEffect, useState } from "react";
-import { statusOrder } from "./mock";
-import OrderList from "@component/AdminUI/OrderList/";
-import { data } from "../user/mock";
-import { getOrderList } from "./function";
 import { useNavigate } from "react-router-dom";
+import { Tabs, message } from "antd";
+
+import OrderList from "@component/AdminUI/OrderList/";
+import Loading from "@component/Loading/Loading";
+
+import { statusOrder } from "./mock";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
+import { getOrderList } from "./function";
 import { logAgain } from "@utils/function";
 import { FAIL } from "@utils/message";
-import Loading from "@component/Loading/Loading";
 
 const Orders = (props) => {
 
