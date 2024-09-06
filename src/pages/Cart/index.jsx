@@ -31,6 +31,7 @@ const CartPage = () => {
         isLoading:{
             type: '',
             status: false,
+            id: '',
         },
         isLoadingDelete: false,
         quantity: 0,
@@ -149,6 +150,7 @@ const CartPage = () => {
             isLoading: {
                 type: type,
                 status: true,
+                id,
             },
         }));
 
@@ -160,6 +162,7 @@ const CartPage = () => {
                 isLoading: {
                     type: "",
                     status: false,
+                    id: "",
                 } 
             }));
         }else{
@@ -173,6 +176,7 @@ const CartPage = () => {
                     isLoading: {
                         type: "",
                         status: false,
+                        id: "",
                     } 
                 }));
             }

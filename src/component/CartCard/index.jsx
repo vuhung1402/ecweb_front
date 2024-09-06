@@ -39,7 +39,7 @@ const CartCard = (props) => {
                         <div className="text-sm font-bold tracking-wider opacity-70">{`${data?.color} / ${data?.size}`}</div>
                         <div className="flex items-center">
                             <Button
-                                loading={isLoadingUpdate?.status && "minus" === isLoadingUpdate?.type}
+                                loading={isLoadingUpdate?.status && "minus" === isLoadingUpdate?.type && data?._id === isLoadingUpdate?.id}
                                 className="flex items-center justify-center bg-gray-300 text-xs hover:bg-gray-400 transition-colors duration-200 text-gray-800 font-bold"
                                 onClick={() => handleUpdateItem(data?._id, data?.quantity - 1, "minus")}
                             >
@@ -47,7 +47,7 @@ const CartCard = (props) => {
                             </Button>
                             <span className="w-[35px] h-[25px] cursor-default flex items-center justify-center bg-[#f5f5f5] font-bold opacity-70 text-[15px]">{data?.quantity}</span>
                             <Button
-                                loading={isLoadingUpdate?.status && "plus" === isLoadingUpdate?.type}
+                                loading={isLoadingUpdate?.status && "plus" === isLoadingUpdate?.type && data?._id === isLoadingUpdate?.id}
                                 className="flex items-center justify-center bg-gray-300 text-xs hover:bg-gray-400 transition-colors duration-200 text-gray-800 font-bold"
                                 onClick={() => handleUpdateItem(data?._id, data?.quantity + 1, "plus")}
                             >
