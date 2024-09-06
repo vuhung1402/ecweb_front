@@ -7,13 +7,15 @@ import { CloseOutlined, PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import { formatCurrencyVN } from "@utils/function";
 
 const CartCard = (props) => {
-    const { data, isLoadingDelete } = props;
-    const { getData, handleSelectItem, handleDeleteItem } = props;
+    const { data, isLoadingDelete, isLoadingUpdate } = props;
+    const { getData, handleSelectItem, handleDeleteItem, handleUpdateItem } = props;
     const navigate = useNavigate();
     const [state, setState] = useState({
         quantity: '',
         isLoadingDelete: false,
     })
+
+    console.log({isLoadingUpdate})
 
     useEffect(() => {
         state.quantity = data?.quantity;
@@ -21,9 +23,9 @@ const CartCard = (props) => {
     }, []);
 
     const handleDelete = async () => {
-        setState((prev) => ({...prev , isLoadingDelete:true}))
+        setState((prev) => ({ ...prev, isLoadingDelete: true }))
         await handleDeleteItem(data?._id);
-        setState((prev) => ({...prev , isLoadingDelete:false}))
+        setState((prev) => ({ ...prev, isLoadingDelete: false }))
     }
 
     return (
@@ -36,17 +38,21 @@ const CartCard = (props) => {
                         <a className="hover:text-blue-500 font-bold opacity-85 cursor-pointer">{data?.product_name}</a>
                         <div className="text-sm font-bold tracking-wider opacity-70">{`${data?.color} / ${data?.size}`}</div>
                         <div className="flex items-center">
-                            <button
-                                className="w-[25px] h-[25px] flex items-center justify-center bg-gray-300 text-xs hover:bg-gray-400 transition-colors duration-200 text-gray-800 font-bold"
+                            <Button
+                                loading={isLoadingUpdate?.status && "minus" === isLoadingUpdate?.type}
+                                className="flex items-center justify-center bg-gray-300 text-xs hover:bg-gray-400 transition-colors duration-200 text-gray-800 font-bold"
+                                onClick={() => handleUpdateItem(data?._id, data?.quantity - 1, "minus")}
                             >
                                 <MinusOutlined />
-                            </button>
-                            <span className="w-[35px] h-[25px] cursor-default flex items-center justify-center bg-[#f5f5f5] font-bold opacity-70 text-[15px]">{state?.quantity}</span>
-                            <button
-                                className="w-[25px] h-[25px] flex items-center justify-center bg-gray-300 text-xs hover:bg-gray-400 transition-colors duration-200 text-gray-800 font-bold"
+                            </Button>
+                            <span className="w-[35px] h-[25px] cursor-default flex items-center justify-center bg-[#f5f5f5] font-bold opacity-70 text-[15px]">{data?.quantity}</span>
+                            <Button
+                                loading={isLoadingUpdate?.status && "plus" === isLoadingUpdate?.type}
+                                className="flex items-center justify-center bg-gray-300 text-xs hover:bg-gray-400 transition-colors duration-200 text-gray-800 font-bold"
+                                onClick={() => handleUpdateItem(data?._id, data?.quantity + 1, "plus")}
                             >
                                 <PlusOutlined />
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </div>

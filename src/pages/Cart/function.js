@@ -37,3 +37,20 @@ export const checkout = async (items) => {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
     };
 };
+
+export const updateItemCart = async (id, quantity) => {
+
+    const body = {
+        _id: id,
+        quantity,
+    }
+
+    try{
+        const res = await axiosInstance.post(`/cart/update_items_in_cart`, JSON.stringify(body), {
+            requiresAuth: true,
+        })
+        return res.data;
+    } catch (error){
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+    }
+}

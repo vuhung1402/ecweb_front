@@ -9,7 +9,7 @@ import { SwapRightOutlined } from "@ant-design/icons";
 import CartCard from "@component/CartCard";
 import Loading from "@component/Loading/Loading";
 
-import { checkout, deleteItemCart, getCart } from "./function";
+import { checkout, deleteItemCart, getCart, updateItemCart } from "./function";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { FAIL, SUCCESS } from "@utils/message";
 
@@ -26,9 +26,12 @@ const CartPage = () => {
     const dispatch = useDispatch();
     const [state, setState] = useState({
         data: undefined,
-        quantity: '',
         selectedItem: [],
         totalPrice: 0,
+        isLoading:{
+            type: '',
+            status: false,
+        },
         isLoadingDelete: false,
         quantity: 0,
     });
@@ -37,8 +40,14 @@ const CartPage = () => {
         const cartItem = await getCart();
         if (cartItem?.success) {
             const quantity = cartItem?.items?.reduce((total, item) => total += item?.quantity,0);
-            state.data = cartItem;
-            state.quantity = quantity;
+            console.log("quantity: ", quantity)
+            setState((prev) => ({
+                ...prev,
+                data: cartItem,
+                quantity: quantity,
+            }));
+            // state.data = cartItem;
+            // state.quantity = quantity;
             dispatch(numOfCartPackage(cartItem?.items?.length))
         } else {
             if (cartItem?.message === TOKEN_INVALID) {
@@ -46,14 +55,21 @@ const CartPage = () => {
                 navigate("/login");
             }
         }
-        setState((prev) => ({ ...prev }));
+        // setState((prev) => ({ ...prev }));
     };
 
     useEffect(() => {
         getData();
     }, []);
 
-    const handleCheckout = async () => {
+    const handleCheckout = async (type) => {
+        setState((prev) => ({
+            ...prev,
+            isLoading: {
+                status: true,
+                type,
+            }
+        }));
         const response = await checkout(state?.selectedItem);
         if(response?.success){
             navigate(
@@ -71,7 +87,14 @@ const CartPage = () => {
                 logAgain();
                 navigate('/login');
             } else {
-                message.error(FAIL);
+                setState((prev) => ({
+                    ...prev,
+                    isLoading: {
+                        status: false,
+                        type: "",
+                    }
+                }))
+                message.info("Chọn sản phảm muốn thanh toán!");
             }
         }
     };
@@ -113,6 +136,49 @@ const CartPage = () => {
         }
     };
 
+    const handleUpdateItem = async (id, quantity, type) => {
+        if(quantity === 0) return;
+        console.log(type)
+        // {
+        //     "success": true,
+        //     "message": "Cập nhật giỏ hàng thành công",
+        //     "color": "text-green-500"
+        // }
+        setState((prev) => ({ 
+            ...prev, 
+            isLoading: {
+                type: type,
+                status: true,
+            },
+        }));
+
+        const res = await updateItemCart(id, quantity);
+        if(res?.success){
+            await getData();
+            setState((prev) => ({ 
+                ...prev, 
+                isLoading: {
+                    type: "",
+                    status: false,
+                } 
+            }));
+        }else{
+            if (result?.message === TOKEN_INVALID || result?.message === NOT_AUTHENTICATION) {
+                logAgain();
+                navigate('/login');
+            } else {
+                message.error(FAIL);
+                setState((prev) => ({ 
+                    ...prev, 
+                    isLoading: {
+                        type: "",
+                        status: false,
+                    } 
+                }));
+            }
+        }
+    }
+
     return(
         <div className="w-full h-full xl:max-w-[1600px] px-[15px] xl:px-[85px] mx-auto">
             {!state.data && (
@@ -140,7 +206,9 @@ const CartPage = () => {
                                             getData={getData}
                                             handleSelectItem={handleSelectItem}
                                             handleDeleteItem={handleDeleteItem}
+                                            handleUpdateItem={handleUpdateItem}
                                             isLoadingDelete={state?.isLoadingDelete}
+                                            isLoadingUpdate={state.isLoading}
                                         />
                                     )
                                 })
@@ -174,7 +242,8 @@ const CartPage = () => {
                                     Bạn cũng có thể nhập mã giảm giá ở trang thanh toán.
                                 </div>
                                 <Button
-                                    onClick={handleCheckout}
+                                    onClick={() => handleCheckout("checkOut")}
+                                    loading={state.isLoading.status && "checkOut" === state.isLoading.type}
                                     className="w-full mt-3 p-3 !h-auto font-medium uppercase text-xl"
                                     type="primary"
                                 >
