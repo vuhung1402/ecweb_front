@@ -1,10 +1,13 @@
 import { Button, Input } from "antd";
 import Title from "antd/es/typography/Title";
-import React from "react";
+import React, { useState } from "react";
 
-const OTPCode = () => {
+const OTPCode = (props) => {
+    const { handleChangeTab, handleSentOtp, handleChangeInfo } = props
+    const { loading } = props;
+
     const onChange = (text) => {
-        console.log('onChange:', text);
+        handleChangeInfo("otp", text);
     };
     const sharedProps = {
         onChange,
@@ -25,6 +28,8 @@ const OTPCode = () => {
                     <Button
                         type="primary"
                         className=" w-full"
+                        loading={loading?.status && "sent" === loading?.type}
+                        onClick={() => handleSentOtp("sent")}
                     >
                         Xác nhận
                     </Button>
@@ -33,6 +38,13 @@ const OTPCode = () => {
                         className=" w-full"
                     >
                         Gửi lại
+                    </Button>
+                    <Button
+                        type="primary"
+                        className=" w-full"
+                        onClick={() => handleChangeTab(0)}
+                    >
+                        Quay lại
                     </Button>
                 </div>
             </div>

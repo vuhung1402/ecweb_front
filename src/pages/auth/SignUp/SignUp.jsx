@@ -3,7 +3,7 @@ import { dateFormat, endpoint } from "../../../api/api";
 import React, { useRef, useState } from "react";
 
 function SignUp(props) {
-    const { handleChangeTab } = props;
+    const { handleChangeTab, handleChangeInfo, handleChangeTypeOtp } = props;
 
     const [state, setState] = useState({
         ho: "",
@@ -40,7 +40,10 @@ function SignUp(props) {
             return response.json()
         }).then((json) => {
             setState((prev) => ({ ...prev, isLoading: false }));
-            message.info(json?.message);
+            message.info("OTP đã được gửi qua email của bạn");
+            handleChangeInfo("user_id", json?.user_id);
+            handleChangeTypeOtp("register");
+            handleChangeTab(2);
             // setNotifi(json);
         }).catch((e) => {
             setState((prev) => ({ ...prev, isLoading: false }));

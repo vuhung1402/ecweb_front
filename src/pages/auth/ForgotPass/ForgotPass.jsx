@@ -1,37 +1,42 @@
 import React, { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { endpoint } from "../../../api/api"
-import { Button } from "antd"
+import { Button, message } from "antd"
+import { forgotPass } from "../function"
+import { FAIL } from "@utils/message"
 
 const ForgotPass = (props) => {
-    const { handleChangeTab } = props
+    const { handleChangeTab, handleChangeInfo, handleChangeTypeOtp } = props
 
+    const [state, setState] = useState({
+        isLoading: false,
+    })
     const [notify, setNotify] = useState()
     const emailRef = useRef()
 
-    const handleResetPass = () => {
-        // console.log("email: ", emailRef.current.value)
+    const handleResetPass = async () => {
+        setState((prev) => ({ ...prev, isLoading: true }));
         const body = {
             email: emailRef.current.value
         }
 
-        fetch(`${endpoint}/users/forgot-password/`, {
-            method: "POST",
-            body: JSON.stringify(body),
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }).then((response) => {
-            if (!response.ok) {
-                throw new Error("Netword response not ok")
-            }
-            return response.json()
-        }).then((json) => {
-            setNotify(json)
+        // {
+        //     "success": true,
+        //     "user_id": "66dc6309a508b334a25201c8",
+        //     "message": "Đã gữi Email Xác thực",
+        //     "color": "text-green-500"
+        // }
 
-        }).catch((error) => {
-            console.error("Error: ", error)
-        })
+        const res = await forgotPass(body);
+        if(res?.success){
+            message.info("OTP đã được gửi tới email của bạn");
+            handleChangeInfo("user_id", res?.user_id);
+            handleChangeTypeOtp("forgotPass");
+            handleChangeTab(2);
+        }else{
+            message.error(FAIL);
+            setState((prev) => ({ ...prev, isLoading: false }));
+        }
     }
 
     return (
@@ -46,6 +51,7 @@ const ForgotPass = (props) => {
             <div className=" flex gap-2 items-center">
                 <Button
                     onClick={handleResetPass}
+                    loading={state.isLoading}
                     type="primary"
                 >
                     Gửi
