@@ -15,7 +15,7 @@ import useWindowSize from "../../../hooks/useWindowSize";
 
 const OrderDetail = (props) => {
     const { userId, orderId } = props;
-    const { handleBack } = props;
+    const { handleBack, getDataOrder } = props;
     
     if (!userId && !orderId) return <div className="font-bold">Chi tiết sản phẩm sẽ hiển thị ở đây</div>
     
@@ -24,7 +24,7 @@ const OrderDetail = (props) => {
 
     const [state, setState] = useState({
         data: undefined,
-        isLoading: false,
+        isLoading: true,
     });
 
     const arrayNotShowRefund = [0,5];
@@ -32,7 +32,7 @@ const OrderDetail = (props) => {
     const getData = async () => {
         const respone = await getOrderDetail(orderId, userId);
         if (respone?.success) {
-            setState((prev) => ({ ...prev, data: respone?.formatted_order_detail }));
+            setState((prev) => ({ ...prev, data: respone?.formatted_order_detail, isLoading: false }));
         } else {
             if (respone?.message === TOKEN_INVALID || respone?.message === NOT_AUTHENTICATION) {
                 logAgain();
@@ -48,6 +48,9 @@ const OrderDetail = (props) => {
         const response = await updateStatuOrder(user_id, Order_id, new_status_order)
         if (response?.success) {
             message?.success(SUCCESS)
+            const tab = localStorage.getItem("orderTab");
+            getDataOrder(`?status=${tab}`);
+            getData();
             setState((prev) => ({ ...prev, isLoading: false }))
         } else {
             if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
@@ -79,6 +82,7 @@ const OrderDetail = (props) => {
 
     useEffect(() => {
         state.data = undefined;
+        state.isLoading = true;
         setState(prev => ({...prev}));
         if (!userId || !orderId) return;
         getData();
@@ -87,7 +91,7 @@ const OrderDetail = (props) => {
     return (
         <>
             {
-                state.data === undefined ? <Loading /> :
+                state.isLoading ? <Loading /> :
                     <div className="w-full h-full p-4 flex flex-col gap-2 overflow-y-auto">
                         <div className="w-full flex flex-col gap-2">
                             <div className="w-full items-center flex justify-between">
@@ -103,7 +107,7 @@ const OrderDetail = (props) => {
                                     )}
                                 </div>
                                 <Tag color="green" className="font-bold">
-                                    {statusOrder.find((item) => item?.status === state.data.status).name}
+                                    {statusOrder.find((item) => item?.status === state.data?.status)?.name}
                                 </Tag>
                             </div>
                             <div className="w-full flex flex-col gap-3">

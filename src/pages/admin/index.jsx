@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
+import { message } from 'antd';
 
 import SildeBar from '@component/AdminUI/Sidebar';
 import Orders from './orders';
@@ -14,6 +15,10 @@ import NewProduct from '@component/AdminUI/NewProduct';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@component/Resizable';
 import { useUserPackageHook } from '@redux/hooks/userHook';
 import useWindowSize from '../../hooks/useWindowSize';
+import { getOrderList } from './orders/function';
+import { NOT_AUTHENTICATION, TOKEN_INVALID } from '@utils/error';
+import { logAgain } from '@utils/function';
+import { FAIL } from '@utils/message';
 
 import './style.scss';
 
@@ -30,6 +35,7 @@ const Admin = () => {
         productId: '',
         productType: '',
         isModifiedProduct: false,
+        dataOrder: [],
     });
 
     useEffect(() => {
@@ -38,6 +44,22 @@ const Admin = () => {
         }
     },[]);
 
+    // get data order
+    const getDataOrder = async (query) => {
+        const response = await getOrderList(query);
+        if (response?.success) {
+            setState((prev) => ({ ...prev, dataOrder: response?.formatted_Order_table }));
+        } else {
+            if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
+                logAgain();
+                navigate('/login');
+            } else {
+                message.error(FAIL);
+            }
+        }
+    }
+
+    // go to order detail in mobile
     const handleOrderDetail = (orderId, userId) => {
         if (iw < 960) {
             const left = document.getElementById('admin-order-left');
@@ -51,34 +73,7 @@ const Admin = () => {
         setState(prev => ({...prev, userId: userId, orderId: orderId}));
     };
 
-    const handleBack = () => {
-        const left = document.getElementById('admin-order-left');
-        const right = document.getElementById('admin-order-right');
-
-        if (left && right) {
-            left.classList.remove('hidden');
-            right.classList.add('hidden');
-        };
-    };
-
-    useEffect(() => {
-        const activeTab = localStorage.getItem('activeTab');
-        activeTab?.length > 0 ? navigate({search: activeTab}) : navigate({search: `?url=${state.tab}`});
-        setState((prev) => ({ ...prev, tab: localStorage.getItem('currentTab') }));
-    },[])
-
-    const handleChangeTab = (tab) => {
-        localStorage.removeItem('category_id');
-        localStorage.setItem('activeTab', `?url=${tab}`);
-        localStorage.setItem('currentTab', tab);
-        state.tab = tab;
-        setState((prev) => ({ ...prev }));
-
-        navigate({
-            search: `?url=${tab}`
-        });
-    };
-
+    // go to product detail
     const handleDetail = (productId, type) => {
         if (iw < 960) {
             const left = document.getElementById('admin-order-left');
@@ -92,18 +87,54 @@ const Admin = () => {
         setState(prev => ({...prev, productId: productId, productType: type}));
     };
 
+    // back from detail in mobile
+    const handleBack = () => {
+        const left = document.getElementById('admin-order-left');
+        const right = document.getElementById('admin-order-right');
+
+        if (left && right) {
+            left.classList.remove('hidden');
+            right.classList.add('hidden');
+        };
+    };
+
+    // get tab from local storage
+    useEffect(() => {
+        const activeTab = localStorage.getItem('activeTab');
+        activeTab?.length > 0 ? navigate({search: activeTab}) : navigate({search: `?url=${state.tab}`});
+        setState((prev) => ({ ...prev, tab: localStorage.getItem('currentTab') }));
+    },[])
+
+    // change tab
+    const handleChangeTab = (tab) => {
+        localStorage.removeItem('category_id');
+        localStorage.setItem('activeTab', `?url=${tab}`);
+        localStorage.setItem('currentTab', tab);
+        state.tab = tab;
+        setState((prev) => ({ ...prev }));
+
+        navigate({
+            search: `?url=${tab}`
+        });
+    };
+
+    // change product
     const handleModifiedProduct = () => {
         setState(prev => ({...prev, isModifiedProduct: !prev.isModifiedProduct}));
     };
 
+    // back to home
     const handleGoBack = () => {
         navigate('/');
     }
 
+    // render tab
     const renderTab = {
         0: (
             <Orders
+                orders={state.dataOrder}
                 handleOrderDetail={handleOrderDetail}
+                getDataOrder={getDataOrder}
             />
         ),
         1: <User url={location.search} />,
@@ -123,6 +154,7 @@ const Admin = () => {
                 userId={state.userId}
                 orderId={state.orderId}
                 handleBack={handleBack}
+                getDataOrder={getDataOrder}
             />
         ),
         2: (

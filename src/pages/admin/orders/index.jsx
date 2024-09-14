@@ -1,56 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Tabs, message } from "antd";
+import { Tabs } from "antd";
 
 import OrderList from "@component/AdminUI/OrderList/";
 import Loading from "@component/Loading/Loading";
 
 import { statusOrder } from "./mock";
-import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
-import { getOrderList } from "./function";
-import { logAgain } from "@utils/function";
-import { FAIL } from "@utils/message";
 
 const Orders = (props) => {
 
-    const { handleOrderDetail } = props;
+    const { orders } = props;
+    const { handleOrderDetail, getDataOrder } = props;
+
 
     const [state, setState] = useState({
-        data: undefined,
         tab: 0,
         isLoadingList: false,
     })
-    const navigate = useNavigate();
-
-    const getData = async (query) => {
-        const respose = await getOrderList(query);
-        if (respose?.success) {
-            setState((prev) => ({ ...prev, data: respose?.formatted_Order_table }));
-        } else {
-            if (respose?.message === TOKEN_INVALID || respose?.message === NOT_AUTHENTICATION) {
-                logAgain();
-                navigate('/login');
-            } else {
-                message.error(FAIL);
-            }
-        }
-    }
 
     useEffect(() => {
-        getData(`?status=0`);
-    }, [])
+        getDataOrder(`?status=0`);
+    }, []);
+
+    useEffect(() => {
+        setState((prev) => ({ ...prev, isLoadingList: false }));
+    }, [orders]);
 
     const onChangeTab = async (key) => {
         setState((prev) => ({ ...prev, tab: key, isLoadingList: true }));
         localStorage.setItem("orderTab", key);
-        await getData(`?status=${key}`);
+        await getDataOrder(`?status=${key}`);
         setState((prev) => ({ ...prev, tab: key, isLoadingList: false }));
     }
 
     return (
         <>
             {
-                state.data === undefined ? <Loading />
+                orders === undefined ? <Loading />
                     :
                     <div className="w-full h-full p-4">
                         <Tabs
@@ -64,10 +49,10 @@ const Orders = (props) => {
                                     key: item?.status,
                                     children: (
                                         <OrderList
-                                            orders={state.data}
+                                            orders={orders}
                                             tab={state?.tab}
                                             isLoadingList={state.isLoadingList}
-                                            getData={getData}
+                                            getData={getDataOrder}
                                             handleOrderDetail={handleOrderDetail}
                                         />
                                     )
