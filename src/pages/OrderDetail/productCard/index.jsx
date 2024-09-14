@@ -4,7 +4,7 @@ import React from "react";
 const ProductCard = (props) => {
     const { data } = props;
     return(
-        <div className="py-2 px-4 border rounded-lg flex mb-3 justify-between">
+        <div className="py-2 px-4 border-t flex justify-between">
             <div className="flex items-center gap-5">
                 <img className="h-[100px] w-[100px]" src={data?.image_hover} />
                 <div className="flex flex-col gap-2">

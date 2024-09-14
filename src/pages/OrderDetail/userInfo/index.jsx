@@ -1,29 +1,23 @@
-import { PhoneOutlined, PinterestOutlined, UserOutlined } from "@ant-design/icons";
 import React from "react";
-import LocationIcon from "@icon/locatioin.svg"
+import { PhoneOutlined, MailFilled, UserOutlined } from "@ant-design/icons";
 
 const UserInfo = (props) => {
-    const { address, phone, name } = props;
+    const { phone, name, email } = props;
 
     return (
-        <div className="w-full p-3 mb-3 flex flex-col gap-3 border rounded-lg">
-            <div className="font-bold text-2xl">
-                Thông tin khách hàng
-            </div>
-            <div className=" flex flex-col gap-2">
-                <div className="font-bold flex gap-2">
+        <div className="w-full p-3 flex flex-col gap-3">
+            <div className="flex flex-col gap-2">
+                <div className="text-sm flex gap-2">
                     <UserOutlined />
                     <div>{name}</div>
                 </div>
-                <div className="font-bold flex gap-2">
+                <div className="text-sm flex gap-2">
                     <PhoneOutlined />
                     <div>{phone}</div>
                 </div>
-                <div className="font-bold flex gap-2">
-                    <LocationIcon />
-                    <div>
-                        {address?.street}, {address?.wardName}, {address?.districtName}, {address?.provinceName}
-                    </div>
+                <div className="text-sm flex gap-2">
+                    <MailFilled />
+                    <div className="truncate">{email}</div>
                 </div>
             </div>
         </div>

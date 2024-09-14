@@ -4,9 +4,9 @@
 
 body {
   margin: 0;
-  font-family: "Mulish", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: "Nunito", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 code {
@@ -35,5 +35,5 @@ input[type=number] {
 // }
 
 [class^="ant-"] {
-  font-family: "Mulish", sans-serif !important;
+  font-family: "Nunito", sans-serif !important;
 }

@@ -41,7 +41,6 @@ const CartPage = () => {
         const cartItem = await getCart();
         if (cartItem?.success) {
             const quantity = cartItem?.items?.reduce((total, item) => total += item?.quantity,0);
-            console.log("quantity: ", quantity)
             setState((prev) => ({
                 ...prev,
                 data: cartItem,
