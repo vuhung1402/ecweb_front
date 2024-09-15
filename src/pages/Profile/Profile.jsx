@@ -29,24 +29,26 @@ const Profile = () => {
     }, []);
 
     return (
-        <div className="w-full min-h-screen bg-gray-50">
+        <div className="w-full h-full flex flex-col bg-gray-50">
             {!infor ? <Loading /> : (
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                    <h1 className="text-3xl font-bold text-center mb-8">Tài khoản của bạn</h1>
-                    <div className="flex flex-col md:flex-row gap-8">
-                        <div className="w-full md:w-1/4">
-                            <SideBar />
-                        </div>
-                        <div className="w-full md:w-3/4 bg-white rounded-lg shadow p-6">
-                            <h2 className="text-xl font-semibold mb-4 pb-2 border-b">Thông tin tài khoản</h2>
-                            <div className="space-y-2">
-                                {infor?.name && <p className="font-medium">{infor.name}</p>}
-                                {infor?.address && <p className="text-sm text-gray-600">{infor.address}</p>}
-                                {infor?.email && <p className="text-sm text-gray-600">{infor.email}</p>}
-                                <div className="mt-4">
-                                    <a href="/address" className="text-sm font-medium text-blue-500 hover:text-blue-600">
-                                        Xem địa chỉ
-                                    </a>
+                <div className="flex-grow">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                        <h1 className="text-3xl font-bold text-center mb-8">Tài khoản của bạn</h1>
+                        <div className="flex flex-col md:flex-row gap-8">
+                            <div className="w-full md:w-1/4">
+                                <SideBar />
+                            </div>
+                            <div className="w-full md:w-3/4 bg-white rounded-lg shadow p-6">
+                                <h2 className="text-xl font-semibold mb-4 pb-2 border-b">Thông tin tài khoản</h2>
+                                <div className="space-y-2">
+                                    {infor?.name && <p className="font-medium">{infor.name}</p>}
+                                    {infor?.address && <p className="text-sm text-gray-600">{infor.address}</p>}
+                                    {infor?.email && <p className="text-sm text-gray-600">{infor.email}</p>}
+                                    <div className="mt-4">
+                                        <a href="/address" className="text-sm font-medium text-blue-500 hover:text-blue-600">
+                                            Xem địa chỉ
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
