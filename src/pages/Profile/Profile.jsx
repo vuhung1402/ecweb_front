@@ -29,34 +29,31 @@ const Profile = () => {
     }, []);
 
     return (
-        <div className="w-full h-full">
-            {
-                !infor ? <Loading /> :
-                    (
-                        <div>
-                            <div className=" flex flex-col items-center justify-center font-semibold text-[30px] gap-8 p-5 border-b-[1px]">
-                                <h1 className="text-center">Tài khoản của bạn</h1>
-                                <span className="bg-black p-[1.5px] w-14 flex items-center justify-center"></span>
-                            </div>
-                            <div className="flex flex-col md:flex-row w-full md:w-[750px] me:w-[970px] xl:w-[1170px] mx-auto">
-                                <div className="w-full md:w-1/4 px-5 md:px-0">
-                                    <SideBar />
-                                </div>
-                                <div className="w-full me:w-3/4 p-5 flex flex-col gap-3">
-                                    <div className="uppercase font-extrabold mb-3 border-b-[1px] pb-1">Thông tin tài khoản</div>
-
-                                    <div>
-                                        {infor?.name && <p className=" font-medium">{infor?.name}</p>}
-                                        {infor?.address && <div className=" text-sm">{infor?.address}</div>}
-                                        {infor?.email && <div className=" text-sm">{infor?.email}</div>}
-                                        <div className="mt-1"><a className="hover:text-blue-500 text-sm font-bold cursor-pointer text-gray-500">Xem địa chỉ</a></div>
-                                    </div>
+        <div className="w-full min-h-screen bg-gray-50">
+            {!infor ? <Loading /> : (
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <h1 className="text-3xl font-bold text-center mb-8">Tài khoản của bạn</h1>
+                    <div className="flex flex-col md:flex-row gap-8">
+                        <div className="w-full md:w-1/4">
+                            <SideBar />
+                        </div>
+                        <div className="w-full md:w-3/4 bg-white rounded-lg shadow p-6">
+                            <h2 className="text-xl font-semibold mb-4 pb-2 border-b">Thông tin tài khoản</h2>
+                            <div className="space-y-2">
+                                {infor?.name && <p className="font-medium">{infor.name}</p>}
+                                {infor?.address && <p className="text-sm text-gray-600">{infor.address}</p>}
+                                {infor?.email && <p className="text-sm text-gray-600">{infor.email}</p>}
+                                <div className="mt-4">
+                                    <a href="/address" className="text-sm font-medium text-blue-500 hover:text-blue-600">
+                                        Xem địa chỉ
+                                    </a>
                                 </div>
                             </div>
                         </div>
-                    )
-            }
-            <div><Footer /></div>
+                    </div>
+                </div>
+            )}
+            <Footer />
         </div>
     );
 };

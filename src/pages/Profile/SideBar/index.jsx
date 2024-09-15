@@ -1,41 +1,32 @@
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-
+import React from "react";
+import { NavLink } from "react-router-dom";
 import IconStopCircle from '@icon/iconStopCircle.svg';
 
 const SideBar = () => {
-    const navigate = useNavigate()
-    const handleClick = (url) => {
-        navigate(url);
-        localStorage.setItem("sildeBar", url);
-    }
-    
+    const menuItems = [
+        { path: '/account', label: 'Thông tin tài khoản' },
+        { path: '/address', label: 'Danh sách địa chỉ' },
+        { path: '/order', label: 'Lịch sử mua hàng' },
+    ];
+
     return (
-        <div className="w-full py-5">
-            <p className="uppercase font-extrabold mb-3">Tài khoản</p>
-            <div
-                className={`mt-2 text-sm font-bold opacity-70 hover:text-blue-500 flex items-center gap-1 cursor-pointer ${localStorage.getItem('sildeBar') === "/account" ? 'text-blue-500' : ''}`}
-                onClick={() => handleClick('/account')}
-            >
-                <IconStopCircle />
-                Thông tin tài khoản
-            </div>
-            <div
-                className={`text-sm mt-2 font-bold opacity-70 hover:text-blue-500 flex items-center gap-1 cursor-pointer ${localStorage.getItem('sildeBar') === "/address" ? 'text-blue-500' : ''}`}
-                onClick={() => handleClick('/address')}
-            >
-                <IconStopCircle />
-                Danh sách địa chỉ
-            </div>
-            <div
-                className={`text-sm mt-2 font-bold opacity-70 hover:text-blue-500 flex items-center gap-1 cursor-pointer ${localStorage.getItem('sildeBar') === "/order" ? 'text-blue-500' : ''}`}
-                onClick={() => handleClick('/order')}
-            >
-                <IconStopCircle />
-                Lịch sử mua hàng
-            </div>
+        <div className="w-full py-5 bg-gray-100 rounded-lg">
+            <p className="uppercase font-extrabold mb-3 px-4">Tài khoản</p>
+            {menuItems.map((item) => (
+                <NavLink
+                    key={item.path}
+                    to={item.path}
+                    className={({ isActive }) => `
+                        flex items-center gap-2 px-4 py-2 text-sm font-medium
+                        ${isActive ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-200'}
+                    `}
+                >
+                    <IconStopCircle />
+                    {item.label}
+                </NavLink>
+            ))}
         </div>
-    )
-}
+    );
+};
 
 export default SideBar;

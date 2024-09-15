@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useRef } from "react"
 import { useEffect, useState } from "react"
 import AddressInfor from "../../component/AddressInfor/AddressInfor"
 import { useUserPackageHook } from "../../redux/hooks/userHook"
@@ -42,6 +42,17 @@ const Address = () => {
         isDefault: false,
         isUpdateLoading: false,
     })
+
+    const insertAddressRef = useRef(null);
+
+    const handleAddAddressClick = () => {
+        setAddAddress(!addAddress);
+        if (!addAddress) {
+            setTimeout(() => {
+                insertAddressRef.current?.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        }
+    }
 
     useEffect(() => {
         getDataAddress();
@@ -170,21 +181,20 @@ const Address = () => {
     }
 
     return (
-        <div className="w-full h-full">
+        <div className="w-full h-full bg-gray-50 overflow-y-auto">
             {
                 address === undefined ? <Loading /> :
                     (
                         <>
-                            <div className="flex flex-col items-center justify-center font-semibold gap-8 p-5 border-b-[1px]">
-                                <h1 className="text-center text-[30px]">Thông tin địa chỉ</h1>
-                                <span className="bg-black p-[1.5px] w-14 flex items-center justify-center"></span>
+                            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                                <h1 className="text-3xl font-bold text-center mb-8">Thông tin địa chỉ</h1>
                             </div>
-                            <div className="flex flex-col md:flex-row w-full md:w-[750px] me:w-[970px] xl:w-[1170px] mx-auto">
-                                <div className="w-full md:w-1/4 px-5 md:px-0">
+                            <div className="flex flex-col md:flex-row gap-8 w-full md:w-[750px] me:w-[970px] xl:w-[1170px] mx-auto">
+                                <div className="w-full md:w-1/4 px-5">
                                     <SideBar />
                                 </div>
 
-                                <div className="w-full me:w-3/4 p-5 flex flex-col me:flex-row gap-3">
+                                <div className="w-full me:w-3/4 px-5 flex flex-col me:flex-row gap-3">
 
                                     <div className="w-full me:w-7/12">
                                         {/* {updateAddress ? <UpdateAddress/> : <AddressInfor/>} */}
@@ -223,7 +233,7 @@ const Address = () => {
                                     <div className="w-full me:w-5/12 me:px-3">
                                         <div className="me:px-3 flex flex-col gap-3">
                                             <Button
-                                                onClick={() => setAddAddress(!addAddress)}
+                                                onClick={handleAddAddressClick}
                                                 type="primary"
                                                 className="font-bold w-fit"
                                                 size="large"
@@ -233,27 +243,29 @@ const Address = () => {
                                             {
                                                 addAddress &&
                                                 (
-                                                    <InsertAddress
-                                                        setAddAddress={setAddAddress}
-                                                        getDataAddress={getDataAddress}
-                                                        name={state.name}
-                                                        number={state.number}
-                                                        street={state.street}
-                                                        isDefault={state.isDefault}
-                                                        provinces={state.provinces}
-                                                        provinceID={state.provinceID}
-                                                        provinceName={state.provinceName}
-                                                        wards={state.wards}
-                                                        wardCode={state.wardCode}
-                                                        wardName={state.wardName}
-                                                        districts={state.districts}
-                                                        districtID={state.districtID}
-                                                        districtName={state.districtName}
-                                                        onSelectProvince={onSelectProvince}
-                                                        onSelectDistrict={onSelectDistrict}
-                                                        onSelectWard={onSelectWard}
-                                                        onChangeInfor={onChangeInfor}
-                                                    />
+                                                    <div className="flex flex-col gap-3" ref={insertAddressRef}>
+                                                        <InsertAddress
+                                                            setAddAddress={setAddAddress}
+                                                            getDataAddress={getDataAddress}
+                                                            name={state.name}
+                                                            number={state.number}
+                                                            street={state.street}
+                                                            isDefault={state.isDefault}
+                                                            provinces={state.provinces}
+                                                            provinceID={state.provinceID}
+                                                            provinceName={state.provinceName}
+                                                            wards={state.wards}
+                                                            wardCode={state.wardCode}
+                                                            wardName={state.wardName}
+                                                            districts={state.districts}
+                                                            districtID={state.districtID}
+                                                            districtName={state.districtName}
+                                                            onSelectProvince={onSelectProvince}
+                                                            onSelectDistrict={onSelectDistrict}
+                                                            onSelectWard={onSelectWard}
+                                                            onChangeInfor={onChangeInfor}
+                                                        />
+                                                    </div>
                                                 )
                                             }
                                         </div>

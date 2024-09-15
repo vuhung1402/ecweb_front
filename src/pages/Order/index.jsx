@@ -53,11 +53,10 @@ const Order = () => {
                             height: 'calc(100% - 80px)'
                         }}
                     >
-                        <div className=" flex flex-col items-center justify-center font-semibold text-5xl gap-3 p-5 border-b-[1px]">
-                            <h1>Lịch sử mua hàng</h1>
-                            <span className="bg-black p-[1.5px] w-14 flex items-center justify-center"></span>
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                            <h1 className="text-3xl font-bold text-center mb-8">Lịch sử mua hàng</h1>
                         </div>
-                        <div className="flex flex-col md:flex-row w-full md:w-[750px] me:w-[970px] xl:w-[1170px] mx-auto">
+                        <div className="flex flex-col md:flex-row gap-8 w-full md:w-[750px] me:w-[970px] xl:w-[1170px] mx-auto">
                             <div className="md:w-1/4 px-5 md:px-0">
                                 <SideBar />
                             </div>
