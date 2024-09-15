@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useUserPackageHook } from "@redux/hooks/userHook";
-import { useNumOfCartPackageHook } from "@redux/hooks/numOfCart"
+import { Drawer } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Badge, Popover, message, Menu } from "antd"
+import { MenuOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 
-import HeaderSearch from "@component/HeaderSearch";
-
+import { useUserPackageHook } from "@redux/hooks/userHook";
+import { useNumOfCartPackageHook } from "@redux/hooks/numOfCart"
 import { clear, numOfCartPackage } from "@redux/actions";
 import { getCategories, quantityCart } from "@pages/Product/function";
-import { endpoint } from "@api/api";
 import { TOKEN_INVALID } from "@utils/error";
 import { getLevelKeys } from "@utils/function";
-
-import { MenuOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 
 import './style.scss';
 
@@ -36,6 +33,7 @@ const Header = (props) => {
 
     const [account, setAccount] = useState(false)
     const [category, setCategory] = useState([])
+    const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
 
     const [state, setState] = useState({
         popOverAcc: false,
@@ -141,6 +139,10 @@ const Header = (props) => {
         },
     ];
 
+    const toggleMobileMenu = () => {
+        setMobileMenuVisible(!mobileMenuVisible);
+    };
+
     const handleNavBarChange = (openKeys) => {
         const levelKeys = getLevelKeys(menuContent);
         const currentOpenKey = openKeys.find((key) => state.navbarMobileOpenkey.indexOf(key) === -1);
@@ -160,6 +162,7 @@ const Header = (props) => {
     };
 
     const handleNavbarClick = (item) => {
+        setMobileMenuVisible(false);
         const sidebarElement = document.getElementById('navbar-mobile');
 
         if (sidebarElement) {
@@ -185,18 +188,17 @@ const Header = (props) => {
         });
     };
 
-    return (
-        <header className={`relative w-full bg-white px-4 md:px-20 lg:px-40 ${visible ? 'header-visible' : 'header-hidden'}`}>
-            <div className="relative cursor-pointer hidden md:flex">
-                <HeaderSearch />
-            </div>
-
-            <Popover
-                trigger={"click"}
-                rootClassName="w-screen navbar-mobile"
-                arrow={false}
-                onOpenChange={handleMobileNavOpenChange}
-                content={
+    return (     
+        <header className={`relative w-full px-4 md:px-20 lg:px-40 top-0 left-0 right-0 bg-white shadow-md z-50 ${visible ? 'header-visible' : 'header-hidden'}`}>
+            {/* Mobile Menu Drawer */}
+            <Drawer
+                placement="left"
+                onClose={toggleMobileMenu}
+                visible={mobileMenuVisible}
+                width="80%"
+                bodyStyle={{ padding: 0 }}
+            >
+                <div className="flex flex-col h-full">
                     <Menu
                         className="font-bold w-full h-full overflow-y-auto"
                         mode="inline"
@@ -206,24 +208,25 @@ const Header = (props) => {
                         onClick={handleNavbarClick}
                         onOpenChange={handleNavBarChange}
                     />
-                }            
-            >
-                <div id="navbar-mobile" className="flex md:hidden cursor-pointer">
-                    <MenuOutlined />
                 </div>
-            </Popover>
+            </Drawer>
 
-            <div className="h-full hidden md:flex flex-grow">
-                <Menu
-                    className="font-bold flex items-center justify-center"
-                    rootClassName="!border-none w-full"
-                    mode="horizontal"
-                    theme="light"
-                    items={menuContent}
-                    multiple={false}
-                    onClick={handleNavbarClick}
-                    onOpenChange={handleNavBarChange}
-                />
+            <div className="h-full flex flex-grow">
+                <div className="md:hidden flex items-center justify-center">
+                    <MenuOutlined onClick={toggleMobileMenu} className="text-2xl scale-75 transform" />
+                </div>
+                <div className="h-full w-full hidden md:flex">
+                    <Menu
+                        className="font-bold flex items-center justify-center"
+                        rootClassName="!border-none w-full"
+                        mode="horizontal"
+                        theme="light"
+                        items={menuContent}
+                        multiple={false}
+                        onClick={handleNavbarClick}
+                        onOpenChange={handleNavBarChange}
+                    />
+                </div>
             </div>
 
             <div className="flex items-center gap-5">
