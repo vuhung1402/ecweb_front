@@ -3,7 +3,7 @@ import "./Style.scss";
 
 const Loading = () => {
     return (
-        <div className="w-full h-full flex items-center justify-center">
+        <div className="w-full h-full flex flex-col items-center justify-center">
             <div className="preloader">
                 <svg className="cart" role="img" aria-label="Shopping cart line animation" viewBox="0 0 128 128" width="128px" height="128px" xmlns="http://www.w3.org/2000/svg">
                     <g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="8">
@@ -24,6 +24,7 @@ const Loading = () => {
                     </g>
                 </svg>
             </div>
+            <p className="mt-4 text-lg text-gray-600 animate-bounce">This may take a moment...</p>
         </div>
     )
 }
