@@ -100,6 +100,16 @@ const OrderList = (props) => {
         setState(prev => ({ ...prev }));
     }
 
+    const [selectedRowKey, setSelectedRowKey] = useState(null); // Track selected row
+
+    const onRowClick = (record) => {
+        setSelectedRowKey(record.Order_id); // Set selected row key
+    };
+
+    const rowClassName = (record) => {
+        return record.Order_id === selectedRowKey ? 'selected-row' : ''; // Highlight selected row
+    };
+
     return (
         <div
             className=" w-full h-full flex flex-col gap-4 order-list"
@@ -147,6 +157,10 @@ const OrderList = (props) => {
                             hideOnSinglePage: true,
                             pageSize: 10
                         }}
+                        rowClassName={rowClassName} // Add rowClassName prop
+                        onRow={(record) => ({
+                            onClick: () => onRowClick(record), // Handle row click
+                        })}
                     />
             }
         </div>

@@ -38,6 +38,16 @@ const ProductList = (props) => {
         confirmLoading: false,
     })
 
+    const [selectedRowKey, setSelectedRowKey] = useState(null); // Track selected row
+
+    const onRowClick = (record) => {
+        setSelectedRowKey(record.product_id); // Set selected row key
+    };
+
+    const rowClassName = (record) => {
+        return record.product_id === selectedRowKey ? 'selected-row' : ''; // Highlight selected row
+    };
+
     useEffect(() => {
         state.idSubCategory = '';
         state.data = products;
@@ -225,6 +235,10 @@ const ProductList = (props) => {
                                     hideOnSinglePage: true,
                                     pageSize: 10
                                 }}
+                                rowClassName={rowClassName} // Add rowClassName prop
+                                onRow={(record) => ({
+                                    onClick: () => onRowClick(record), // Handle row click
+                                })}
                             />
                         )}
                     </>
