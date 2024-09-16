@@ -156,8 +156,6 @@ const Address = () => {
             isDefault: state.isDefault,
         }
 
-        console.log({body});
-
         const res = await updateAddress(body, state.addressId);
         // {
         //     "success": true,
@@ -177,7 +175,6 @@ const Address = () => {
             }
             setState((prev) => ({ ...prev, isUpdateLoading: false }))
         }
-        console.log(res);
     }
 
     return (
