@@ -311,7 +311,7 @@ const NewProduct = (props) => {
                 const body = {
                     product_id: productId,
                     name: nameProduct,
-                    total,
+                    total: total.toString(),
                     codeProduct: codeProduct,
                     price: price,
                     array_color: array_image.newColor,
