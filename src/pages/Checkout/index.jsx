@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Button, Input, Radio, Select, Space, message, Collapse } from "antd";
+import { Button, Input, Radio, Select, Space, message, Collapse, Modal } from "antd";
 
 import ProductCard from "./productCard";
-import { calculateShippingFee, formatCurrencyVN, logAgain } from "@utils/function";
+import { calculateShippingFee, formatCurrencyVN, getDistricts, getProvinces, getWards, logAgain } from "@utils/function";
 import { getAddressInfo, order } from "./function";
 import useWindowSize from "../../hooks/useWindowSize";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { FAIL } from "@utils/message";
-
 import IconCart from '@icon/iconCart.svg';
-
 import './style.scss';
+import ModalAddAddress from "./modalAddAddress";
+import { insertAddress } from "@pages/Addresses/function";
 
 const paymentMethod = [
     {
@@ -31,7 +31,7 @@ const CheckOut = () => {
     const iw = useWindowSize().width;
 
     const [state, setState] = useState({
-        price: 0,
+        price: location?.state?.order?.total_price,
         shippingFee: 0,
         addresses: undefined,
         paymentMethod: 0,
@@ -39,11 +39,26 @@ const CheckOut = () => {
         phone: '',
         name: '',
         street: '',
-        order: {},
+        order: location?.state?.order,
+        isDefault: false,
         idAdress: '',
+        provinceID: undefined,
+        provinceName: undefined,
+        districtID: undefined,
+        districtName: undefined,
+        wardCode: undefined,
+        wardName: undefined,
+        provinces: undefined,
+        districts: undefined,
+        wards: undefined,
         isOrderLoading: false,
         isCollapse: true,
+        insertAddress: false,
     });
+
+    useEffect(() => {
+        getData();
+    }, []);
 
     const getData = async () => {
         const result = await getAddressInfo();
@@ -51,31 +66,104 @@ const CheckOut = () => {
             logAgain();
             navigate("/login");
         } else {
-            const index = result?.findIndex((item) => item?.isDefault);
-            const res = await calculateShippingFee(result[index]?.districtID, result[index]?.wardCode);
-            let fee = 0;
-            if (res?.code === 200) {
-                fee = res?.data?.total;
-            }
+            if (result?.length !== 0) {
+                const index = result?.findIndex((item) => item?.isDefault);
+                if (index !== -1) {
+                    const res = await calculateShippingFee(result[index]?.districtID, result[index]?.wardCode);
+                    let fee = 0;
+                    if (res?.code === 200) {
+                        fee = res?.data?.total;
+                    }
 
-            setState((prev) => ({
-                ...prev,
-                shippingFee: fee,
-                addresses: result,
-                idAdress: result[index]?._id,
-                addressInfo: result[index],
-                name: result[index]?.name,
-                phone: result[index]?.number,
-                street: result[index]?.street,
-                order: location?.state?.order,
-                price: location?.state?.order?.total_price,
-            }));
+                    setState((prev) => ({
+                        ...prev,
+                        shippingFee: fee,
+                        addresses: result,
+                        idAdress: result[index]?._id,
+                        addressInfo: result[index],
+                        name: result[index]?.name,
+                        phone: result[index]?.number,
+                        street: result[index]?.street,
+                        order: location?.state?.order,
+                        price: location?.state?.order?.total_price,
+                    }));
+                }else{
+                    setState((prev) => ({
+                        ...prev,
+                        addresses: result,
+                        order: location?.state?.order,
+                        price: location?.state?.order?.total_price,
+                    }));
+                }
+            } else {
+                getProvinceData();
+            }
         }
     };
 
-    useEffect(() => {
-        getData();
-    }, []);
+    const getProvinceData = async () => {
+        const response = await getProvinces();
+        if (response?.code === 200) {
+            setState((prev) => ({ ...prev, provinces: response?.data }))
+        }
+    }
+
+    const onSelectProvince = async (value, option) => {
+        setState((prev) => ({ ...prev, provinceID: value, provinceName: option?.label }));
+        const response = await getDistricts(value);
+        if (response?.code === 200) {
+            setState((prev) => ({ ...prev, districts: response?.data }))
+        }
+    }
+
+    const onSelectDistrict = async (value, option) => {
+        setState((prev) => ({ ...prev, districtID: value, districtName: option?.label }));
+        const response = await getWards(value);
+        if (response?.code === 200) {
+            setState((prev) => ({ ...prev, wards: response?.data }));
+        }
+    }
+
+    const onSelectWard = async (value, option) => {
+        setState((prev) => ({ ...prev, wardCode: value, wardName: option?.label }))
+    }
+
+    const onChangeInfor = (value, type) => {
+        setState((prev) => ({
+            ...prev,
+            [type]: value,
+        }))
+    }
+
+    const handleAddAddress = async () => {
+        const body = {
+            name: state.name,
+            street: state.street,
+            provinceID: state.provinceID,
+            provinceName: state.provinceName,
+            districtID: state.districtID,
+            districtName: state.districtName,
+            wardCode: state.wardCode,
+            wardName: state.wardName,
+            number: state.phone,
+            isDefault: state.isDefault,
+        }
+
+        console.log({ body })
+
+        const res = await insertAddress(body);
+        if (res?.success) {
+            message.success(res?.message);
+            getData();
+            handleInsertAddress();
+            // setState((prev) => ({...prev, isLoading: false}));
+        } else {
+            if (res?.message === TOKEN_INVALID || res?.message === NOT_AUTHENTICATION) {
+                logAgain();
+                navigate('/')
+            }
+        }
+    }
 
     const handleSelectPaymentMethod = (e) => {
         state.paymentMethod = e.target.value;
@@ -109,7 +197,6 @@ const CheckOut = () => {
             type_pay: state?.paymentMethod,
             shipping_code: state.shippingFee
         }
-        console.log({body})
         const response = await order(body);
         if (response?.success) {
             if (response?.paymentUrl) {
@@ -122,7 +209,8 @@ const CheckOut = () => {
                 logAgain();
                 navigate('/login');
             } else {
-                message.error(FAIL);
+                setState((prev) => ({ ...prev, isOrderLoading: false }))
+                message.error(response?.message);
             }
         }
     }
@@ -131,32 +219,74 @@ const CheckOut = () => {
         setState(prev => ({ ...prev, isCollapse: status.length === 0 }));
     };
 
+    const handleInsertAddress = () => {
+        setState(prev => ({ ...prev, insertAddress: !state.insertAddress }));
+    }
+
     return (
         <div className="w-full flex flex-col-reverse me:flex-row p-3 checkout-page me:h-full">
             <div className="w-full mx-auto max-w-[640px] me:max-w-none me:mx-0 me:w-2/3 p-5 me:border-r-[1px]">
-                <div className="mb-5">
-                    <h1 className="text-lg py-4 font-medium tracking-wide">Thông tin giao hàng</h1>
-                    <div className="">
-                        <Select
-                            className="w-full h-10 font-medium"
-                            rootClassName="checkout-select"
-                            value={state.idAdress}
-                            onSelect={handleSelectAddressInfo}
-                            placeholder="Chọn thông tin giao hàng"
-                            optionFilterProp="label"
-                            options={state.addresses?.map((item) => ({
-                                value: item?._id,
-                                label: `${item?.name}, ${item?.number}, ${item?.street}, ${item?.wardName}, ${item?.districtName}, ${item?.provinceName}`,
-                                wardCode: item?.wardCode,
-                                districtID: item?.districtID,
-                                addressInfor: item,
-                                phone: item?.number,
-                                name: item?.name,
-                                street: item?.street,
-                            }))}
-                        />
-                    </div>
-                </div>
+                {
+                    state.addresses === undefined ?
+                        (
+                            <>
+                                <div>
+                                    <Button
+                                        type="primary"
+                                        onClick={handleInsertAddress}
+                                    >
+                                        Thêm thông tin giao hàng
+                                    </Button>
+                                </div>
+                                <ModalAddAddress
+                                    name={state.name}
+                                    number={state.phone}
+                                    street={state.street}
+                                    isDefault={state.isDefault}
+                                    provinces={state.provinces}
+                                    provinceID={state.provinceID}
+                                    districts={state.districts}
+                                    districtID={state.districtID}
+                                    wards={state.wards}
+                                    wardCode={state.wardCode}
+                                    isOpen={state.insertAddress}
+                                    handleInsertAddress={handleInsertAddress}
+                                    onSelectProvince={onSelectProvince}
+                                    onSelectDistrict={onSelectDistrict}
+                                    onSelectWard={onSelectWard}
+                                    onChangeInfor={onChangeInfor}
+                                    handleAddAddress={handleAddAddress}
+                                />
+                            </>
+                        ) :
+                        (
+                            <>
+                                <div className="mb-5">
+                                    <h1 className="text-lg py-4 font-medium tracking-wide">Thông tin giao hàng</h1>
+                                    <div className="">
+                                        <Select
+                                            className="w-full h-10 font-medium"
+                                            rootClassName="checkout-select"
+                                            value={state.idAdress}
+                                            onSelect={handleSelectAddressInfo}
+                                            placeholder="Chọn thông tin giao hàng"
+                                            optionFilterProp="label"
+                                            options={state.addresses?.map((item) => ({
+                                                value: item?._id,
+                                                label: `${item?.name}, ${item?.number}, ${item?.street}, ${item?.wardName}, ${item?.districtName}, ${item?.provinceName}`,
+                                                wardCode: item?.wardCode,
+                                                districtID: item?.districtID,
+                                                addressInfor: item,
+                                                phone: item?.number,
+                                                name: item?.name,
+                                                street: item?.street,
+                                            }))}
+                                        />
+                                    </div>
+                                </div>
+                            </>
+                        )
+                }
 
                 <div className="w-full">
                     <h1 className="text-lg py-4 font-medium tracking-wide">Phương thức thanh toán</h1>
