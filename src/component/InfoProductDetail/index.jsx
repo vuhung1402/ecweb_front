@@ -100,25 +100,26 @@ const InfoProductDetail = ({ data, handleGotoImage }) => {
             product_id: data?.product_id,
             product_name: data?.name,
             size: state.selectSize?.name_size,
-            image_hover: state.selectColor?.image,
+            image_hover: state.selectColor?.image === undefined ? data?.primary_image?.url : state.selectColor?.image,
             color: state.selectColor?.name,
             quantity: state.number,
             price_per_one: data?.price,
         }
-        setState((prev) => ({...prev, loadingAddCart:true}));
+
+        setState((prev) => ({ ...prev, loadingAddCart: true }));
         const result = await addToCart(cart);
         const numOfCart = await quantityCart();
-        if(result?.success){
+        if (result?.success) {
             message.success(SUCCESS)
             dispatch(numOfCartPackage(numOfCart))
-            setState((prev) => ({...prev, loadingAddCart:false}));
-        }else{
-            if(result?.message === TOKEN_INVALID || result?.message === NOT_AUTHENTICATION){
+            setState((prev) => ({ ...prev, loadingAddCart: false }));
+        } else {
+            if (result?.message === TOKEN_INVALID || result?.message === NOT_AUTHENTICATION) {
                 logAgain();
                 navigate('/login');
-            }else{
+            } else {
                 message.error(result?.message);
-                setState((prev) => ({...prev, loadingAddCart:false}));
+                setState((prev) => ({ ...prev, loadingAddCart: false }));
             }
         }
     }
@@ -129,49 +130,62 @@ const InfoProductDetail = ({ data, handleGotoImage }) => {
             <div className="text-red-500 text-[18px] font-bold opacity-[0.92] border-b-[1px] py-3">
                 {formatCurrencyVN(data?.price)}
             </div>
-            <div id="text-name-color" className="text-xs font-bold opacity-60 my-3" >{state.textColor?.toUpperCase()}</div>
-            <div className="mb-3 cursor-default flex gap-3 items-center">
-                {
-                    state.color?.map((item, index) => {
-                        return (
-                            <div
-                                onMouseEnter={() => handleChangeNameColor(item?.name)}
-                                onClick={() => handleSelectColor(item)}
-                                onMouseLeave={handleMouseLeave}
-                                key={`product-color-${index}`}
-                                className={` relative h-[31px] w-[31px] cursor-pointer rounded-full flex justify-center items-center ${state.selectColor?.code === item?.code ? 'border border-[#808284]' : ''}`}
-                            >
-                                <div
-                                    className={` h-[23px] w-[23px] rounded-full ${item.invalid ? ' opacity-5' : ''}`}
-                                    style={{ backgroundColor: item?.code }}
-                                >
-                                </div>
-                                {item.invalid &&
-                                    (<div className=" absolute">
-                                        <IconClose />
-                                    </div>)
-                                }
-                            </div>
-                        )
-                    })
-                }
-            </div>
-            <div className="flex gap-3 pb-3 items-center border-b">
-                {state.sizes?.map((item, index) => {
-                    return (
-                        <>
-                            <div
-                                onClick={() => handleSelectSize(item)}
-                                className={` relative w-[40px] h-[40px] text-center border flex items-center justify-center 
-                                            ${item?.name_size === state.selectSize?.name_size ? 'bg-black text-white' : 'text-black'} ${item?.invalid ? ' cursor-default' : ' cursor-pointer'}`}
-                                key={`product-size-${index}`}
-                            >
-                                <div className={`text-[16px] ${item?.invalid ? ' opacity-30' : ''}`}>{item?.name_size}</div>
-                            </div>
-                        </>
-                    )
-                })}
-            </div>
+            {
+                state.color.length !== 0 &&
+                (
+                    <>
+                        <div id="text-name-color" className="text-xs font-bold opacity-60 my-3" >{state.textColor?.toUpperCase()}</div>
+                        <div className="mb-3 cursor-default flex gap-3 items-center">
+                            {
+                                state.color?.map((item, index) => {
+                                    return (
+                                        <div
+                                            onMouseEnter={() => handleChangeNameColor(item?.name)}
+                                            onClick={() => handleSelectColor(item)}
+                                            onMouseLeave={handleMouseLeave}
+                                            key={`product-color-${index}`}
+                                            className={` relative h-[31px] w-[31px] cursor-pointer rounded-full flex justify-center items-center ${state.selectColor?.code === item?.code ? 'border border-[#808284]' : ''}`}
+                                        >
+                                            <div
+                                                className={` h-[23px] w-[23px] rounded-full ${item.invalid ? ' opacity-5' : ''}`}
+                                                style={{ backgroundColor: item?.code }}
+                                            >
+                                            </div>
+                                            {item.invalid &&
+                                                (<div className=" absolute">
+                                                    <IconClose />
+                                                </div>)
+                                            }
+                                        </div>
+                                    )
+                                })
+                            }
+                        </div>
+                    </>
+                )
+            }
+
+            {
+                state.sizes !== undefined &&
+                (
+                    <div className="flex gap-3 pb-3 items-center border-b">
+                        {state.sizes?.map((item, index) => {
+                            return (
+                                <>
+                                    <div
+                                        onClick={() => handleSelectSize(item)}
+                                        className={` relative w-[40px] h-[40px] text-center border flex items-center justify-center 
+                                                ${item?.name_size === state.selectSize?.name_size ? 'bg-black text-white' : 'text-black'} ${item?.invalid ? ' cursor-default' : ' cursor-pointer'}`}
+                                        key={`product-size-${index}`}
+                                    >
+                                        <div className={`text-[16px] ${item?.invalid ? ' opacity-30' : ''}`}>{item?.name_size}</div>
+                                    </div>
+                                </>
+                            )
+                        })}
+                    </div>
+                )
+            }
 
             <div className="flex gap-3 items-center mt-4">
                 <div onClick={() => handleNumber("minus")} className="p-3 bg-[rgb(245,245,245)] cursor-pointer hover:bg-opacity-60">
