@@ -7,7 +7,7 @@ import { formatCurrencyVN } from "@utils/function";
 
 const PaymentInfo = (props) => {
 
-    const { address, totalPrice, name, phone, price_pay } = props;
+    const { address, totalPrice, name, phone, price_pay, shipping_code } = props;
 
     return (
         <div className="w-full flex flex-col gap-2">
@@ -50,7 +50,7 @@ const PaymentInfo = (props) => {
                 <div className="w-full flex gap-3 items-center justify-between">
                     <Tag color="cyan" className="font-medium">Phí vận chuyển:</Tag>
                     <Tag color="#109ee9" className="font-bold text-sm">
-                        {formatCurrencyVN(0)}
+                        {formatCurrencyVN(shipping_code)}
                     </Tag>
                 </div>
                 <div className="w-full flex gap-3 items-center justify-between">

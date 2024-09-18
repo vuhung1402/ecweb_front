@@ -5,10 +5,6 @@ export const statusOrder = [
         status: 0,
         name: <div className="font-bold">Chờ thanh toán</div>,
         nextStatus: [
-            {
-                status: 5,
-                label: 'Huỷ đơn hàng',
-            },
         ],
     },
     {
@@ -18,10 +14,6 @@ export const statusOrder = [
             {
                 status: 2,
                 label: 'Xác nhận đơn hàng',
-            },
-            {
-                status: 5,
-                label: 'Huỷ đơn hàng',
             },
         ],
     },
@@ -68,10 +60,6 @@ export const statusOrder = [
             {
                 status: 3,
                 label:'Giao hàng',
-            },
-            {
-                status: 5,
-                label: 'Huỷ đơn hàng',
             },
         ],
     },

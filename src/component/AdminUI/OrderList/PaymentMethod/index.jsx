@@ -28,7 +28,7 @@ const PaymentMethod = (props) => {
                     </Tag>
                 }
                 {
-                    (typePay === 1 && (status === 5 || status === 6)) &&
+                    status === 6 &&
                     <div color="#87d068" className="font-bold">
                         Đã hoàn tiền
                     </div>

@@ -11,10 +11,10 @@ export function cn(...inputs) {
     return twMerge(clsx(inputs));
 }
 
-export const formatCurrencyVN = (number) => {
+export const formatCurrencyVN = (number, isNotRounded = false) => {
     if (isNaN(number)) return "";
 
-    let formattedNumber = Math.ceil(number / 1000) * 1000;
+    let formattedNumber = isNotRounded ? number : Math.ceil(number / 1000) * 1000;
     let numberStr = formattedNumber.toString();
     let [wholeNumber, decimal] = numberStr.split(",");
 

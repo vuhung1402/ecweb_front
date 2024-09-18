@@ -3,7 +3,7 @@ import { formatCurrencyVN } from "@utils/function";
 import React from "react";
 
 const PaymentInfor = (props) => {
-    const { data, status, shippingFee, typePay } = props;
+    const { data, status, shippingFee, typePay, price_pay } = props;
 
     return (
         <div className="w-full p-3">
@@ -20,13 +20,13 @@ const PaymentInfor = (props) => {
             <div className=" flex flex-col gap-3 pt-3">
                 <div className=" flex justify-between">
                     <div>Thanh toán:</div>
-                    <div className="font-bold text-sm text-red-500">{formatCurrencyVN(data)}</div>
+                    <div className="font-bold text-sm text-red-500">{formatCurrencyVN(price_pay)}</div>
                 </div>
                 {
                     typePay === 1 && status !== 0 &&
                     <div className=" flex justify-between">
                         <div>Đã thanh toán:</div>
-                        <div className="font-bold text-sm text-green-400">{formatCurrencyVN(data)}</div>
+                        <div className="font-bold text-sm text-green-400">{formatCurrencyVN(price_pay)}</div>
                     </div>
                 }
 

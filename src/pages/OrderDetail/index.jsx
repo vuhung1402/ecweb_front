@@ -10,7 +10,7 @@ import OrderStatus from "@component/OrderStatus";
 import Loading from "@component/Loading/Loading";
 
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { getOrderDetail } from "./function";
+import { cancelOrder, getOrderDetail, orderHistory } from "./function";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { logAgain } from "@utils/function";
 import { FAIL, SUCCESS } from "@utils/message";
@@ -22,6 +22,7 @@ const OderDetail = () => {
 
     const [state, setState] = useState({
         data: undefined,
+        orderHistory: [],
         isLoading: false,
         quantity: 0,
     })
@@ -29,7 +30,6 @@ const OderDetail = () => {
     const getData = async () => {
         const response = await getOrderDetail(param?.id);
         if (response?.success) {
-            console.log({response});
             const quantity = response?.formatted_order_detail?.items?.reduce((total, item) => total += item?.quantity,0);
             setState((prev) => ({ 
                 ...prev,
@@ -46,16 +46,40 @@ const OderDetail = () => {
         }
     }
 
-    // const handle = async (type_pay, user_id, Order_id, new_status_order) => {
-    //     if(type_pay === 1){
-    //         handleRedundMoney();
-    //     }else{
-    //         updateStatus(user_id, Order_id, new_status_order);
-    //     }
-    // }
+    const getHistory = async () => {
+        // {
+        //     "success": true,
+        //     "log": [
+        //         {
+        //             "status": 1,
+        //             "day_add": "2024-09-18T08:16:25.869Z",
+        //             "_id": "66ead3980cb95c76fbc85e6d"
+        //         },
+        //         {
+        //             "status": 2,
+        //             "day_add": "2024-09-18T13:20:24.952Z",
+        //             "_id": "66ead3980cb95c76fbc85e6e"
+        //         }
+        //     ],
+        //     "color": "text-green-500"
+        // }
+        const res = await orderHistory(param?.id);
+        if(res?.success){
+            setState((prev) => ({
+                ...prev,
+                orderHistory: res?.log,
+            }));
+        } else {
+            if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
+                logAgain();
+                navigate('/login');
+            } else {
+                message.error(FAIL);
+            }
+        }
+    }
 
     const handleRedundMoney = async () => {
-        setState((prev) => ({ ...prev, isLoading: true }))
         const response = await refundMoney(state.data?.Order_id);
         if (response?.success) {
             message?.success(SUCCESS)
@@ -71,9 +95,9 @@ const OderDetail = () => {
         }
     }
 
-    const updateStatus = async (user_id, Order_id, new_status_order) => {
+    const cancelShipCode = async () => {
         setState((prev) => ({ ...prev, isLoading: true }))
-        const response = await updateStatuOrder(user_id, Order_id, new_status_order)
+        const response = await cancelOrder(state.data?.Order_id)
         if (response?.success) {
             message?.success(SUCCESS)
             setState((prev) => ({ ...prev, isLoading: false }))
@@ -88,8 +112,17 @@ const OderDetail = () => {
         }
     }
 
+    const handleCancelOrder = async () => {
+        if(state.data?.type_pay === 0){
+            cancelShipCode();
+        }else{
+            handleRedundMoney();
+        }
+    }
+
     useEffect(() => {
-        getData()
+        getData();
+        getHistory();
     }, [])
 
     return (
@@ -156,6 +189,7 @@ const OderDetail = () => {
                                                         status = {state.data?.status}
                                                         shippingFee={state.data?.shipping_code}
                                                         typePay={state.data?.type_pay}
+                                                        price_pay={state.data?.price_pay}
                                                     />
                                                 </div>
                                             </div>
@@ -173,7 +207,7 @@ const OderDetail = () => {
                                             </div>
                                         </div>
                                         <div className="flex flex-col gap-3 mb-3">
-                                            <OrderStatus status={state.data?.status} />
+                                            <OrderStatus status={state.data?.status} history={state.orderHistory} />
                                         </div>
 
                                         {
@@ -194,7 +228,7 @@ const OderDetail = () => {
                                                     okText="Xác nhận"
                                                     onConfirm={
                                                         // () =>handle(state.data?.type_pay, state.data?.user_id, state.data.Order_id, 5)
-                                                        handleRedundMoney
+                                                        handleCancelOrder
                                                     }
                                                     okButtonProps={{
                                                         loading: state.isLoading

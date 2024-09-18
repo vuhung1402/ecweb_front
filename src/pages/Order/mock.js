@@ -25,4 +25,12 @@ export const statusOrder = [
         key: 5,
         name: 'Đã huỷ',
     },
+    {
+        key: 6,
+        name: 'Trả hàng/Hoàn tiền',
+    },
+    {
+        key: 7,
+        name: 'Giao hàng không thành công',
+    },
 ];

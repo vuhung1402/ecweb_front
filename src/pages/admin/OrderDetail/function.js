@@ -1,4 +1,4 @@
-import { endpoint } from "@api/api";
+import { axiosInstance, endpoint } from "@api/api";
 import { message } from "antd";
 
 export const getOrderDetail = async (id, user_id) => {
@@ -57,29 +57,18 @@ export const updateStatuOrder = async (user_id, Order_id, new_status_order) => {
     }
 }
 
-export const refundMoney = async (Order_id) => {
+export const refundMoney = async (Order_id, user_id) => {
     const body = {
-        Order_id
-    }
+        Order_id,
+        user_id,
+    } 
 
-    const token = localStorage.getItem("token");
     try {
-        const response = await fetch(`${endpoint}/order/refund_momo_money`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                "token" : `${token}`,
-                'Content-Type': 'application/json',
-            }
+        const response = await axiosInstance.post(`admin/refund_momo_money_admin`, JSON.stringify(body), {
+            requiresAuth: true,
         });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data;
+        return response.data;
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
     }
 }

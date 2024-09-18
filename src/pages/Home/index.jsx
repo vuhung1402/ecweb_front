@@ -63,10 +63,10 @@ const Home = () => {
 
     return (
         <div className="w-screen h-screen">
-            {state.products.length === 0 && (
+            {state.products?.length === 0 && (
                 <Loading />
             )}
-            {state.products.length > 0 && (
+            {state.products?.length > 0 && (
                 <>
                     <div className="flex top-0 fixed w-full justify-center z-[999]" id="app-header">
                         <Header

@@ -7,7 +7,7 @@ import IconOrderFinish from '@icon/iconOrderFinish.svg';
 
 const OrderStatus = (props) => {
 
-    const { status } = props;
+    const { status, history } = props;
 
     const orderStatus = [
         { label: 'Đặt hàng thành công', icon: <IconOrderSuccess /> },
@@ -16,12 +16,23 @@ const OrderStatus = (props) => {
         { label: 'Đã giao hàng', icon: <IconOrderFinish /> },
     ];
 
+    const statusName = {
+        0: 'Chờ thanh toán',
+        1: 'Chờ xác nhận',
+        2: 'Đã xác nhận',
+        3: 'Đang giao hàng',
+        4: 'Đã giao hàng',
+        5: 'Đã huỷ',
+        6: 'Trả hàng/Hoàn tiền',
+        7: 'Giao hàng không thành công',
+    }
+
     return (
         <>
             {
                 status !== 5 &&
-                <div className="flex flex-col sm:flex-row gap-3 sm:gap-0 items-center justify-center sm:h-[80px]">
-                    {orderStatus.map((item, index) => {
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-0 sm:h-[80px]">
+                    {/* {orderStatus.map((item, index) => {
                         return (
                             <div key={`order-status=${index}`} className="flex items-center h-full">
                                 <div
@@ -38,7 +49,19 @@ const OrderStatus = (props) => {
                                 )}
                             </div>
                         )
-                    })}
+                    })} */}
+                    <div className=" flex flex-col gap-3">
+                        {
+                            history?.map((item) => {
+                                return (
+                                    <div className=" flex">
+                                        <div>{item?.day_add}</div>
+                                        <div>{statusName[item?.status]}</div>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
                 </div>
             }
         </>

@@ -16,9 +16,9 @@ import useWindowSize from "../../../hooks/useWindowSize";
 const OrderDetail = (props) => {
     const { userId, orderId } = props;
     const { handleBack, getDataOrder } = props;
-    
+
     if (!userId && !orderId) return <div className="font-bold">Chi tiết sản phẩm sẽ hiển thị ở đây</div>
-    
+
     const iw = useWindowSize().width;
     const navigate = useNavigate();
 
@@ -27,7 +27,8 @@ const OrderDetail = (props) => {
         isLoading: true,
     });
 
-    const arrayNotShowRefund = [0,5];
+    const arrayNotShowRefund = [0, 1, 2, 5, 6, 7];
+    const arrayNotShowCancelOrder = [0, 3, 4, 5, 6]
 
     const getData = async () => {
         const respone = await getOrderDetail(orderId, userId);
@@ -44,7 +45,6 @@ const OrderDetail = (props) => {
     };
 
     const updateStatus = async (user_id, Order_id, new_status_order) => {
-        setState((prev) => ({ ...prev, isLoading: true }))
         const response = await updateStatuOrder(user_id, Order_id, new_status_order)
         if (response?.success) {
             message?.success(SUCCESS)
@@ -64,10 +64,12 @@ const OrderDetail = (props) => {
     }
 
     const handleRedundMoney = async () => {
-        setState((prev) => ({ ...prev, isLoading: true }))
-        const response = await refundMoney(state.data?.Order_id);
+        const response = await refundMoney(state.data?.Order_id, state.data?.user_id);
         if (response?.success) {
             message?.success(SUCCESS)
+            const tab = localStorage.getItem("orderTab");
+            getDataOrder(`?status=${tab}`);
+            getData();
             setState((prev) => ({ ...prev, isLoading: false }))
         } else {
             if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
@@ -80,10 +82,33 @@ const OrderDetail = (props) => {
         }
     }
 
+    const handleUpdate = async (user_id, Order_id, newStatus) => {
+        setState((prev) => ({ ...prev, isLoading: true }));
+        updateStatus(user_id, Order_id, newStatus);
+    }
+
+    const cancelOrder = async () => {
+        setState((prev) => ({ ...prev, isLoading: true }))
+        if (state.data?.type_pay === 0) {
+            updateStatus(state.data?.user_id, state.data?.Order_id, 5);
+        } else {
+            handleRedundMoney();
+        }
+    }
+
+    const refundOrder = async () => {
+        setState((prev) => ({ ...prev, isLoading: true }))
+        if (state.data?.type_pay === 0) {
+            updateStatus(state.data?.user_id, state.data?.Order_id, 6);
+        } else {
+            handleRedundMoney();
+        }
+    }
+
     useEffect(() => {
         state.data = undefined;
         state.isLoading = true;
-        setState(prev => ({...prev}));
+        setState(prev => ({ ...prev }));
         if (!userId || !orderId) return;
         getData();
     }, [userId, orderId])
@@ -121,8 +146,18 @@ const OrderDetail = (props) => {
                                     }
                                 </div>
                                 <div className="flex flex-col w-full gap-3">
-                                    <PaymentInfo address={state?.data?.address} totalPrice={state.data?.total_price} name={state.data?.name} phone={state.data?.phone} price_pay={state.data?.price_pay} />
-                                    <PaymentMethod typePay={state.data?.type_pay} status={state?.data?.status} />
+                                    <PaymentInfo
+                                        address={state?.data?.address}
+                                        totalPrice={state.data?.total_price}
+                                        name={state.data?.name}
+                                        phone={state.data?.phone}
+                                        price_pay={state.data?.price_pay}
+                                        shipping_code={state.data?.shipping_code}
+                                    />
+                                    <PaymentMethod
+                                        typePay={state.data?.type_pay}
+                                        status={state?.data?.status}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -135,7 +170,7 @@ const OrderDetail = (props) => {
                                             description="Bạn muốn đổi trạng thái của đơn hàng?"
                                             cancelText="Huỷ"
                                             okText="Xác nhận"
-                                            onConfirm={() => updateStatus(state.data?.user_id, state.data?.Order_id, nextStatusItem.status)}
+                                            onConfirm={() => handleUpdate(state.data?.user_id, state.data?.Order_id, nextStatusItem.status)}
                                             okButtonProps={{
                                                 loading: state.isLoading
                                             }}
@@ -151,13 +186,33 @@ const OrderDetail = (props) => {
                                 })
                             }
                             {
-                                (state.data?.type_pay === 1 && !arrayNotShowRefund.includes(state?.data?.status) ) &&
+                                !arrayNotShowCancelOrder.includes(state.data?.status) &&
                                 <Popconfirm
                                     title="Hoàn tiền"
-                                    description="Bạn muốn hoàn tiền đơn hàng này?"
+                                    description="Bạn muốn huỷ đơn hàng này?"
                                     cancelText="Huỷ"
                                     okText="Xác nhận"
-                                    onConfirm={handleRedundMoney}
+                                    onConfirm={cancelOrder}
+                                    okButtonProps={{
+                                        loading: state.isLoading
+                                    }}
+                                >
+                                    <Button
+                                        type="primary"
+                                        className="font-bold"
+                                    >
+                                        Huỷ đơn hàng
+                                    </Button>
+                                </Popconfirm>
+                            }
+                            {
+                                (!arrayNotShowRefund.includes(state?.data?.status)) &&
+                                <Popconfirm
+                                    title="Hoàn tiền"
+                                    description="Bạn muốn trả hàng/hoàn tiền đơn hàng này?"
+                                    cancelText="Huỷ"
+                                    okText="Xác nhận"
+                                    onConfirm={refundOrder}
                                     okButtonProps={{
                                         loading: state.isLoading
                                     }}

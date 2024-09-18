@@ -1,4 +1,4 @@
-import { endpoint } from "@api/api";
+import { axiosInstance, endpoint } from "@api/api";
 import { message } from "antd";
 
 export const getOrderDetail = async (id) => {
@@ -25,5 +25,34 @@ export const getOrderDetail = async (id) => {
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
+    }
+}
+
+export const cancelOrder = async (Order_id) => {
+    const body = {
+        Order_id
+    }
+    try {
+        const response = await axiosInstance.post(`order/cancer_order`, JSON.stringify(body), {
+            requiresAuth: true,
+        });
+        return response.data;
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+    }
+}
+
+export const orderHistory = async (Order_id) => {
+    const body = {
+        Order_id
+    }
+
+    try {
+        const response = await axiosInstance.post(`order/get_OrderHistory_log`, JSON.stringify(body), {
+            requiresAuth: true,
+        });
+        return response.data;
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
     }
 }

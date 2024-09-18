@@ -50,7 +50,7 @@ const CartPage = () => {
             // state.quantity = quantity;
             dispatch(numOfCartPackage(cartItem?.items?.length))
         } else {
-            if (cartItem?.message === TOKEN_INVALID) {
+            if (cartItem?.message === TOKEN_INVALID || cartItem?.message === NOT_AUTHENTICATION) {
                 logAgain();
                 navigate("/login");
             }
