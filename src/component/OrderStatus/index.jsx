@@ -31,7 +31,6 @@ const OrderStatus = (props) => {
     return (
         <>
             {
-                status !== 5 &&
                 <div className="order-status-container"> {/* Add a class for styling */}
                     <div className="status-history"> {/* Add a class for styling */}
                         {
