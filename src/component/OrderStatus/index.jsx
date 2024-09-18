@@ -1,4 +1,5 @@
-import React from "react"
+import React from "react";
+import './styles.scss'; // Import the styles
 
 import IconOrderSuccess from '@icon/iconOrderSuccess.svg';
 import IconConfirm from '@icon/iconConfirm.svg';
@@ -31,32 +32,21 @@ const OrderStatus = (props) => {
         <>
             {
                 status !== 5 &&
-                <div className="flex flex-col sm:flex-row gap-3 sm:gap-0 sm:h-[80px]">
-                    {/* {orderStatus.map((item, index) => {
-                        return (
-                            <div key={`order-status=${index}`} className="flex items-center h-full">
-                                <div
-                                    style={{
-                                        opacity: index >= status ? '0.5' : '1'
-                                    }}
-                                    className="flex flex-col gap-3 items-center text-xs"
-                                >
-                                    <div className="scale-75 sm:scale-100 transform">{item.icon}</div>
-                                    <div className="w-20 text-center text-red-500 font-medium">{item.label}</div>
-                                </div>
-                                {index !== 3 && (
-                                    <div className="w-[30px] hidden sm:block h-[1px] border-dashed border-t-2 border-red-500"></div>
-                                )}
-                            </div>
-                        )
-                    })} */}
-                    <div className=" flex flex-col gap-3">
+                <div className="order-status-container"> {/* Add a class for styling */}
+                    <div className="status-history"> {/* Add a class for styling */}
                         {
                             history?.map((item) => {
                                 return (
-                                    <div className=" flex">
-                                        <div>{item?.day_add}</div>
-                                        <div>{statusName[item?.status]}</div>
+                                    <div className="status-item"> {/* Add a class for styling */}
+                                        <div className="status-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10">
+                                                <circle cx="5" cy="5" r="5" fill="#00796b" />
+                                            </svg>
+                                        </div>
+                                        <div className="status-details">
+                                            <div className="status-date">{item?.day_add}</div>
+                                            <div className="status-label">{statusName[item?.status]}</div>
+                                        </div>
                                     </div>
                                 )
                             })

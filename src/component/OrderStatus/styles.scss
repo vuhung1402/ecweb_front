@@ -1,0 +1,67 @@
+.order-status-container {
+    background-color: #f9f9f9; /* Light background */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    padding: 20px; /* Padding for spacing */
+    margin: 20px 0; /* Margin for spacing */
+    max-width: 100%; /* Ensure it fits mobile screens */
+}
+
+.status-history {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between items */
+}
+
+.status-item {
+    display: flex;
+    align-items: center; /* Align items vertically */
+    padding: 15px; /* Increased padding for touch targets */
+    border-radius: 5px; /* Rounded corners for items */
+    background-color: #ffffff; /* White background for items */
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+.status-item:hover {
+    background-color: #e0f7fa; /* Light blue on hover */
+}
+
+.status-icon {
+    margin-right: 10px; /* Space between icon and text */
+}
+
+.status-details {
+    flex: 1; /* Allow details to take available space */
+    display: flex;
+    justify-content: space-between;
+}
+
+.status-date {
+    font-weight: bold; /* Bold date */
+    color: #00796b; /* Teal color */
+}
+
+.status-label {
+    font-weight: 500; /* Medium weight for status */
+    color: #d32f2f; /* Red color for status */
+}
+
+/* Mobile Styles */
+@media (max-width: 600px) {
+    .order-status-container {
+        padding: 15px; /* Adjust padding for mobile */
+    }
+
+    .status-item {
+        flex-direction: row; /* Keep items in a row */
+    }
+
+    .status-date, .status-label {
+        text-align: left; /* Align text to the left */
+        width: auto; /* Auto width for mobile */
+    }
+
+    .status-details {
+        flex-direction: column;
+    }
+}
