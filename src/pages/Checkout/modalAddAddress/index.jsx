@@ -1,103 +1,95 @@
 import { HomeOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
-import { Input, Modal, Select } from "antd";
+import { Input, Modal, Select, Checkbox } from "antd";
 import React from "react";
+import './styles.scss';
 
 const ModalAddAddress = (props) => {
     const { isOpen, name, number, provinces, provinceID, districts, districtID, wards, wardCode, street, isDefault } = props;
     const { handleInsertAddress, onChangeInfor, onSelectProvince, onSelectDistrict, onSelectWard, handleAddAddress } = props;
 
     return (
-        <div className=" flex flex-col gap-3">
+        <div className="modal-container">
             <Modal
                 title="Địa chỉ"
                 open={isOpen}
                 onCancel={handleInsertAddress}
                 onOk={handleAddAddress}
+                className="modal"
             >
                 <Input
                     value={name}
-                    type=""
-                    className="text-sm outline-none border"
                     onChange={(e) => onChangeInfor(e.target.value, 'name')}
                     placeholder="Họ và tên"
-                    prefix={<UserOutlined className="opacity-60" />}
-                    classNames={{
-                        input: '!px-2'
-                    }}
+                    prefix={<UserOutlined className="icon" />}
+                    className="input"
                 />
 
                 <Input
                     value={number}
-                    type=""
-                    className="text-sm outline-none border"
                     onChange={(e) => onChangeInfor(e.target.value, 'phone')}
                     placeholder="Số điện thoại"
-                    prefix={<PhoneOutlined className="opacity-60" />}
-                    classNames={{
-                        input: '!px-2'
-                    }}
+                    prefix={<PhoneOutlined className="icon" />}
+                    className="input"
                 />
 
-                <Select
-                    showSearch
-                    optionFilterProp="label"
-                    value={provinceID}
-                    onSelect={onSelectProvince}
-                    placeholder='Tỉnh, Thành Phố'
-                    options={provinces?.map((item) => ({
-                        label: item?.ProvinceName,
-                        value: item?.ProvinceID,
-                    }))}
-                    suffixIcon={<HomeOutlined />}
-                />
-
-                <Select
-                    showSearch
-                    optionFilterProp="label"
-                    suffixIcon={<HomeOutlined />}
-                    value={districtID}
-                    placeholder='Quận, Huyện'
-                    onSelect={onSelectDistrict}
-                    options={districts?.map((item) => ({
-                        label: item?.DistrictName,
-                        value: item?.DistrictID,
-                    }))}
-                />
-
-                <Select
-                    showSearch
-                    optionFilterProp="label"
-                    suffixIcon={<HomeOutlined />}
-                    value={wardCode}
-                    placeholder='Phường, Xã'
-                    onSelect={onSelectWard}
-                    options={wards?.map((item) => ({
-                        label: item?.WardName,
-                        value: item?.WardCode,
-                    }))}
-                />
+                <div className="flex items-center gap-2">
+                    <Select
+                        showSearch
+                        optionFilterProp="label"
+                        value={provinceID}
+                        onSelect={onSelectProvince}
+                        placeholder='Tỉnh, Thành Phố'
+                        options={provinces?.map((item) => ({
+                            label: item?.ProvinceName,
+                            value: item?.ProvinceID,
+                        }))}
+                        suffixIcon={<HomeOutlined />}
+                        className="select"
+                    />
+                    <Select
+                        showSearch
+                        optionFilterProp="label"
+                        value={districtID}
+                        onSelect={onSelectDistrict}
+                        placeholder='Quận, Huyện'
+                        options={districts?.map((item) => ({
+                            label: item?.DistrictName,
+                            value: item?.DistrictID,
+                        }))}
+                        suffixIcon={<HomeOutlined />}
+                        className="select"
+                    />
+                    <Select
+                        showSearch
+                        optionFilterProp="label"
+                        value={wardCode}
+                        onSelect={onSelectWard}
+                        placeholder='Phường, Xã'
+                        options={wards?.map((item) => ({
+                            label: item?.WardName,
+                            value: item?.WardCode,
+                        }))}
+                        suffixIcon={<HomeOutlined />}
+                        className="select"
+                    />
+                </div>
 
                 <Input
                     value={street}
-                    type=""
-                    prefix={<HomeOutlined className="opacity-60" />}
-                    className="text-sm outline-none border"
-                    classNames={{
-                        input: '!px-2'
-                    }}
                     onChange={(e) => onChangeInfor(e.target.value, 'street')}
                     placeholder="tên đường, số nhà"
+                    prefix={<HomeOutlined className="icon" />}
+                    className="input"
                 />
 
-                <div class="flex items-center mb-2">
-                    <input
-                        value={isDefault}
+                <div className="checkbox-container flex items-center">
+                    <Checkbox
+                        checked={isDefault}
                         onChange={(e) => onChangeInfor(e.target.checked, 'isDefault')}
                         id="default-checkbox"
-                        type="checkbox"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 outline-none cursor-pointer"
+                        className="checkbox"
                     />
-                    <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Đặt làm địa chỉ mặc định</label>
+                    <label htmlFor="default-checkbox" className="checkbox-label">Đặt làm địa chỉ mặc định</label>
                 </div>
             </Modal>
         </div>

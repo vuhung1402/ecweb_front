@@ -1,0 +1,41 @@
+.modal-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal {
+    width: 400px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.input {
+    margin-bottom: 16px;
+    border-radius: 4px;
+}
+
+.select {
+    margin-bottom: 16px;
+    border-radius: 4px;
+}
+
+.icon {
+    color: #1890ff;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.checkbox {
+    margin-right: 8px;
+}
+
+.checkbox-label {
+    font-size: 14px;
+    color: #333;
+}
