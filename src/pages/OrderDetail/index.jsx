@@ -30,8 +30,8 @@ const OderDetail = () => {
     const getData = async () => {
         const response = await getOrderDetail(param?.id);
         if (response?.success) {
-            const quantity = response?.formatted_order_detail?.items?.reduce((total, item) => total += item?.quantity,0);
-            setState((prev) => ({ 
+            const quantity = response?.formatted_order_detail?.items?.reduce((total, item) => total += item?.quantity, 0);
+            setState((prev) => ({
                 ...prev,
                 data: response?.formatted_order_detail,
                 quantity: quantity,
@@ -64,7 +64,7 @@ const OderDetail = () => {
         //     "color": "text-green-500"
         // }
         const res = await orderHistory(param?.id);
-        if(res?.success){
+        if (res?.success) {
             setState((prev) => ({
                 ...prev,
                 orderHistory: res?.log,
@@ -113,9 +113,9 @@ const OderDetail = () => {
     }
 
     const handleCancelOrder = async () => {
-        if(state.data?.type_pay === 0){
+        if (state.data?.type_pay === 0) {
             cancelShipCode();
-        }else{
+        } else {
             handleRedundMoney();
         }
     }
@@ -186,7 +186,7 @@ const OderDetail = () => {
                                                 <div>
                                                     <PaymentInfor
                                                         data={state?.data?.total_price}
-                                                        status = {state.data?.status}
+                                                        status={state.data?.status}
                                                         shippingFee={state.data?.shipping_code}
                                                         typePay={state.data?.type_pay}
                                                         price_pay={state.data?.price_pay}
@@ -219,7 +219,7 @@ const OderDetail = () => {
                                         }
 
                                         {
-                                            state.data?.status === 1  &&
+                                            state.data?.status === 1 &&
                                             <div className="flex gap-3 justify-end">
                                                 <Popconfirm
                                                     title="Huỷ đơn hàng"
