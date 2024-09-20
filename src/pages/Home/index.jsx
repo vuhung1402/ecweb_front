@@ -50,7 +50,7 @@ const Home = () => {
                 </HomeBackground>
                 <HomePart id={HOME_PRODUCT_ID}>
                     <HomeProduct
-                        products={data?.productListAll_DataFormat}
+                        products={data?.productListAll_DataFormat?.slice(0,8)}
                         handleCLick={handleCLick}
                     />
                 </HomePart>
