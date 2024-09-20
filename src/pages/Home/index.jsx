@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 import HomeContainer from "./HomeContainer";
@@ -10,63 +10,36 @@ import ShopCategory from "./ShopCategory";
 import Sponsor from "./Sponsor";
 import Footer from "@core/Footer";
 
-import { getProducts } from "./function";
+import useVisibleHeader from "@hooks/useVisibleHeader";
+import { useGetProducts } from "@api/Home";
+import { navigatePath } from "@constants/index";
 
 const HEADER_ID = 'app-header'
 const HOME_PRODUCT_ID = 'home-product'
 
 const Home = () => {
     const navigate = useNavigate();
-    const [state, setState] = useState({
-        products: [],
-        position: window.scrollY,
-        visible: false,
-    });
 
-    const handleGetProducts = async () => {
-        const products = await getProducts();
-        setState(prev => ({...prev, products: products.productListAll_DataFormat?.slice(0,8)}));
-    };
-
-    useEffect(() => {
-        handleGetProducts();
-    }, []);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            let moving = window.scrollY;
-            setState(prev => ({...prev, position: moving, visible: moving < 60 ? false : state.position > moving}));
-        };
-
-        document.addEventListener("scroll", handleScroll);
-
-        return () => {
-            document.removeEventListener("scroll", handleScroll);
-        };
-    });
-
-    const handleMobileNavOpenChange = (event) => {
-        document.body.style.overflow = event ? 'hidden' : 'auto';
-    };
+    const { isLoading, data } = useGetProducts();
+    const { visible } = useVisibleHeader();
 
     const handleScrollToProduct = () => {
-        const homeProductElement = document.getElementById('home-product');
+        const homeProductElement = document.getElementById(HOME_PRODUCT_ID);
         if (homeProductElement) {
             homeProductElement.scrollIntoView({ behavior: 'smooth' });
         }
     };
 
     const handleCLick = () => {
-        navigate("/products/all")
+        navigate(navigatePath.PRODUCT_ALL)
     }
 
     return (
-        <HomeContainer isLoading={state.products?.length === 0}>
+        <HomeContainer isLoading={isLoading}>
             <>
                 <HomeHeader id={HEADER_ID}>
                     <Header
-                        visible={state.visible}
-                        handleMobileNavOpenChange={handleMobileNavOpenChange}
+                        visible={visible}
                     />
                 </HomeHeader>
                 <HomeBackground>
@@ -77,7 +50,7 @@ const Home = () => {
                 </HomeBackground>
                 <HomePart id={HOME_PRODUCT_ID}>
                     <HomeProduct
-                        products={state.products}
+                        products={data?.productListAll_DataFormat}
                         handleCLick={handleCLick}
                     />
                 </HomePart>
