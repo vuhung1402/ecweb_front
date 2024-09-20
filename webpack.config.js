@@ -23,6 +23,7 @@ module.exports = {
             "@redux": path.resolve(__dirname, './src/redux'),
             "@api": path.resolve(__dirname, './src/api'),
             "@hooks": path.resolve(__dirname, './src/hooks'),
+            "@constants": path.resolve(__dirname, './src/constants'),
         }
     },
     optimization: {
