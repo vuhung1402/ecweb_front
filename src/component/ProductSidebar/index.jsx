@@ -5,7 +5,7 @@ import useWindowSize from "../../hooks/useWindowSize";
 
 import './style.scss';
 
-function Filter({ onClick, category }) {
+function ProductSidebar({ onClick, category }) {
 
     const iw = useWindowSize().width;
 
@@ -24,4 +24,4 @@ function Filter({ onClick, category }) {
     );
 };
 
-export default Filter;
+export default ProductSidebar;

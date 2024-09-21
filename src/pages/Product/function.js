@@ -1,5 +1,8 @@
-import { endpoint, axiosInstance } from "@api/api";
+import { useQuery } from "@tanstack/react-query";
 import { message } from "antd";
+
+import { endpoint, axiosInstance } from "@api/api";
+import { GET_CATEGORIES, GET_PRODUCTS_PAGE } from "@constants/index";
 
 export const addToCart = async (body) => {
     const token = localStorage.getItem("token");
@@ -46,20 +49,35 @@ export const quantityCart = async () => {
     }
 }
 
-export const getProducts = async (key, modeFilter) => {
-    try {
-        const response = await axiosInstance.get(`/product/getAllProductList/${key}/${modeFilter}`);
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-    }
+// products
+
+const getProducts = async (location) => {
+    const regex = /[?&]sort_by=([^&]*)/;
+    const match = regex.exec(location?.search);
+    const key = location?.state?.key ? location?.state?.key : 'all';
+    const modeFilter = match?.[1].length > 0 ? `${location?.state?.value}` : `1`;
+
+    const response = await axiosInstance.get(`/product/getAllProductList/${key}/${modeFilter}`);
+    return response.data;
 };
 
+export function useGetProducts(location, parmas) {
+    return useQuery({
+        queryFn: () => getProducts(location),
+        queryKey: [GET_PRODUCTS_PAGE, location?.search, parmas?.category]
+    });
+};
+
+// catagories
+
 export const getCategories = async () => {
-    try {
-        const response = await axiosInstance.get(`/category/getAllCategories`);
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-    }
+    const response = await axiosInstance.get(`/category/getAllCategories`);
+    return response.data;
+};
+
+export function useGetCategories() {
+    return useQuery({
+        queryFn: () => getCategories(),
+        queryKey: [GET_CATEGORIES]
+    });
 };
