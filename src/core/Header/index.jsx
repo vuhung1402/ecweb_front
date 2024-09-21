@@ -26,7 +26,7 @@ const accountMenuClassName = 'cursor-pointer hover:bg-[rgb(239,239,239)] rounded
 
 const Header = (props) => {
 
-    const { visible = true, handleMobileNavOpenChange } = props;
+    const { visible = true } = props;
 
     const user = useUserPackageHook();
     const numOfCart = useNumOfCartPackageHook();
