@@ -140,7 +140,7 @@ const InfoProductDetail = ({ data, handleGotoImage, isLoading }) => {
                 price={data?.price}
             />
             <InfoProductDetailColor>
-                <InfoProductDetailColorName id={ID_TEXT_NAME_COLOR} textColor={state.textColor?.toUpperCase()} />
+                <InfoProductDetailColorName id={ID_TEXT_NAME_COLOR} colorName={state.textColor?.toUpperCase()} />
                 <ProductDetailColorPick
                     color={state?.color}
                     selectColor={state.selectColor}

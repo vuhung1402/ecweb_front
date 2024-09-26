@@ -21,6 +21,7 @@ const ProductDetailQantity = (props) => {
                 className="outline-none text-xl border-none shadow-transparent w-14 text-center"
                 value={number}
                 type="number"
+                readOnly
             />
 
             <div
