@@ -1,13 +1,19 @@
-import { endpoint, axiosInstance } from "@api/api";
+import { useQuery } from "@tanstack/react-query";
 import { message } from "antd";
 
-export const getDetailProduct = async (id) => {
-    try {
-        const response = await axiosInstance.get(`/product/getProductDetail/${id}`);
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-    }
+import { endpoint, axiosInstance } from "@api/api";
+import { GET_DETAIL_PRODUCT } from "@constants/index";
+
+const getDetailProduct = async (id) => {
+    const response = await axiosInstance.get(`/product/getProductDetail/${id}`);
+    return response.data;
+};
+
+export function useGetDetailProduct(id) {
+    return useQuery({
+        queryFn: () => getDetailProduct(id),
+        queryKey: [GET_DETAIL_PRODUCT]
+    });
 };
 
 export const addToCart = async (body) => {

@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Carousel } from "antd";
 
+import { BigImageWrapper, SmallImageWrapper } from "@pages/ProductDetail/ProductDetail";
+
 import './style.scss';
 
 const ImagePreview = ({ imageArray, currentImg }) => {
@@ -54,25 +56,36 @@ const ImagePreview = ({ imageArray, currentImg }) => {
     },[currentImg]);
 
     return (
-        <div className="flex gap-3 h-fit w-full">
-            <div className="hidden me:flex flex-col gap-3 sticky top-20 h-fit">
+        <>
+            <SmallImageWrapper>
                 {
                     imageArray?.map((item, index) => {
                         return (
-                            <a onClick={() => handleNavigateImage(`image-${index}`)} id={`small-image-${index}`} className={`w-[64px] h-[64px] cursor-pointer ${Number(imageId) === index ? 'border': ''}`}><img src={item?.url} /></a>
+                            <a
+                                onClick={() => handleNavigateImage(`image-${index}`)}
+                                id={`small-image-${index}`}
+                                className={`w-[64px] h-[64px] cursor-pointer ${Number(imageId) === index ? 'border': ''}`}
+                            >
+                                <img src={item?.url} />
+                            </a>
                         )
                     })
                 }
-            </div>
-            <div className="hidden me:flex flex-col gap-3 flex-grow px-6">
+            </SmallImageWrapper>
+            <BigImageWrapper>
                 {
                     imageArray?.map((item, index) => {
                         return (
-                            <div id={`image-${index}`} className="w-full"><img src={item?.url} className="w-full" /></div>
+                            <div
+                                id={`image-${index}`}
+                                className="w-full"
+                            >
+                                <img src={item?.url} className="w-full" />
+                            </div>
                         )
                     })
                 }
-            </div>
+            </BigImageWrapper>
             <Carousel
                 rootClassName="w-full slide-show block me:hidden"
                 dots={{className: 'text-black'}}
@@ -86,7 +99,7 @@ const ImagePreview = ({ imageArray, currentImg }) => {
                     })
                 }
             </Carousel>
-        </div>
+        </>
     )
 }
 
