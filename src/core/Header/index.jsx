@@ -194,9 +194,9 @@ const Header = (props) => {
             <Drawer
                 placement="left"
                 onClose={toggleMobileMenu}
-                visible={mobileMenuVisible}
+                open={mobileMenuVisible}
                 width="80%"
-                bodyStyle={{ padding: 0 }}
+                styles={{body: {padding: 0}}}
             >
                 <div className="flex flex-col h-full">
                     <Menu

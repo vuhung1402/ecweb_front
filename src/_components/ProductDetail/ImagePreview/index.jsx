@@ -64,6 +64,7 @@ const ImagePreview = ({ imageArray, currentImg }) => {
                             <a
                                 onClick={() => handleNavigateImage(`image-${index}`)}
                                 id={`small-image-${index}`}
+                                key={`small-image-${index}`}
                                 className={`w-[64px] h-[64px] cursor-pointer ${Number(imageId) === index ? 'border': ''}`}
                             >
                                 <img src={item?.url} />
@@ -78,6 +79,7 @@ const ImagePreview = ({ imageArray, currentImg }) => {
                         return (
                             <div
                                 id={`image-${index}`}
+                                key={`big-image-${index}`}
                                 className="w-full"
                             >
                                 <img src={item?.url} className="w-full" />
@@ -94,7 +96,7 @@ const ImagePreview = ({ imageArray, currentImg }) => {
                 {
                     imageArray?.map((item, index) => {
                         return (
-                           <img src={item?.url} className="w-full h-auto" />
+                           <img key={`img-carousel-${index}`} src={item?.url} className="w-full h-auto" />
                         )
                     })
                 }
