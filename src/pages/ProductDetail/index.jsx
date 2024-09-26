@@ -36,7 +36,6 @@ const ProductDetail = () => {
                 <InfoProductWrapper>
                     <InfoProductDetail
                         data={data?.product}
-                        isLoading={isLoading}
                         handleGotoImage={handleGotoImage}
                     />
                 </InfoProductWrapper>

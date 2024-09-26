@@ -19,7 +19,7 @@ import ProductDetailQantity from "../ProductDetailQantity";
 
 const ID_TEXT_NAME_COLOR='text-name-color'
 
-const InfoProductDetail = ({ data, handleGotoImage, isLoading }) => {
+const InfoProductDetail = ({ data, handleGotoImage }) => {
     
     const [state, setState] = useState({
         number: 1,
@@ -30,8 +30,6 @@ const InfoProductDetail = ({ data, handleGotoImage, isLoading }) => {
         selectSize: {},
         loadingAddCart: false,
     });
-
-    if(isLoading) return <div className="w-full min-h-screen h-full flex items-center justify-center"><Loading /></div>
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
