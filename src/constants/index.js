@@ -1,6 +1,9 @@
 export const GET_PRODUCTS = 'get_products'
 export const GET_CATEGORIES = 'get_categories'
 export const GET_PRODUCTS_PAGE = 'get_products_page'
+export const GET_USERS_ADMIN = 'get_users_admin'
+export const GET_USERS_DETAIL_ADMIN = 'get_users_detail_admin'
+
 export const navigatePath = {
     PRODUCT_ALL: '/products/all'
 };

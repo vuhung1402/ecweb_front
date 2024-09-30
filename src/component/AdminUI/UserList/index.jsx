@@ -1,23 +1,81 @@
 import React from 'react';
-import { Popconfirm, Space, Table, Tag, Tooltip } from 'antd';
+import { Button, Popconfirm, Space, Table, Tag, Tooltip } from 'antd';
 import DeleteIcon from "@icon/deleteIcon.svg"
 import EditIcon from "@icon/edit.svg"
 import { data } from '@pages/admin/user/mock';
 import { StopOutlined, StopTwoTone, TransactionOutlined, UserDeleteOutlined, UserOutlined } from '@ant-design/icons';
 import ModalUserInfor from '@component/AdminUI/ModalUserInfor';
 import ModalTransaction from '../ModalTransaction';
+import Loading from '@component/Loading/Loading';
 
 
 const UserList = (props) => {
-    const { isOpenModalUser, isOpenModalTransaction } = props;
-    const { handleOpenModalUserInfor, handleOpenModalTransaction } = props;
+    const { isOpenModalUser, isOpenModalTransaction, userData, isGetUsers } = props;
+    const { handleOpenModalUserInfor, handleOpenModalTransaction, handleUserDetail } = props;
+
+    // [
+    //     {
+    //         "_id": "6663a25a208960e6b253f1e0",
+    //         "ho": "Dinh",
+    //         "ten": "Quan",
+    //         "email": "dinhquanfananime3@gmail.com"
+    //     },
+    //     {
+    //         "_id": "6663a2bc208960e6b253f1e5",
+    //         "ho": "Dinh",
+    //         "ten": "Quan",
+    //         "email": "dinhquanfananime4@gmail.com"
+    //     },
+    //     {
+    //         "_id": "6663cb79e12e5a5b69c7fb01",
+    //         "ho": "Dinh",
+    //         "ten": "Quan",
+    //         "email": "dinhquanfananime@gmail.com"
+    //     },
+    //     {
+    //         "_id": "66db2f7fb8963205c67c6400",
+    //         "ho": "Dinh",
+    //         "ten": "Quan",
+    //         "email": "tab39105@dcobe.com"
+    //     },
+    //     {
+    //         "_id": "66dd5e594ab3bd087f98f4b6",
+    //         "ho": "Đỗ",
+    //         "ten": "Hưng",
+    //         "email": "badao867@gmail.com"
+    //     },
+    //     {
+    //         "_id": "66dd62f84ab3bd087f991250",
+    //         "ho": "yuhnnart",
+    //         "ten": " ",
+    //         "email": "yuhnnart84@gmail.com"
+    //     },
+    //     {
+    //         "_id": "66ec3c4f199158fa2de65a43",
+    //         "ho": "test",
+    //         "ten": "test",
+    //         "email": "vuhung14022002@gmail.com"
+    //     },
+    //     {
+    //         "_id": "66ec3d60199158fa2de65c65",
+    //         "ho": "Test1",
+    //         "ten": "test1",
+    //         "email": "badao867+1@gmail.com"
+    //     }
+    // ]
+
+    if(isGetUsers) return <Loading/>
 
     const columns = [
         {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            render: (text) => <a>{text}</a>,
+            render: (_, record) => (
+                <div className=' flex gap-3'>
+                    {record?.ho} {record?.ten}
+                </div>
+            ),
         },
         {
             title: 'Email',
@@ -29,58 +87,12 @@ const UserList = (props) => {
             key: 'action',
             render: (_, record) => (
                 <div className=' flex gap-3'>
-                    <div
-                        className=' cursor-pointer'
-                        onClick={handleOpenModalUserInfor}
+                    <Button
+                        type='primary'
+                        onClick={() => handleUserDetail(record?._id)}
                     >
-                        <Tooltip title='Thông tin người dùng'>
-                            <UserOutlined
-                                className=' text-xl'
-                                twoToneColor={"#0000FF"} />
-                        </Tooltip>
-                    </div>
-                    <div
-                        className=' cursor-pointer'
-                        onClick={handleOpenModalTransaction}
-                    >
-                        <Tooltip title='Lịch sử giao dịch'>
-                            <TransactionOutlined
-                                className=' text-xl'
-                                twoToneColor="#FF0000"
-                            />
-                        </Tooltip>
-                    </div>
-                    <Popconfirm
-                        title="Chặn email người dùng"
-                        description="Bạn muốn chặn email của người dùng này?"
-                        // onConfirm={confirm}
-                        // onCancel={cancel}
-                        okText="Xác nhận"
-                        cancelText="Huỷ"
-                    >
-                        <div
-                            className=' cursor-pointer'
-                        >
-                            <StopTwoTone
-                                className=' text-xl'
-                                twoToneColor="#FF0000"
-                            />
-                        </div>
-                    </Popconfirm>
-                    <Popconfirm
-                        title="Xoá người dùng"
-                        description="Bạn muốn xoá người dùng này?"
-                        // onConfirm={confirm}
-                        // onCancel={cancel}
-                        okText="Xác nhận"
-                        cancelText="Huỷ"
-                    >
-                        <div className='cursor-pointer'>
-                            <UserDeleteOutlined
-                                className=' text-xl'
-                            />
-                        </div>
-                    </Popconfirm>
+                        Chi tiết
+                    </Button>
                 </div>
             ),
         },
@@ -90,7 +102,7 @@ const UserList = (props) => {
         <>
             <Table
                 columns={columns}
-                dataSource={data}
+                dataSource={userData}
                 pagination={{
                     hideOnSinglePage: true,
                     pageSize: 15,
