@@ -33,7 +33,10 @@
             ],
             "@constants/*":[
                 "src/constants/*"
-            ]
+            ],
+            "@_components/*":[
+                "src/_components/*"
+            ],
         }
     },
 }

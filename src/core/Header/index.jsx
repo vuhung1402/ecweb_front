@@ -6,13 +6,12 @@ import { Badge, Popover, message, Menu } from "antd"
 import { MenuOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 
 import { useUserPackageHook } from "@redux/hooks/userHook";
-import { useNumOfCartPackageHook } from "@redux/hooks/numOfCart"
-import { clear, numOfCartPackage } from "@redux/actions";
-import { getCategories, quantityCart } from "@pages/Product/function";
-import { TOKEN_INVALID } from "@utils/error";
+import { clear } from "@redux/actions";
+import { getCategories } from "@pages/Product/function";
 import { getLevelKeys } from "@utils/function";
 
 import './style.scss';
+import useGetCartQuantity from "@hooks/useGetCartQuantity";
 
 const policyTitle = [
     {key: 'policy-title-1' , label: 'CHÍNH SÁCH ĐỔI TRẢ'},
@@ -28,13 +27,13 @@ const Header = (props) => {
 
     const { visible = true } = props;
 
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const user = useUserPackageHook();
-    const numOfCart = useNumOfCartPackageHook();
+    const { cartQuantity, getQuantity } = useGetCartQuantity()
 
     const [account, setAccount] = useState(false)
-    const [category, setCategory] = useState([])
     const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
-
     const [state, setState] = useState({
         popOverAcc: false,
         searchBox: false,
@@ -43,8 +42,13 @@ const Header = (props) => {
         navbarMobileOpenkey: ''
     });
 
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+    useEffect(() => {
+        handleGetCategories();
+    }, []);
+
+    useEffect(() => {
+        getQuantity()
+    }, [user?.accessToken]);
 
     const handleGetCategories = async () => {
         const res = await getCategories();
@@ -52,43 +56,6 @@ const Header = (props) => {
             setState((prev) => ({...prev, category: res?.formattedData}))
         }
     }
-
-    useEffect(() => {
-        // fetch(`${endpoint}/category/getAllCategories`, {
-        //     method: "GET",
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        // }).then((response) => {
-        //     if (!response.ok) {
-        //         throw new Error("Netword response not ok")
-        //     }
-        //     return response.json()
-        // }).then((json) => {
-        //     if (json?.success) {
-        //         setCategory(json?.formattedData)
-        //     }
-        // }).catch((error) => {
-        //     console.error("Error: ", error)
-        // })
-        handleGetCategories();
-    }, []);
-
-    const setLocalStorageQuantiyCart = async () => {
-        if (user?.accessToken) {
-            const numOfCart = await quantityCart();
-
-            if(numOfCart?.message === TOKEN_INVALID){
-                dispatch(numOfCartPackage(0));
-            } else {
-                dispatch(numOfCartPackage(numOfCart));
-            };
-        };
-    };
-
-    useEffect(() => {
-        setLocalStorageQuantiyCart();
-    }, [user?.accessToken]);
 
     const handleLogOut = () => {
         localStorage.removeItem("token");
@@ -282,7 +249,7 @@ const Header = (props) => {
                     </Popover>
                 </div>
                 <div className="relative cursor-pointer flex items-center justify-center">
-                    <Badge count={numOfCart}>
+                    <Badge count={cartQuantity}>
                         <div
                             onClick={() => {
                             setAccount(false);

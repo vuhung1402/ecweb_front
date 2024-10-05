@@ -24,6 +24,7 @@ module.exports = {
             "@api": path.resolve(__dirname, './src/api'),
             "@hooks": path.resolve(__dirname, './src/hooks'),
             "@constants": path.resolve(__dirname, './src/constants'),
+            "@_components": path.resolve(__dirname, './src/_components'),
         }
     },
     optimization: {

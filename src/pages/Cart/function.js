@@ -1,28 +1,36 @@
-import { endpoint, axiosInstance } from "@api/api";
-import { message } from "antd";
+import { useQuery, useMutation } from "@tanstack/react-query";
 
-export const getCart = async () => {
-    try {
-        const response = await axiosInstance.get(`/cart/cart_show`, {
-            requiresAuth: true, // require user token
-        });
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-    };
+import { axiosInstance } from "@api/api";
+import { message } from "antd";
+import { GET_CARD } from "@constants/index";
+
+const getCart = async () => {
+    const response = await axiosInstance.get(`/cart/cart_show`, {
+        requiresAuth: true, // require user token
+    });
+    return response.data;
 };
 
-export const deleteItemCart = async (id) => {
+export function useGetCart() {
+    return useQuery({
+        queryFn: () => getCart(),
+        queryKey: [GET_CARD]
+    });
+};
+
+const deleteItemCart = async (id) => {
     const body = { _id : id };
 
-    try {
-        const response = await axiosInstance.post(`/cart/delete_items_in_cart`, JSON.stringify(body) , {
-            requiresAuth: true, // require user token
-        });
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-    };
+    // const response = await axiosInstance.post(`/cart/delete_items_in_cart`, JSON.stringify(body) , {
+    //     requiresAuth: true, // require user token
+    // });
+    // return response.data;
+};
+
+export function useDeleteItemCart(id) {
+    return useMutation({
+        mutationFn: deleteItemCart(id)
+    });
 };
 
 export const checkout = async (items) => {

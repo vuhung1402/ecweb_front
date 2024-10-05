@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, message } from "antd";
-
 import { useDispatch } from "react-redux";
-import { numOfCartPackage } from "@redux/actions";
 
 import { addKeyToArraySize, getNotInvalidColor, logAgain } from "@utils/function";
-
-import { addToCart, quantityCart } from "@pages/Product/function";
-import { SUCCESS } from "@utils/message";
+import useGetCartQuantity from "@hooks/useGetCartQuantity";
+import { addToCart, useGetQuantityCart } from "@pages/Product/function";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 
 import { InfoProductDetailColor, InfoProductDetailColorName, InfoProductDetailHeader } from "@pages/ProductDetail/ProductDetail";
-import Loading from "@component/Loading/Loading";
 import ProductDetailColorPick from "../ProductDetailColorPick";
 import ProductDetailSize from "../ProductDetailSize";
 import ProductDetailQantity from "../ProductDetailQantity";
@@ -31,8 +27,8 @@ const InfoProductDetail = ({ data, handleGotoImage }) => {
         loadingAddCart: false,
     });
 
-    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { getQuantity } = useGetCartQuantity()
 
     useEffect(() => {
         if (data) {
@@ -115,10 +111,8 @@ const InfoProductDetail = ({ data, handleGotoImage }) => {
 
         setState((prev) => ({ ...prev, loadingAddCart: true }));
         const result = await addToCart(cart);
-        const numOfCart = await quantityCart();
         if (result?.success) {
-            message.success(SUCCESS)
-            dispatch(numOfCartPackage(numOfCart))
+            getQuantity()
             setState((prev) => ({ ...prev, loadingAddCart: false }));
         } else {
             if (result?.message === TOKEN_INVALID || result?.message === NOT_AUTHENTICATION) {

@@ -15,8 +15,6 @@ const CartCard = (props) => {
         isLoadingDelete: false,
     })
 
-    console.log({isLoadingUpdate})
-
     useEffect(() => {
         state.quantity = data?.quantity;
         setState((prev) => ({ ...prev }))
