@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const endpoint = "http://localhost:5500/api/v1/"
+export const endpoint = "https://ecweb-backend.onrender.com/api/v1"
 
 export const dateFormat = "DD/MM/YYYY"
 

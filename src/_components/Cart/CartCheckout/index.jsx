@@ -24,7 +24,7 @@ const CartCheckout = (props) => {
                 </div>
                 <Button
                     onClick={() => handleCheckout("checkOut")}
-                    loading={isLoadingCheckout.status && "checkOut" === isLoadingCheckout.type}
+                    loading={isLoadingCheckout}
                     className="w-full mt-3 p-3 !h-auto font-medium uppercase text-xl"
                     type="primary"
                 >
