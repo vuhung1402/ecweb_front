@@ -17,7 +17,7 @@ const HomeProduct = (props) => {
                 Check out our <span className="text-primary">new arrivals</span>
             </h2>
             <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-4 xl:gap-x-10">
-                {products.map((item, index) => {
+                {products?.map((item, index) => {
                     return (
                         <div key={item?.id}>
                             <MotionBox animation={fadeIn(0.3 + (0.1 * index))} className="relative">

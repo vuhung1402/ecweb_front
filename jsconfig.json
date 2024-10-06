@@ -36,7 +36,10 @@
             ],
             "@store/*":[
                 "src/store/*"
-            ]
+            ],
+            "@_components/*":[
+                "src/_components/*"
+            ],
         }
     },
 }
