@@ -1,17 +1,13 @@
 import React from 'react';
-import { Button, Popconfirm, Space, Table, Tag, Tooltip } from 'antd';
-import DeleteIcon from "@icon/deleteIcon.svg"
-import EditIcon from "@icon/edit.svg"
-import { data } from '@pages/admin/user/mock';
-import { StopOutlined, StopTwoTone, TransactionOutlined, UserDeleteOutlined, UserOutlined } from '@ant-design/icons';
+import { Button,Table} from 'antd';
 import ModalUserInfor from '@component/AdminUI/ModalUserInfor';
 import ModalTransaction from '../ModalTransaction';
 import Loading from '@component/Loading/Loading';
 
 
 const UserList = (props) => {
-    const { isOpenModalUser, isOpenModalTransaction, userData, isGetUsers } = props;
-    const { handleOpenModalUserInfor, handleOpenModalTransaction, handleUserDetail } = props;
+    const { isOpenModalUser, isOpenModalTransaction, userData, isGetUsers, isRefetchingUsers } = props;
+    const { handleOpenModalUserInfor, handleOpenModalTransaction, handleUserDetail,  } = props;
 
     // [
     //     {
@@ -64,7 +60,7 @@ const UserList = (props) => {
     //     }
     // ]
 
-    if(isGetUsers) return <Loading/>
+    if(isGetUsers || isRefetchingUsers) return <Loading/>
 
     const columns = [
         {

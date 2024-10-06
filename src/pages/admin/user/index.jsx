@@ -14,8 +14,8 @@ import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { logAgain } from "@utils/function";
 
 const User = (props) => {
-    const { userId } = props;
-    const { handleUserDetail } = props;
+    const { userId, isGetUsers, userData, isRefetchingUsers } = props;
+    const { handleUserDetail  } = props;
 
     const [state, setState] = useState({
         email: '',
@@ -50,8 +50,6 @@ const User = (props) => {
         setState((prev) => ({ ...prev, isOpenModalTransaction: !state.isOpenModalTransaction }));
     }
 
-    const { isLoading: isGetUsers, data: userData, } = useGetUsers(state.email);
-
     // if(!userData?.success) {
     //     if(userData?.message === TOKEN_INVALID || userData?.message === NOT_AUTHENTICATION){
     //         logAgain();
@@ -71,6 +69,7 @@ const User = (props) => {
             <UserListWrapper>
                 <UserList
                     isGetUsers={isGetUsers}
+                    isRefetchingUsers={isRefetchingUsers}
                     handleOpenModalUserInfor={handleOpenModalUserInfor}
                     handleOpenModalTransaction={handleOpenModalTransaction}
                     isOpenModalUser={state.isOpenModalUser}

@@ -7,6 +7,17 @@ export const UserInforWrapper = (props) => {
     );
 };
 
+export const UserRolesWrapper = (props) => {
+
+    if(props?.isGetDetailSuccess){
+        
+    }
+
+    return(
+        <div className=" w-full" {...props} />
+    );
+};
+
 export const UserAddressWrapper = (props) => {
     return(
         <div className=" w-full" {...props} />
@@ -16,5 +27,5 @@ export const UserAddressWrapper = (props) => {
 export const UserActionWrapper = (props) => {
     return(
         <div className=" w-full" {...props} />
-    )
-}
+    );
+};

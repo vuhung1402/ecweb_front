@@ -24,12 +24,14 @@ export function useGetUserDetail(userId) {
     return useQuery({
         queryFn: () => getUserDetail(userId),
         queryKey: [GET_USERS_DETAIL_ADMIN, userId], 
+        enabled: !!userId,
     })
 
 }
 
 //add to blacklist
 export const addToBlackList = async (email) => {
+    // console.log(email);
     const body = {
         email
     }
@@ -42,20 +44,51 @@ export const addToBlackList = async (email) => {
     return response.data;
 }
 
-export function useAddToBlackList (email) {
+export function useAddToBlackList () {
     return useMutation(
         {
-            mutationFn: () => addToBlackList(email),
-            onSuccess: (data, variables, context) => {
-                if(data?.success){
-                    message.success(SUCCESS);
-                }else{
-                    if(data?.message === TOKEN_INVALID || data?.message === NOT_AUTHENTICATION){
-                        logAgain();
-                        // navigate('/login');
-                    }
-                }
-            },
+            mutationFn: (email) => addToBlackList(email),
         }
     )
+}
+
+//delete user
+export const deleteUser = async (userId) => {
+    const body = {
+        userId
+    }
+
+    const response = await axiosInstance.post(`/admin/deleteUser`, JSON.stringify(body), {
+        requiresAuth: true,
+    });
+
+    return response.data;
+}
+
+export function useDeleteUser () {
+    return useMutation(
+        {
+            mutationFn: (userId) => deleteUser(userId),
+        }
+    )
+}
+
+//grnat role
+export const grantRole = async (body) => {
+
+    console.log({body});
+
+    const response = await axiosInstance.post(`/admin/grantRoles`, JSON.stringify(body), {
+        requiresAuth: true,
+    });
+
+    return response.data;
+}
+
+export function useGrantRole () {
+    return useMutation(
+        {
+            mutationFn: (body) => grantRole(body),
+        }
+    );
 }

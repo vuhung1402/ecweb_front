@@ -1,15 +1,34 @@
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { useAddToBlackList } from "@pages/admin/UserDetail/function";
-import { Button, Popconfirm } from "antd";
+import { SUCCESS } from "@utils/message";
+import { Button, message, Popconfirm } from "antd";
 import React from "react";
 
 const UserAction = (props) => {
-    const { email } = props;
-
-    const { mutate } = useAddToBlackList(email)
+    const { isGrantRole, userRoles, initialRole } = props;
+    const { addToBlackList, deleteUser, grantRole } = props;
 
     return (
         <div className=" w-full p-3 flex gap-2 justify-end items-center">
+            <Popconfirm
+                title="Chặn người dùng"
+                description="Cập nhật quyền người dùng này?"
+                icon={
+                    <QuestionCircleOutlined
+                        style={{
+                            color: 'red',
+                        }}
+                    />
+                }
+                onConfirm={grantRole}
+            >
+                <Button
+                    disabled={initialRole === userRoles}
+                    type="primary"
+                >
+                    Cập nhật
+                </Button>
+            </Popconfirm>
             <Popconfirm
                 title="Chặn người dùng"
                 description="Bạn muốn chặn người dùng này?"
@@ -20,7 +39,7 @@ const UserAction = (props) => {
                         }}
                     />
                 }
-                onConfirm={mutate}
+                onConfirm={addToBlackList}
             >
                 <Button
                     danger
@@ -39,6 +58,7 @@ const UserAction = (props) => {
                         }}
                     />
                 }
+                onConfirm={deleteUser}
             >
                 <Button danger>Xoá người dùng</Button>
             </Popconfirm>

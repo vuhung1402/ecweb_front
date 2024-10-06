@@ -65,11 +65,11 @@ const UserAddress = (props) => {
                         <div className=" p-3 border rounded-lg flex flex-col gap-2">
                             <div className=" flex items-center gap-3">
                                 <div className=" font-bold">Họ và tên:</div>
-                                <div>{item.name}</div>
+                                <div>{item?.name}</div>
                             </div>
                             <div className=" flex items-center gap-3">
                                 <div className=" font-bold">Địa chỉ:</div>
-                                <div>{item.street}, {item.wardName}, {item.districtName}, {item.provinceName}</div>
+                                <div>{item?.street}, {item?.wardName}, {item?.districtName}, {item?.provinceName}</div>
                             </div>
                             <div className=" flex items-center gap-3">
                                 <div className=" font-bold">Số điện thoại:</div>

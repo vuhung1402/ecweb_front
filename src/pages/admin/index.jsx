@@ -22,6 +22,7 @@ import { FAIL } from '@utils/message';
 
 import './style.scss';
 import UserDetail from './UserDetail';
+import { useGetUsers } from './user/function';
 
 const Admin = () => {
     const navigate = useNavigate();
@@ -59,6 +60,10 @@ const Admin = () => {
             }
         }
     }
+
+    const { isLoading: isGetUsers, data: userData, refetch: refetchUsers ,isRefetching: isRefetchingUsers} = useGetUsers(state.email);
+
+    // const { setRoles, roles } = useUserDetailStore();
 
     // go to order detail in mobile
     const handleOrderDetail = (orderId, userId) => {
@@ -156,6 +161,9 @@ const Admin = () => {
                 url={location.search}
                 handleUserDetail={handleUserDetail}
                 userId={state.userId}
+                isGetUsers={isGetUsers}
+                userData={userData}
+                isRefetchingUsers={isRefetchingUsers}
             />
         ),
         2: (
@@ -180,6 +188,7 @@ const Admin = () => {
         1: (
             <UserDetail 
                 userId={state.userId}
+                refetchUsers={refetchUsers}
             />
         ),
         2: (
