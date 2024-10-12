@@ -16,7 +16,8 @@ export function useGetUsers(email){
     return useQuery(
         {
             queryFn: () => getUsers(email),
-            queryKey: [GET_USERS_ADMIN, email]
+            queryKey: [GET_USERS_ADMIN, email],
+            // enabled: false,
         }
     )
 }

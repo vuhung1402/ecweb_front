@@ -15,24 +15,14 @@ import { logAgain } from "@utils/function";
 
 const User = (props) => {
     const { userId, isGetUsers, userData, isRefetchingUsers } = props;
-    const { handleUserDetail  } = props;
+    const { handleUserDetail, handleChangeInfor  } = props;
 
     const [state, setState] = useState({
-        email: '',
         selectValue: '1',
         placeholder: '',
         isOpenModalUser: false,
         isOpenModalTransaction: false,
     });
-
-    const handleChangeInfor = (value, key) => {
-        setState(prev => (
-            {
-                ...prev,
-                [key] : value
-            }
-        ))
-    }
 
     const navigate = useNavigate();
 

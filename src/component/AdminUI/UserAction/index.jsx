@@ -23,7 +23,7 @@ const UserAction = (props) => {
                 onConfirm={grantRole}
             >
                 <Button
-                    disabled={initialRole === userRoles}
+                    disabled={initialRole?.toString() === userRoles?.toString()}
                     type="primary"
                 >
                     Cập nhật

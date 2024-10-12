@@ -61,6 +61,15 @@ const Admin = () => {
         }
     }
 
+    const handleChangeInfor = (value, key) => {
+        setState(prev => (
+            {
+                ...prev,
+                [key] : value
+            }
+        ))
+    }
+
     const { isLoading: isGetUsers, data: userData, refetch: refetchUsers ,isRefetching: isRefetchingUsers} = useGetUsers(state.email);
 
     // const { setRoles, roles } = useUserDetailStore();
@@ -164,6 +173,7 @@ const Admin = () => {
                 isGetUsers={isGetUsers}
                 userData={userData}
                 isRefetchingUsers={isRefetchingUsers}
+                handleChangeInfor={handleChangeInfor}
             />
         ),
         2: (
@@ -220,6 +230,7 @@ const Admin = () => {
                     <SildeBar
                         tab={state.tab}
                         handleChangeTab={handleChangeTab}
+                        roles={user?.role}
                     />
                 </div>
                 <div
