@@ -15,7 +15,7 @@ import NewProduct from '@component/AdminUI/NewProduct';
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@component/Resizable';
 import { useUserPackageHook } from '@redux/hooks/userHook';
 import useWindowSize from '../../hooks/useWindowSize';
-import { getOrderList } from './orders/function';
+import { getOrderList, useGetOrderList } from './orders/function';
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from '@utils/error';
 import { logAgain } from '@utils/function';
 import { FAIL } from '@utils/message';
@@ -30,6 +30,8 @@ const Admin = () => {
 
     const [state, setState] = useState({
         tab: 0,
+        query: '?status=0&type_sort=1',
+        email: '',
         orderId: '',
         userId: '',
         productId: '',
@@ -42,7 +44,14 @@ const Admin = () => {
         if(!user?.isAdmin){
             navigate('/404')
         }
-    },[]);
+    }, []);
+
+    // get tab from local storage
+    useEffect(() => {
+        const activeTab = localStorage.getItem('activeTab');
+        activeTab?.length > 0 ? navigate({ search: activeTab }) : navigate({ search: `?url=${state.tab}` });
+        setState((prev) => ({ ...prev, tab: localStorage.getItem('currentTab') }));
+    }, [])
 
     // get data order
     const getDataOrder = async (query) => {
@@ -57,6 +66,20 @@ const Admin = () => {
                 message.error(FAIL);
             }
         }
+    }
+
+    //get orderlist
+    const { isLoading: isGetOrderList, data: orders, refetch: refetchOrderList } = useGetOrderList(state.query);
+
+    // const { setRoles, roles } = useUserDetailStore();
+
+    const handleChangeInfor = (value, key) => {
+        setState(prev => (
+            {
+                ...prev,
+                [key] : value
+            }
+        ))
     }
 
     // go to order detail in mobile
@@ -98,13 +121,6 @@ const Admin = () => {
         };
     };
 
-    // get tab from local storage
-    useEffect(() => {
-        const activeTab = localStorage.getItem('activeTab');
-        activeTab?.length > 0 ? navigate({search: activeTab}) : navigate({search: `?url=${state.tab}`});
-        setState((prev) => ({ ...prev, tab: localStorage.getItem('currentTab') }));
-    },[])
-
     // change tab
     const handleChangeTab = (tab) => {
         localStorage.removeItem('category_id');
@@ -132,9 +148,10 @@ const Admin = () => {
     const renderTab = {
         0: (
             <Orders
-                orders={state.dataOrder}
+                isGetOrderList={isGetOrderList}
+                orders={orders?.formatted_Order_table}
                 handleOrderDetail={handleOrderDetail}
-                getDataOrder={getDataOrder}
+                handleChangeInfor={handleChangeInfor}
             />
         ),
         1: <User url={location.search} />,
@@ -155,6 +172,7 @@ const Admin = () => {
                 orderId={state.orderId}
                 handleBack={handleBack}
                 getDataOrder={getDataOrder}
+                refetchOrderList={refetchOrderList}
             />
         ),
         2: (

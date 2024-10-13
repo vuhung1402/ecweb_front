@@ -9,6 +9,8 @@ const PaymentMethod = (props) => {
         1: "Thanh toán bằng momo"
     }[typePay]
 
+    const isPaymented = [1, 2, 3, 4, 7];
+
     return (
         <Card title="Phương thức thanh toán">
             <div className="flex items-center justify-between">
@@ -22,7 +24,7 @@ const PaymentMethod = (props) => {
                     </Tag>
                 }
                 {
-                    (typePay === 1 && status > 0 && status <= 4) &&
+                    (typePay === 1 && isPaymented.includes(status)) &&
                     <Tag color="#87d068" className="font-bold">
                         Đã thanh toán
                     </Tag>
