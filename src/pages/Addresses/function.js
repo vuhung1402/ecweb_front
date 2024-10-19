@@ -1,3 +1,5 @@
+import { useMutation } from "@tanstack/react-query";
+
 import { axiosInstance } from "@api/api";
 import { message } from "antd";
 
@@ -28,3 +30,9 @@ export const updateAddress = async (body, addressId) => {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
     };
 };
+
+export const useInsertAddress = () => {
+    return useMutation({
+        mutationFn: (body) => insertAddress(body)
+    })
+}

@@ -2,25 +2,25 @@ import React, { useEffect, useState } from "react";
 import { Button, Select, message, Collapse } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 
-import ProductCard from "./productCard";
-import ModalAddAddress from "./modalAddAddress";
 import CheckoutTotal from "@_components/Checkout/CheckoutTotal";
 import CheckoutPrice from "@_components/Checkout/CheckoutPrice";
 import CheckoutAction from "@_components/Checkout/CheckoutAction";
 import CheckoutVoucher from "@_components/Checkout/CheckoutVoucher";
 import { CheckoutContainer, CheckoutAddress } from "./CheckoutContainer";
 import CheckoutPaymentMethod from "@_components/Checkout/CheckoutPaymentMethod";
+import ModalAddAddress from "@_components/Checkout/ModalAddress";
+import ProductCard from "@_components/Checkout/ProductCard";
 
 import { useCreateOrder, useGetAddressInfo } from "./function";
 import useCheckoutStore from "@store/checkout";
-import { insertAddress } from "@pages/Addresses/function";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
-import { calculateShippingFee, formatCurrencyVN, getDistricts, getProvinces, getWards, logAgain } from "@utils/function";
+import { calculateShippingFee, formatCurrencyVN, getProvinces, logAgain } from "@utils/function";
+import { handleAddresOptions } from "@utils/checkout";
+import useGetCartQuantity from "@hooks/useGetCartQuantity";
 
 import IconCart from '@icon/iconCart.svg';
 
 import './style.scss';
-import { handleAddresOptions } from "@utils/checkout";
 
 const CheckOut = () => {
     const navigate = useNavigate();
@@ -28,32 +28,24 @@ const CheckOut = () => {
 
     const { order } = useCheckoutStore()
     const { mutate }  = useCreateOrder()
-    const { data: addressInfo } = useGetAddressInfo()
+    const { data: addressInfo, refetch } = useGetAddressInfo()
+    const { getQuantity } = useGetCartQuantity()
 
     const [state, setState] = useState({
         price: location?.state?.order?.total_price,
         shippingFee: 0,
         addresses: undefined,
         paymentMethod: 0,
-        // addressInfo: '',
         phone: '',
         name: '',
         street: '',
         order: location?.state?.order,
-        isDefault: false,
         idAdress: '',
-        provinceID: undefined,
-        provinceName: undefined,
-        districtID: undefined,
-        districtName: undefined,
-        wardCode: undefined,
-        wardName: undefined,
         provinces: undefined,
-        districts: undefined,
-        wards: undefined,
         isOrderLoading: false,
         isCollapse: true,
         insertAddress: false,
+        addressInfor: ''
     });
 
     useEffect(() => {
@@ -79,6 +71,7 @@ const CheckOut = () => {
                         ...prev,
                         shippingFee: fee,
                         addresses: addressesOptions,
+                        addressInfor: addressInfo[index],
                         idAdress: addressInfo[index]?._id
                     }))
                     
@@ -97,61 +90,6 @@ const CheckOut = () => {
         handleData()
 
     },[addressInfo])
-
-    const onSelectProvince = async (value, option) => {
-        setState((prev) => ({ ...prev, provinceID: value, provinceName: option?.label }));
-        const response = await getDistricts(value);
-        if (response?.code === 200) {
-            setState((prev) => ({ ...prev, districts: response?.data }))
-        }
-    }
-
-    const onSelectDistrict = async (value, option) => {
-        setState((prev) => ({ ...prev, districtID: value, districtName: option?.label }));
-        const response = await getWards(value);
-        if (response?.code === 200) {
-            setState((prev) => ({ ...prev, wards: response?.data }));
-        }
-    }
-
-    const onSelectWard = async (value, option) => {
-        setState((prev) => ({ ...prev, wardCode: value, wardName: option?.label }))
-    }
-
-    const onChangeInfor = (value, type) => {
-        setState((prev) => ({
-            ...prev,
-            [type]: value,
-        }))
-    }
-
-    const handleAddAddress = async () => {
-        const body = {
-            name: state.name,
-            street: state.street,
-            provinceID: state.provinceID,
-            provinceName: state.provinceName,
-            districtID: state.districtID,
-            districtName: state.districtName,
-            wardCode: state.wardCode,
-            wardName: state.wardName,
-            number: state.phone,
-            isDefault: state.isDefault,
-        }
-
-        const res = await insertAddress(body);
-        if (res?.success) {
-            message.success(res?.message);
-            getData();
-            handleInsertAddress();
-            // setState((prev) => ({...prev, isLoading: false}));
-        } else {
-            if (res?.message === TOKEN_INVALID || res?.message === NOT_AUTHENTICATION) {
-                logAgain();
-                navigate('/')
-            }
-        }
-    }
 
     const handleSelectPaymentMethod = (e) => {
         state.paymentMethod = e.target.value;
@@ -180,15 +118,18 @@ const CheckOut = () => {
 
         const body = {
             order: order,
-            address: state?.addressInfo,
-            phone: state.phone,
-            name: state.name,
+            address: state?.addressInfor,
+            phone: state.addressInfor?.number,
+            name: state.addressInfor?.name,
             type_pay: state?.paymentMethod,
             shipping_code: state.shippingFee
         }
-        
+
         mutate(body, {
             onSuccess: (res) => {
+
+                getQuantity()
+
                 if (res?.paymentUrl) {
                     window.open(res?.paymentUrl, '_blank')
                 } else {
@@ -219,7 +160,7 @@ const CheckOut = () => {
         <CheckoutContainer isLoading={!addressInfo || !order}>
             <CheckoutAddress>
                 {
-                    addressInfo ?
+                    addressInfo?.length > 0 ?
                         (
                             <div className="mb-5">
                                 <h1 className="text-lg py-4 font-medium tracking-wide">Thông tin giao hàng</h1>
@@ -245,23 +186,10 @@ const CheckOut = () => {
                                     </Button>
                                 </div>
                                 <ModalAddAddress
-                                    name={state.name}
-                                    number={state.phone}
-                                    street={state.street}
-                                    isDefault={state.isDefault}
+                                    open={state.insertAddress}
                                     provinces={state.provinces}
-                                    provinceID={state.provinceID}
-                                    districts={state.districts}
-                                    districtID={state.districtID}
-                                    wards={state.wards}
-                                    wardCode={state.wardCode}
-                                    isOpen={state.insertAddress}
+                                    refetch={refetch}
                                     handleInsertAddress={handleInsertAddress}
-                                    onSelectProvince={onSelectProvince}
-                                    onSelectDistrict={onSelectDistrict}
-                                    onSelectWard={onSelectWard}
-                                    onChangeInfor={onChangeInfor}
-                                    handleAddAddress={handleAddAddress}
                                 />
                             </>
                         )
