@@ -4,6 +4,7 @@ export const GET_PRODUCTS_PAGE = 'get_products_page'
 export const GET_DETAIL_PRODUCT = 'get_detail_product'
 export const GET_CARD = 'get_card'
 export const GET_QUANTITY_CARD = 'get_quantity_card'
+export const GET_ADDRESS_INFO = 'get_address_info'
 export const navigatePath = {
     PRODUCT_ALL: '/products/all'
 };

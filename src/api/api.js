@@ -2,6 +2,8 @@ import axios from 'axios';
 
 export const endpoint = "https://ecweb-backend.onrender.com/api/v1"
 
+export const shippingFeeEndpoint = "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee"
+
 export const dateFormat = "DD/MM/YYYY"
 
 export const status = {

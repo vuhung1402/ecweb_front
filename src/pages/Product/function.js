@@ -40,7 +40,7 @@ export function useGetQuantityCart(acessToken) {
     return useQuery({
         queryFn: () => quantityCart(),
         queryKey: [GET_QUANTITY_CARD, acessToken],
-        enabled: false
+        enabled: true
     })
 }
 

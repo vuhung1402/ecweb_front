@@ -1,7 +1,6 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../firebase/firebase";
 import { message } from "antd";
-import { useNavigate } from "react-router-dom";
 import { LOGIN_AGAIN } from "./message";
 import { axiosInstance, from_district_id, tokenGHN } from "@api/api";
 import { clsx } from "clsx";

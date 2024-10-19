@@ -11,12 +11,12 @@ import CartHeader from "@_components/Cart/CartHeader";
 
 import { useCheckout, useDeleteItemCart, useGetCart, useUpdateItemCart } from "./function";
 
-import { checkout } from "./function";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { FAIL, SUCCESS } from "@utils/message";
 import CartItems from "@_components/Cart/CartItems";
 import CartCheckout from "@_components/Cart/CartCheckout";
 import useGetCartQuantity from "@hooks/useGetCartQuantity";
+import useCheckoutStore from "@store/checkout";
 
 const CartPage = () => {
 
@@ -42,6 +42,7 @@ const CartPage = () => {
     const { mutateAsync, isPending } = useDeleteItemCart();
     const { mutateAsync: updateMutaion, isPending: isUpdateLoading } = useUpdateItemCart();
     const checkoutMutation = useCheckout();
+    const { setOrder } = useCheckoutStore()
 
     useEffect(() => {
         const quantity = data?.items?.reduce((total, item) => total += item?.quantity,0);
@@ -56,7 +57,8 @@ const CartPage = () => {
                 const order = data?.order;
                 const orderId = data?.order?.order_id;
 
-                navigate({ pathname: `/checkout/${orderId}`}, { order: order });
+                setOrder(order)
+                navigate({ pathname: `/checkout/${orderId}`});
             },
             onError: (error) => {
                 const response = error?.response?.data
