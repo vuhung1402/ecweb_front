@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom"
 import { message } from "antd"
 
 import SideBar from "@pages/Profile/SideBar"
-import InsertAddress from "../../component/InsertAddress/InsertAddress"
 import AddressCard from "@_components/Addresses/AddressCard"
+import AddressInsert from "@_components/Addresses/AddressInsert"
 import { AddAddressWrapper, AddressesContainer, AddressesInfoWrapper, AddressesTitle, AddressesWrapper, AddressListWrapper } from "./Addresses"
 
 import { logAgain } from "@utils/function"
@@ -96,26 +96,9 @@ const Address = () => {
                             {addAddress &&
                                 (
                                     <div className="flex flex-col gap-3" ref={insertAddressRef}>
-                                        <InsertAddress
-                                            // setAddAddress={setAddAddress}
-                                            // getDataAddress={getDataAddress}
-                                            // name={state.name}
-                                            // number={state.number}
-                                            // street={state.street}
-                                            // isDefault={state.isDefault}
-                                            // provinces={state.provinces}
-                                            // provinceID={state.provinceID}
-                                            // provinceName={state.provinceName}
-                                            // wards={state.wards}
-                                            // wardCode={state.wardCode}
-                                            // wardName={state.wardName}
-                                            // districts={state.districts}
-                                            // districtID={state.districtID}
-                                            // districtName={state.districtName}
-                                            // onSelectProvince={onSelectProvince}
-                                            // onSelectDistrict={onSelectDistrict}
-                                            // onSelectWard={onSelectWard}
-                                            // onChangeInfor={onChangeInfor}
+                                        <AddressInsert
+                                            refetch={refetch}
+                                            setAddAddress={setAddAddress}
                                         />
                                     </div>
                                 )

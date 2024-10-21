@@ -158,7 +158,7 @@ const AddressCard = (props) => {
                 handleDeleteAddress={handleDeleteAddress}
             />
 
-            {addressId ? (
+            {addressId === address?._id ? (
                 <AddressUpdateCard
                     wards={state.wards}
                     provinces={state.provinces}
