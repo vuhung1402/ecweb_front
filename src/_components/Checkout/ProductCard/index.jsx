@@ -1,6 +1,6 @@
-import { formatCurrencyVN } from "@utils/function";
-import { Badge } from "antd";
 import React from "react";
+import { Badge } from "antd";
+import { formatCurrencyVN } from "@utils/function";
 
 const ProductCard = (props) => {
     const { data } = props;

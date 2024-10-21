@@ -6,6 +6,8 @@ export const endpoint = "http://localhost:4000/api/v1"
 
 
 
+export const shippingFeeEndpoint = "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee"
+
 export const dateFormat = "DD/MM/YYYY"
 
 export const status = {
