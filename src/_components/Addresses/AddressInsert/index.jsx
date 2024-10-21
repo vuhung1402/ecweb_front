@@ -213,7 +213,7 @@ const AddressInsert = ({ refetch, setAddAddress }) => {
                 <div className="ml-2 flex gap-2 text-sm">
                     <div>hoặc</div>
                     <p
-                        // onClick={() => setAddAddress(false)}
+                        onClick={() => setAddAddress(false)}
                         className="hover:text-blue-500 cursor-pointer font-bold opacity-60"
                     >
                         Huỷ
