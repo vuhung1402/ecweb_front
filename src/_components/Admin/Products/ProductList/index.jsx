@@ -5,19 +5,21 @@ import { useNavigate } from 'react-router-dom';
 import Loading from '@component/Loading/Loading';
 import DropDownSubCategory from '../DropDownSubCategory';
 
-import { deleteProduct, updateOnlShopStatus } from '@pages/admin/products/function';
+import { deleteProduct, updateOnlShopStatus, useDeleteProduct, useUpdateOnlShopStatus } from '@pages/admin/products/function';
 import { PlusOutlined, EditOutlined } from '@ant-design/icons';
 import useWindowSize from '@hooks/useWindowSize';
-import { formatCurrencyVN } from '@utils/function';
-import { TOKEN_INVALID } from '@utils/error';
+import { formatCurrencyVN, logAgain } from '@utils/function';
+import { NOT_AUTHENTICATION, TOKEN_INVALID } from '@utils/error';
 import DeleteIcon from "@icon/deleteIcon.svg";
 import EditIcon from "@icon/edit.svg";
 
 import './style.scss';
+import { FAIL, SUCCESS } from '@utils/message';
+import { ActionWrraper, DropDownSubCategoryWrapper, ProductActionWrapper, ProductListWrapper } from '@pages/admin/products/Products';
 
 const ProductList = (props) => {
-    const { idCategory, subCategory, products, skeletonLoading } = props;
-    const { handleOpenModal, handleChangeSubCategory, getData, filterData, handleDetail } = props; // function
+    const { idCategory, subCategory, products, isGetProducts, pendingEditSubCategory } = props;
+    const { handleOpenModal, handleChangeSubCategory, getData, filterData, handleDetail, refetchCategories, refetchProducts } = props; // function
 
     const navigate = useNavigate();
     const iw = useWindowSize().width;
@@ -37,6 +39,10 @@ const ProductList = (props) => {
         },
         confirmLoading: false,
     })
+
+    const mutateUpdateOnlShop = useUpdateOnlShopStatus();
+
+    const mutateDeleteProduct = useDeleteProduct()
 
     const [selectedRowKey, setSelectedRowKey] = useState(null); // Track selected row
 
@@ -58,25 +64,30 @@ const ProductList = (props) => {
 
     const onConfirm = async (product_id) => {
         setState(prev => ({ ...prev, confirmLoading: true }));
-        const result = await deleteProduct(product_id);
-        if (result?.success) {
-            await getData();
-            setState(prev => ({ ...prev, confirmLoading: false }));
-            message.success(result?.message);
-        } else {
-            if (result?.message === TOKEN_INVALID) {
-                message?.info("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại!");
-                navigate("/login");
-            } else {
-                setState(prev => ({ ...prev, confirmLoading: false }));
-                message?.error("Không thành công!");
+        const body = {
+            product_id
+        };
+
+        mutateDeleteProduct.mutateAsync(body, {
+            onSuccess: (data, variable, context) => {
+                refetchProducts();
+                message.success(SUCCESS);
+            },
+            onError: (error, context) => {
+                const response = error?.response?.data;
+                if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
+                    logAgain();
+                    navigate('/login');
+                } else {
+                    message.error(FAIL);
+                }
             }
-        }
+        })
     }
 
     const columns = [
         {
-            title:<div className='font-bold'>Mã sản phẩm</div>,
+            title: <div className='font-bold'>Mã sản phẩm</div>,
             dataIndex: 'code',
         },
         {
@@ -108,7 +119,7 @@ const ProductList = (props) => {
             title: <div className='font-bold'>Trạng thái bán hàng</div>,
             dataIndex: 'onlShop',
             render: (_, record) => {
-                const obj = state.data?.find(item => item.product_id === record?.product_id);
+                // const obj = state.data?.find(item => item.product_id === record?.product_id);
                 return (
                     <Switch
                         checked={record?.onlShop}
@@ -137,7 +148,7 @@ const ProductList = (props) => {
                         cancelText="Hủy"
                         onConfirm={() => onConfirm(record?.product_id)}
                         okButtonProps={{
-                            loading: state.confirmLoading,
+                            loading: mutateDeleteProduct.isPending,
                         }}
                     >
                         <div className='cursor-pointer'>
@@ -151,21 +162,27 @@ const ProductList = (props) => {
 
     const handleOnchange = async (checked, record) => {
         setState(prev => ({ ...prev, switchLoading: { status: true, id: record?.product_id } }));
-        const isUpdateOnlShop = await updateOnlShopStatus(record?.product_id, checked)
+        const body = {
+            id: record?.product_id,
+            onlShop: checked,
+        };
 
-        if (isUpdateOnlShop?.success) {
-            await getData();
-            setState(prev => ({ ...prev, switchLoading: { status: false, id: '' } }));
-            message.success("Thành công!!");
-        } else {
-            if (isUpdateOnlShop?.message === TOKEN_INVALID || isUpdateOnlShop?.message === "You're not authenticated") {
-                message.info("Phiên đăng nhập hết hạn!!");
-                navigate('/login');
-            } else {
+        mutateUpdateOnlShop.mutateAsync(body, {
+            onSuccess: (data, variable, context) => {
+                message.success(SUCCESS);
                 setState(prev => ({ ...prev, switchLoading: { status: false, id: '' } }));
-                message.error("Không thành công!!");
+                refetchProducts()
+            },
+            onError: (error, context) => {
+                const response = error?.response?.data;
+                if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
+                    logAgain();
+                    navigate('/login');
+                } else {
+                    message.error(FAIL);
+                }
             }
-        }
+        });
     }
 
     const handleSelect = async (value, option) => {
@@ -180,17 +197,15 @@ const ProductList = (props) => {
         setState((prev) => ({ ...prev }))
     };
 
+    console.log({ isGetProducts })
+
     return (
-        <div
-            style={{
-                height: iw > 640 ? 'calc(100vh - 120px)' : 'calc(100vh - 230px)'
-            }}
-        >
+        <ProductListWrapper>
             {
-                products === undefined ? <Loading /> :
+                isGetProducts ? <Loading /> :
                     <>
-                        <div className='flex flex-col 2xl:flex-row gap-3 items-center justify-end 2xl:justify-between mb-3 px-2'>
-                            <div className='flex flex-col sm:flex-row w-full sm:items-center gap-3 justify-end 2xl:justify-normal'>
+                        <ActionWrraper>
+                            <ProductActionWrapper>
                                 <Button
                                     className='font-bold'
                                     onClick={() => handleOpenModal('edit', idCategory)}
@@ -208,8 +223,8 @@ const ProductList = (props) => {
                                 >
                                     Thêm sản phẩm
                                 </Button>
-                            </div>
-                            <div className='w-full flex justify-end'>
+                            </ProductActionWrapper>
+                            <DropDownSubCategoryWrapper>
                                 <DropDownSubCategory
                                     name={state.name}
                                     idCategory={idCategory}
@@ -219,31 +234,28 @@ const ProductList = (props) => {
                                     handleSelect={handleSelect}
                                     onNameChange={onNameChange}
                                     getData={getData}
+                                    refetchCategories={refetchCategories}
+                                    pendingEditSubCategory={pendingEditSubCategory}
                                 />
-                            </div>
-                        </div>
-                        {skeletonLoading && (
-                            <Loading />
-                        )}
-                        {!skeletonLoading && (
-                            <Table
-                                rootClassName={`${products.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
-                                columns={columns}
-                                bordered
-                                dataSource={products}
-                                pagination={{
-                                    hideOnSinglePage: true,
-                                    pageSize: 10
-                                }}
-                                rowClassName={rowClassName} // Add rowClassName prop
-                                onRow={(record) => ({
-                                    onClick: () => onRowClick(record), // Handle row click
-                                })}
-                            />
-                        )}
+                            </DropDownSubCategoryWrapper>
+                        </ActionWrraper>
+                        <Table
+                            rootClassName={`${products?.formatted_product?.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
+                            columns={columns}
+                            bordered
+                            dataSource={products?.formatted_product}
+                            pagination={{
+                                hideOnSinglePage: true,
+                                pageSize: 10
+                            }}
+                            rowClassName={rowClassName} // Add rowClassName prop
+                            onRow={(record) => ({
+                                onClick: () => onRowClick(record), // Handle row click
+                            })}
+                        />
                     </>
             }
-        </div>
+        </ProductListWrapper>
     )
 }
 

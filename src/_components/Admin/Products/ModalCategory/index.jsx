@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Modal } from 'antd'
 
 const ModalCategory = (props) => {
-    const { type, open, name } = props;
+    const { type, open, name, pendingEditCategory, pendingAddCategory, pendingDeleteCategory, isPendingDeleteSubCategory, pendingEditSubCategory } = props;
     const { onCancel, handleChangeName, handleDeleteTab } = props;
 
     const [state, setState]  = useState({
@@ -19,9 +19,9 @@ const ModalCategory = (props) => {
         setState((prev) => ({...prev}));
     },[name, open]);
 
-    useEffect(() => {
-        setState((prev) => ({...prev, confirmLoading: false}));
-    },[open])
+    // useEffect(() => {
+    //     setState((prev) => ({...prev, confirmLoading: false}));
+    // },[open])
 
     // focus on input
     useEffect(() => {
@@ -30,7 +30,6 @@ const ModalCategory = (props) => {
 
     // handle when click in ok button
     const handleOK = async () => {
-        setState(prev => ({...prev, confirmLoading: true}))
         if (type === 'delete'){
             await handleDeleteTab();
         };
@@ -62,7 +61,7 @@ const ModalCategory = (props) => {
                 okText={okText}
                 okType={type === 'delete' ? 'danger' : 'primary'}
                 cancelText={'Huỷ'}
-                confirmLoading={state.confirmLoading}
+                confirmLoading={pendingEditCategory || pendingAddCategory || pendingDeleteCategory || isPendingDeleteSubCategory || pendingEditSubCategory}
                 onOk={handleOK}
                 onCancel={onCancel}
             >

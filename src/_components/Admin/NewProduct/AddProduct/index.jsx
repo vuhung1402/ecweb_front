@@ -6,17 +6,18 @@ import UploadImage from "./uploadImage";
 import ColorInfo from "./ColorInfo";
 
 import useWindowSize from "@hooks/useWindowSize";
+import { AddProductWrapper, ConfirmButtonWrapper, InforProductWrapper } from "@pages/admin/products/Products";
 
 const AddProduct = React.forwardRef((props, ref) => {
-    const { color, imageList, idCategory, idSubCategory, code, name, price, description, total, colorUid, addLoading, hoverImage, mainImage } = props;
+    const { color, imageList, idCategory, idSubCategory, code, name, price, description, total, colorUid, addLoading, hoverImage, mainImage, pendingAddProduct, pendingUpdateProduct } = props;
     const { handleAddColor, handleAddSize, handleDeleteColor, handleDeleteSize, handleChangeInfo, handleExportData, handleEditColor } = props;
     const { handleEditSize, handleSelectCategory, onOk } = props
 
     const iw = useWindowSize().width;
 
     return (
-        <div id="modal-product" className="flex flex-col w-full me:py-2" style={{height: iw < 960 ? 'calc(100% - 44px)' : '100%'}}>
-            <div className="w-full overflow-y-auto scrollbar-hide">
+        <AddProductWrapper>
+            <InforProductWrapper>
                 <InforProduct
                     description={description}
                     total={total}
@@ -27,12 +28,11 @@ const AddProduct = React.forwardRef((props, ref) => {
                     handleSelectCategory={handleSelectCategory}
                     idCategory={idCategory}
                     idSubCategory={idSubCategory}
-                // category={category}
                 />
                 <UploadImage
                     mainImage={mainImage}
                     hoverImage={hoverImage}
-                    imageList = {imageList}
+                    imageList={imageList}
                     ref={ref}
                     handleExportData={handleExportData}
                 />
@@ -47,18 +47,18 @@ const AddProduct = React.forwardRef((props, ref) => {
                     handleEditColor={handleEditColor}
                     handleEditSize={handleEditSize}
                 />
-            </div>
-            <div className=" flex gap-3 justify-end items-center mt-5">
+            </InforProductWrapper>
+            <ConfirmButtonWrapper>
                 <Button
                     onClick={onOk}
-                    loading={addLoading}
+                    loading={pendingUpdateProduct || pendingAddProduct}
                     type="primary"
                     className="font-bold"
                 >
                     XÁC NHẬN
                 </Button>
-            </div>
-        </div>
+            </ConfirmButtonWrapper>
+        </AddProductWrapper>
     )
 })
 
