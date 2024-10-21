@@ -1,12 +1,12 @@
 import React from "react";
 
 export const statusOrder = [
-    {
-        status: 0,
-        name: <div className="font-bold">Chờ thanh toán</div>,
-        nextStatus: [
-        ],
-    },
+    // {
+    //     status: 0,
+    //     name: <div className="font-bold">Chờ thanh toán</div>,
+    //     nextStatus: [
+    //     ],
+    // },
     {
         status: 1,
         name: <div className="font-bold">Chờ xác nhận</div>,
