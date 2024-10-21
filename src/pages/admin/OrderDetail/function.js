@@ -27,7 +27,8 @@ export function useGetOrderDetail (Order_id, user_id) {
     return useQuery(
         {
             queryFn: () => getOrderDetail(Order_id, user_id),
-            queryKey: [GET_ORDER_DETAIL_ADMIN, Order_id, user_id]
+            queryKey: [GET_ORDER_DETAIL_ADMIN, Order_id, user_id],
+            enabled: !!Order_id || !!user_id,
         }
     )
 }

@@ -84,7 +84,7 @@ const OrderList = (props) => {
             {
                 isLoadingList ? <Loading /> :
                     <Table
-                        rootClassName={`${orders.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
+                        rootClassName={`${orders?.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
                         className="font-bold"
                         columns={columns}
                         dataSource={orders}
