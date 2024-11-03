@@ -17,7 +17,7 @@ const OrderDetail = (props) => {
     const { userId, orderId } = props;
     const { handleBack, getDataOrder } = props;
 
-    if (!userId && !orderId) return <div className="font-bold">Chi tiết sản phẩm sẽ hiển thị ở đây</div>
+    if (!userId || !orderId) return <div className="font-bold">Chi tiết sản phẩm sẽ hiển thị ở đây</div>
 
     const iw = useWindowSize().width;
     const navigate = useNavigate();

@@ -21,6 +21,8 @@ import { logAgain } from '@utils/function';
 import { FAIL } from '@utils/message';
 
 import './style.scss';
+import UserDetail from './UserDetail';
+import { useGetUsers } from './user/function';
 
 const Admin = () => {
     const navigate = useNavigate();
@@ -39,10 +41,10 @@ const Admin = () => {
     });
 
     useEffect(() => {
-        if(!user?.isAdmin){
+        if (!user?.isAdmin) {
             navigate('/404')
         }
-    },[]);
+    }, []);
 
     // get data order
     const getDataOrder = async (query) => {
@@ -59,6 +61,19 @@ const Admin = () => {
         }
     }
 
+    const handleChangeInfor = (value, key) => {
+        setState(prev => (
+            {
+                ...prev,
+                [key] : value
+            }
+        ))
+    }
+
+    const { isLoading: isGetUsers, data: userData, refetch: refetchUsers ,isRefetching: isRefetchingUsers} = useGetUsers(state.email);
+
+    // const { setRoles, roles } = useUserDetailStore();
+
     // go to order detail in mobile
     const handleOrderDetail = (orderId, userId) => {
         if (iw < 960) {
@@ -70,7 +85,7 @@ const Admin = () => {
                 right.classList.remove('hidden');
             }
         };
-        setState(prev => ({...prev, userId: userId, orderId: orderId}));
+        setState(prev => ({ ...prev, userId: userId, orderId: orderId }));
     };
 
     // go to product detail
@@ -84,8 +99,21 @@ const Admin = () => {
                 right.classList.remove('hidden');
             }
         };
-        setState(prev => ({...prev, productId: productId, productType: type}));
+        setState(prev => ({ ...prev, productId: productId, productType: type }));
     };
+
+    const handleUserDetail = (user_id) => {
+        if (iw < 960) {
+            const left = document.getElementById('admin-order-left');
+            const right = document.getElementById('admin-order-right');
+
+            if (left && right) {
+                left.classList.add('hidden');
+                right.classList.remove('hidden');
+            }
+        };
+        setState(prev => ({ ...prev, userId: user_id }))
+    }
 
     // back from detail in mobile
     const handleBack = () => {
@@ -101,9 +129,9 @@ const Admin = () => {
     // get tab from local storage
     useEffect(() => {
         const activeTab = localStorage.getItem('activeTab');
-        activeTab?.length > 0 ? navigate({search: activeTab}) : navigate({search: `?url=${state.tab}`});
+        activeTab?.length > 0 ? navigate({ search: activeTab }) : navigate({ search: `?url=${state.tab}` });
         setState((prev) => ({ ...prev, tab: localStorage.getItem('currentTab') }));
-    },[])
+    }, [])
 
     // change tab
     const handleChangeTab = (tab) => {
@@ -120,7 +148,7 @@ const Admin = () => {
 
     // change product
     const handleModifiedProduct = () => {
-        setState(prev => ({...prev, isModifiedProduct: !prev.isModifiedProduct}));
+        setState(prev => ({ ...prev, isModifiedProduct: !prev.isModifiedProduct }));
     };
 
     // back to home
@@ -137,7 +165,17 @@ const Admin = () => {
                 getDataOrder={getDataOrder}
             />
         ),
-        1: <User url={location.search} />,
+        1: (
+            <User
+                url={location.search}
+                handleUserDetail={handleUserDetail}
+                userId={state.userId}
+                isGetUsers={isGetUsers}
+                userData={userData}
+                isRefetchingUsers={isRefetchingUsers}
+                handleChangeInfor={handleChangeInfor}
+            />
+        ),
         2: (
             <Products
                 isModifiedProduct={state.isModifiedProduct}
@@ -155,6 +193,12 @@ const Admin = () => {
                 orderId={state.orderId}
                 handleBack={handleBack}
                 getDataOrder={getDataOrder}
+            />
+        ),
+        1: (
+            <UserDetail 
+                userId={state.userId}
+                refetchUsers={refetchUsers}
             />
         ),
         2: (
@@ -186,6 +230,7 @@ const Admin = () => {
                     <SildeBar
                         tab={state.tab}
                         handleChangeTab={handleChangeTab}
+                        roles={user?.role}
                     />
                 </div>
                 <div

@@ -4,61 +4,71 @@ import { optionSearchOrder } from "../orders/mock";
 import { SearchOutlined } from "@ant-design/icons";
 import { filterUser } from "./mock";
 import UserList from "@component/AdminUI/UserList";
+import UserContainer from "./UserContainer";
+import { UserFilterWrapper, UserListWrapper } from "./User";
+import UserFilter from "@component/AdminUI/UserFilter";
+import { useGetUsers } from "./function";
+import Loading from "@component/Loading/Loading";
+import { useNavigate } from "react-router-dom";
+import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
+import { logAgain } from "@utils/function";
 
-const User = () => {
-    const  [state, setState] = useState({
+const User = (props) => {
+    const { userId, isGetUsers, userData, isRefetchingUsers } = props;
+    const { handleUserDetail, handleChangeInfor  } = props;
+
+    const [state, setState] = useState({
         selectValue: '1',
         placeholder: '',
         isOpenModalUser: false,
         isOpenModalTransaction: false,
     });
 
+    const navigate = useNavigate();
+
     const handleSelect = (value, option) => {
         state.selectValue = value;
         state.placeholder = option?.label;
-        setState((prev) => ({...prev}));
+        setState((prev) => ({ ...prev }));
     }
 
     const handleOpenModalUserInfor = async () => {
-        setState((prev) => ({...prev, isOpenModalUser: !state.isOpenModalUser}));
+        setState((prev) => ({ ...prev, isOpenModalUser: !state.isOpenModalUser }));
     }
 
     const handleOpenModalTransaction = async () => {
         setState((prev) => ({ ...prev, isOpenModalTransaction: !state.isOpenModalTransaction }));
     }
 
+    // if(!userData?.success) {
+    //     if(userData?.message === TOKEN_INVALID || userData?.message === NOT_AUTHENTICATION){
+    //         logAgain();
+    //         navigate('/login');
+    //     }
+    // }
+
+
     return (
-        <div className="w-full h-full p-4 flex flex-col gap-3">
-            <div className="w-full flex justify-end items-center gap-3">
-                <div className=" flex gap-2">
-                    <Select
-                        style={{
-                            width: 200,
-                        }}
-                        value={state.selectValue}
-                        onSelect={handleSelect}
-                        optionFilterProp="children"
-                        filterOption={(input, option) => (option?.label ?? '').includes(input)}
-                        filterSort={(optionA, optionB) =>
-                            (optionA?.label ?? '').toLowerCase().localeCompare((optionB?.label ?? '').toLowerCase())
-                        }
-                        options={filterUser}
-                    />
-                    <Input
-                        placeholder={state.placeholder ||'Tên người dùng'} prefix={<SearchOutlined />}
-                    />
-                </div>
-                <Button type="primary">Áp dụng</Button>
-            </div>
-            <div className="">
+        <UserContainer>
+            <UserFilterWrapper>
+                <UserFilter
+                    email={state.email}
+                    handleChangeInfor={handleChangeInfor}
+                />
+            </UserFilterWrapper>
+            <UserListWrapper>
                 <UserList
+                    isGetUsers={isGetUsers}
+                    isRefetchingUsers={isRefetchingUsers}
                     handleOpenModalUserInfor={handleOpenModalUserInfor}
                     handleOpenModalTransaction={handleOpenModalTransaction}
                     isOpenModalUser={state.isOpenModalUser}
                     isOpenModalTransaction={state.isOpenModalTransaction}
-                /> 
-            </div>
-        </div>
+                    userData={userData?.users}
+                    handleUserDetail={handleUserDetail}
+                />
+            </UserListWrapper>
+        </UserContainer>
     )
 }
 

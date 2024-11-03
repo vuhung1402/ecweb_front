@@ -35,6 +35,7 @@ export const getProducts = async (id) => {
         const response = await fetch(`${endpoint}/admin/admin_to_get_product_list/${id}`, {
             method: 'GET',
             headers: {
+                "token" : `${token}`,
                 'Content-Type': 'application/json',
             }
         });
@@ -60,6 +61,7 @@ export const getCategories = async () => {
         const response = await fetch(`${endpoint}/admin/Admin_get_all_category`, {
             method: 'GET',
             headers: {
+                "token" : `${token}`,
                 'Content-Type': 'application/json',
             }
         });
