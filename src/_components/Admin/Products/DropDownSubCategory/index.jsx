@@ -3,12 +3,16 @@ import { PlusOutlined } from '@ant-design/icons';
 import { Button, Divider, Input, Select, Space, message } from 'antd';
 import DeleteIcon from "@icon/deleteIcon.svg"
 import EditIcon from "@icon/edit.svg"
-import ModalCategory from '@component/ModalCategory';
-import { addSubCategory, deleteSubCategory } from '@pages/admin/products/function';
+import ModalCategory from '@_components/Admin/Products/ModalCategory';
+import { addSubCategory, deleteSubCategory, useAddSubCategory, useDeleteSubCategory } from '@pages/admin/products/function';
+import { logAgain } from '@utils/function';
+import { useNavigate } from 'react-router-dom';
+import { NOT_AUTHENTICATION, TOKEN_INVALID } from '@utils/error';
+import { FAIL, SUCCESS } from '@utils/message';
 
 const DropDownSubCategory = (props) => {
-    const { idCategory,  subCategory, idSubCategory, name} = props;
-    const { handleChangeSubCategory, onNameChange, handleSelect, getData } = props;
+    const { idCategory,  subCategory, idSubCategory, name, pendingEditSubCategory} = props;
+    const { handleChangeSubCategory, onNameChange, handleSelect, refetchCategories } = props;
 
     const [state, setState] = useState({
         items: [],
@@ -19,6 +23,12 @@ const DropDownSubCategory = (props) => {
         isLoading: false,
     });
 
+    const navigate = useNavigate();
+
+    const mutateAddSubCategory = useAddSubCategory();
+
+    const mutateDeleteSubCategory = useDeleteSubCategory();
+
     useEffect(() => {
         //goi api lay subCategory
         const defaultItem = [{
@@ -28,7 +38,6 @@ const DropDownSubCategory = (props) => {
 
         const subItem = defaultItem.concat(subCategory)
 
-        state.isLoading=false;
         state.items = subItem;
         setState((prev) => ({ ...prev }))
     }, [subCategory, state.isModalOpen, idSubCategory])
@@ -38,17 +47,25 @@ const DropDownSubCategory = (props) => {
     const addItem = async (e) => {
         localStorage.setItem('category_id', idCategory);
         e.preventDefault();
-        setState((prev) => ({ ...prev, isLoading:true }))
-        const isAddSubCategory = await addSubCategory(name, idCategory);
-        if(isAddSubCategory){
-            await getData()
-            message.success("Thêm thành công!!");
-        }else{
-            message.error("Không thành công!!")
-            setState((prev) => ({ ...prev, isLoading:false }))
+        const body = {
+            name_sub_category: name,
+            id: idCategory,
         }
-
-        //gọi api để add
+        mutateAddSubCategory.mutateAsync(body, {
+            onSuccess: () => {
+                message.success(SUCCESS);
+                refetchCategories();
+            },
+            onError: (error) => {
+                const response = error?.response?.data;
+                if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
+                    logAgain();
+                    navigate('/login');
+                } else {
+                    message.error(FAIL);
+                }
+            }
+        });
     };
 
     const handleEdit = () => {
@@ -73,13 +90,32 @@ const DropDownSubCategory = (props) => {
     };
 
     const handleDeleteTab = async () => {
-        const isDeleteCategory = await deleteSubCategory(idCategory, idSubCategory);
-        if(isDeleteCategory){
-            message.success("Thành công!!");
-            await getData();
-        }else{
-            message.error("Không thành công!!");
+        const body = {
+            category_id: idCategory,
+            sub_category_id: idSubCategory,
         }
+        await mutateDeleteSubCategory.mutateAsync(body, {
+            onSuccess: () => {
+                message.success(SUCCESS);
+                refetchCategories();
+            },
+            onError: (error) => {
+                const response = error?.response?.data;
+                if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
+                    logAgain();
+                    navigate('/login');
+                } else {
+                    message.error(FAIL);
+                }
+            }
+        })
+        // const isDeleteCategory = await deleteSubCategory(body);
+        // if(isDeleteCategory){
+        //     message.success("Thành công!!");
+        //     await getData();
+        // }else{
+        //     message.error("Không thành công!!");
+        // }
         state.isModalOpen = false;
         setState(prev => ({...prev}));
     }
@@ -108,7 +144,7 @@ const DropDownSubCategory = (props) => {
                                 onKeyDown={(e) => e.stopPropagation()}
                             />
                             <Button
-                                loading={state.isLoading}
+                                loading={mutateAddSubCategory.isPending}
                                 type="text"
                                 icon={<PlusOutlined />}
                                 onClick={addItem}
@@ -130,6 +166,8 @@ const DropDownSubCategory = (props) => {
                 <DeleteIcon />
             </div>
             <ModalCategory
+                isPendingDeleteSubCategory={mutateDeleteSubCategory.isPending}
+                pendingEditSubCategory={pendingEditSubCategory}
                 open={state.isModalOpen}
                 type={state.modalType}
                 onCancel={handleEdit}

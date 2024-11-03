@@ -1,67 +1,65 @@
 import { axiosInstance, endpoint } from "@api/api";
+import { GET_ORDER_DETAIL_ADMIN } from "@constants/index";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { message } from "antd";
 
-export const getOrderDetail = async (id, user_id) => {
-    const token = localStorage.getItem("token");
+//get order detail
+export const getOrderDetail = async (Order_id, user_id) => {
     const body = {
-        Order_id: id,
-        user_id,
-    };
+        Order_id,
+        user_id
+    }
     try {
-        const response = await fetch(`${endpoint}/admin/get_order_detail_to_admin`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                "token" : `${token}`,
-                'Content-Type': 'application/json',
+        const response = await axiosInstance.post(`/admin/get_order_detail_to_admin`, JSON.stringify(body),
+            {
+                requiresAuth: true,
             }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
+        )
+
+        return response.data;
+    } catch (error) {
+        console.log("An error occur when get order detail: ", error);
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+    }
+};
+
+export function useGetOrderDetail (Order_id, user_id) {
+    return useQuery(
+        {
+            queryFn: () => getOrderDetail(Order_id, user_id),
+            queryKey: [GET_ORDER_DETAIL_ADMIN, Order_id, user_id],
+            enabled: !!Order_id || !!user_id,
         }
-        const data = await response.json();
-        return data;
+    )
+}
+
+export const updateStatuOrder = async (body) => {
+    // const body = {
+    //     Order_id,
+    //     user_id,
+    //     new_status_order,
+    // }
+
+    try {
+        const response = await axiosInstance.post(`/admin/update_status_order`, JSON.stringify(body), {
+            requiresAuth: true,
+        });
+        return response.data
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
     }
 }
 
-export const updateStatuOrder = async (user_id, Order_id, new_status_order) => {
-    const body = {
-        Order_id,
-        user_id,
-        new_status_order,
-    }
-
-    const token = localStorage.getItem("token");
-    try {
-        const response = await fetch(`${endpoint}/admin/update_status_order`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                "token" : `${token}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
+export function useUpdateStatusOrder () {
+    return useMutation(
+        {
+            mutationFn: (body) => updateStatuOrder(body),
         }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
-}
+    )
+} 
 
-export const refundMoney = async (Order_id, user_id) => {
-    const body = {
-        Order_id,
-        user_id,
-    } 
+export const refundMoney = async (body) => {
 
     try {
         const response = await axiosInstance.post(`admin/refund_momo_money_admin`, JSON.stringify(body), {
@@ -71,4 +69,12 @@ export const refundMoney = async (Order_id, user_id) => {
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
     }
+}
+
+export function useRefundMoney () {
+    return useMutation(
+        {
+            mutationFn: (body) => refundMoney(body),
+        }
+    );
 }

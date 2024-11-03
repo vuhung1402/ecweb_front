@@ -24,10 +24,6 @@ const SildeBar = ({tab, handleChangeTab}) => {
             label: "Transaction",
             icon: <TransactionIcon className="scale-75"/>,
         },
-        {
-            label: "Inbox",
-            icon: <InboxIcon className="scale-75"/>,
-        },
     ];
 
     return(

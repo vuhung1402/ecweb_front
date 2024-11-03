@@ -2,7 +2,7 @@ import TextEditor from "@component/TextEditor";
 import { Input, InputNumber } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import React, { useEffect, useState } from "react";
-import DropDownCategory from "../DropDownCategory";
+import DropDownCategory from "../../../../component/AdminUI/DropDownCategory";
 import { getCategories } from "@pages/admin/products/function";
 
 const InforProduct = (props) => {
@@ -16,7 +16,7 @@ const InforProduct = (props) => {
     useEffect(() => {
         async function fetchData() {
             const categories = await getCategories();
-            state.categories = categories;
+            state.categories = categories?.category;
             setState((prev) => ({ ...prev }));
         };
         fetchData();

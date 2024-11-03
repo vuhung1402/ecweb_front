@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Tabs } from "antd"
-import ProductList from "@component/AdminUI/ProductList";
-import Modal from "@component/ModalCategory";
+import ProductList from "@_components/Admin/Products/ProductList";
+import Modal from "@_components/Admin/Products/ModalCategory";
 
 const TabCategory = ({data}) => {
     const [state, setState] = useState({

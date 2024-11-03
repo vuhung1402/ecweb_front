@@ -5,6 +5,12 @@ export const GET_DETAIL_PRODUCT = 'get_detail_product'
 export const GET_CARD = 'get_card'
 export const GET_QUANTITY_CARD = 'get_quantity_card'
 export const GET_ADDRESS_INFO = 'get_address_info'
+export const GET_ORDER_LIST_ADMIN = 'get_order_list_admin'
+export const GET_ORDER_DETAIL_ADMIN = 'get_order_detail_admin'
+export const GET_PRODUCTS_ADMIN = "get_products_admin";
+export const GET_CATEGORIES_ADMIN = "GET_CATEGORIES_ADMIN";
+export const GET_PRODUCT_DETAIL_ADMIN = "GET_PRODUCT_DETAIL_ADMIN";
+
 export const navigatePath = {
     PRODUCT_ALL: '/products/all'
 };
