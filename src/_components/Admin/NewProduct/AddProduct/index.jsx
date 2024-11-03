@@ -1,19 +1,16 @@
-import React from "react";
 import { Button } from "antd";
+import React from "react";
 
+import ColorInfo from "./ColorInfo";
 import InforProduct from "./InforProduct";
 import UploadImage from "./uploadImage";
-import ColorInfo from "./ColorInfo";
 
-import useWindowSize from "@hooks/useWindowSize";
 import { AddProductWrapper, ConfirmButtonWrapper, InforProductWrapper } from "@pages/admin/products/Products";
 
 const AddProduct = React.forwardRef((props, ref) => {
-    const { color, imageList, idCategory, idSubCategory, code, name, price, description, total, colorUid, addLoading, hoverImage, mainImage, pendingAddProduct, pendingUpdateProduct } = props;
+    const { color, imageList, idCategory, idSubCategory, code, name, price, description, total, colorUid, hoverImage, mainImage, pendingAddProduct, pendingUpdateProduct } = props;
     const { handleAddColor, handleAddSize, handleDeleteColor, handleDeleteSize, handleChangeInfo, handleExportData, handleEditColor } = props;
     const { handleEditSize, handleSelectCategory, onOk } = props
-
-    const iw = useWindowSize().width;
 
     return (
         <AddProductWrapper>

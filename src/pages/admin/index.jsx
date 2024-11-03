@@ -182,7 +182,6 @@ const Admin = () => {
             />
         ),
         3: <Transaction url={location.search} />,
-        4: <ChatBox url={location.search} />
     }[state.tab || 0];
 
     const renderDetailTab = {

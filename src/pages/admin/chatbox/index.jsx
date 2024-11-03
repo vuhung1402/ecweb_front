@@ -48,9 +48,6 @@ const ChatBox = () => {
     const onEdit = (targetKey, action) => {
         const modalType = action === 'add' ? 'create' : 'delete';
         handleOpenModal(modalType, targetKey);
-        // setState((prev) => ({ ...prev }));
-        console.log({ action })
-        console.log({ targetKey })
     };
 
     const handleOpenModal = (type, targetKey) => {
@@ -74,12 +71,12 @@ const ChatBox = () => {
                 category_id: activeKey,
             }
             mutateEditCategory.mutateAsync(body, {
-                onSuccess: (data, variables, context) => {
+                onSuccess: () => {
                     message.success("Cập nhật thành công!!");
                     setIsModalOpen(isModalOpen);
                     refetchCategories();
                 },
-                onError: (error, context) => {
+                onError: (error) => {
                     const response = error?.response?.data;
                     if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                         logAgain();
@@ -95,12 +92,12 @@ const ChatBox = () => {
                 name
             };
             mutateAddCategory.mutateAsync(body, {
-                onSuccess: (data, variables, context) => {
+                onSuccess: () => {
                     message.success(SUCCESS);
                     setIsModalOpen(isModalOpen);
                     refetchCategories();
                 },
-                onError: (error, context) => {
+                onError: (error) => {
                     const response = error?.response?.data;
                     if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                         logAgain();
@@ -119,12 +116,12 @@ const ChatBox = () => {
             category_id: deleteTab,
         }
         mutateDeleteCategory.mutateAsync(body, {
-            onSuccess: (data, variables, context) => {
+            onSuccess: () => {
                 message.success(SUCCESS);
                 setIsModalOpen(isModalOpen);
                 refetchCategories();
             },
-            onError: (error, context) => {
+            onError: (error) => {
                 const response = error?.response?.data;
                 if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                     logAgain();
@@ -145,11 +142,11 @@ const ChatBox = () => {
         }
 
         await mutateEditSubCategory.mutateAsync(body, {
-            onSuccess: (data, variables, context) => {
+            onSuccess: () => {
                 message.success(SUCCESS);
                 refetchCategories();
             },
-            onError: (error, context) => {
+            onError: (error) => {
                 const response = error?.response?.data;
                 if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                     logAgain();

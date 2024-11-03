@@ -52,11 +52,11 @@ const DropDownSubCategory = (props) => {
             id: idCategory,
         }
         mutateAddSubCategory.mutateAsync(body, {
-            onSuccess: (data, variables, context) => {
+            onSuccess: () => {
                 message.success(SUCCESS);
                 refetchCategories();
             },
-            onError: (error, context) => {
+            onError: (error) => {
                 const response = error?.response?.data;
                 if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                     logAgain();
@@ -95,11 +95,11 @@ const DropDownSubCategory = (props) => {
             sub_category_id: idSubCategory,
         }
         await mutateDeleteSubCategory.mutateAsync(body, {
-            onSuccess: (data, variables, context) => {
+            onSuccess: () => {
                 message.success(SUCCESS);
                 refetchCategories();
             },
-            onError: (error, context) => {
+            onError: (error) => {
                 const response = error?.response?.data;
                 if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                     logAgain();

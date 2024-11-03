@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Tabs } from "antd";
 
 import OrderList from "@_components/Admin/Order/OrderList";
@@ -14,18 +14,14 @@ const Orders = (props) => {
 
     const [state, setState] = useState({
         tab: 1,
-        isLoadingList: false,
     })
 
-    useEffect(() => {
-        setState((prev) => ({ ...prev, isLoadingList: false }));
-    }, [orders]);
 
     const onChangeTab = async (key) => {
-        setState((prev) => ({ ...prev, tab: key, isLoadingList: true }));
+        setState((prev) => ({ ...prev, tab: key}));
         localStorage.setItem("orderTab", key);
         handleChangeInfor(`?status=${key}&type_sort=1`, 'query')
-        setState((prev) => ({ ...prev, tab: key, isLoadingList: false }));
+        setState((prev) => ({ ...prev, tab: key}));
     }
 
     return (

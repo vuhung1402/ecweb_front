@@ -49,7 +49,6 @@ const NewProduct = (props) => {
     const mutateUpdateProduct = useUpdateProduct();
 
     useEffect(() => {
-        // state.category = category;
         state.idCategory = idCategory;
         state.idSubCategory = idSubCategory;
         setState((prev) => ({ ...prev }))
@@ -57,7 +56,6 @@ const NewProduct = (props) => {
 
     // mode edit
     useEffect(() => {
-        console.log({ type })
         if (type === 'edit') {
             setState(prev => ({ ...prev }));
             // refetchProductDetail();
@@ -326,13 +324,13 @@ const NewProduct = (props) => {
                 };
                 if (type === 'edit') {
                     mutateUpdateProduct.mutateAsync(body, {
-                        onSuccess: (data, variable, context) => {
+                        onSuccess: () => {
                             setState(prev => ({ ...prev, addLoading: false }));
                             refetchProductDetail();
                             refetchProducts();
                             message.success(SUCCESS);
                         },
-                        onError: (error, context) => {
+                        onError: (error) => {
                             const response = error?.response?.data;
                             if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                                 logAgain();
@@ -345,13 +343,13 @@ const NewProduct = (props) => {
                 };
                 onCancel();
                 mutateAddProduct.mutateAsync(body, {
-                    onSuccess: (data, variable, context) => {
+                    onSuccess: () => {
                         setState(prev => ({ ...prev, addLoading: false }));
                         // handleModifiedProduct();
                         refetchProducts();
                         message.success(SUCCESS);
                     },
-                    onError: (error, context) => {
+                    onError: (error) => {
                         const response = error?.response?.data;
                         if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                             logAgain();

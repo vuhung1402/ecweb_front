@@ -1,29 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 // libraty
 import { Tabs, message } from "antd";
 
 // component
-import ProductList from "@_components/Admin/Products/ProductList";
 import ModalCategory from "@_components/Admin/Products/ModalCategory";
+import ProductList from "@_components/Admin/Products/ProductList";
 
-import { useAddCategory, useDeleteCategory, useEditCategory, useGetCategories, useGetProducts, useHandleEditSubCategory } from "../products/function";
-import { useNavigate } from "react-router-dom";
+import useAdminProductStore from "@store/admin-product";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { logAgain } from "@utils/function";
 import { FAIL, SUCCESS } from "@utils/message";
-import Loading from "@component/Loading/Loading";
-import useAdminProductStore from "@store/admin-product";
+import { useNavigate } from "react-router-dom";
+import { useAddCategory, useDeleteCategory, useEditCategory, useHandleEditSubCategory } from "../products/function";
 import ProductsContainer from "./ProductsContainer";
 
 const Products = (props) => {
 
-    const { isModifiedProduct, isGetCategories, isGetCategoriesSuccess, categories, isGetProducts, products } = props;
+    const {  isGetCategories, isGetCategoriesSuccess, categories, isGetProducts, products } = props;
     const { handleDetail, refetchCategories, refetchProducts } = props;
 
     const navigate = useNavigate();
 
-    const { categoryId, setCategoryId, setIsModalOpen, isModalOpen, setActiveKey, activeKey,
+    const { setCategoryId, setIsModalOpen, isModalOpen, setActiveKey, activeKey,
         setModalType, modalType, setDeleteTab, deleteTab } = useAdminProductStore();
 
     const mutateEditCategory = useEditCategory();
@@ -53,9 +52,6 @@ const Products = (props) => {
     const onEdit = (targetKey, action) => {
         const modalType = action === 'add' ? 'create' : 'delete';
         handleOpenModal(modalType, targetKey);
-        // setState((prev) => ({ ...prev }));
-        console.log({ action })
-        console.log({ targetKey })
     };
 
     const handleOpenModal = (type, targetKey) => {
@@ -67,11 +63,9 @@ const Products = (props) => {
         if (type === 'edit') {
             setActiveKey(targetKey);
         }
-        // setState((prev) => ({ ...prev }))
     };
 
     const handleChangeName = async (name, type) => {
-        // const { activeKey, category } = state;
 
         if (type === 'edit') {
             const body = {
@@ -79,12 +73,12 @@ const Products = (props) => {
                 category_id: activeKey,
             }
             mutateEditCategory.mutateAsync(body, {
-                onSuccess: (data, variables, context) => {
+                onSuccess: () => {
                     message.success("Cập nhật thành công!!");
                     setIsModalOpen(isModalOpen);
                     refetchCategories();
                 },
-                onError: (error, context) => {
+                onError: (error) => {
                     const response = error?.response?.data;
                     if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                         logAgain();
@@ -100,12 +94,12 @@ const Products = (props) => {
                 name
             };
             mutateAddCategory.mutateAsync(body, {
-                onSuccess: (data, variables, context) => {
+                onSuccess: () => {
                     message.success(SUCCESS);
                     setIsModalOpen(isModalOpen);
                     refetchCategories();
                 },
-                onError: (error, context) => {
+                onError: (error) => {
                     const response = error?.response?.data;
                     if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                         logAgain();
@@ -124,12 +118,12 @@ const Products = (props) => {
             category_id: deleteTab,
         }
         mutateDeleteCategory.mutateAsync(body, {
-            onSuccess: (data, variables, context) => {
+            onSuccess: () => {
                 message.success(SUCCESS);
                 setIsModalOpen(isModalOpen);
                 refetchCategories();
             },
-            onError: (error, context) => {
+            onError: (error) => {
                 const response = error?.response?.data;
                 if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                     logAgain();
@@ -150,11 +144,11 @@ const Products = (props) => {
         }
 
         await mutateEditSubCategory.mutateAsync(body, {
-            onSuccess: (data, variables, context) => {
+            onSuccess: () => {
                 message.success(SUCCESS);
                 refetchCategories();
             },
-            onError: (error, context) => {
+            onError: (error) => {
                 const response = error?.response?.data;
                 if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                     logAgain();
@@ -181,7 +175,6 @@ const Products = (props) => {
                         key: item?.category_id,
                         children: (
                             <ProductList
-                                // skeletonLoading={state.skeletonLoading}
                                 refetchCategories={refetchCategories}
                                 isGetProducts={isGetProducts}
                                 refetchProducts={refetchProducts}
@@ -193,7 +186,6 @@ const Products = (props) => {
                                 handleChangeSubCategory={handleChangeSubCategory}
                                 handleOpenModal={handleOpenModal}
                                 pendingEditSubCategory={mutateEditSubCategory.isPending}
-                                // getData={getData}
                                 handleDetail={handleDetail}
                             />
                         )

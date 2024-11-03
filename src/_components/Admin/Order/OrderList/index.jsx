@@ -10,13 +10,7 @@ const OrderList = (props) => {
     const { orders, isLoadingList } = props;
     const { handleOrderDetail } = props;
 
-    const [state, setState] = useState({
-        placeholder: '',
-        selectValue: '1',
-        isDetaile: false,
-        codeOrder: '',
-        isConfirmLoading: false,
-    })
+    const [selectedRowKey, setSelectedRowKey] = useState(null); // Track selected row
 
     const columns = [
         {
@@ -59,14 +53,6 @@ const OrderList = (props) => {
             }
         },
     ];
-
-    const handleSelect = (value, option) => {
-        state.selectValue = value;
-        state.placeholder = option.label;
-        setState(prev => ({ ...prev }));
-    }
-
-    const [selectedRowKey, setSelectedRowKey] = useState(null); // Track selected row
 
     const onRowClick = (record) => {
         setSelectedRowKey(record.Order_id); // Set selected row key

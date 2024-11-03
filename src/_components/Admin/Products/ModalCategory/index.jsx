@@ -19,10 +19,6 @@ const ModalCategory = (props) => {
         setState((prev) => ({...prev}));
     },[name, open]);
 
-    // useEffect(() => {
-    //     setState((prev) => ({...prev, confirmLoading: false}));
-    // },[open])
-
     // focus on input
     useEffect(() => {
         if (inputRef && inputRef.current) inputRef.current.focus();

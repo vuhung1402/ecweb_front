@@ -19,7 +19,7 @@ const OrderDetail = (props) => {
     const iw = useWindowSize().width;
     const navigate = useNavigate();
 
-    const arrayNotShowRefund = [0, 1, 2, 5, 6, 7];
+    const arrayNotShowRefund = [0, 1, 2, 3, 5, 6, 7];
     const arrayNotShowCancelOrder = [0, 3, 4, 5, 6]
 
     const { isLoading: isGetOrderDetail, data: detailData, refetch: refetchOrderDetail } = useGetOrderDetail(orderId, userId);
@@ -31,12 +31,12 @@ const OrderDetail = (props) => {
     const updateStatus = async (user_id, Order_id, new_status_order) => {
         mutateUpdateStatusOrder.mutateAsync({ user_id, Order_id, new_status_order },
             {
-                onSuccess: (data, variable, context) => {
+                onSuccess: () => {
                     message?.success(SUCCESS);
                     refetchOrderList();
                     refetchOrderDetail();
                 },
-                onError: (error, context) => {
+                onError: (error) => {
                     const response = error?.response?.data;
                     if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                         logAgain();
@@ -56,12 +56,12 @@ const OrderDetail = (props) => {
         }
         mutateRefundMoney.mutateAsync(body,
             {
-                onSuccess: (data, variable, context) => {
+                onSuccess: () => {
                     message?.success(SUCCESS);
                     refetchOrderList();
                     refetchOrderDetail();
                 },
-                onError: (error, context) => {
+                onError: (error) => {
                     const response = error?.response?.data;
                     if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                         logAgain();

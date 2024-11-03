@@ -1,28 +1,26 @@
-import React, { useEffect, useState } from 'react';
 import { Button, Popconfirm, Space, Switch, Table, message } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Loading from '@component/Loading/Loading';
 import DropDownSubCategory from '../DropDownSubCategory';
 
-import { deleteProduct, updateOnlShopStatus, useDeleteProduct, useUpdateOnlShopStatus } from '@pages/admin/products/function';
-import { PlusOutlined, EditOutlined } from '@ant-design/icons';
-import useWindowSize from '@hooks/useWindowSize';
-import { formatCurrencyVN, logAgain } from '@utils/function';
-import { NOT_AUTHENTICATION, TOKEN_INVALID } from '@utils/error';
+import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import DeleteIcon from "@icon/deleteIcon.svg";
 import EditIcon from "@icon/edit.svg";
+import { useDeleteProduct, useUpdateOnlShopStatus } from '@pages/admin/products/function';
+import { NOT_AUTHENTICATION, TOKEN_INVALID } from '@utils/error';
+import { formatCurrencyVN, logAgain } from '@utils/function';
 
-import './style.scss';
-import { FAIL, SUCCESS } from '@utils/message';
 import { ActionWrraper, DropDownSubCategoryWrapper, ProductActionWrapper, ProductListWrapper } from '@pages/admin/products/Products';
+import { FAIL, SUCCESS } from '@utils/message';
+import './style.scss';
 
 const ProductList = (props) => {
     const { idCategory, subCategory, products, isGetProducts, pendingEditSubCategory } = props;
     const { handleOpenModal, handleChangeSubCategory, getData, filterData, handleDetail, refetchCategories, refetchProducts } = props; // function
 
     const navigate = useNavigate();
-    const iw = useWindowSize().width;
 
     const [state, setState] = useState({
         data: [],
@@ -63,17 +61,16 @@ const ProductList = (props) => {
     }, [subCategory?.length]);
 
     const onConfirm = async (product_id) => {
-        setState(prev => ({ ...prev, confirmLoading: true }));
         const body = {
             product_id
         };
 
         mutateDeleteProduct.mutateAsync(body, {
-            onSuccess: (data, variable, context) => {
+            onSuccess: () => {
                 refetchProducts();
                 message.success(SUCCESS);
             },
-            onError: (error, context) => {
+            onError: (error) => {
                 const response = error?.response?.data;
                 if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                     logAgain();
@@ -168,12 +165,12 @@ const ProductList = (props) => {
         };
 
         mutateUpdateOnlShop.mutateAsync(body, {
-            onSuccess: (data, variable, context) => {
+            onSuccess: () => {
                 message.success(SUCCESS);
                 setState(prev => ({ ...prev, switchLoading: { status: false, id: '' } }));
                 refetchProducts()
             },
-            onError: (error, context) => {
+            onError: (error) => {
                 const response = error?.response?.data;
                 if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                     logAgain();
@@ -196,8 +193,6 @@ const ProductList = (props) => {
         state.name = event.target.value
         setState((prev) => ({ ...prev }))
     };
-
-    console.log({ isGetProducts })
 
     return (
         <ProductListWrapper>
