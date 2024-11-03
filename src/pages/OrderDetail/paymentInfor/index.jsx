@@ -30,13 +30,13 @@ const PaymentInfor = (props) => {
                     </div>
                 }
 
-                {/* {
+                {
                     typePay === 0 && status === 4 &&
                     <div className=" flex justify-between">
                         <div>Đã thanh toán:</div>
                         <div className="font-bold text-sm text-green-400">{formatCurrencyVN(data)}</div>
                     </div>
-                } */}
+                }
             </div>
         </div>
     )

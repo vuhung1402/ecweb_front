@@ -25,6 +25,8 @@ import { useGetCategories, useGetProducts } from './products/function';
 import useAdminProductStore from '@store/admin-product';
 import AdminContainer from './AdminContainer';
 import { BackWrapper, ContentWrapper, SildeBarContentWrapper, SildeBarWrapper } from './Admin';
+import UserDetail from './UserDetail';
+import { useGetUsers } from './user/function';
 
 const Admin = () => {
     const navigate = useNavigate();
@@ -45,10 +47,10 @@ const Admin = () => {
     });
 
     useEffect(() => {
-        if (!user?.isAdmin) {
+        if  (!user?.isAdmin)  {
             navigate('/404')
         }
-    }, []);
+    },  []);
 
     // get tab from local storage
     useEffect(() => {
@@ -81,6 +83,8 @@ const Admin = () => {
 
     const { isLoading: isGetProducts, data: products, refetch: refetchProducts } = useGetProducts(categoryId);
 
+    const { isLoading: isGetUsers, data: userData, refetch: refetchUsers ,isRefetching: isRefetchingUsers} = useGetUsers(state.email);
+
     // const { setRoles, roles } = useUserDetailStore();
 
     const handleChangeInfor = (value, key) => {
@@ -103,7 +107,7 @@ const Admin = () => {
                 right.classList.remove('hidden');
             }
         };
-        setState(prev => ({ ...prev, userId: userId, orderId: orderId }));
+        setState(prev => ({  ...prev, userId: userId, orderId: orderId  }));
     };
 
     // go to product detail
@@ -117,8 +121,21 @@ const Admin = () => {
                 right.classList.remove('hidden');
             }
         };
-        setState(prev => ({ ...prev, productId: productId, productType: type }));
+        setState(prev => ({  ...prev, productId: productId, productType: type  }));
     };
+
+    const handleUserDetail = (user_id) => {
+        if (iw < 960) {
+            const left = document.getElementById('admin-order-left');
+            const right = document.getElementById('admin-order-right');
+
+            if (left && right) {
+                left.classList.add('hidden');
+                right.classList.remove('hidden');
+            }
+        };
+        setState(prev => ({ ...prev, userId: user_id }))
+    }
 
     // back from detail in mobile
     const handleBack = () => {
@@ -149,7 +166,7 @@ const Admin = () => {
 
     // change product
     const handleModifiedProduct = () => {
-        setState(prev => ({ ...prev, isModifiedProduct: !prev.isModifiedProduct }));
+        setState(prev => ({  ...prev, isModifiedProduct: !prev.isModifiedProduct  }));
     };
 
     // back to home
@@ -167,7 +184,17 @@ const Admin = () => {
                 handleChangeInfor={handleChangeInfor}
             />
         ),
-        1: <User url={location.search} />,
+        1: (
+            <User
+                url={location.search}
+                handleUserDetail={handleUserDetail}
+                userId={state.userId}
+                isGetUsers={isGetUsers}
+                userData={userData}
+                isRefetchingUsers={isRefetchingUsers}
+                handleChangeInfor={handleChangeInfor}
+            />
+        ),
         2: (
             <Products
                 isGetCategories={isGetCategories}
@@ -194,6 +221,18 @@ const Admin = () => {
                 refetchOrderList={refetchOrderList}
             />
         ),
+        1: (
+            <UserDetail 
+                userId={state.userId}
+                refetchUsers={refetchUsers}
+            />
+        ),
+        1: (
+            <UserDetail 
+                userId={state.userId}
+                refetchUsers={refetchUsers}
+            />
+        ),
         2: (
             <NewProduct
                 productId={state.productId}
@@ -216,6 +255,7 @@ const Admin = () => {
                     <SildeBar
                         tab={state.tab}
                         handleChangeTab={handleChangeTab}
+                        roles={user?.role}
                     />
                 </SildeBarWrapper>
                 <SildeBarContentWrapper>

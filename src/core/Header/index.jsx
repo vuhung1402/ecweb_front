@@ -50,6 +50,8 @@ const Header = (props) => {
         getQuantity()
     }, [user?.accessToken]);
 
+    const roleShowManagement = ["admin", "ql_order", "ql_user", "ql_product", "ql_transaction"];
+
     const handleGetCategories = async () => {
         const res = await getCategories();
         if(res.success){
@@ -204,7 +206,7 @@ const Header = (props) => {
                         placement="bottomRight"
                         content={
                             <div className="flex flex-col font-bold gap-2">
-                                {user?.isAdmin && (
+                                {user?.role?.some(item => roleShowManagement.includes(item)) && (
                                     <div
                                         onClick={() => {
                                             navigate("/admin")

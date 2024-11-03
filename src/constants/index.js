@@ -11,6 +11,9 @@ export const GET_PRODUCTS_ADMIN = "get_products_admin";
 export const GET_CATEGORIES_ADMIN = "GET_CATEGORIES_ADMIN";
 export const GET_PRODUCT_DETAIL_ADMIN = "GET_PRODUCT_DETAIL_ADMIN";
 
+export const GET_USERS_ADMIN = 'get_users_admin'
+export const GET_USERS_DETAIL_ADMIN = 'get_users_detail_admin'
+
 export const navigatePath = {
     PRODUCT_ALL: '/products/all'
 };

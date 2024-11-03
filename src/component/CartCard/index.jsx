@@ -52,7 +52,7 @@ const CartCard = (props) => {
                     <img className="h-[100px] w-[100px]" src={data?.image_hover} />
                     <div className="ml-3 flex flex-col gap-2">
                         <a className="hover:text-blue-500 font-bold opacity-85 cursor-pointer">{data?.product_name}</a>
-                        <div className="text-sm font-bold tracking-wider opacity-70">{`${data?.color} / ${data?.size}`}</div>
+                        <div className="text-sm font-bold tracking-wider opacity-70">{`${data?.color ? `${data?.color}/` : ""}${data?.size ? data?.size : ""}`}</div>
                         <div className="flex items-center">
                             <Button
                                 loading={state.isLoadingMinus}
@@ -80,7 +80,7 @@ const CartCard = (props) => {
                     loading={state.isDeleteLoading}
                     icon={<CloseOutlined />}
                 />
-                <div className="font-semibold text-[16px]">{formatCurrencyVN(data?.price_per_one)}</div>
+                <div className="font-semibold text-[16px]">{formatCurrencyVN(data?.price_per_one, true)}</div>
             </div>
         </div>
     )

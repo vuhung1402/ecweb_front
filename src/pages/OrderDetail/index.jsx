@@ -27,6 +27,12 @@ const OderDetail = () => {
         quantity: 0,
     })
 
+    const paymentMethdod = {
+        0: "Nhận tiền khi giao hàng",
+        1: "Thanh toán bằng momo"
+    }[state.data?.type_pay]
+
+
     const getData = async () => {
         const response = await getOrderDetail(param?.id);
         if (response?.success) {
@@ -201,8 +207,8 @@ const OderDetail = () => {
                                                     <div className="font-bold">{param?.id}</div>
                                                 </div>
                                                 <div className="flex gap-3">
-                                                    <div className="font-medium w-28">Số lượng:</div>
-                                                    <div className="font-bold">{state.quantity}</div>
+                                                    <div className="font-medium w-28">Phương thức thanh toán:</div>
+                                                    <div className="font-bold text-green-500">{paymentMethdod}</div>
                                                 </div>
                                             </div>
                                         </div>

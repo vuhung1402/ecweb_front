@@ -1,7 +1,7 @@
 export const filterUser = [
     {
         value: '1',
-        label: 'Tên người dùng',
+        label: 'user',
     },
     {
         value: '2',
