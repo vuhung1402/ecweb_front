@@ -51,7 +51,7 @@ const ColorInfo = (props) => {
                                         />
                                         <Input
                                             value={item?.total_number_with_color}
-                                            onChange={(e) => handleEditColor(e.target.value, item?._id, 'total_number_with_color')}
+                                            onChange={(e) => handleEditColor(Number(e.target.value), item?._id, 'total_number_with_color')}
                                             type=""
                                             placeholder="Số lượng"
                                             style={{
