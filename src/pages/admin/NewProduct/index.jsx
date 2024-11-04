@@ -336,29 +336,30 @@ const NewProduct = (props) => {
                                 logAgain();
                                 navigate('/login');
                             } else {
-                                message.error(FAIL);
+                                message.error(response?.message);
                             }
                         }
                     })
-                };
-                onCancel();
-                mutateAddProduct.mutateAsync(body, {
-                    onSuccess: () => {
-                        setState(prev => ({ ...prev, addLoading: false }));
-                        // handleModifiedProduct();
-                        refetchProducts();
-                        message.success(SUCCESS);
-                    },
-                    onError: (error) => {
-                        const response = error?.response?.data;
-                        if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
-                            logAgain();
-                            navigate('/login');
-                        } else {
-                            message.error(FAIL);
+                }else{
+                    mutateAddProduct.mutateAsync(body, {
+                        onSuccess: () => {
+                            setState(prev => ({ ...prev, addLoading: false }));
+                            // handleModifiedProduct();
+                            refetchProducts();
+                            message.success(SUCCESS);
+                        },
+                        onError: (error) => {
+                            const response = error?.response?.data;
+                            if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
+                                logAgain();
+                                navigate('/login');
+                            } else {
+                                message.error(response?.message);
+                            }
                         }
-                    }
-                })
+                    })
+                    onCancel();
+                }
             })
             // .then(result => {
             //     if (result?.success) {

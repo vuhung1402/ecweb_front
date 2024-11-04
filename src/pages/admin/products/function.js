@@ -1,5 +1,5 @@
 import { endpoint, axiosInstance } from "@api/api"
-import { GET_CATEGORIES_ADMIN, GET_PRODUCT_DETAIL_ADMIN, GET_PRODUCTS_ADMIN } from "@constants/index";
+import { ADMIN, GET_CATEGORIES_ADMIN, GET_PRODUCT_DETAIL_ADMIN, GET_PRODUCTS_ADMIN, QL_PRODUCT } from "@constants/index";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { message } from "antd"
 
@@ -35,11 +35,11 @@ export const getProducts = async (id) => {
     }
 }
 
-export function useGetProducts (id) {
+export function useGetProducts (id, role) {
     return useQuery({
         queryFn: () => getProducts(id),
         queryKey: [GET_PRODUCTS_ADMIN, id],
-        enabled: !!id,
+        enabled: !!id && (role?.includes(ADMIN) || role?.includes(QL_PRODUCT)),
     })
 }
 
@@ -55,10 +55,11 @@ export const getCategories = async () => {
     }
 }
 
-export function useGetCategories () {
+export function useGetCategories (role) {
     return useQuery({
         queryFn: () => getCategories(),
         queryKey: [GET_CATEGORIES_ADMIN],
+        enabled: role?.includes(ADMIN) || role?.includes(QL_PRODUCT),
     })
 }
 
@@ -235,7 +236,7 @@ export const updateProduct = async (body) => {
         })
         return response.data;
     } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+        // message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
     }
 }

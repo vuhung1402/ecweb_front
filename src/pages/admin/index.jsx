@@ -27,6 +27,7 @@ import AdminContainer from './AdminContainer';
 import { BackWrapper, ContentWrapper, SildeBarContentWrapper, SildeBarWrapper } from './Admin';
 import UserDetail from './UserDetail';
 import { useGetUsers } from './user/function';
+import { ADMIN, QL_ORDER, QL_PRODUCT, QL_TRANSACTION, QL_USER } from '@constants/index';
 
 const Admin = () => {
     const navigate = useNavigate();
@@ -47,17 +48,18 @@ const Admin = () => {
     });
 
     useEffect(() => {
-        if  (!user?.isAdmin)  {
+        if  (!user?.role?.includes(ADMIN) && !user?.role?.includes(QL_ORDER) && !user?.role?.includes(QL_PRODUCT) 
+            && !user?.role?.includes(QL_TRANSACTION) && !user?.role?.includes(QL_USER))  {
             navigate('/404')
         }
-    },  []);
+    },[]);
 
     // get tab from local storage
-    useEffect(() => {
-        const activeTab = localStorage.getItem('activeTab');
-        activeTab?.length > 0 ? navigate({ search: activeTab }) : navigate({ search: `?url=${state.tab}` });
-        setState((prev) => ({ ...prev, tab: localStorage.getItem('currentTab') }));
-    }, [])
+    // useEffect(() => {
+    //     const activeTab = localStorage.getItem('activeTab');
+    //     activeTab?.length > 0 ? navigate({ search: activeTab }) : navigate({ search: `?url=${state.tab}` });
+    //     setState((prev) => ({ ...prev, tab: localStorage.getItem('currentTab') }));
+    // }, [])
 
     // get data order
     const getDataOrder = async (query) => {
@@ -77,13 +79,13 @@ const Admin = () => {
     const { categoryId } = useAdminProductStore();
 
     //get orderlist
-    const { isLoading: isGetOrderList, data: orders, refetch: refetchOrderList } = useGetOrderList(state.query);
+    const { isLoading: isGetOrderList, data: orders, refetch: refetchOrderList } = useGetOrderList(state.query, user?.role);
 
-    const { isLoading: isGetCategories, isSuccess: isGetCategoriesSuccess, data: categories, refetch: refetchCategories } = useGetCategories();
+    const { isLoading: isGetCategories, isSuccess: isGetCategoriesSuccess, data: categories, refetch: refetchCategories } = useGetCategories(user?.role);
 
-    const { isLoading: isGetProducts, data: products, refetch: refetchProducts } = useGetProducts(categoryId);
+    const { isLoading: isGetProducts, data: products, refetch: refetchProducts } = useGetProducts(categoryId, user?.role);
 
-    const { isLoading: isGetUsers, data: userData, refetch: refetchUsers ,isRefetching: isRefetchingUsers} = useGetUsers(state.email);
+    const { isLoading: isGetUsers, data: userData, refetch: refetchUsers ,isRefetching: isRefetchingUsers} = useGetUsers(state.email, user?.role);
 
     // const { setRoles, roles } = useUserDetailStore();
 

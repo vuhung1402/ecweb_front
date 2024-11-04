@@ -75,7 +75,7 @@ const UserDetail = (props) => {
             {
                 onSuccess: (data, variables, contex) => {
                     message.success(SUCCESS);
-                    refetchDetail();
+                    refetchUsers();
                 }
             }
         )

@@ -13,6 +13,7 @@ export const GET_PRODUCT_DETAIL_ADMIN = "GET_PRODUCT_DETAIL_ADMIN";
 
 export const GET_USERS_ADMIN = 'get_users_admin'
 export const GET_USERS_DETAIL_ADMIN = 'get_users_detail_admin'
+export const GET_USER_PROFILE = "get_user_profile";
 
 export const navigatePath = {
     PRODUCT_ALL: '/products/all'
@@ -51,3 +52,9 @@ export const changeSizeRule = [
     'Chỉ hỗ trợ đổi size 01 lần/đơn hàng',
     'Phí ship đổi size khách hàng sẽ thanh toán'
 ];
+
+export const ADMIN = "admin";
+export const QL_ORDER = "ql_order";
+export const QL_USER = "ql_user";
+export const QL_PRODUCT = "ql_product";
+export const QL_TRANSACTION = "ql_transaction";
