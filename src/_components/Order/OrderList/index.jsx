@@ -2,7 +2,8 @@ import React from "react";
 import { Table } from "antd";
 import { useNavigate } from "react-router-dom";
 import { formatCurrencyVN } from "@utils/function";
-import { statusOrder } from "../mock";
+import { statusOrder } from "../../../pages/Order/mock";
+import { TableWrapper } from "@pages/Order/Order";
 
 const OrderList = (props) => {
     const { data } = props;
@@ -51,7 +52,7 @@ const OrderList = (props) => {
     }
 
     return (
-        <div className="w-full overflow-y-auto h-[400px]">
+        <TableWrapper>
             <Table
                 onRow={(record) => {
                     return {
@@ -64,10 +65,10 @@ const OrderList = (props) => {
                 pagination={{
                     hideOnSinglePage: true,
                     pageSize: 10
-                }} 
+                }}
                 className="font-bold"
             />
-        </div>
+        </TableWrapper>
     )
 }
 

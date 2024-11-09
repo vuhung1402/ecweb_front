@@ -14,6 +14,9 @@ export const GET_PRODUCT_DETAIL_ADMIN = "GET_PRODUCT_DETAIL_ADMIN";
 export const GET_USERS_ADMIN = 'get_users_admin'
 export const GET_USERS_DETAIL_ADMIN = 'get_users_detail_admin'
 export const GET_USER_PROFILE = "get_user_profile";
+export const GET_ORDER_LIST = "get_order_list";
+export const GET_ORDER_DETAIL = "get_order_detail";
+export const GET_ORDER_HISTORY = "get_order_history";
 
 export const navigatePath = {
     PRODUCT_ALL: '/products/all'

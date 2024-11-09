@@ -1,21 +1,9 @@
 import React from "react";
 import './styles.scss'; // Import the styles
 
-import IconOrderSuccess from '@icon/iconOrderSuccess.svg';
-import IconConfirm from '@icon/iconConfirm.svg';
-import IconTransport from '@icon/iconTransport.svg';
-import IconOrderFinish from '@icon/iconOrderFinish.svg';
-
 const OrderStatus = (props) => {
 
-    const { status, history } = props;
-
-    const orderStatus = [
-        { label: 'Đặt hàng thành công', icon: <IconOrderSuccess /> },
-        { label: 'Đã xác nhận', icon: <IconConfirm /> },
-        { label: 'Đang vận chuyển', icon: <IconTransport /> },
-        { label: 'Đã giao hàng', icon: <IconOrderFinish /> },
-    ];
+    const { orderHistory } = props;
 
     const statusName = {
         0: 'Chờ thanh toán',
@@ -28,13 +16,15 @@ const OrderStatus = (props) => {
         7: 'Giao hàng không thành công',
     }
 
+    if(orderHistory?.length === 0) return <></>
+
     return (
         <>
             {
                 <div className="order-status-container"> {/* Add a class for styling */}
                     <div className="status-history"> {/* Add a class for styling */}
                         {
-                            history?.map((item) => {
+                            orderHistory?.map((item) => {
                                 return (
                                     <div className="status-item"> {/* Add a class for styling */}
                                         <div className="status-icon">

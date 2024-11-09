@@ -1,21 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { message } from "antd";
+import React from "react";
 
 import Footer from "@core/Footer";
-import Loading from "@component/Loading/Loading";
-import SideBar from "@pages/Profile/SideBar";
+import SideBar from "@component/SideBar";
 
-import { getProfileInfo, useGetProfileInfo } from "@pages/Profile/function";
-import { TOKEN_INVALID } from "@utils/error";
+import { useGetProfileInfo } from "@pages/Profile/function";
 import ProfileContainer from "./ProfileContainer";
 import { AccountInforWrapper, ContentInforWrapper, ContentWrapper, InforWrapper, SildeBarWrapper } from "./Profile";
 import AccountInfor from "@_components/Profile/AccountInfor";
 
 const Profile = () => {
-
-    const navigate = useNavigate();
-
     // const [infor, setInfor] = useState();
 
     const { data: infor, isError, isLoading:isGetInfor } = useGetProfileInfo();

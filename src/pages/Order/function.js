@@ -1,47 +1,24 @@
-import { endpoint } from "@api/api";
+import { axiosInstance } from "@api/api";
+import { GET_ORDER_LIST } from "@constants/index";
+import { useQuery } from "@tanstack/react-query";
 import { message } from "antd";
 
-export const getCart = async () => {
-    const token = localStorage.getItem("token");
+export const getOrderList = async (query) => {
     try {
-        const response = await fetch(`${endpoint}/cart/cart_show`, {
-            method: 'GET',
-            headers: {
-                "token": token,
-                'Content-Type': 'application/json',
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data;
+        const response = await axiosInstance.get(`/order/get_list_detail_user${query}`, {
+            requiresAuth: true,
+        })
+
+        return response.data;
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
     }
 }
 
-export const getOrderList = async (query) => {
-    const token = localStorage.getItem("token");
-    try {
-        const response = await fetch(`${endpoint}/order/get_list_detail_user${query}`, {
-            method: 'GET',
-            // body: JSON.stringify(body),
-            headers: {
-                "token": token,
-                'Content-Type': 'application/json',
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
+export function useGetOrderList (query) {
+    return useQuery({
+        queryFn: () => getOrderList(query),
+        queryKey: [GET_ORDER_LIST, query],
+    })
 }
