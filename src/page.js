@@ -1,6 +1,6 @@
 export {default as HomePage } from "./pages/Home"
 export {default as AuthPage} from "@pages/auth"
-export {default as LoginPage} from "./pages/auth/Login/Login"
+export {default as LoginPage} from "./pages/auth/Login"
 // export {default as SignUpPage} from "./pages/auth/SignUp/SignUp"
 export {default as ProductsPage} from "./pages/Product" 
 export {default as ProductDetailPage} from "./pages/ProductDetail"
