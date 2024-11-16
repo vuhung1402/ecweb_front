@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { message } from "antd"
 
-import SideBar from "@component/SideBar"
+import SideBar from "@widgets/SideBar"
 import AddressCard from "@_components/Addresses/AddressCard"
 import AddressInsert from "@_components/Addresses/AddressInsert"
 import { AddAddressWrapper, AddressesContainer, AddressesInfoWrapper, AddressesTitle, AddressesWrapper, AddressListWrapper } from "./Addresses"

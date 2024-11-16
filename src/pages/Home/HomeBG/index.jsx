@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "antd";
 
-import MotionBox from "@component/MotionBox";
+import MotionBox from "@widgets/MotionBox";
 
 import { fadeIn } from "@utils/animation";
 

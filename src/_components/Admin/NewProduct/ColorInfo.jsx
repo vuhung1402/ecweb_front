@@ -1,11 +1,11 @@
 // ColorInfor.jsx
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import { Button, ColorPicker, Input } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
 import DeleteIcon from "@icon/deleteIcon.svg"
 import PlusIcon from "@icon/plusIcon.svg"
-import SelectImage from "@component/SelectImage";
+import SelectImage from "@widgets/SelectImage";
 
 const ColorInfo = (props) => {
 

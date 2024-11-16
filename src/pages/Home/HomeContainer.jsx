@@ -1,6 +1,6 @@
 import React from "react";
 
-import Loading from "@component/Loading/Loading";
+import Loading from "@widgets/Loading/Loading";
 
 const HomeContainer = (props) => {
 

@@ -1,4 +1,4 @@
-import Loading from "@component/Loading/Loading";
+import Loading from "@widgets/Loading/Loading";
 import useWindowSize from "@hooks/useWindowSize";
 import React from "react";
 

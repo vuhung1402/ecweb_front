@@ -1,4 +1,4 @@
-import Loading from "@component/Loading/Loading";
+import Loading from "@widgets/Loading/Loading";
 import { message, Tabs } from "antd";
 import React, { useEffect } from "react";
 import { useAddCategory, useDeleteCategory, useEditCategory, useGetCategories, useGetProducts, useHandleEditSubCategory } from "../products/function";

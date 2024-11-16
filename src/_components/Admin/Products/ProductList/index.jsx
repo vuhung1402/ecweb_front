@@ -2,7 +2,7 @@ import { Button, Popconfirm, Space, Switch, Table, message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Loading from '@component/Loading/Loading';
+import Loading from '@widgets/Loading/Loading';
 import DropDownSubCategory from '../DropDownSubCategory';
 
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';

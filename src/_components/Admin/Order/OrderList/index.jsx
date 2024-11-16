@@ -2,7 +2,7 @@ import { Button, Space, Table, Tag } from "antd";
 import React, { useState } from "react";
 import { formatCurrencyVN } from "@utils/function";
 import './style.scss'
-import Loading from "@component/Loading/Loading";
+import Loading from "@widgets/Loading/Loading";
 import { OrderListFilterWrapper, OrderListWrapper } from "@pages/admin/orders/Orders";
 import OrderListFilter from "@_components/Admin/Order/OrderListFilter";
 

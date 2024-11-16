@@ -3,8 +3,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom"
 
 import ProductContainer from "./ProductContainer"
 import { ProductSidebarWrapper, ProductListWrapper } from "./Product"
-import ProductSidebar from "@component/ProductSidebar"
-import ProductList from "../../component/ProductList/ProductList"
+import ProductSidebar from "@widgets/ProductSidebar"
+import ProductList from "@widgets/ProductList/ProductList"
 
 import { useGetCategories, useGetProducts } from "./function"
 

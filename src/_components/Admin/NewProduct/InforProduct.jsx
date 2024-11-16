@@ -1,8 +1,7 @@
-import TextEditor from "@component/TextEditor";
+import TextEditor from "@widgets/TextEditor";
 import { Input, InputNumber } from "antd";
-import TextArea from "antd/es/input/TextArea";
 import React, { useEffect, useState } from "react";
-import DropDownCategory from "@component/AdminUI/DropDownCategory";
+import DropDownCategory from "@widgets/AdminUI/DropDownCategory";
 import { getCategories } from "@pages/admin/products/function";
 
 const InforProduct = (props) => {

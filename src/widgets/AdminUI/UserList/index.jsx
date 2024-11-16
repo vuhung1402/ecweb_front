@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button,Table} from 'antd';
-import ModalUserInfor from '@component/AdminUI/ModalUserInfor';
+import ModalUserInfor from '../ModalUserInfor';
 import ModalTransaction from '../ModalTransaction';
-import Loading from '@component/Loading/Loading';
+import Loading from '@widgets/Loading/Loading';
 
 
 const UserList = (props) => {

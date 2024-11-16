@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import UserDetailContainer from "./UserDetailContainer";
 import { UserActionWrapper, UserAddressWrapper, UserInforWrapper, UserRolesWrapper } from "./UserDetail";
-import UserInfor from "@component/AdminUI/UserInfor";
-import UserAddress from "@component/AdminUI/UserAddress/UserAddress";
-import UserAction from "@component/AdminUI/UserAction";
+import UserInfor from "@widgets/AdminUI/UserInfor";
+import UserAddress from "@widgets/AdminUI/UserAddress/UserAddress";
+import UserAction from "@widgets/AdminUI/UserAction";
 import { useAddToBlackList, useDeleteUser, useGetUserDetail, useGrantRole } from "./function";
-import Loading from "@component/Loading/Loading";
 import { message } from "antd";
 import { FAIL, SUCCESS } from "@utils/message";
-import UserRoles from "@component/AdminUI/UserRoles";
+import UserRoles from "@widgets/AdminUI/UserRoles";
 import useUserDetailStore from "@store/user-detail";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 

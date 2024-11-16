@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Tabs } from "antd";
-import SideBar from "@component/SideBar";
+import SideBar from "@widgets/SideBar";
 import OrderList from "../../_components/Order/OrderList";
 
 import { statusOrder } from "./mock";

@@ -1,7 +1,7 @@
 import React from "react";
 
 import Footer from "@core/Footer";
-import SideBar from "@component/SideBar";
+import SideBar from "@widgets/SideBar";
 
 import { useGetProfileInfo } from "@pages/Profile/function";
 import ProfileContainer from "./ProfileContainer";

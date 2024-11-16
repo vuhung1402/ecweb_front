@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { numOfCartPackage } from "@redux/actions";
 import { message } from "antd";
 
-import CartCard from "@component/CartCard";
+import CartCard from "@widgets/CartCard";
 import CartContainer from "./CartContainer";
 import CartHeader from "@_components/Cart/CartHeader";
 

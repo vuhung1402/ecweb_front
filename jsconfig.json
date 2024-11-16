@@ -40,6 +40,9 @@
             "@_components/*":[
                 "src/_components/*"
             ],
+            "@widgets/*":[
+                "src/widgets/*"
+            ],
         }
     },
 }

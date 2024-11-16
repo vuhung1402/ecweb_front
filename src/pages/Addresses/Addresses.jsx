@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Empty } from 'antd'
 
-import Loading from "@component/Loading/Loading";
+import Loading from "@widgets/Loading/Loading";
 
 export const AddressesContainer = ({ isLoading, ...rest }) => {
 

@@ -1,8 +1,8 @@
 import React from "react";
 import { List } from "antd";
 
-import CardProduct from "@component/CardProduct/CardProduct";
-import ProductFilter from "@component/ProductFilter/ProductFilter";
+import CardProduct from "@widgets/CardProduct/CardProduct";
+import ProductFilter from "@widgets/ProductFilter/ProductFilter";
 
 const ProductList = (props) => {
     const { data } = props;

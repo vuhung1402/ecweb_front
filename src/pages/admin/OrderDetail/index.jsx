@@ -6,7 +6,7 @@ import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { logAgain } from "@utils/function";
 import { FAIL, SUCCESS } from "@utils/message";
 import { statusOrder } from "../orders/mock";
-import Loading from "@component/Loading/Loading";
+import Loading from "@widgets/Loading/Loading";
 import useWindowSize from "../../../hooks/useWindowSize";
 import OrderDetailContainer from "./OrderDetailContainer";
 import { OrderDetailActionWrapper, OrderDetailWrapper } from "./OrderDetail";

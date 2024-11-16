@@ -1,6 +1,6 @@
 import React from "react";
 
-import Loading from "@component/Loading/Loading";
+import Loading from "@widgets/Loading/Loading";
 
 export const CheckoutContainer = ({ children, isLoading }) => {
 

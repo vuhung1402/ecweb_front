@@ -3,16 +3,15 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 
-import SildeBar from '@component/AdminUI/Sidebar';
+import SildeBar from '@widgets/AdminUI/Sidebar';
 import Orders from './orders';
 import User from './user';
 import Products from './products';
 import Transaction from './transaction';
-import ChatBox from './chatbox';
 import OrderDetail from './OrderDetail';
 import NewProduct from '@pages/admin/NewProduct';
 
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@component/Resizable';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@widgets/Resizable';
 import { useUserPackageHook } from '@redux/hooks/userHook';
 import useWindowSize from '../../hooks/useWindowSize';
 import { getOrderList, useGetOrderList } from './orders/function';

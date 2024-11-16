@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, message, Popconfirm } from "antd";
 
-import SideBar from "@component/SideBar";
+import SideBar from "@widgets/SideBar";
 import ProductCard from "../../_components/OrderDetail/productCard";
 import PaymentInfor from "../../_components/OrderDetail/paymentInfor";
 import UserInfo from "../../_components/OrderDetail/userInfo";
-import OrderStatus from "@component/OrderStatus";
+import OrderStatus from "@widgets/OrderStatus";
 
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useCancelOrder, useGetOrderDetail, useGetOrderHistory, useRefundMoney } from "./function";
@@ -21,18 +21,14 @@ const OderDetail = () => {
 
     const param = useParams();
 
-    const [state, setState] = useState({
-        quantity: 0,
-    })
-
     const { mutateAsync: muatateCancelOrder, isPending: isPendingCancelOrder } = useCancelOrder();
 
     const { mutateAsync: mutateRefundMoney, isPending: isPendingRefundMoney } = useRefundMoney();
 
     const { data: orderDetail, isLoading: isGetOrderDetail,
-        refetch: refetchOrderDetail, isRefetching: isRefetchOrderDetail } = useGetOrderDetail(param?.id)
+        refetch: refetchOrderDetail } = useGetOrderDetail(param?.id)
 
-    const { data: orderHistory, isLoading: isGetOrderHistory } = useGetOrderHistory(param?.id)
+    const { data: orderHistory } = useGetOrderHistory(param?.id)
 
     const paymentMethdod = {
         0: "Nhận tiền khi giao hàng",

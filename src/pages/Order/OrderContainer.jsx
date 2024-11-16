@@ -1,4 +1,3 @@
-import Loading from "@component/Loading/Loading";
 import React from "react";
 
 const OrderContainer = (props) => {
