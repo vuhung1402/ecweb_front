@@ -2,14 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { message } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 
-import AddProduct from "../../../_components/Admin/NewProduct/AddProduct";
-import Loading from "@component/Loading/Loading";
+import AddProduct from "@_components/Admin/NewProduct";
 
 import { handleUploadListImage, uuid } from "@utils/function";
 import useWindowSize from "@hooks/useWindowSize";
-import { addProduct, productDetail, updateProduct, useAddProduct, useGetProductDetail, useUpdateProduct } from "@pages/admin/products/function";
+import { useAddProduct, useGetProductDetail, useUpdateProduct } from "@pages/admin/products/function";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
-import { LOGIN_AGAIN, SUCCESS } from "@utils/message";
+import { SUCCESS } from "@utils/message";
 import { LeftOutlined } from "@ant-design/icons";
 
 import "./style.scss";
@@ -18,7 +17,7 @@ import { NewProductActionWrapper, NewProductWrapper } from "@pages/admin/product
 const NewProduct = (props) => {
 
     const { open, type, idCategory, idSubCategory, productId } = props;
-    const { handleModifiedProduct, handleBack, refetchProducts } = props;
+    const { handleBack, refetchProducts } = props;
 
     const params = useParams();
     const uploadImageRef = useRef(null);
@@ -361,21 +360,6 @@ const NewProduct = (props) => {
                     onCancel();
                 }
             })
-            // .then(result => {
-            //     if (result?.success) {
-            //         setState(prev => ({ ...prev, addLoading: false }));
-            //         handleModifiedProduct();
-            //         message.success(SUCCESS);
-            //     } else {
-            //         if (result?.message === TOKEN_INVALID || result?.message === NOT_AUTHENTICATION) {
-            //             navigate("/login");
-            //             message?.info(LOGIN_AGAIN);
-            //         } else {
-            //             setState(prev => ({ ...prev, addLoading: false }));
-            //             message.error(result?.message);
-            //         }
-            //     }
-            // })
             .catch(error => {
                 setState(prev => ({ ...prev, addLoading: false }));
                 message.error("Đã xảy ra lỗi khi xử lý ảnh.");

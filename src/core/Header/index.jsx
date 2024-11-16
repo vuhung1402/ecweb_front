@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Drawer } from 'antd';
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -47,8 +47,12 @@ const Header = (props) => {
     }, []);
 
     useEffect(() => {
-        getQuantity()
-    }, [user?.accessToken]);
+        if (!visible) return;
+
+        if(user?.accessToken){
+            getQuantity()
+        }
+    }, [user, visible]);
 
     const roleShowManagement = ["admin", "ql_order", "ql_user", "ql_product", "ql_transaction"];
 
@@ -267,4 +271,4 @@ const Header = (props) => {
     )
 }
 
-export default Header
+export default memo(Header);

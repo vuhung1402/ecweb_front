@@ -1,5 +1,4 @@
 import React from "react";
-import { data } from "./mock";
 
 const UserInfor = (props) => {
     const { userDetail } = props;

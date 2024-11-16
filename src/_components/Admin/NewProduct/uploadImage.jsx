@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useImperativeHandle } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import { Checkbox, Image, Upload, Button, Popover, Switch } from 'antd';
+import { Checkbox, Image, Upload, Button, Popover } from 'antd';
 
 import './style.scss';
 

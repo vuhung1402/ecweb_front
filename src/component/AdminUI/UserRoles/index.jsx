@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { Select } from "antd";
 import { roles } from "./mock";
 
 const UserRoles = (props) => {
-    const { userRoles, initialRole } = props;
+    const { userRoles } = props;
     const { handleAddRole } = props;
 
     const filteredOptions = roles.filter((o) => !userRoles?.includes(o.value));

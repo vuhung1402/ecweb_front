@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, message } from "antd";
-import { useDispatch } from "react-redux";
 
 import { addKeyToArraySize, getNotInvalidColor, logAgain } from "@utils/function";
 import useGetCartQuantity from "@hooks/useGetCartQuantity";
-import { addToCart, useGetQuantityCart } from "@pages/Product/function";
+import { addToCart } from "@pages/Product/function";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 
 import { InfoProductDetailColor, InfoProductDetailColorName, InfoProductDetailHeader } from "@pages/ProductDetail/ProductDetail";

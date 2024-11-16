@@ -36,11 +36,11 @@ export const quantityCart = async () => {
     return response.data
 }
 
-export function useGetQuantityCart(acessToken) {
+export function useGetQuantityCart() {
     return useQuery({
         queryFn: () => quantityCart(),
-        queryKey: [GET_QUANTITY_CARD, acessToken],
-        enabled: true
+        queryKey: [GET_QUANTITY_CARD],
+        enabled: true,
     })
 }
 
