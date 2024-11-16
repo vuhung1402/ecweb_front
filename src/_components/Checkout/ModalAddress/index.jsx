@@ -4,7 +4,7 @@ import { Checkbox, Input, message, Modal, Select } from "antd";
 import { HomeOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
 
 import { getDistricts, getWards, logAgain } from "@utils/function";
-import { useInsertAddress } from "@pages/Addresses/function";
+import { useInsertAddress } from "@api/Addresses";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 
 const inputField = [

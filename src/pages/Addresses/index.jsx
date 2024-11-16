@@ -8,7 +8,7 @@ import AddressInsert from "@_components/Addresses/AddressInsert"
 import { AddAddressWrapper, AddressesContainer, AddressesInfoWrapper, AddressesTitle, AddressesWrapper, AddressListWrapper } from "./Addresses"
 
 import { logAgain } from "@utils/function"
-import { useUpdateAddress } from "./function"
+import { useUpdateAddress } from "@api/Addresses"
 import { FAIL, SUCCESS } from "@utils/message"
 import { useGetAddressInfo } from "@pages/Checkout/function"
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error"

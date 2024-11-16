@@ -4,7 +4,7 @@ import { Button, Checkbox, Input, message, Select } from "antd";
 import { HomeOutlined, PhoneOutlined, UserOutlined } from "@ant-design/icons";
 
 import { FAIL } from "@utils/message";
-import { useInsertAddress } from "@pages/Addresses/function";
+import { useInsertAddress } from "@api/Addresses";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { getDistricts, getProvinces, getWards, logAgain } from "@utils/function";
 

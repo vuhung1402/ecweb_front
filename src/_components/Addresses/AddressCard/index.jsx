@@ -7,7 +7,7 @@ import AddressCardHeader from "../AddressCardHeader";
 import AddressUpdateCard from "../AddressUpdateCard";
 
 import { FAIL } from "@utils/message";
-import { useDeleteAdress } from "@pages/Addresses/function";
+import { useDeleteAdress } from "@api/Addresses";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { getDistricts, getProvinces, getWards, logAgain } from "@utils/function";
 
