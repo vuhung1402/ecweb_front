@@ -51,8 +51,8 @@ export const DropDownSubCategoryWrapper = (props) => {
     )
 }
 
-export const NewProductWrapper = (props) => {
-    if (props?.isGetProductDetail) return <Loading />
+export const NewProductWrapper = ({isGetProductDetail, ...props}) => {
+    if (isGetProductDetail) return <Loading />
 
     return (
         <div

@@ -49,8 +49,8 @@ export const InfoProductDetailColor = (props) => {
     );
 };
 
-export const InfoProductDetailColorName = (props) => {
+export const InfoProductDetailColorName = ({colorName, ...props}) => {
     return (
-        <div className="text-xs font-bold opacity-60 my-3" {...props}>{props?.colorName}</div>
+        <div className="text-xs font-bold opacity-60 my-3" {...props}>{colorName}</div>
     );
 };

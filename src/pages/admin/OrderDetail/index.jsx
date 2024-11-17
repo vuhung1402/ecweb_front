@@ -5,7 +5,7 @@ import { useGetOrderDetail, useRefundMoney, useUpdateStatusOrder } from "./funct
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { logAgain } from "@utils/function";
 import { FAIL, SUCCESS } from "@utils/message";
-import { statusOrder } from "../orders/mock";
+import { statusOrder } from "@constants/index";
 import Loading from "@widgets/Loading/Loading";
 import useWindowSize from "../../../hooks/useWindowSize";
 import OrderDetailContainer from "./OrderDetailContainer";
@@ -112,7 +112,8 @@ const OrderDetail = (props) => {
                 {
                     statusOrder.find((item) => item.status === detailData?.formatted_order_detail?.status)?.nextStatus?.map((nextStatusItem) => {
                         return (
-                            <Popconfirm
+                            <div key={`${nextStatusItem?.status}-${new Date().getTime()}`}>
+                                <Popconfirm
                                 title="Đổi trạng thái"
                                 description="Bạn muốn đổi trạng thái của đơn hàng?"
                                 cancelText="Huỷ"
@@ -127,8 +128,9 @@ const OrderDetail = (props) => {
                                     className="font-bold"
                                 >
                                     {nextStatusItem?.label}
-                                </Button>
-                            </Popconfirm>
+                                    </Button>
+                                </Popconfirm>
+                            </div>
                         )
                     })
                 }

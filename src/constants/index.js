@@ -1,3 +1,5 @@
+import React from "react";
+
 export const GET_PRODUCTS = 'get_products'
 export const GET_CATEGORIES = 'get_categories'
 export const GET_PRODUCTS_PAGE = 'get_products_page'
@@ -61,3 +63,62 @@ export const QL_ORDER = "ql_order";
 export const QL_USER = "ql_user";
 export const QL_PRODUCT = "ql_product";
 export const QL_TRANSACTION = "ql_transaction";
+
+export const statusOrder = [
+    {
+        status: 1,
+        name: <div className="font-bold">Chờ xác nhận</div>,
+        nextStatus: [
+            {
+                status: 2,
+                label: 'Xác nhận đơn hàng',
+            },
+        ],
+    },
+    {
+        status: 2,
+        name: <div className="font-bold">Đã xác nhận</div>,
+        nextStatus: [
+            {
+                status: 3,
+                label:'Giao hàng',
+            }
+        ],
+    },
+    {
+        status: 3,
+        name: <div className="font-bold">Đang giao hàng</div>,
+        nextStatus: [
+            {
+                status: 4,
+                label: 'Thành công',
+            },
+            {
+                status: 7,
+                label: 'Không thành công',
+            },
+        ],
+    },
+    {
+        status: 4,
+        name: <div className="font-bold">Đã giao hàng</div>,
+    },
+    {
+        status: 5,
+        name: <div className="font-bold">Đã huỷ</div>,
+    },
+    {
+        status: 6,
+        name: <div className="font-bold">Trả hàng/Hoàn tiền</div>,
+    },
+    {
+        status: 7,
+        name: <div className="font-bold">Giao hàng không thành công</div>,
+        nextStatus: [
+            {
+                status: 3,
+                label:'Giao hàng',
+            },
+        ],
+    },
+];

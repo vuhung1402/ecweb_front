@@ -33,7 +33,9 @@ const InforOrderDetail = (props) => {
                     {
                         detailData?.formatted_order_detail?.items?.map((item) => {
                             return (
-                                <CardProduct dataDetail={item} />
+                                <div key={item?.product_id}>
+                                    <CardProduct dataDetail={item} />
+                                </div>
                             )
                         })
                     }

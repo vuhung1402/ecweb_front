@@ -73,7 +73,7 @@ const OrderList = (props) => {
                         rootClassName={`${orders?.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
                         className="font-bold"
                         columns={columns}
-                        dataSource={orders}
+                        dataSource={orders.map(order => ({ ...order, key: order.Order_id }))}
                         bordered
                         pagination={{
                             hideOnSinglePage: true,

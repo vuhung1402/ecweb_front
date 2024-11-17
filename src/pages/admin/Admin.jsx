@@ -1,9 +1,7 @@
 import useWindowSize from "@hooks/useWindowSize";
 import React from "react";
 
-export const BackWrapper = (props) => {
-    const { handleGoBack } = props
-
+export const BackWrapper = ({handleGoBack, ...props}) => {
     return (
         <div
             className='w-fit flex items-center gap-3 text-sm font-bold opacity-80 p-1 hover:bg-[#f1f5f9] transition-colors duration-200 cursor-pointer'

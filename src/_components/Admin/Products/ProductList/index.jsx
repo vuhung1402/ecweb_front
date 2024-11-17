@@ -238,7 +238,7 @@ const ProductList = (props) => {
                             rootClassName={`${products?.formatted_product?.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
                             columns={columns}
                             bordered
-                            dataSource={products?.formatted_product}
+                            dataSource={products?.formatted_product.map(product => ({ ...product, key: product.product_id }))}
                             pagination={{
                                 hideOnSinglePage: true,
                                 pageSize: 10

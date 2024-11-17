@@ -47,7 +47,7 @@ const UserList = (props) => {
         <>
             <Table
                 columns={columns}
-                dataSource={userData}
+                dataSource={userData.map(user => ({ ...user, key: user._id }))}
                 pagination={{
                     hideOnSinglePage: true,
                     pageSize: 15,

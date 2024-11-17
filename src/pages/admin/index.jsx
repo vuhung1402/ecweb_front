@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 
-import SildeBar from '@widgets/AdminUI/Sidebar';
+import Sidebar from '@widgets/AdminUI/Sidebar';
 import Orders from './orders';
 import User from './user';
 import Products from './products';
@@ -253,7 +253,7 @@ const Admin = () => {
             </BackWrapper>
             <ContentWrapper>
                 <SildeBarWrapper>
-                    <SildeBar
+                    <Sidebar
                         tab={state.tab}
                         handleChangeTab={handleChangeTab}
                         roles={user?.role}

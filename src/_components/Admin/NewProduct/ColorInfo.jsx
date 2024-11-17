@@ -32,8 +32,8 @@ const ColorInfo = (props) => {
                 <div className="flex flex-col gap-3 w-full">
                     {color?.map((item, index) => {
                         return (
-                            <>
-                                <div className="flex flex-col gap-2" key={`color-${index}`}>
+                            <div key={`color-${index}`} className="flex flex-col gap-2">
+                                <div>
                                     <div className="flex items-center gap-2">
                                         <ColorPicker
                                             value={item?.code_color}
@@ -110,7 +110,7 @@ const ColorInfo = (props) => {
                                         </div>
                                     )
                                 })}
-                            </>
+                            </div>
                         )
                     })}
                     <div id='endRef' className=" h-1 w-full"></div>

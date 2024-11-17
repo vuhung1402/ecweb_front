@@ -14,7 +14,7 @@ const UserAddress = (props) => {
             {
                 userAddress?.map((item) => {
                     return (
-                        <div className=" p-3 border rounded-lg flex flex-col gap-2">
+                        <div key={item?._id} className=" p-3 border rounded-lg flex flex-col gap-2">
                             <div className=" flex items-center gap-3">
                                 <div className=" font-bold">Họ và tên:</div>
                                 <div>{item?.name}</div>

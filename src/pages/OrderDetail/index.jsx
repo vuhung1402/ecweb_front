@@ -14,7 +14,7 @@ import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { logAgain } from "@utils/function";
 import { FAIL, SUCCESS } from "@utils/message";
 import OderDetailContainer from "./OrderDetailContainer";
-import { AddressInforDetail, AddressInforTitle, AddressInforWrapper, BackTitle, BackWrapper, ContentOrderInfoWrapper, ContentWrapper, InforTitle, InforWrapper, OrderActionWrapper, OrderId, OrderInfoWrapper, OrderStatusWrapper, PaymentInforWrapper, PaymentMethod, PaymentMethodContentWrapper, PaymentMethodTitle, PaymentMethodWrapper, PaymentTitle, SideBarWrapper, Title, UserInforContentWrapper, UserInforDetailWrapper, UserInforTitle, UserInforWrapper } from "./OrderDetail";
+import { AddressInforDetail, AddressInforTitle, AddressInforWrapper, BackTitle, BackWrapper, ContentOrderInfoWrapper, ContentWrapper, InforTitle, InforWrapper, OrderActionWrapper, OrderId, OrderInfoWrapper, OrderStatusWrapper, PaymentInforWrapper, PaymentMethod, PaymentMethodContentWrapper, PaymentMethodWrapper, PaymentTitle, SideBarWrapper, Title, UserInforContentWrapper, UserInforDetailWrapper, UserInforTitle, UserInforWrapper } from "./OrderDetail";
 
 const OderDetail = () => {
     const navigate = useNavigate();

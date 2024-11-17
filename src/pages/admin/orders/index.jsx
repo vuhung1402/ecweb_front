@@ -3,7 +3,7 @@ import { Tabs } from "antd";
 
 import OrderList from "@_components/Admin/Order/OrderList";
 
-import { statusOrder } from "./mock";
+import { statusOrder } from "@constants/index";
 import OrdersContainer from "./OrdersContainer";
 
 const Orders = (props) => {
@@ -17,7 +17,7 @@ const Orders = (props) => {
     })
 
 
-    const onChangeTab = async (key) => {
+    const handleChangeTab = async (key) => {
         setState((prev) => ({ ...prev, tab: key}));
         localStorage.setItem("orderTab", key);
         handleChangeInfor(`?status=${key}&type_sort=1`, 'query')
@@ -25,9 +25,9 @@ const Orders = (props) => {
     }
 
     return (
-        <OrdersContainer isGetOrderList={isGetOrderList}>
+        <OrdersContainer>
             <Tabs
-                onChange={onChangeTab}
+                onChange={handleChangeTab}
                 rootClassName="!w-full !max-w-full"
                 className="!w-full !max-w-full"
                 activeKey={state.tab}
