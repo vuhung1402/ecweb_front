@@ -9,7 +9,7 @@ import CartCard from "@widgets/CartCard";
 import CartContainer from "./CartContainer";
 import CartHeader from "@_components/Cart/CartHeader";
 
-import { useCheckout, useDeleteItemCart, useGetCart, useUpdateItemCart } from "./function";
+import { useGetCart, useDeleteItemCart, useCheckout, useUpdateItemCart } from "@api/Cart";
 
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { FAIL, SUCCESS } from "@utils/message";
@@ -52,6 +52,12 @@ const CartPage = () => {
 
 
     const handleCheckout = async () => {
+
+        if (state?.selectedItem?.length === 0) {
+            message.warning("Chọn sản phảm muốn thanh toán!");
+            return;
+        }
+
         checkoutMutation.mutateAsync(state?.selectedItem, {
             onSuccess: (data) => {
                 const order = data?.order;
@@ -144,14 +150,16 @@ const CartPage = () => {
                         {
                             data?.items?.map((item) => {
                                 return (
-                                    <CartCard
-                                        data={item}
-                                        handleSelectItem={handleSelectItem}
-                                        handleDeleteItem={handleDeleteItem}
-                                        handleUpdateItem={handleUpdateItem}
-                                        isLoadingDelete={isPending}
-                                        isLoadingUpdate={isUpdateLoading}
-                                    />
+                                    <div key={item?._id}>
+                                        <CartCard
+                                            data={item}
+                                            handleSelectItem={handleSelectItem}
+                                            handleDeleteItem={handleDeleteItem}
+                                            handleUpdateItem={handleUpdateItem}
+                                            isLoadingDelete={isPending}
+                                            isLoadingUpdate={isUpdateLoading}
+                                        />
+                                    </div>
                                 )
                             })
                         }

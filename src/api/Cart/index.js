@@ -1,8 +1,8 @@
 import { useQuery, useMutation } from "@tanstack/react-query";
 
 import { axiosInstance } from "@api/api";
-import { message } from "antd";
 import { GET_CARD } from "@constants/index";
+import { message } from "antd";
 
 // get cart items
 const getCart = async () => {
@@ -40,10 +40,14 @@ export function useDeleteItemCart() {
 export const checkout = async (items) => {
     const body = { items }
 
-    const response = await axiosInstance.post(`/cart/check_out`, JSON.stringify(body) , {
-        requiresAuth: true, // require user token
-    });
-    return response.data;
+    try {
+        const response = await axiosInstance.post(`/cart/check_out`, JSON.stringify(body) , {
+            requiresAuth: true, // require user token
+        });
+        return response.data;
+    } catch (error) {
+        message.error(error?.response?.data?.message);
+    }
 };
 
 export function useCheckout() {
