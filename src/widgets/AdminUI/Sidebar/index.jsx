@@ -25,11 +25,11 @@ const Sidebar = (props) => {
             label: "Products",
             icon: <ProductIcon className="scale-75"/>,
         },
-        {
-            role: ["admin", "ql_transaction"],
-            label: "Transaction",
-            icon: <TransactionIcon className="scale-75"/>,
-        },
+        // {
+        //     role: ["admin", "ql_transaction"],
+        //     label: "Transaction",
+        //     icon: <TransactionIcon className="scale-75"/>,
+        // },
     ];
 
     return(

@@ -16,14 +16,15 @@ const Products = () => {
     const { isLoading: isLoadingCategpories, data: dataCategories } = useGetCategories(params);
     const { isLoading: isLoadingProducts, data: dataProducts } = useGetProducts(location, params);
 
-    const onClick = (item) => {
+    const onClick = ({item, key, keyPath}) => {
+        console.log({item});
         navigate(
             {
-                pathname: `/products/${item?.item?.props?.route}`,
+                pathname: `/products/${item?.props?.route}`,
             },
             {
                 state: {
-                    key: item?.key
+                    key: key
                 }
             }
         )
@@ -45,14 +46,14 @@ const Products = () => {
     };
 
     return (
-        <ProductContainer isLoading={isLoadingCategpories || isLoadingProducts}>
+        <ProductContainer >
             <ProductSidebarWrapper>
                 <ProductSidebar
                     category={dataCategories?.formattedData}
                     onClick={onClick}
                 />
             </ProductSidebarWrapper>
-            <ProductListWrapper>
+            <ProductListWrapper isLoading={isLoadingCategpories || isLoadingProducts}>
                 <ProductList
                     handleSelect={handleSelect}
                     data={dataProducts?.productListAll_DataFormat}

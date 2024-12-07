@@ -1,11 +1,6 @@
 import React from "react";
 
-import Loading from "@widgets/Loading/Loading";
-
-const ProductContainer = ({isLoading, ...props}) => {
-
-    if (isLoading) return <div className="w-full h-full"><Loading /></div>
-
+const ProductContainer = (props) => {
     return (
         <div className="w-full h-full flex flex-col lg:flex-row" {...props} />
     );

@@ -11,6 +11,7 @@ import { InfoProductDetailColor, InfoProductDetailColorName, InfoProductDetailHe
 import ProductDetailColorPick from "../ProductDetailColorPick";
 import ProductDetailSize from "../ProductDetailSize";
 import ProductDetailQantity from "../ProductDetailQantity";
+import { SUCCESS } from "@utils/message";
 
 const ID_TEXT_NAME_COLOR='text-name-color'
 
@@ -111,8 +112,9 @@ const InfoProductDetail = ({ data, handleGotoImage }) => {
         setState((prev) => ({ ...prev, loadingAddCart: true }));
         const result = await addToCart(cart);
         if (result?.success) {
-            getQuantity()
+            getQuantity();
             setState((prev) => ({ ...prev, loadingAddCart: false }));
+            message.success(SUCCESS);
         } else {
             if (result?.message === TOKEN_INVALID || result?.message === NOT_AUTHENTICATION) {
                 logAgain();
