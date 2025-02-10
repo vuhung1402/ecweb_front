@@ -11,7 +11,7 @@ import CheckoutPaymentMethod from "@_components/Checkout/CheckoutPaymentMethod";
 import ModalAddAddress from "@_components/Checkout/ModalAddress";
 import ProductCard from "@_components/Checkout/ProductCard";
 
-import { useCreateOrder, useGetAddressInfo } from "./function";
+import { useApplyVoucher, useCreateOrder, useGetAddressInfo, useGetReleasedVoucher } from "./function";
 import useCheckoutStore from "@store/checkout";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { calculateShippingFee, formatCurrencyVN, getProvinces, logAgain } from "@utils/function";
@@ -26,13 +26,16 @@ const CheckOut = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { order } = useCheckoutStore()
+    const { order, codeVoucherDiscount, codeVoucherShipping } = useCheckoutStore()
     const { mutate }  = useCreateOrder()
     const { data: addressInfo, refetch } = useGetAddressInfo()
+    const { data: voucher } = useGetReleasedVoucher()
     const { getQuantity } = useGetCartQuantity()
 
+    const mutateApplyVoucher = useApplyVoucher();
+
     const [state, setState] = useState({
-        price: location?.state?.order?.total_price,
+        price: order?.total_price,
         shippingFee: 0,
         addresses: undefined,
         paymentMethod: 0,
@@ -127,9 +130,7 @@ const CheckOut = () => {
 
         mutate(body, {
             onSuccess: (res) => {
-
                 getQuantity()
-
                 if (res?.paymentUrl) {
                     window.open(res?.paymentUrl, '_blank')
                 } else {
@@ -154,6 +155,24 @@ const CheckOut = () => {
 
     const handleInsertAddress = () => {
         setState(prev => ({ ...prev, insertAddress: !state.insertAddress }));
+    }
+
+    const applyVoucher = () => {
+        const body = {
+            code: [codeVoucherDiscount, codeVoucherShipping],
+            shippingFee: state.shippingFee,
+            price: order?.total_price,
+        }
+
+        mutateApplyVoucher.mutateAsync(body, {
+            onSuccess: (res) => {
+                setState(prev => ({ ...prev, price: res?.discountedPrice, shippingFee: res?.discountedShippingFee }));
+                message.success('Áp dụng mã giảm giá thành công');
+            },
+            onError: (error) => {
+                message.error(error?.response?.data?.message);
+            }
+        })
     }
 
     return (
@@ -248,16 +267,20 @@ const CheckOut = () => {
                     })}
                 </div>
 
-                <CheckoutVoucher />
+                <CheckoutVoucher 
+                    discountVouchers = {voucher?.dicountVouchers}
+                    shippingVouchers = {voucher?.shippingVouchers}
+                    applyVoucher={applyVoucher}
+                />
 
                 <CheckoutPrice
                     shippingFee={state.shippingFee}
                     isCollapse={state.isCollapse}
-                    price={order?.total_price}
+                    price={state?.price}
                 />
 
                 <CheckoutTotal
-                    price={order?.total_price}
+                    price={state?.price}
                     isCollapse={state.isCollapse}
                     shippingFee={state.shippingFee}
                 />

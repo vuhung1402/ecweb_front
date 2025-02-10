@@ -133,7 +133,7 @@ const AddressCard = (props) => {
 
     // handle when delete address
     const handleDeleteAddress = () => {
-        deleteAddressMutation(addressId, {
+        deleteAddressMutation(address?._id, {
             onSuccess: () => {
                 refetch()
             },

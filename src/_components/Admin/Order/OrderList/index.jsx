@@ -7,8 +7,8 @@ import { OrderListFilterWrapper, OrderListWrapper } from "@pages/admin/orders/Or
 import OrderListFilter from "@_components/Admin/Order/OrderListFilter";
 
 const OrderList = (props) => {
-    const { orders, isLoadingList } = props;
-    const { handleOrderDetail } = props;
+    const { orders, isLoadingList, query } = props;
+    const { handleOrderDetail, handleChangeInfor } = props;
 
     const [selectedRowKey, setSelectedRowKey] = useState(null); // Track selected row
 
@@ -65,7 +65,10 @@ const OrderList = (props) => {
     return (
         <OrderListWrapper>
             <OrderListFilterWrapper>
-                <OrderListFilter/>
+                <OrderListFilter 
+                    handleChangeInfor={handleChangeInfor}
+                    query={query}
+                />
             </OrderListFilterWrapper>
             {
                 isLoadingList ? <Loading /> :
@@ -73,7 +76,7 @@ const OrderList = (props) => {
                         rootClassName={`${orders?.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
                         className="font-bold"
                         columns={columns}
-                        dataSource={orders.map(order => ({ ...order, key: order.Order_id }))}
+                        dataSource={orders?.map(order => ({ ...order, key: order.Order_id }))}
                         bordered
                         pagination={{
                             hideOnSinglePage: true,

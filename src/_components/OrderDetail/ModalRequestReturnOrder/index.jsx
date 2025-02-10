@@ -1,8 +1,12 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { handleUploadListImage } from "@utils/function";
+import { useRequestReturnOrder } from "@pages/OrderDetail/function";
+import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
+import { handleUploadListImage, logAgain } from "@utils/function";
+import { SUCCESS } from "@utils/message";
 import { Image, message, Modal, Upload } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const getBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -13,8 +17,10 @@ const getBase64 = (file) =>
     });
 
 const ModalRequestReturnOrder = (props) => {
-    const { open } = props;
-    const { handleOpenModal } = props;
+    const { open, OrderId } = props;
+    const { handleOpenModal, refetchOrderDetail, refetchOrderHistory } = props;
+
+    const navigate = useNavigate();
 
     const [state, setState] = useState({
         note: '',
@@ -22,6 +28,8 @@ const ModalRequestReturnOrder = (props) => {
         previewImage: '',
         fileList: [],
     })
+
+    const mutateRequestReturnOrder = useRequestReturnOrder();
 
     const uploadButton = (
         <button
@@ -47,20 +55,38 @@ const ModalRequestReturnOrder = (props) => {
             file.preview = await getBase64(file.originFileObj);
         }
 
-        setState((prev) => ({...prev, previewImage: file.url || file.preview, previewOpen: true}));
+        setState((prev) => ({ ...prev, previewImage: file.url || file.preview, previewOpen: true }));
     };
     const handleChange = ({ fileList: newFileList }) => {
-        setState((prev) => ({...prev, fileList: newFileList}));
+        setState((prev) => ({ ...prev, fileList: newFileList }));
     };
 
     const onOk = () => {
         handleUploadListImage(state.fileList)
             .then(array_image => {
                 const body = {
-                    note: state.note,
-                    images: array_image.result
+                    Order_id: OrderId,
+                    description: state.note,
+                    list_image: array_image.result
                 }
-                console.log({body})
+                console.log({ body })
+                mutateRequestReturnOrder.mutateAsync(body, {
+                    onSuccess: () => {
+                        handleOpenModal();
+                        refetchOrderDetail();
+                        refetchOrderHistory();
+                        message.success(SUCCESS);
+                    },
+                    onError: (error) => {
+                        const response = error?.response?.data;
+                        if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
+                            logAgain();
+                            navigate('/login');
+                        } else {
+                            message.error(response?.message);
+                        }
+                    }
+                })
             })
             .catch(error => {
                 message.error("Đã xảy ra lỗi khi xử lý ảnh.");
@@ -75,6 +101,9 @@ const ModalRequestReturnOrder = (props) => {
                 open={open}
                 onCancel={handleOpenModal}
                 onOk={onOk}
+                okButtonProps={{
+                    loading: mutateRequestReturnOrder.isPending
+                }}
                 okText="Gửi yêu cầu"
                 cancelText="Huỷ"
             >
@@ -85,7 +114,7 @@ const ModalRequestReturnOrder = (props) => {
                         "margin-bottom": "10px",
                     }}
                     value={state.note}
-                    onChange={(e) => setState((prev) => ({...prev, note: e.target.value}))}
+                    onChange={(e) => setState((prev) => ({ ...prev, note: e.target.value }))}
                 />
                 <div>
                     Hình ảnh hư hại (6 hình)
@@ -109,8 +138,8 @@ const ModalRequestReturnOrder = (props) => {
                         }}
                         preview={{
                             visible: state.previewOpen,
-                            onVisibleChange: (visible) => setState((prev) => ({...prev, previewOpen: visible})),
-                            afterOpenChange: (visible) => !visible && setState((prev) => ({...prev, previewImage: ''})),
+                            onVisibleChange: (visible) => setState((prev) => ({ ...prev, previewOpen: visible })),
+                            afterOpenChange: (visible) => !visible && setState((prev) => ({ ...prev, previewImage: '' })),
                         }}
                         src={state.previewImage}
                     />

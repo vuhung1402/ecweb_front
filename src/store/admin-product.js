@@ -1,3 +1,4 @@
+import { voucherStatus, voucherType } from '@constants/index';
 import { create } from 'zustand';
 
 const initialState = {
@@ -5,6 +6,8 @@ const initialState = {
     activeKey:'',
     modalType: '',
     deleteTab:'',
+    statusVoucher: voucherStatus.UNRELEASED,
+    typeVoucher: '',
     isModalOpen: false,
 }
 
@@ -18,7 +21,9 @@ const useAdminProductStore = create((set) => ({
         { 
             isModalOpen: !isModalOpen 
         }
-    ), 
+    ),
+    setTypeVoucher: (typeVoucher) => set({typeVoucher}), 
+    setStatusVoucher: (statusVoucher) => set({statusVoucher}),
     clear: () => set({ ...initialState })
 }));
 

@@ -120,6 +120,24 @@ export const logAgain = () => {
     localStorage.removeItem("token");
 }
 
+export const buildApiParams = (params) => {
+    // Kiểm tra nếu params không phải là object
+    if (typeof params !== "object" || params === null) {
+        return "";
+    }
+
+    // Sử dụng Object.entries để duyệt qua các cặp key-value
+    return Object.entries(params)
+        .map(([key, value]) => {
+            if (value === null || value === undefined) {
+                return ''; // Bỏ qua giá trị null hoặc undefined
+            }
+            return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        })
+        .filter(param => param) // Loại bỏ các chuỗi trống
+        .join("&"); // Nối các cặp key-value bằng dấu &
+}
+
 export const getLevelKeys = (items1) => {
     const key = {};
     const func = (items2, level = 1) => {

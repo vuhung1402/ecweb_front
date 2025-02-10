@@ -5,6 +5,7 @@ import OrderList from "@_components/Admin/Order/OrderList";
 
 import { statusOrder } from "@constants/index";
 import OrdersContainer from "./OrdersContainer";
+import { query } from "firebase/database";
 
 const Orders = (props) => {
 
@@ -14,14 +15,14 @@ const Orders = (props) => {
 
     const [state, setState] = useState({
         tab: 1,
+        query: '?status=1&type_sort=1',
     })
 
 
     const handleChangeTab = async (key) => {
-        setState((prev) => ({ ...prev, tab: key}));
+        setState((prev) => ({ ...prev, tab: key, query: `?status=${key}&type_sort=1`}));
         localStorage.setItem("orderTab", key);
         handleChangeInfor(`?status=${key}&type_sort=1`, 'query')
-        setState((prev) => ({ ...prev, tab: key}));
     }
 
     return (
@@ -40,6 +41,8 @@ const Orders = (props) => {
                                 orders={orders}
                                 isLoadingList={isGetOrderList}
                                 handleOrderDetail={handleOrderDetail}
+                                handleChangeInfor={handleChangeInfor}
+                                query={state.query}
                             />
                         )
                     }

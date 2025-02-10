@@ -26,7 +26,10 @@ import AdminContainer from './AdminContainer';
 import { BackWrapper, ContentWrapper, SildeBarContentWrapper, SildeBarWrapper } from './Admin';
 import UserDetail from './UserDetail';
 import { useGetUsers } from './user/function';
-import { ADMIN, QL_ORDER, QL_PRODUCT, QL_TRANSACTION, QL_USER } from '@constants/index';
+import { ADMIN, QL_ORDER, QL_PRODUCT, QL_TRANSACTION, QL_USER, voucherStatus } from '@constants/index';
+import Voucher from './voucher';
+import VoucherDetail from './VoucherDetail';
+import { useGetVoucherList } from './voucher/function';
 
 const Admin = () => {
     const navigate = useNavigate();
@@ -39,19 +42,21 @@ const Admin = () => {
         query: '?status=1&type_sort=1',
         email: '',
         orderId: '',
+        voucherId: '',
         userId: '',
         productId: '',
         productType: '',
+        voucherMode: '',
         isModifiedProduct: false,
         dataOrder: [],
     });
 
     useEffect(() => {
-        if  (!user?.role?.includes(ADMIN) && !user?.role?.includes(QL_ORDER) && !user?.role?.includes(QL_PRODUCT) 
-            && !user?.role?.includes(QL_TRANSACTION) && !user?.role?.includes(QL_USER))  {
+        if (!user?.role?.includes(ADMIN) && !user?.role?.includes(QL_ORDER) && !user?.role?.includes(QL_PRODUCT)
+            && !user?.role?.includes(QL_TRANSACTION) && !user?.role?.includes(QL_USER)) {
             navigate('/404')
         }
-    },[]);
+    }, []);
 
     // get tab from local storage
     // useEffect(() => {
@@ -75,7 +80,7 @@ const Admin = () => {
         }
     }
 
-    const { categoryId } = useAdminProductStore();
+    const { categoryId, statusVoucher, typeVoucher, setStatusVoucher } = useAdminProductStore();
 
     //get orderlist
     const { isLoading: isGetOrderList, data: orders, refetch: refetchOrderList } = useGetOrderList(state.query, user?.role);
@@ -84,7 +89,9 @@ const Admin = () => {
 
     const { isLoading: isGetProducts, data: products, refetch: refetchProducts } = useGetProducts(categoryId, user?.role);
 
-    const { isLoading: isGetUsers, data: userData, refetch: refetchUsers ,isRefetching: isRefetchingUsers} = useGetUsers(state.email, user?.role);
+    const { isLoading: isGetUsers, data: userData, refetch: refetchUsers, isRefetching: isRefetchingUsers } = useGetUsers(state.email, user?.role);
+
+    const { isLoading: isGetVouchers, data:vouchers, refetch: refetchVoucher  } = useGetVoucherList(typeVoucher, statusVoucher, user?.role);
 
     // const { setRoles, roles } = useUserDetailStore();
 
@@ -108,7 +115,7 @@ const Admin = () => {
                 right.classList.remove('hidden');
             }
         };
-        setState(prev => ({  ...prev, userId: userId, orderId: orderId  }));
+        setState(prev => ({ ...prev, userId: userId, orderId: orderId }));
     };
 
     // go to product detail
@@ -122,7 +129,7 @@ const Admin = () => {
                 right.classList.remove('hidden');
             }
         };
-        setState(prev => ({  ...prev, productId: productId, productType: type  }));
+        setState(prev => ({ ...prev, productId: productId, productType: type }));
     };
 
     const handleUserDetail = (user_id) => {
@@ -136,6 +143,19 @@ const Admin = () => {
             }
         };
         setState(prev => ({ ...prev, userId: user_id }))
+    }
+
+    const handleVoucherDetail = (voucherId, mode) => {
+        if (iw < 960) {
+            const left = document.getElementById('admin-order-left');
+            const right = document.getElementById('admin-order-right');
+
+            if (left && right) {
+                left.classList.add('hidden');
+                right.classList.remove('hidden');
+            }
+        };
+        setState(prev => ({ ...prev, voucherId: voucherId, voucherMode: mode }))
     }
 
     // back from detail in mobile
@@ -154,9 +174,10 @@ const Admin = () => {
         localStorage.removeItem('category_id');
         localStorage.setItem('activeTab', `?url=${tab}`);
         localStorage.setItem('currentTab', tab);
-        setState((prev) => ({ 
-            ...prev, 
-            tab: tab, 
+        setStatusVoucher(voucherStatus.UNRELEASED);
+        setState((prev) => ({
+            ...prev,
+            tab: tab,
             query: '?status=1&type_sort=1',
         }));
 
@@ -167,7 +188,7 @@ const Admin = () => {
 
     // change product
     const handleModifiedProduct = () => {
-        setState(prev => ({  ...prev, isModifiedProduct: !prev.isModifiedProduct  }));
+        setState(prev => ({ ...prev, isModifiedProduct: !prev.isModifiedProduct }));
     };
 
     // back to home
@@ -209,7 +230,13 @@ const Admin = () => {
                 handleDetail={handleDetail}
             />
         ),
-        3: <Transaction url={location.search} />,
+        3: <Voucher 
+                url={location.search} 
+                handleVoucherDetail={handleVoucherDetail}
+                isGetVouchers={isGetVouchers}
+                vouchers={vouchers}
+                refetchVoucher={refetchVoucher}
+            />,
     }[state.tab || 0];
 
     const renderDetailTab = {
@@ -223,13 +250,7 @@ const Admin = () => {
             />
         ),
         1: (
-            <UserDetail 
-                userId={state.userId}
-                refetchUsers={refetchUsers}
-            />
-        ),
-        1: (
-            <UserDetail 
+            <UserDetail
                 userId={state.userId}
                 refetchUsers={refetchUsers}
             />
@@ -243,6 +264,14 @@ const Admin = () => {
                 handleBack={handleBack}
             />
         ),
+        3: (
+            <VoucherDetail
+                voucherId={state.voucherId}
+                mode={state.voucherMode}
+                refetchVoucher={refetchVoucher}
+                handleBack={handleBack}
+            />
+        )
     }[state.tab || 0];
 
     return (

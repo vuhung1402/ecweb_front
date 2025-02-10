@@ -86,3 +86,22 @@ export function useGetOrderHistory (Order_id) {
         enabled:!!Order_id
     })
 }
+
+export const requestReturnOrder = async(body) => {
+    try{
+        const response = await axiosInstance.post(`order/add_description_fop_refund`, JSON.stringify(body), {
+            requiresAuth: true,
+        });
+        return response.data;
+    }catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+    }
+}
+
+export function useRequestReturnOrder () {
+    return useMutation(
+        {
+            mutationFn: (body) => requestReturnOrder(body),
+        }
+    );
+}

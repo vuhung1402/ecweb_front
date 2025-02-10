@@ -19,8 +19,8 @@ const OrderDetail = (props) => {
     const iw = useWindowSize().width;
     const navigate = useNavigate();
 
-    const arrayNotShowRefund = [0, 1, 2, 3, 5, 6, 7];
-    const arrayNotShowCancelOrder = [0, 3, 4, 5, 6]
+    const arrayNotShowRefund = [0, 1, 2, 3, 4, 5, 6, 7, 9];
+    const arrayNotShowCancelOrder = [0, 3, 4, 5, 6, 8, 9]
 
     const { isLoading: isGetOrderDetail, data: detailData, refetch: refetchOrderDetail } = useGetOrderDetail(orderId, userId);
 
@@ -170,7 +170,7 @@ const OrderDetail = (props) => {
                             type="primary"
                             className="font-bold"
                         >
-                            Hoàn tiền
+                            {detailData?.formatted_order_detail?.type_pay === 0 ? 'Trả hàng' : 'Hoàn tiền'}
                         </Button>
                     </Popconfirm>
                 }
