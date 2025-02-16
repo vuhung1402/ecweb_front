@@ -1,10 +1,10 @@
 import React from "react";
 import { Button } from "antd";
 
-import MotionBox from "@component/MotionBox";
+import MotionBox from "@widgets/MotionBox";
 import { fadeIn } from "@utils/animation";
 
-import CardProduct from "@component/CardProduct/CardProduct";
+import CardProduct from "@widgets/CardProduct/CardProduct";
 
 const HomeProduct = (props) => {
 

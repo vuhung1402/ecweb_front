@@ -1,261 +1,231 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, message, Popconfirm } from "antd";
 
-import SideBar from "@pages/Profile/SideBar";
-import ProductCard from "./productCard";
-import PaymentInfor from "./paymentInfor";
-import UserInfo from "./userInfo";
-import OrderStatus from "@component/OrderStatus";
-import Loading from "@component/Loading/Loading";
+import SideBar from "@widgets/SideBar";
+import ProductCard from "../../_components/OrderDetail/productCard";
+import PaymentInfor from "../../_components/OrderDetail/paymentInfor";
+import UserInfo from "../../_components/OrderDetail/userInfo";
+import OrderStatus from "@widgets/OrderStatus";
 
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { cancelOrder, getOrderDetail, orderHistory } from "./function";
+import { useCancelOrder, useGetOrderDetail, useGetOrderHistory, useRefundMoney } from "./function";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { logAgain } from "@utils/function";
 import { FAIL, SUCCESS } from "@utils/message";
-import { refundMoney, updateStatuOrder } from "@pages/admin/OrderDetail/function";
+import OderDetailContainer from "./OrderDetailContainer";
+import { AddressInforDetail, AddressInforTitle, AddressInforWrapper, BackTitle, BackWrapper, ContentOrderInfoWrapper, ContentWrapper, InforTitle, InforWrapper, OrderActionWrapper, OrderId, OrderInfoWrapper, OrderStatusWrapper, PaymentInforWrapper, PaymentMethod, PaymentMethodContentWrapper, PaymentMethodWrapper, PaymentTitle, SideBarWrapper, Title, UserInforContentWrapper, UserInforDetailWrapper, UserInforTitle, UserInforWrapper } from "./OrderDetail";
+import ModalRequestReturnOrder from "@_components/OrderDetail/ModalRequestReturnOrder";
+import ReturnRequest from "@_components/Admin/OrderDetail/ReturnRequest";
 
 const OderDetail = () => {
     const navigate = useNavigate();
+
     const param = useParams();
 
     const [state, setState] = useState({
-        data: undefined,
-        orderHistory: [],
-        isLoading: false,
-        quantity: 0,
-    })
+        openModal: false,
+    });
+
+    const { mutateAsync: muatateCancelOrder, isPending: isPendingCancelOrder } = useCancelOrder();
+
+    const { mutateAsync: mutateRefundMoney, isPending: isPendingRefundMoney } = useRefundMoney();
+
+    const { data: orderDetail, isLoading: isGetOrderDetail,
+        refetch: refetchOrderDetail } = useGetOrderDetail(param?.id)
+
+    const { data: orderHistory, refetch: refetchOrderHistory } = useGetOrderHistory(param?.id)
 
     const paymentMethdod = {
         0: "Nhận tiền khi giao hàng",
         1: "Thanh toán bằng momo"
-    }[state.data?.type_pay]
+    }[orderDetail?.formatted_order_detail?.type_pay]
 
+    const isShowRequestReturn = [6, 8, 9];
 
-    const getData = async () => {
-        const response = await getOrderDetail(param?.id);
-        if (response?.success) {
-            const quantity = response?.formatted_order_detail?.items?.reduce((total, item) => total += item?.quantity, 0);
-            setState((prev) => ({
-                ...prev,
-                data: response?.formatted_order_detail,
-                quantity: quantity,
-            }));
-        } else {
-            if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
-                logAgain();
-                navigate('/login');
-            } else {
-                message.error(FAIL);
-            }
-        }
-    }
-
-    const getHistory = async () => {
-        // {
-        //     "success": true,
-        //     "log": [
-        //         {
-        //             "status": 1,
-        //             "day_add": "2024-09-18T08:16:25.869Z",
-        //             "_id": "66ead3980cb95c76fbc85e6d"
-        //         },
-        //         {
-        //             "status": 2,
-        //             "day_add": "2024-09-18T13:20:24.952Z",
-        //             "_id": "66ead3980cb95c76fbc85e6e"
-        //         }
-        //     ],
-        //     "color": "text-green-500"
-        // }
-        const res = await orderHistory(param?.id);
-        if (res?.success) {
-            setState((prev) => ({
-                ...prev,
-                orderHistory: res?.log,
-            }));
-        } else {
-            if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
-                logAgain();
-                navigate('/login');
-            } else {
-                message.error(FAIL);
-            }
-        }
+    const handleOpenModal = () => {
+        setState(prev => ({ ...prev, openModal: !state.openModal }));
     }
 
     const handleRedundMoney = async () => {
-        const response = await refundMoney(state.data?.Order_id);
-        if (response?.success) {
-            message?.success(SUCCESS)
-            setState((prev) => ({ ...prev, isLoading: false }))
-        } else {
-            if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
-                logAgain();
-                navigate('/login');
-            } else {
-                message.error(FAIL);
-                setState((prev) => ({ ...prev, isLoading: false }))
-            }
+        const body = {
+            Order_id: orderDetail?.formatted_order_detail?.Order_id,
         }
+        mutateRefundMoney(body, {
+            onSuccess: () => {
+                message?.success(SUCCESS);
+                refetchOrderDetail();
+            },
+            onError: (error) => {
+                const response = error?.response?.data;
+                if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
+                    logAgain();
+                    navigate('/login');
+                } else {
+                    message.error(FAIL);
+                }
+            }
+        });
     }
 
     const cancelShipCode = async () => {
-        setState((prev) => ({ ...prev, isLoading: true }))
-        const response = await cancelOrder(state.data?.Order_id)
-        if (response?.success) {
-            message?.success(SUCCESS)
-            setState((prev) => ({ ...prev, isLoading: false }))
-        } else {
-            if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
-                logAgain();
-                navigate('/login');
-            } else {
-                message.error(FAIL);
-                setState((prev) => ({ ...prev, isLoading: false }))
-            }
+        // setState((prev) => ({ ...prev, isLoading: true }))
+        const body = {
+            Order_id: orderDetail?.formatted_order_detail?.Order_id,
         }
+        muatateCancelOrder(body, {
+            onSuccess: () => {
+                message?.success(SUCCESS);
+                refetchOrderDetail();
+            },
+            onError: (error) => {
+                const response = error?.response?.data;
+                if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
+                    logAgain();
+                    navigate('/login');
+                } else {
+                    message.error(FAIL);
+                }
+            }
+        })
     }
 
     const handleCancelOrder = async () => {
-        if (state.data?.type_pay === 0) {
+        if (orderDetail?.formatted_order_detail?.type_pay === 0) {
             cancelShipCode();
         } else {
             handleRedundMoney();
         }
     }
 
-    useEffect(() => {
-        getData();
-        getHistory();
-    }, [])
-
     return (
-        <>
-            {
-                state?.data === undefined ? <Loading />
-                    :
-                    <div
-                        className="w-full"
-                        style={{
-                            height: 'calc(100% - 80px)',
-                        }}
-                    >
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                            <h1 className="text-3xl font-bold text-center mb-8">Lịch sử mua hàng</h1>
-                        </div>
-                        <div className="flex flex-col md:flex-row gap-8 w-full md:w-[750px] me:w-[970px] xl:w-[1170px] mx-auto">
-                            <div className="md:w-1/4 px-5 md:px-0">
-                                <SideBar />
-                            </div>
-                            <div className="w-full md:w-3/4 h-full my-3">
-                                <div className="w-full h-full px-5 md:px-0">
-                                    <div className="mb-2 flex items-center gap-3 hover:bg-[rgb(219,219,219)] w-fit transition-colors duration-300 cursor-pointer py-1 px-2 rounded-md">
-                                        <ArrowLeftOutlined
-                                            className="cursor-pointer"
-                                            onClick={() => navigate('/order')}
+        <OderDetailContainer isGetOrderDetail={isGetOrderDetail}>
+            <Title />
+            <ContentWrapper>
+                <SideBarWrapper>
+                    <SideBar />
+                </SideBarWrapper>
+                <OrderInfoWrapper>
+                    <ContentOrderInfoWrapper>
+                        <BackWrapper>
+                            <ArrowLeftOutlined
+                                className="cursor-pointer"
+                                onClick={() => navigate('/order')}
+                            />
+                            <BackTitle />
+                        </BackWrapper>
+                        <InforWrapper>
+                            <InforTitle order_date={orderDetail?.formatted_order_detail?.order_date} />
+                            <UserInforWrapper>
+                                <UserInforContentWrapper>
+                                    <UserInforTitle />
+                                    <UserInforDetailWrapper>
+                                        <UserInfo
+                                            address={orderDetail?.formatted_order_detail?.address}
+                                            phone={orderDetail?.formatted_order_detail?.phone}
+                                            name={orderDetail?.formatted_order_detail?.name}
+                                            email={orderDetail?.formatted_order_detail?.email}
                                         />
-                                        <div className="text-sm font-semibold">Quay về</div>
-                                    </div>
-                                    <div className="border rounded-md">
-                                        <div className="h-fit flex items-center gap-6 mb-2 border-b px-5 py-2">
-                                            <div className="text-lg font-bold uppercase">Chi tiết đơn hàng</div>
-                                            <div className="font-bold italic text-sm opacity-60">{state.data?.order_date}</div>
-                                        </div>
-                                        <div className="flex flex-col me:grid me:grid-cols-3 px-5 gap-3 mb-2">
-                                            <div className="border rounded-md h-[200px]">
-                                                <div className="w-full px-3 py-2 uppercase text-sm font-bold text-neutral-400 border-b">
-                                                    Thông tin khách hàng
-                                                </div>
-                                                <div className="w-full">
-                                                    <UserInfo
-                                                        address={state?.data?.address}
-                                                        phone={state?.data?.phone}
-                                                        name={state?.data?.name}
-                                                        email={state?.data?.email}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="border rounded-md h-[200px]">
-                                                <div className="w-full px-3 py-2 uppercase text-sm font-bold text-neutral-400 border-b">
-                                                    Địa chỉ
-                                                </div>
-                                                <div className="">
-                                                    {state?.data?.address?.street}, {state?.data?.address?.wardName}, {state?.data?.address?.districtName}, {state?.data?.address?.provinceName}
-                                                </div>
-                                            </div>
-                                            <div className="border rounded-md h-[200px]">
-                                                <div className="w-full px-3 py-2 uppercase text-sm font-bold text-neutral-400 border-b">
-                                                    Thông tin thanh toán
-                                                </div>
-                                                <div>
-                                                    <PaymentInfor
-                                                        data={state?.data?.total_price}
-                                                        status={state.data?.status}
-                                                        shippingFee={state.data?.shipping_code}
-                                                        typePay={state.data?.type_pay}
-                                                        price_pay={state.data?.price_pay}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="w-full px-5 mb-2">
-                                            <div className="border px-3 py-2 rounded-md text-sm flex flex-col gap-3">
-                                                <div className="flex gap-3">
-                                                    <div className="font-medium w-28">Mã đơn hàng:</div>
-                                                    <div className="font-bold">{param?.id}</div>
-                                                </div>
-                                                <div className="flex gap-3">
-                                                    <div className="font-medium w-28">Phương thức thanh toán:</div>
-                                                    <div className="font-bold text-green-500">{paymentMethdod}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="flex flex-col gap-3 mb-3">
-                                            <OrderStatus status={state.data?.status} history={state.orderHistory} />
-                                        </div>
+                                    </UserInforDetailWrapper>
+                                </UserInforContentWrapper>
+                                <AddressInforWrapper>
+                                    <AddressInforTitle />
+                                    <AddressInforDetail
+                                        street={orderDetail?.formatted_order_detail?.address?.street}
+                                        wardName={orderDetail?.formatted_order_detail?.address?.wardName}
+                                        districtName={orderDetail?.formatted_order_detail?.address?.districtName}
+                                        provinceName={orderDetail?.formatted_order_detail?.address?.provinceName}
+                                    />
+                                </AddressInforWrapper>
+                                <PaymentInforWrapper>
+                                    <PaymentTitle />
+                                    <PaymentInfor
+                                        data={orderDetail?.formatted_order_detail?.total_price}
+                                        status={orderDetail?.formatted_order_detail?.status}
+                                        shippingFee={orderDetail?.formatted_order_detail?.shipping_code}
+                                        typePay={orderDetail?.formatted_order_detail?.type_pay}
+                                        price_pay={orderDetail?.formatted_order_detail?.price_pay}
+                                    />
+                                </PaymentInforWrapper>
+                            </UserInforWrapper>
+                            <PaymentMethodWrapper>
+                                <PaymentMethodContentWrapper>
+                                    <OrderId id={param?.id} />
+                                    <PaymentMethod paymentMethdod={paymentMethdod} />
+                                </PaymentMethodContentWrapper>
+                            </PaymentMethodWrapper>
+                            <OrderStatusWrapper>
+                                <OrderStatus orderHistory={orderHistory?.log} />
+                            </OrderStatusWrapper>
 
-                                        {
-                                            state?.data?.items?.map((item) => {
-                                                return (
-                                                    <ProductCard data={item} />
-                                                )
-                                            })
-                                        }
+                            {
+                                isShowRequestReturn.includes(orderDetail?.formatted_order_detail?.status)
+                                &&
+                                <ReturnRequest
+                                listImage={orderDetail?.formatted_order_detail?.list_image}
+                                description={orderDetail?.formatted_order_detail?.description}
+                            />
+                            }
 
-                                        {
-                                            state.data?.status === 1 &&
-                                            <div className="flex gap-3 justify-end">
-                                                <Popconfirm
-                                                    title="Huỷ đơn hàng"
-                                                    description="Bạn muốn huỷ đơn hàng này?"
-                                                    cancelText="Huỷ"
-                                                    okText="Xác nhận"
-                                                    onConfirm={
-                                                        // () =>handle(state.data?.type_pay, state.data?.user_id, state.data.Order_id, 5)
-                                                        handleCancelOrder
-                                                    }
-                                                    okButtonProps={{
-                                                        loading: state.isLoading
-                                                    }}
-                                                >
-                                                    <Button
-                                                        type="primary"
-                                                        className="font-bold"
-                                                    >
-                                                        Huỷ
-                                                    </Button>
-                                                </Popconfirm>
-                                            </div>
+                            {
+                                orderDetail?.formatted_order_detail?.items?.map((item) => {
+                                    return (
+                                        <ProductCard data={item} />
+                                    )
+                                })
+                            }
+
+                            {
+                                orderDetail?.formatted_order_detail?.status === 1 &&
+                                <OrderActionWrapper>
+                                    <Popconfirm
+                                        title="Huỷ đơn hàng"
+                                        description="Bạn muốn huỷ đơn hàng này?"
+                                        cancelText="Huỷ"
+                                        okText="Xác nhận"
+                                        onConfirm={
+                                            // () =>handle(state.data?.type_pay, state.data?.user_id, state.data.Order_id, 5)
+                                            handleCancelOrder
                                         }
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            }
-        </>
+                                        okButtonProps={{
+                                            loading: isPendingCancelOrder || isPendingRefundMoney
+                                        }}
+                                    >
+                                        <Button
+                                            type="primary"
+                                            className="font-bold"
+                                        >
+                                            Huỷ
+                                        </Button>
+                                    </Popconfirm>
+                                </OrderActionWrapper>
+                            }
+
+                            {
+                                orderDetail?.formatted_order_detail?.status === 4 &&
+                                <OrderActionWrapper>
+                                    <Button
+                                        type="primary"
+                                        className="font-bold"
+                                        onClick={handleOpenModal}
+                                    >
+                                        Yêu cầu trả hàng
+                                    </Button>
+                                </OrderActionWrapper>
+                            }
+                        </InforWrapper>
+                    </ContentOrderInfoWrapper>
+                </OrderInfoWrapper>
+            </ContentWrapper>
+
+            <ModalRequestReturnOrder
+                open={state.openModal}
+                OrderId={orderDetail?.formatted_order_detail?.Order_id}
+                refetchOrderDetail={refetchOrderDetail}
+                refetchOrderHistory={refetchOrderHistory}
+                handleOpenModal={handleOpenModal}
+            />
+        </OderDetailContainer>
     )
 }
 

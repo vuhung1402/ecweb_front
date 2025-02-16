@@ -1,10 +1,18 @@
-import { Button, Input } from "antd";
+import { Button, Input, message } from "antd";
 import Title from "antd/es/typography/Title";
 import React, { useState } from "react";
+import OTPContainer from "./OTPContainer";
+import { ActionWrapper, ContentWrapper, OTPInputWrapper } from "./OTP";
+import { useResendPass } from "./function";
+import { useForgotPass } from "../ForgotPass/function";
+import { FAIL } from "@utils/message";
 
 const OTPCode = (props) => {
     const { handleChangeTab, handleSentOtp, handleChangeInfo } = props
-    const { loading } = props;
+    const { typeOtp, isPendingVerifyOtp, isPendingVerifyOtpForgotPass, email } = props;
+
+    const { mutateAsync: resendOtpRegister, isPending: isResendOtpRegister } = useResendPass();
+    const { mutateAsync: resnedOtpForgotPass, isPending: isResnedOtpForgotPass } = useForgotPass();
 
     const onChange = (text) => {
         handleChangeInfo("otp", text);
@@ -13,29 +21,56 @@ const OTPCode = (props) => {
         onChange,
     };
 
+    const resentOtp = () => {
+        const body = {
+            email
+        }
+        if(typeOtp === "register"){
+            resendOtpRegister(body, {
+                onSuccess: () => {
+                    message.info("Đã gửi lại otp!!");
+                },
+                onError: () => {
+                    message.error(FAIL);
+                }
+            });
+        }else{
+            resnedOtpForgotPass(body, {
+                onSuccess: () => {
+                    message.info("Đã gửi lại otp!!");
+                },
+                onError: () => {
+                    message.error(FAIL);
+                }
+            });
+        }
+    }
+
     return (
-        <div className=" w-full h-full">
-            <div className="flex flex-col items-center gap-3 w">
-                <div className=" w-full flex flex-col items-center">
+        <OTPContainer>
+            <ContentWrapper>
+                <OTPInputWrapper>
                     <Title level={5}>
                         Nhập mã OTP của bạn vào đây
                     </Title>
                     <Input.OTP
                         mask="🔒" {...sharedProps}
                     />
-                </div>
-                <div className=" w-[252px] flex flex-col gap-3">
+                </OTPInputWrapper>
+                <ActionWrapper>
                     <Button
                         type="primary"
                         className=" w-full"
-                        loading={loading?.status && "sent" === loading?.type}
-                        onClick={() => handleSentOtp("sent")}
+                        loading={isPendingVerifyOtp || isPendingVerifyOtpForgotPass}
+                        onClick={() => handleSentOtp()}
                     >
                         Xác nhận
                     </Button>
                     <Button
                         type="primary"
                         className=" w-full"
+                        loading={isResendOtpRegister || isResnedOtpForgotPass}
+                        onClick={() => resentOtp()}
                     >
                         Gửi lại
                     </Button>
@@ -46,9 +81,9 @@ const OTPCode = (props) => {
                     >
                         Quay lại
                     </Button>
-                </div>
-            </div>
-        </div>
+                </ActionWrapper>
+            </ContentWrapper>
+        </OTPContainer>
     )
 }
 

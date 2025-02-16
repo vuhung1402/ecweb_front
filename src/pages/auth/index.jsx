@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import Login from "./Login/Login";
-import SignUp from "./SignUp/SignUp";
+import Login from "./Login";
+import SignUp from "./SignUp";
 import OTPCode from "./OTPCode";
-import ForgotPass from "./ForgotPass/ForgotPass";
-import { login, verifyOtp, verifyOtpForgotPass } from "./function";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import ForgotPass from "./ForgotPass";
+import { useVerifyOtp, useVerifyOtpForgotPass } from "./function";
 import { message } from "antd";
 import { FAIL, SUCCESS } from "@utils/message";
-import ResetPass from "./ResetPass/ResetPass";
+import ResetPass from "./ResetPass";
+import AuthContainer from "./AuthContainer";
+import { PageTitleWrapper, PageWrapper } from "./Auth";
 
 const Auth = () => {
     const [state, setState] = useState(
@@ -16,6 +16,10 @@ const Auth = () => {
             tab: 0,
             typeOtp: "",
             otp: "",
+            ho: "",
+            ten: "",
+            gender: "",
+            birthday: "",
             email: "",
             password: "",
             user_id: "",
@@ -25,9 +29,25 @@ const Auth = () => {
             },
         }
     );
+    const { mutateAsync: verifyOtp, isPending: isPendingVerifyOtp } = useVerifyOtp();
+    const { mutateAsync: verifyOtpForgotPass, isPending: isPendingVerifyOtpForgotPass } = useVerifyOtpForgotPass();
+
 
     const handleChangeTab = (tab) => {
-        setState((prev) => ({ ...prev, tab: tab }))
+        if (tab === 1) {
+            setState((prev) => (
+                {
+                    ...prev,
+                    tab: tab,
+                    ho: "",
+                    ten: "",
+                    gender: "",
+                    birthday: "",
+                }
+            ))
+        }else{
+            setState((prev) => ({ ...prev, tab: tab }))
+        }
     }
 
     const handleChangeTypeOtp = (type) => {
@@ -41,57 +61,35 @@ const Auth = () => {
         }));
     }
 
-    const handleSentOtp = async (type) => {
-        setState((prev) => ({
-            ...prev,
-            loading:{
-                status: true,
-                type,
-            }
-        }));
-        // {
-        //     "success": true,
-        //     "message": "Email verified successfully",
-        //     "color": "text-green-500"
-        //   }
-
-
+    const handleSentOtp = async () => {
         if (state.typeOtp === "register") {
             const body = {
                 token: state.otp,
+                user_id: state.user_id,
             }
-            const res = await verifyOtp(body, state.user_id);
-            if (res?.success) {
-                message.success(SUCCESS);
-                setState((prev) => ({ ...prev, tab: 0 }));
-            }else{
-                setState((prev) => ({
-                    ...prev,
-                    loading:{
-                        status: false,
-                        type: "",
-                    }
-                }));
-                message.error(FAIL);
-            }
+            verifyOtp(body, {
+                onSuccess: () => {
+                    message.success(SUCCESS);
+                    setState((prev) => ({ ...prev, tab: 0 }));
+                },
+                onError: () => {
+                    message.error(FAIL);
+                }
+            })
         } else {
             const body = {
                 otp: state.otp,
+                user_id: state.user_id,
             }
-            const res = await verifyOtpForgotPass(body, state.user_id);
-            if (res?.success) {
-                message.success(SUCCESS);
-                setState((prev) => ({ ...prev, tab: 4 }));
-            }else{
-                setState((prev) => ({
-                    ...prev,
-                    loading:{
-                        status: false,
-                        type: "",
-                    }
-                }));
-                message.error(FAIL);
-            }
+            verifyOtpForgotPass(body, {
+                onSuccess: () => {
+                    message.success(SUCCESS);
+                    setState((prev) => ({ ...prev, tab: 4 }));
+                },
+                onError: () => {
+                    message.error(FAIL);
+                }
+            })
         }
 
     }
@@ -119,6 +117,12 @@ const Auth = () => {
             ),
             1: (
                 <SignUp
+                    ho={state.ho}
+                    ten={state.ten}
+                    email={state.email}
+                    birthday={state.birthday}
+                    gender={state.gender}
+                    password={state.password}
                     handleChangeTab={handleChangeTab}
                     handleChangeInfo={handleChangeInfo}
                     handleChangeTypeOtp={handleChangeTypeOtp}
@@ -126,14 +130,18 @@ const Auth = () => {
             ),
             2: (
                 <OTPCode
+                    typeOtp={state.typeOtp}
+                    email={state.email}
                     handleChangeTab={handleChangeTab}
                     handleSentOtp={handleSentOtp}
                     handleChangeInfo={handleChangeInfo}
-                    loading={state.loading}
+                    isPendingVerifyOtp={isPendingVerifyOtp}
+                    isPendingVerifyOtpForgotPass={isPendingVerifyOtpForgotPass}
                 />
             ),
             3: (
                 <ForgotPass
+                    email={state.email}
                     handleChangeTab={handleChangeTab}
                     handleChangeInfo={handleChangeInfo}
                     handleChangeTypeOtp={handleChangeTypeOtp}
@@ -151,20 +159,15 @@ const Auth = () => {
     }
 
     return (
-        <div className="flex flex-col me:flex-row w-full h-full">
-            <div
-                className="w-full me:w-1/2 h-auto px-[15px] py-[30px] md:px-0 md:py-0 md:h-full flex justify-center items-center font-semibold text-5xl"
-                style={{
-                    borderRight: '1px solid rgba(5, 5, 5, 0.06)'
-                }}
-            >
+        <AuthContainer>
+            <PageTitleWrapper>
                 {renderPageTitle()}
-            </div>
+            </PageTitleWrapper>
 
-            <div className="w-full py-[60px] px-[15px] me:w-1/2 md:py-[100px] md:px-[80px] me:py-[100px] me:px-[60px] xl:p-[100px]">
+            <PageWrapper>
                 {renderPage()}
-            </div>
-        </div>
+            </PageWrapper>
+        </AuthContainer>
     )
 }
 

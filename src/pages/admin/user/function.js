@@ -1,5 +1,5 @@
 import { axiosInstance } from "@api/api"
-import { GET_USERS_ADMIN } from "@constants/index";
+import { ADMIN, GET_USERS_ADMIN, QL_USER } from "@constants/index";
 import { useQuery } from "@tanstack/react-query";
 
 export const getUsers = async (email) => {
@@ -12,12 +12,12 @@ export const getUsers = async (email) => {
     return response.data;
 }
 
-export function useGetUsers(email){
+export function useGetUsers(email, role){
     return useQuery(
         {
             queryFn: () => getUsers(email),
             queryKey: [GET_USERS_ADMIN, email],
-            // enabled: false,
+            enabled: role?.includes(ADMIN) || role?.includes(QL_USER),
         }
     )
 }

@@ -3,26 +3,33 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 
-import SildeBar from '@component/AdminUI/Sidebar';
+import Sidebar from '@widgets/AdminUI/Sidebar';
 import Orders from './orders';
 import User from './user';
 import Products from './products';
 import Transaction from './transaction';
-import ChatBox from './chatbox';
 import OrderDetail from './OrderDetail';
-import NewProduct from '@component/AdminUI/NewProduct';
+import NewProduct from '@pages/admin/NewProduct';
 
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@component/Resizable';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@widgets/Resizable';
 import { useUserPackageHook } from '@redux/hooks/userHook';
 import useWindowSize from '../../hooks/useWindowSize';
-import { getOrderList } from './orders/function';
+import { getOrderList, useGetOrderList } from './orders/function';
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from '@utils/error';
 import { logAgain } from '@utils/function';
 import { FAIL } from '@utils/message';
 
 import './style.scss';
+import { useGetCategories, useGetProducts } from './products/function';
+import useAdminProductStore from '@store/admin-product';
+import AdminContainer from './AdminContainer';
+import { BackWrapper, ContentWrapper, SildeBarContentWrapper, SildeBarWrapper } from './Admin';
 import UserDetail from './UserDetail';
 import { useGetUsers } from './user/function';
+import { ADMIN, QL_ORDER, QL_PRODUCT, QL_TRANSACTION, QL_USER, voucherStatus } from '@constants/index';
+import Voucher from './voucher';
+import VoucherDetail from './VoucherDetail';
+import { useGetVoucherList } from './voucher/function';
 
 const Admin = () => {
     const navigate = useNavigate();
@@ -32,19 +39,31 @@ const Admin = () => {
 
     const [state, setState] = useState({
         tab: 0,
+        query: '?status=1&type_sort=1',
+        email: '',
         orderId: '',
+        voucherId: '',
         userId: '',
         productId: '',
         productType: '',
+        voucherMode: '',
         isModifiedProduct: false,
         dataOrder: [],
     });
 
     useEffect(() => {
-        if (!user?.isAdmin) {
+        if (!user?.role?.includes(ADMIN) && !user?.role?.includes(QL_ORDER) && !user?.role?.includes(QL_PRODUCT)
+            && !user?.role?.includes(QL_TRANSACTION) && !user?.role?.includes(QL_USER)) {
             navigate('/404')
         }
     }, []);
+
+    // get tab from local storage
+    // useEffect(() => {
+    //     const activeTab = localStorage.getItem('activeTab');
+    //     activeTab?.length > 0 ? navigate({ search: activeTab }) : navigate({ search: `?url=${state.tab}` });
+    //     setState((prev) => ({ ...prev, tab: localStorage.getItem('currentTab') }));
+    // }, [])
 
     // get data order
     const getDataOrder = async (query) => {
@@ -61,18 +80,29 @@ const Admin = () => {
         }
     }
 
+    const { categoryId, statusVoucher, typeVoucher, setStatusVoucher } = useAdminProductStore();
+
+    //get orderlist
+    const { isLoading: isGetOrderList, data: orders, refetch: refetchOrderList } = useGetOrderList(state.query, user?.role);
+
+    const { isLoading: isGetCategories, isSuccess: isGetCategoriesSuccess, data: categories, refetch: refetchCategories } = useGetCategories(user?.role);
+
+    const { isLoading: isGetProducts, data: products, refetch: refetchProducts } = useGetProducts(categoryId, user?.role);
+
+    const { isLoading: isGetUsers, data: userData, refetch: refetchUsers, isRefetching: isRefetchingUsers } = useGetUsers(state.email, user?.role);
+
+    const { isLoading: isGetVouchers, data:vouchers, refetch: refetchVoucher  } = useGetVoucherList(typeVoucher, statusVoucher, user?.role);
+
+    // const { setRoles, roles } = useUserDetailStore();
+
     const handleChangeInfor = (value, key) => {
         setState(prev => (
             {
                 ...prev,
-                [key] : value
+                [key]: value
             }
         ))
     }
-
-    const { isLoading: isGetUsers, data: userData, refetch: refetchUsers ,isRefetching: isRefetchingUsers} = useGetUsers(state.email);
-
-    // const { setRoles, roles } = useUserDetailStore();
 
     // go to order detail in mobile
     const handleOrderDetail = (orderId, userId) => {
@@ -115,6 +145,19 @@ const Admin = () => {
         setState(prev => ({ ...prev, userId: user_id }))
     }
 
+    const handleVoucherDetail = (voucherId, mode) => {
+        if (iw < 960) {
+            const left = document.getElementById('admin-order-left');
+            const right = document.getElementById('admin-order-right');
+
+            if (left && right) {
+                left.classList.add('hidden');
+                right.classList.remove('hidden');
+            }
+        };
+        setState(prev => ({ ...prev, voucherId: voucherId, voucherMode: mode }))
+    }
+
     // back from detail in mobile
     const handleBack = () => {
         const left = document.getElementById('admin-order-left');
@@ -126,20 +169,17 @@ const Admin = () => {
         };
     };
 
-    // get tab from local storage
-    useEffect(() => {
-        const activeTab = localStorage.getItem('activeTab');
-        activeTab?.length > 0 ? navigate({ search: activeTab }) : navigate({ search: `?url=${state.tab}` });
-        setState((prev) => ({ ...prev, tab: localStorage.getItem('currentTab') }));
-    }, [])
-
     // change tab
     const handleChangeTab = (tab) => {
         localStorage.removeItem('category_id');
         localStorage.setItem('activeTab', `?url=${tab}`);
         localStorage.setItem('currentTab', tab);
-        state.tab = tab;
-        setState((prev) => ({ ...prev }));
+        setStatusVoucher(voucherStatus.UNRELEASED);
+        setState((prev) => ({
+            ...prev,
+            tab: tab,
+            query: '?status=1&type_sort=1',
+        }));
 
         navigate({
             search: `?url=${tab}`
@@ -160,9 +200,10 @@ const Admin = () => {
     const renderTab = {
         0: (
             <Orders
-                orders={state.dataOrder}
+                isGetOrderList={isGetOrderList}
+                orders={orders?.formatted_Order_table}
                 handleOrderDetail={handleOrderDetail}
-                getDataOrder={getDataOrder}
+                handleChangeInfor={handleChangeInfor}
             />
         ),
         1: (
@@ -178,12 +219,24 @@ const Admin = () => {
         ),
         2: (
             <Products
+                isGetCategories={isGetCategories}
+                isGetCategoriesSuccess={isGetCategoriesSuccess}
+                categories={categories}
+                refetchCategories={refetchCategories}
+                isGetProducts={isGetProducts}
+                products={products}
+                refetchProducts={refetchProducts}
                 isModifiedProduct={state.isModifiedProduct}
                 handleDetail={handleDetail}
             />
         ),
-        3: <Transaction url={location.search} />,
-        4: <ChatBox url={location.search} />
+        3: <Voucher 
+                url={location.search} 
+                handleVoucherDetail={handleVoucherDetail}
+                isGetVouchers={isGetVouchers}
+                vouchers={vouchers}
+                refetchVoucher={refetchVoucher}
+            />,
     }[state.tab || 0];
 
     const renderDetailTab = {
@@ -193,10 +246,11 @@ const Admin = () => {
                 orderId={state.orderId}
                 handleBack={handleBack}
                 getDataOrder={getDataOrder}
+                refetchOrderList={refetchOrderList}
             />
         ),
         1: (
-            <UserDetail 
+            <UserDetail
                 userId={state.userId}
                 refetchUsers={refetchUsers}
             />
@@ -204,42 +258,37 @@ const Admin = () => {
         2: (
             <NewProduct
                 productId={state.productId}
+                refetchProducts={refetchProducts}
                 type={state.productType}
                 handleModifiedProduct={handleModifiedProduct}
                 handleBack={handleBack}
             />
         ),
+        3: (
+            <VoucherDetail
+                voucherId={state.voucherId}
+                mode={state.voucherMode}
+                refetchVoucher={refetchVoucher}
+                handleBack={handleBack}
+            />
+        )
     }[state.tab || 0];
 
     return (
-        <div className='w-screen h-screen p-4 flex flex-col gap-2'>
-            <div
-                className='w-fit flex items-center gap-3 text-sm font-bold opacity-80 p-1 hover:bg-[#f1f5f9] transition-colors duration-200 cursor-pointer'
-                onClick={handleGoBack}
-            >
+        <AdminContainer>
+            <BackWrapper handleGoBack={handleGoBack}>
                 <ArrowLeftOutlined />
                 <div>Quay lại</div>
-            </div>
-            <div
-                className='w-full flex flex-col sm:flex-row'
-                style={{
-                    height: 'calc(100vh - 68px)'
-                }}
-            >
-                <div className='h-[66px] sm:h-full w-full sm:w-[64px] md:w-[150px]'>
-                    <SildeBar
+            </BackWrapper>
+            <ContentWrapper>
+                <SildeBarWrapper>
+                    <Sidebar
                         tab={state.tab}
                         handleChangeTab={handleChangeTab}
                         roles={user?.role}
                     />
-                </div>
-                <div
-                    className='flex gap-[3px]'
-                    style={{
-                        width: iw > 768 ? 'calc(100vw - 182px)' : iw > 640 ? 'calc(100vw - 96px)' : '100%',
-                        height: iw > 640 ? '100%' : 'calc(100% - 66px)'
-                    }}
-                >
+                </SildeBarWrapper>
+                <SildeBarContentWrapper>
                     <ResizablePanelGroup autoSaveId="window-layout" direction="horizontal">
                         <ResizablePanel defaultValue={60} minSize={40} id='admin-order-left'>
                             <div className="h-full flex items-center border border-[rgb(229,230,230)] rounded-tr-md rounded-br-md">
@@ -255,9 +304,9 @@ const Admin = () => {
                             </div>
                         </ResizablePanel>
                     </ResizablePanelGroup>
-                </div>
-            </div>
-        </div>
+                </SildeBarContentWrapper>
+            </ContentWrapper>
+        </AdminContainer>
     );
 };
 

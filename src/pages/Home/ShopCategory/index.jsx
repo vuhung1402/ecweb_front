@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Tooltip } from "antd";
-import MotionBox from "@component/MotionBox";
+import MotionBox from "@widgets/MotionBox";
 import { fadeIn } from "@utils/animation";
 
 import IconTshirt from '@icon/iconTshirt.svg';

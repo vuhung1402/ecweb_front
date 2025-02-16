@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { message } from "antd";
 
 import { endpoint, axiosInstance } from "@api/api";
-import { GET_CATEGORIES, GET_PRODUCTS_PAGE } from "@constants/index";
+import { GET_CATEGORIES, GET_PRODUCTS_PAGE, GET_QUANTITY_CARD } from "@constants/index";
 
 export const addToCart = async (body) => {
     const token = localStorage.getItem("token");
@@ -27,26 +27,21 @@ export const addToCart = async (body) => {
     }
 }
 
+// get quantity cart
 export const quantityCart = async () => {
-    const token = localStorage.getItem("token");
-    try {
-        const response = await fetch(`${endpoint}/cart/show_number_items_in_cart`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'token': token,
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
+    const response = await axiosInstance.get(`/cart/show_number_items_in_cart`, {
+        requiresAuth: true,
+    })
+
+    return response.data
+}
+
+export function useGetQuantityCart() {
+    return useQuery({
+        queryFn: () => quantityCart(),
+        queryKey: [GET_QUANTITY_CARD],
+        enabled: true,
+    })
 }
 
 // products

@@ -1,67 +1,54 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Tabs } from "antd";
 
-import OrderList from "@component/AdminUI/OrderList/";
-import Loading from "@component/Loading/Loading";
+import OrderList from "@_components/Admin/Order/OrderList";
 
-import { statusOrder } from "./mock";
+import { statusOrder } from "@constants/index";
+import OrdersContainer from "./OrdersContainer";
+import { query } from "firebase/database";
 
 const Orders = (props) => {
 
-    const { orders } = props;
-    const { handleOrderDetail, getDataOrder } = props;
+    const { orders, isGetOrderList } = props;
+    const { handleOrderDetail, handleChangeInfor } = props;
 
 
     const [state, setState] = useState({
-        tab: 0,
-        isLoadingList: false,
+        tab: 1,
+        query: '?status=1&type_sort=1',
     })
 
-    useEffect(() => {
-        getDataOrder(`?status=0`);
-    }, []);
 
-    useEffect(() => {
-        setState((prev) => ({ ...prev, isLoadingList: false }));
-    }, [orders]);
-
-    const onChangeTab = async (key) => {
-        setState((prev) => ({ ...prev, tab: key, isLoadingList: true }));
+    const handleChangeTab = async (key) => {
+        setState((prev) => ({ ...prev, tab: key, query: `?status=${key}&type_sort=1`}));
         localStorage.setItem("orderTab", key);
-        await getDataOrder(`?status=${key}`);
-        setState((prev) => ({ ...prev, tab: key, isLoadingList: false }));
+        handleChangeInfor(`?status=${key}&type_sort=1`, 'query')
     }
 
     return (
-        <>
-            {
-                orders === undefined ? <Loading />
-                    :
-                    <div className="w-full h-full p-4">
-                        <Tabs
-                            onChange={onChangeTab}
-                            rootClassName="!w-full !max-w-full"
-                            className="!w-full !max-w-full"
-                            activeKey={state.tab}
-                            items={statusOrder.map((item) => {
-                                return {
-                                    label: item?.name,
-                                    key: item?.status,
-                                    children: (
-                                        <OrderList
-                                            orders={orders}
-                                            tab={state?.tab}
-                                            isLoadingList={state.isLoadingList}
-                                            getData={getDataOrder}
-                                            handleOrderDetail={handleOrderDetail}
-                                        />
-                                    )
-                                }
-                            })}
-                        />
-                    </div>
-            }
-        </>
+        <OrdersContainer>
+            <Tabs
+                onChange={handleChangeTab}
+                rootClassName="!w-full !max-w-full"
+                className="!w-full !max-w-full"
+                activeKey={state.tab}
+                items={statusOrder.map((item) => {
+                    return {
+                        label: item?.name,
+                        key: item?.status,
+                        children: (
+                            <OrderList
+                                orders={orders}
+                                isLoadingList={isGetOrderList}
+                                handleOrderDetail={handleOrderDetail}
+                                handleChangeInfor={handleChangeInfor}
+                                query={state.query}
+                            />
+                        )
+                    }
+                })}
+            />
+        </OrdersContainer>
     )
 }
 

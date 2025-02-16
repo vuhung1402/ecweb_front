@@ -1,4 +1,4 @@
-import Loading from "@component/Loading/Loading";
+import Loading from "@widgets/Loading/Loading";
 import React from "react";
 
 const UserDetailContainer = (props) => {

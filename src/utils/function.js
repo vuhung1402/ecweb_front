@@ -1,7 +1,6 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../firebase/firebase";
 import { message } from "antd";
-import { useNavigate } from "react-router-dom";
 import { LOGIN_AGAIN } from "./message";
 import { axiosInstance, from_district_id, tokenGHN } from "@api/api";
 import { clsx } from "clsx";
@@ -119,6 +118,24 @@ export const handleUploadListImage = async (list, color, idImgHover, idPrimaryIm
 export const logAgain = () => {
     message?.info(LOGIN_AGAIN);
     localStorage.removeItem("token");
+}
+
+export const buildApiParams = (params) => {
+    // Kiểm tra nếu params không phải là object
+    if (typeof params !== "object" || params === null) {
+        return "";
+    }
+
+    // Sử dụng Object.entries để duyệt qua các cặp key-value
+    return Object.entries(params)
+        .map(([key, value]) => {
+            if (value === null || value === undefined) {
+                return ''; // Bỏ qua giá trị null hoặc undefined
+            }
+            return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        })
+        .filter(param => param) // Loại bỏ các chuỗi trống
+        .join("&"); // Nối các cặp key-value bằng dấu &
 }
 
 export const getLevelKeys = (items1) => {

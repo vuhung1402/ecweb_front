@@ -3,8 +3,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom"
 
 import ProductContainer from "./ProductContainer"
 import { ProductSidebarWrapper, ProductListWrapper } from "./Product"
-import ProductSidebar from "@component/ProductSidebar"
-import ProductList from "../../component/ProductList/ProductList"
+import ProductSidebar from "@widgets/ProductSidebar"
+import ProductList from "@widgets/ProductList/ProductList"
 
 import { useGetCategories, useGetProducts } from "./function"
 
@@ -16,14 +16,15 @@ const Products = () => {
     const { isLoading: isLoadingCategpories, data: dataCategories } = useGetCategories(params);
     const { isLoading: isLoadingProducts, data: dataProducts } = useGetProducts(location, params);
 
-    const onClick = (item) => {
+    const onClick = ({item, key, keyPath}) => {
+        console.log({item});
         navigate(
             {
-                pathname: `/products/${item?.item?.props?.route}`,
+                pathname: `/products/${item?.props?.route}`,
             },
             {
                 state: {
-                    key: item?.key
+                    key: key
                 }
             }
         )
@@ -45,14 +46,14 @@ const Products = () => {
     };
 
     return (
-        <ProductContainer isLoading={isLoadingCategpories || isLoadingProducts}>
+        <ProductContainer >
             <ProductSidebarWrapper>
                 <ProductSidebar
                     category={dataCategories?.formattedData}
                     onClick={onClick}
                 />
             </ProductSidebarWrapper>
-            <ProductListWrapper>
+            <ProductListWrapper isLoading={isLoadingCategpories || isLoadingProducts}>
                 <ProductList
                     handleSelect={handleSelect}
                     data={dataProducts?.productListAll_DataFormat}
