@@ -4,11 +4,14 @@ import PaymentInfo from "@_components/Admin/OrderDetail/PaymentInfo";
 import PaymentMethod from "@_components/Admin/OrderDetail/PaymentMethod";
 import { Tag } from "antd";
 import React from "react";
+import ReturnRequest from "../ReturnRequest";
 
 const InforOrderDetail = (props) => {
 
     const { statusOrder, detailData, iw } = props;
     const { handleBack } = props;
+
+    const isShowRequestReturn = [6, 8, 9];
 
     return (
         <>
@@ -41,6 +44,14 @@ const InforOrderDetail = (props) => {
                     }
                 </div>
                 <div className="flex flex-col w-full gap-3">
+                    {
+                        isShowRequestReturn.includes(detailData?.formatted_order_detail?.status)
+                        &&
+                        <ReturnRequest
+                            listImage={detailData?.formatted_order_detail?.list_image}
+                            description={detailData?.formatted_order_detail?.description}
+                        />
+                    }
                     <PaymentInfo
                         address={detailData?.formatted_order_detail?.address}
                         totalPrice={detailData?.formatted_order_detail?.total_price}

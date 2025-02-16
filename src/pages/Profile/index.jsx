@@ -14,7 +14,7 @@ const Profile = () => {
     const { data: infor, isError, isLoading:isGetInfor } = useGetProfileInfo();
 
     return (
-        <ProfileContainer isGetInfor = {isGetInfor} >
+        <ProfileContainer isError = {isError} isGetInfor = {isGetInfor} >
             <ContentWrapper>
                 <InforWrapper>
                     <h1 className="text-3xl font-bold text-center mb-8">Tài khoản của bạn</h1>

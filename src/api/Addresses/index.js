@@ -33,7 +33,7 @@ export const updateAddress = async (body, addressId) => {
 
 export const deleteAdress = async (addressId) => {
     try {
-        const res = await axiosInstance.post(`users/delete_address/${addressId}`, {
+        const res = await axiosInstance.post(`users/delete_address/${addressId}`, {}, {
             requiresAuth: true
         })
 

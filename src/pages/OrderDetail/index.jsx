@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, message, Popconfirm } from "antd";
 
@@ -15,11 +15,17 @@ import { logAgain } from "@utils/function";
 import { FAIL, SUCCESS } from "@utils/message";
 import OderDetailContainer from "./OrderDetailContainer";
 import { AddressInforDetail, AddressInforTitle, AddressInforWrapper, BackTitle, BackWrapper, ContentOrderInfoWrapper, ContentWrapper, InforTitle, InforWrapper, OrderActionWrapper, OrderId, OrderInfoWrapper, OrderStatusWrapper, PaymentInforWrapper, PaymentMethod, PaymentMethodContentWrapper, PaymentMethodWrapper, PaymentTitle, SideBarWrapper, Title, UserInforContentWrapper, UserInforDetailWrapper, UserInforTitle, UserInforWrapper } from "./OrderDetail";
+import ModalRequestReturnOrder from "@_components/OrderDetail/ModalRequestReturnOrder";
+import ReturnRequest from "@_components/Admin/OrderDetail/ReturnRequest";
 
 const OderDetail = () => {
     const navigate = useNavigate();
 
     const param = useParams();
+
+    const [state, setState] = useState({
+        openModal: false,
+    });
 
     const { mutateAsync: muatateCancelOrder, isPending: isPendingCancelOrder } = useCancelOrder();
 
@@ -28,12 +34,18 @@ const OderDetail = () => {
     const { data: orderDetail, isLoading: isGetOrderDetail,
         refetch: refetchOrderDetail } = useGetOrderDetail(param?.id)
 
-    const { data: orderHistory } = useGetOrderHistory(param?.id)
+    const { data: orderHistory, refetch: refetchOrderHistory } = useGetOrderHistory(param?.id)
 
     const paymentMethdod = {
         0: "Nhận tiền khi giao hàng",
         1: "Thanh toán bằng momo"
     }[orderDetail?.formatted_order_detail?.type_pay]
+
+    const isShowRequestReturn = [6, 8, 9];
+
+    const handleOpenModal = () => {
+        setState(prev => ({ ...prev, openModal: !state.openModal }));
+    }
 
     const handleRedundMoney = async () => {
         const body = {
@@ -147,6 +159,15 @@ const OderDetail = () => {
                             </OrderStatusWrapper>
 
                             {
+                                isShowRequestReturn.includes(orderDetail?.formatted_order_detail?.status)
+                                &&
+                                <ReturnRequest
+                                listImage={orderDetail?.formatted_order_detail?.list_image}
+                                description={orderDetail?.formatted_order_detail?.description}
+                            />
+                            }
+
+                            {
                                 orderDetail?.formatted_order_detail?.items?.map((item) => {
                                     return (
                                         <ProductCard data={item} />
@@ -179,10 +200,31 @@ const OderDetail = () => {
                                     </Popconfirm>
                                 </OrderActionWrapper>
                             }
+
+                            {
+                                orderDetail?.formatted_order_detail?.status === 4 &&
+                                <OrderActionWrapper>
+                                    <Button
+                                        type="primary"
+                                        className="font-bold"
+                                        onClick={handleOpenModal}
+                                    >
+                                        Yêu cầu trả hàng
+                                    </Button>
+                                </OrderActionWrapper>
+                            }
                         </InforWrapper>
                     </ContentOrderInfoWrapper>
                 </OrderInfoWrapper>
             </ContentWrapper>
+
+            <ModalRequestReturnOrder
+                open={state.openModal}
+                OrderId={orderDetail?.formatted_order_detail?.Order_id}
+                refetchOrderDetail={refetchOrderDetail}
+                refetchOrderHistory={refetchOrderHistory}
+                handleOpenModal={handleOpenModal}
+            />
         </OderDetailContainer>
     )
 }

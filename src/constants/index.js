@@ -20,6 +20,11 @@ export const GET_ORDER_LIST = "get_order_list";
 export const GET_ORDER_DETAIL = "get_order_detail";
 export const GET_ORDER_HISTORY = "get_order_history";
 
+export const GET_VOUCHER_LIST_ADMIN = "get_voucher_list_admin";
+export const GET_DETAIL_VOUCHER_ADMIN = "get_detail_voucher_admin";
+export const GET_RELEASED_VOUCHER = "get_released_voucher";
+
+
 export const navigatePath = {
     PRODUCT_ALL: '/products/all'
 };
@@ -63,6 +68,7 @@ export const QL_ORDER = "ql_order";
 export const QL_USER = "ql_user";
 export const QL_PRODUCT = "ql_product";
 export const QL_TRANSACTION = "ql_transaction";
+export const QL_VOUCHER = "ql_voucher";
 
 export const statusOrder = [
     {
@@ -121,4 +127,59 @@ export const statusOrder = [
             },
         ],
     },
+    {
+        status: 8,
+        name: <div className="font-bold">Yêu cầu Trả hàng/Hoàn tiền</div>,
+        nextStatus: [
+            {
+                status: 9,
+                label:'Không chấp nhận Trả hàng/Hoàn tiền',
+            },
+        ],
+    },
+    {
+        status: 9,
+        name: <div className="font-bold">Không chấp nhận Trả hàng/Hoàn tiền</div>,
+    }
 ];
+
+export const voucherStatus = {
+    RELEASED: 'released',
+    UNRELEASED: 'unreleased',
+    EXPIRED: 'expired',
+};
+
+export const voucherTabs = [
+    {
+      key: voucherStatus.UNRELEASED,
+      label: <div className="font-bold">Chưa phát hành</div>,
+    },
+    {
+      key: voucherStatus.RELEASED,
+      label: <div className="font-bold">Đang phát hành</div>,
+    },
+    {
+      key: voucherStatus.EXPIRED,
+      label: <div className="font-bold">Hết hạn</div>,
+    },
+];
+
+export const voucherType = {
+    DISCOUNT: 'discount',
+    SHIPPING: 'shipping',
+};
+
+export const selectType = [
+    {
+        value: voucherType.DISCOUNT,
+        label: <div className="font-bold">Giảm giá</div>,
+    },
+    {
+        value: voucherType.SHIPPING,
+        label: <div className="font-bold">Miễn phí vận chuyển</div>,
+    },
+    {
+        value: '',
+        label: <div className="font-bold">Tất cả</div>,
+    },
+]

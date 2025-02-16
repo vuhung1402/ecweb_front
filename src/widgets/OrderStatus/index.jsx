@@ -14,6 +14,8 @@ const OrderStatus = (props) => {
         5: 'Đã huỷ',
         6: 'Trả hàng/Hoàn tiền',
         7: 'Giao hàng không thành công',
+        8: 'Yêu cầu Trả hàng/Hoàn tiền',
+        9: 'Không chấp nhận Trả hàng/Hoàn tiền',
     }
 
     if(orderHistory?.length === 0) return <></>

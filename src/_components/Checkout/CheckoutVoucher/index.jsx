@@ -1,17 +1,52 @@
-import { Button, Input } from "antd";
-import React from "react";
+import useCheckoutStore from "@store/checkout";
+import { Button, Input, Select, Space, TreeSelect } from "antd";
+import React, { useState } from "react";
 
-const CheckoutVoucher = () => {
+const CheckoutVoucher = (props) => {
+    const { discountVouchers, shippingVouchers } = props;
+
+    const { applyVoucher } = props;
+    const { setCodeVoucherDiscount, setCodeVoucherShipping } = useCheckoutStore()
+
+    const onSelectVoucher = (value, type) => {
+        if (type === 'discount') {
+            setCodeVoucherDiscount(value)
+        } else {
+            setCodeVoucherShipping(value)
+        }
+    }
+
     return (
         <div className="flex items-center gap-4 border-b-[1px] py-2">
-            <Input
-                placeholder="Mã giảm giá"
-                type=""
-                className="outline-none border rounded-lg w-2/3"
+            <Select
+                style={{
+                    width: 150,
+                }}
+                placeholder="Chọn mã giảm giá"
+                allowClear
+                options={discountVouchers?.map((discountVoucher) => ({
+                    label: discountVoucher?.name,
+                    value: discountVoucher?.code,
+                }))}
+                onChange={(value) => onSelectVoucher(value, 'discount')}
             />
+            <Select
+                style={{
+                    width: 150,
+                }}
+                placeholder="Mã miễn phí vận chuyển"
+                allowClear
+                options={shippingVouchers?.map((shippingVoucher) => ({
+                    label: shippingVoucher?.name,
+                    value: shippingVoucher?.code,
+                }))}
+                onChange={(value) => onSelectVoucher(value, 'shipping')}
+            />
+
             <Button
                 type="primary"
                 className="w-1/3 font-medium rounded-lg text-sm"
+                onClick={applyVoucher}
             >
                 Sử dụng
             </Button>
