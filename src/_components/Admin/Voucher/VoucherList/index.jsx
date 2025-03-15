@@ -3,7 +3,8 @@ import { ActionWrraper, VoucherListWrapper } from "@pages/admin/voucher/Voucher"
 import { Button, message, Popconfirm, Select, Space, Table } from "antd";
 import EditIcon from "@icon/edit.svg";
 import DeleteIcon from "@icon/deleteIcon.svg";
-import React from "react";
+import './style.scss';
+import React, { useState } from "react";
 import { selectType } from "@constants/index";
 import useAdminProductStore from "@store/admin-product";
 import { formatDate } from "date-fns";
@@ -14,6 +15,8 @@ import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 const VoucherList = (props) => {
     const { vouchers } = props;
     const { handleVoucherDetail, refetchVoucher } = props;
+
+    const [selectedRowKey, setSelectedRowKey] = useState(null); // Track selected row
 
     const { setTypeVoucher } = useAdminProductStore();
 
@@ -93,12 +96,20 @@ const VoucherList = (props) => {
         },
     ];
 
+    const onRowClick = (voucher) => {
+        setSelectedRowKey(voucher?._id); // Set selected row key
+    };
+
+    const rowClassName = (voucher) => {
+        return voucher?._id === selectedRowKey ? 'selected-row' : ''; // Highlight selected row
+    };
+
     const onChange = (value) => {
         setTypeVoucher(value);
     }
 
     const onDeleteVoucher = (id) => {
-        const body = {id};
+        const body = { id };
         mutateDeleteVoucher.mutateAsync(body, {
             onSuccess: () => {
                 message.success(SUCCESS);
@@ -144,13 +155,19 @@ const VoucherList = (props) => {
             </ActionWrraper>
 
             <Table
+                rootClassName={`${vouchers?.vouchers?.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
                 bordered
+                className='font-bold'
                 columns={columns}
                 dataSource={vouchers?.vouchers}
                 pagination={{
                     hideOnSinglePage: true,
-                    pageSize: 10
+                    pageSize: 15
                 }}
+                rowClassName={rowClassName} // Add rowClassName prop
+                onRow={(voucher) => ({
+                    onClick: () => onRowClick(voucher), // Handle row click
+                })}
             />
 
         </VoucherListWrapper>

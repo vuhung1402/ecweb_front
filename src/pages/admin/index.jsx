@@ -30,6 +30,8 @@ import { ADMIN, QL_ORDER, QL_PRODUCT, QL_TRANSACTION, QL_USER, voucherStatus } f
 import Voucher from './voucher';
 import VoucherDetail from './VoucherDetail';
 import { useGetVoucherList } from './voucher/function';
+import HomeAdmin from './Home';
+import { useGetReveneuStatistical, useGetStatistical } from './Home/function';
 
 const Admin = () => {
     const navigate = useNavigate();
@@ -40,6 +42,7 @@ const Admin = () => {
     const [state, setState] = useState({
         tab: 0,
         query: '?status=1&type_sort=1',
+        year: new Date().getFullYear(),
         email: '',
         orderId: '',
         voucherId: '',
@@ -91,7 +94,11 @@ const Admin = () => {
 
     const { isLoading: isGetUsers, data: userData, refetch: refetchUsers, isRefetching: isRefetchingUsers } = useGetUsers(state.email, user?.role);
 
-    const { isLoading: isGetVouchers, data:vouchers, refetch: refetchVoucher  } = useGetVoucherList(typeVoucher, statusVoucher, user?.role);
+    const { isLoading: isGetVouchers, data: vouchers, refetch: refetchVoucher } = useGetVoucherList(typeVoucher, statusVoucher, user?.role);
+
+    const { isLoading: isGetStatistical, data: statistical } = useGetStatistical(user?.role);
+
+    const { isLoading: isGetReveneuStatiscal, data: reveneuStatistical } = useGetReveneuStatistical(state.year, user?.role);
 
     // const { setRoles, roles } = useUserDetailStore();
 
@@ -199,6 +206,15 @@ const Admin = () => {
     // render tab
     const renderTab = {
         0: (
+            <HomeAdmin
+                isGetStatistical={isGetStatistical}
+                isGetReveneuStatiscal={isGetReveneuStatiscal}
+                statistical={statistical?.data}
+                reveneuStatistical={reveneuStatistical}
+                handleChangeInfor={handleChangeInfor}
+            />
+        ),
+        1: (
             <Orders
                 isGetOrderList={isGetOrderList}
                 orders={orders?.formatted_Order_table}
@@ -206,7 +222,7 @@ const Admin = () => {
                 handleChangeInfor={handleChangeInfor}
             />
         ),
-        1: (
+        2: (
             <User
                 url={location.search}
                 handleUserDetail={handleUserDetail}
@@ -217,7 +233,7 @@ const Admin = () => {
                 handleChangeInfor={handleChangeInfor}
             />
         ),
-        2: (
+        3: (
             <Products
                 isGetCategories={isGetCategories}
                 isGetCategoriesSuccess={isGetCategoriesSuccess}
@@ -230,17 +246,20 @@ const Admin = () => {
                 handleDetail={handleDetail}
             />
         ),
-        3: <Voucher 
-                url={location.search} 
-                handleVoucherDetail={handleVoucherDetail}
-                isGetVouchers={isGetVouchers}
-                vouchers={vouchers}
-                refetchVoucher={refetchVoucher}
-            />,
+        4: <Voucher
+            url={location.search}
+            handleVoucherDetail={handleVoucherDetail}
+            isGetVouchers={isGetVouchers}
+            vouchers={vouchers}
+            refetchVoucher={refetchVoucher}
+        />,
     }[state.tab || 0];
 
     const renderDetailTab = {
         0: (
+            <></>
+        ),
+        1: (
             <OrderDetail
                 userId={state.userId}
                 orderId={state.orderId}
@@ -249,13 +268,13 @@ const Admin = () => {
                 refetchOrderList={refetchOrderList}
             />
         ),
-        1: (
+        2: (
             <UserDetail
                 userId={state.userId}
                 refetchUsers={refetchUsers}
             />
         ),
-        2: (
+        3: (
             <NewProduct
                 productId={state.productId}
                 refetchProducts={refetchProducts}
@@ -264,7 +283,7 @@ const Admin = () => {
                 handleBack={handleBack}
             />
         ),
-        3: (
+        4: (
             <VoucherDetail
                 voucherId={state.voucherId}
                 mode={state.voucherMode}

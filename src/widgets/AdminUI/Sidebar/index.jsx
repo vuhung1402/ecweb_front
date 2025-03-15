@@ -2,15 +2,19 @@ import React from "react";
 import OrdersIcon from "@icon/iconOrder.svg"
 import UserIcon from "@icon/iconUser.svg"
 import ProductIcon from "@icon/iconProduct.svg"
-import TransactionIcon from "@icon/iconTransaction.svg"
+import HomeIcon from "@icon/home.svg"
 import { cn } from "@utils/function";
-import Voucher from "@pages/admin/voucher";
 
 const Sidebar = (props) => {
     const { tab, roles } = props;
     const { handleChangeTab } = props;
 
     const sidebarTitle = [
+        {
+            role: ["admin"],
+            label: "Trang chủ",
+            icon: <HomeIcon className="scale-75" />,
+        },
         {
             role: ["admin", "ql_order"],
             label: "Đơn Hàng",

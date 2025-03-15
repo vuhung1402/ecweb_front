@@ -24,6 +24,8 @@ export const GET_VOUCHER_LIST_ADMIN = "get_voucher_list_admin";
 export const GET_DETAIL_VOUCHER_ADMIN = "get_detail_voucher_admin";
 export const GET_RELEASED_VOUCHER = "get_released_voucher";
 
+export const GET_ADMIN_STATISTICAL = "get_admin_statistical";
+export const GET_ADMIN_REVENEU_STATISTICAL = "get_admin_reveneu_statistical";
 
 export const navigatePath = {
     PRODUCT_ALL: '/products/all'

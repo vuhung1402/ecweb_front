@@ -36,6 +36,7 @@ const CheckOut = () => {
 
     const [state, setState] = useState({
         price: order?.total_price,
+        initialShippingFee: 0,
         shippingFee: 0,
         addresses: undefined,
         paymentMethod: 0,
@@ -73,6 +74,7 @@ const CheckOut = () => {
                     setState(prev => ({
                         ...prev,
                         shippingFee: fee,
+                        initialShippingFee: fee,
                         addresses: addressesOptions,
                         addressInfor: addressInfo[index],
                         idAdress: addressInfo[index]?._id
@@ -112,6 +114,7 @@ const CheckOut = () => {
             name: option?.name,
             phone: option?.phone,
             street: option?.street,
+            initialShippingFee: fee,
             shippingFee: fee,
         }));
     }
@@ -160,7 +163,7 @@ const CheckOut = () => {
     const applyVoucher = () => {
         const body = {
             code: [codeVoucherDiscount, codeVoucherShipping],
-            shippingFee: state.shippingFee,
+            shippingFee: state.initialShippingFee,
             price: order?.total_price,
         }
 

@@ -1,5 +1,6 @@
-import React from 'react';
-import { Button,Table} from 'antd';
+import React, { useState } from 'react';
+import { Button, Table } from 'antd';
+import './style.scss'
 import ModalUserInfor from '../ModalUserInfor';
 import ModalTransaction from '../ModalTransaction';
 import Loading from '@widgets/Loading/Loading';
@@ -7,18 +8,21 @@ import Loading from '@widgets/Loading/Loading';
 
 const UserList = (props) => {
     const { isOpenModalUser, isOpenModalTransaction, userData, isGetUsers, isRefetchingUsers } = props;
-    const { handleOpenModalUserInfor, handleOpenModalTransaction, handleUserDetail,  } = props;
+    const { handleOpenModalUserInfor, handleOpenModalTransaction, handleUserDetail, } = props;
 
-    if(isGetUsers || isRefetchingUsers) return <Loading/>
+    if (isGetUsers || isRefetchingUsers) return <Loading />
+
+    const [selectedRowKey, setSelectedRowKey] = useState(null); // Track selected row
+
 
     const columns = [
         {
             title: 'Name',
             dataIndex: 'name',
             key: 'name',
-            render: (_, record) => (
+            render: (_, userData) => (
                 <div className=' flex gap-3'>
-                    {record?.ho} {record?.ten}
+                    {userData?.ho} {userData?.ten}
                 </div>
             ),
         },
@@ -30,11 +34,11 @@ const UserList = (props) => {
         {
             title: 'Action',
             key: 'action',
-            render: (_, record) => (
+            render: (_, userData) => (
                 <div className=' flex gap-3'>
                     <Button
                         type='primary'
-                        onClick={() => handleUserDetail(record?._id)}
+                        onClick={() => handleUserDetail(userData?._id)}
                     >
                         Chi tiết
                     </Button>
@@ -43,15 +47,30 @@ const UserList = (props) => {
         },
     ];
 
+    const onRowClick = (userData) => {
+        setSelectedRowKey(userData?._id); // Set selected row key
+    };
+
+    const rowClassName = (userData) => {
+        return userData?._id === selectedRowKey ? 'selected-row' : ''; // Highlight selected row
+    };
+
     return (
         <>
             <Table
+                rootClassName={`${userData?.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
                 columns={columns}
-                dataSource={userData.map(user => ({ ...user, key: user._id }))}
+                className='font-bold'
+                dataSource={userData?.map(user => ({ ...user, key: user._id }))}
                 pagination={{
                     hideOnSinglePage: true,
                     pageSize: 15,
                 }}
+                bordered
+                rowClassName={rowClassName} // Add rowClassName prop
+                onRow={(userData) => ({
+                    onClick: () => onRowClick(userData), // Handle row click
+                })}
             />
 
             <ModalUserInfor
