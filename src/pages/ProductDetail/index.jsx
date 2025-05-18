@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 import ProductDetailContainer from "./ProductDetailContainer";
 import { ImagePreviewWrapper, InfoProductWrapper, ProductDetailWrapper } from "./ProductDetail";
@@ -17,8 +17,9 @@ const ProductDetail = () => {
     });
 
     const location = useLocation();
+    const params = useParams();
 
-    const { isLoading, data } = useGetDetailProduct(location?.state?.key);
+    const { isLoading, data } = useGetDetailProduct(location?.state?.key ? location?.state?.key : params?.name);
 
     const handleGotoImage = (uid) => {
         setState(prev => ({...prev, currentImg: uid}));

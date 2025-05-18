@@ -55,6 +55,7 @@ const InforOrderDetail = (props) => {
                     <PaymentInfo
                         address={detailData?.formatted_order_detail?.address}
                         totalPrice={detailData?.formatted_order_detail?.total_price}
+                        email={detailData?.formatted_order_detail?.emai}
                         name={detailData?.formatted_order_detail?.name}
                         phone={detailData?.formatted_order_detail?.phone}
                         price_pay={detailData?.formatted_order_detail?.price_pay}

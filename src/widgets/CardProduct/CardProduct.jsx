@@ -39,7 +39,7 @@ const CardProduct = ({ data }) => {
                 >
                     <img
                         className={`w-auto h-full cursor-pointer`}
-                        src={img.length ? img : data?.image.url}
+                        src={img.length ? img : data?.primary_image?.url}
                     />
                     <img
                         className={`w-auto h-full cursor-pointer top-0 absolute transition-all duration-300 hover-img`}

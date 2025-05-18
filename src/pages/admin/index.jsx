@@ -100,6 +100,8 @@ const Admin = () => {
 
     const { isLoading: isGetReveneuStatiscal, data: reveneuStatistical } = useGetReveneuStatistical(state.year, user?.role);
 
+    console.log('userData', userData);
+
     // const { setRoles, roles } = useUserDetailStore();
 
     const handleChangeInfor = (value, key) => {

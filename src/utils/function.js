@@ -251,6 +251,21 @@ export const calculateShippingFee = async (to_district_id, to_ward_code) => {
     };
 }
 
+export const getRecommendProducts = async (id) => {
+    try {
+        const response = await axiosInstance.get(`https://recommend-system-nlp.onrender.com/recommendations/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+    };
+}
+
+export function useGetRecommendProducts(id) {
+    return useQuery({
+        queryFn:() => getRecommendProducts(id)
+    })
+}
+
 export const getDistrictsTest = async (province_id) => {
     const body = {
         province_id

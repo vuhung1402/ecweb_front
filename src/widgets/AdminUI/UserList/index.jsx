@@ -58,7 +58,6 @@ const UserList = (props) => {
     return (
         <>
             <Table
-                rootClassName={`${userData?.length > 10 ? 'tableOrderWithPagination' : 'tableOrder'}`}
                 columns={columns}
                 className='font-bold'
                 dataSource={userData?.map(user => ({ ...user, key: user._id }))}

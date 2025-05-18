@@ -4,7 +4,7 @@ import Loading from "@widgets/Loading/Loading";
 
 const HomeContainer = (props) => {
 
-    const { isLoading, children } = props;
+    const { isLoading, children, isGetRecommend } = props;
 
     if (isLoading) return <div className="w-screen h-screen"><Loading /></div>
 

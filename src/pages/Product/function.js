@@ -57,8 +57,22 @@ const getProducts = async (location) => {
 };
 
 export function useGetProducts(location, parmas) {
+    let customLocation;
+    if (location?.state?.key) {
+        customLocation = location;
+    } else {
+        customLocation = {
+            ...location,
+            search: location?.search ? location?.search :`?sort_by=tang-dan`,
+            state: {
+                key: parmas?.category,
+                value: location?.state?.value ? location?.state?.value : '1'
+            }
+        }
+    }
+
     return useQuery({
-        queryFn: () => getProducts(location),
+        queryFn: () => getProducts(customLocation),
         queryKey: [GET_PRODUCTS_PAGE, location?.search, parmas?.category]
     });
 };

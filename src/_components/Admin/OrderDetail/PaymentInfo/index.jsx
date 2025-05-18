@@ -7,15 +7,19 @@ import { formatCurrencyVN } from "@utils/function";
 
 const PaymentInfo = (props) => {
 
-    const { address, totalPrice, name, phone, price_pay, shipping_code } = props;
+    const { address, totalPrice, name, phone, price_pay, shipping_code, email } = props;
 
     return (
         <div className="w-full flex flex-col gap-2">
             <Card
                 title="Thông tin đơn hàng"
-                classNames={{title: 'font-bold'}}
+                classNames={{ title: 'font-bold' }}
             >
                 <div className="flex flex-col gap-1">
+                    <div className="flex gap-3 text-sm font-bold">
+                        <Tag color="cyan" className="w-7 h-5 flex items-center justify-center"><UserOutlined /></Tag>
+                        <Tag color="blue">{email}</Tag>
+                    </div>
                     <div className="flex gap-3 text-sm font-bold">
                         <Tag color="cyan" className="w-7 h-5 flex items-center justify-center"><UserOutlined /></Tag>
                         <Tag color="blue">{name}</Tag>

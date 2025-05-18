@@ -13,14 +13,17 @@ import Footer from "@core/Footer";
 import useVisibleHeader from "@hooks/useVisibleHeader";
 import { useGetProducts } from "@api/Home";
 import { navigatePath } from "@constants/index";
+import { useUserPackageHook } from "@redux/hooks/userHook";
+import { useGetRecommendProducts } from "@utils/function";
 
 const HEADER_ID = 'app-header'
 const HOME_PRODUCT_ID = 'home-product'
 
 const Home = () => {
     const navigate = useNavigate();
-
+    const user = useUserPackageHook();
     const { isLoading, data } = useGetProducts();
+    const { isLoading: isGetRecommend, data: dataRecommend  } = useGetRecommendProducts(user?.id);
     const { visible } = useVisibleHeader();
 
     const handleScrollToProduct = () => {
@@ -35,7 +38,7 @@ const Home = () => {
     }
 
     return (
-        <HomeContainer isLoading={isLoading}>
+        <HomeContainer isLoading={isLoading} isGetRecommend={isGetRecommend}>
             <>
                 <HomeHeader id={HEADER_ID}>
                     <Header
@@ -50,7 +53,7 @@ const Home = () => {
                 </HomeBackground>
                 <HomePart id={HOME_PRODUCT_ID}>
                     <HomeProduct
-                        products={data?.productListAll_DataFormat?.slice(0,8)}
+                        products={dataRecommend?.productListAll_DataFormat}
                         handleCLick={handleCLick}
                     />
                 </HomePart>
@@ -63,6 +66,8 @@ const Home = () => {
                 <HomePart>
                     <Footer />
                 </HomePart>
+                <df-messenger intent="WELCOME" chat-title="EcwebBot" agent-id="915d1e00-467b-4b47-891b-014f7044893f"
+                    language-code="vi"></df-messenger>
             </>
         </HomeContainer>
     )
