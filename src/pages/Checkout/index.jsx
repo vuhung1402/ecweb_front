@@ -128,7 +128,8 @@ const CheckOut = () => {
             phone: state.addressInfor?.number,
             name: state.addressInfor?.name,
             type_pay: state?.paymentMethod,
-            shipping_code: state.shippingFee
+            shipping_code: state.shippingFee,
+            checkout_price: state.price,
         }
 
         mutate(body, {
