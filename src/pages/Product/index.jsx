@@ -24,7 +24,7 @@ const Products = () => {
     const { isLoading: isLoadingProducts, data: dataProducts } = useGetProducts(location, params, state.name);
 
     const onClick = ({item, key, keyPath}) => {
-        setState((prev) => ({ ...prev, name: '' }));
+        setState((prev) => ({ ...prev, name: '', dataFindByImage:'', }));
         console.log({item});
         navigate(
             {
@@ -39,6 +39,7 @@ const Products = () => {
     }
 
     const handleSelect = (_, option) => {
+        setState((prev) => ({ ...prev, dataFindByImage:'', }));
         navigate(
             {
                 pathname: `${location?.pathname}`,
