@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-// export const endpoint = "https://ecweb-backend.onrender.com/api/v1"
+export const endpoint = "https://ecweb-backend.onrender.com/api/v1"
 
-export const endpoint = "http://localhost:4000/api/v1"
+// export const endpoint = "http://localhost:4000/api/v1"
 
 
 
