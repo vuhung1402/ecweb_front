@@ -1,10 +1,10 @@
 import React from "react";
 import { Button } from "antd";
 
-import MotionBox from "@component/MotionBox";
+import MotionBox from "@widgets/MotionBox";
 import { fadeIn } from "@utils/animation";
 
-import CardProduct from "@component/CardProduct/CardProduct";
+import CardProduct from "@widgets/CardProduct/CardProduct";
 
 const HomeProduct = (props) => {
 
@@ -17,7 +17,7 @@ const HomeProduct = (props) => {
                 Check out our <span className="text-primary">new arrivals</span>
             </h2>
             <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-4 xl:gap-x-10">
-                {products.map((item, index) => {
+                {products?.map((item, index) => {
                     return (
                         <div key={item?.id}>
                             <MotionBox animation={fadeIn(0.3 + (0.1 * index))} className="relative">

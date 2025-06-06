@@ -1,5 +1,8 @@
-import { endpoint, axiosInstance } from "@api/api";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { message } from "antd";
+
+import { endpoint, axiosInstance } from "@api/api";
+import { GET_CATEGORIES, GET_PRODUCTS_PAGE, GET_QUANTITY_CARD } from "@constants/index";
 
 export const addToCart = async (body) => {
     const token = localStorage.getItem("token");
@@ -24,42 +27,85 @@ export const addToCart = async (body) => {
     }
 }
 
+// get quantity cart
 export const quantityCart = async () => {
-    const token = localStorage.getItem("token");
-    try {
-        const response = await fetch(`${endpoint}/cart/show_number_items_in_cart`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'token': token,
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
+    const response = await axiosInstance.get(`/cart/show_number_items_in_cart`, {
+        requiresAuth: true,
+    })
+
+    return response.data
 }
 
-export const getProducts = async (key, modeFilter) => {
-    try {
-        const response = await axiosInstance.get(`/product/getAllProductList/${key}/${modeFilter}`);
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-    }
+export function useGetQuantityCart() {
+    return useQuery({
+        queryFn: () => quantityCart(),
+        queryKey: [GET_QUANTITY_CARD],
+        enabled: true,
+    })
+}
+
+// products
+
+const getProducts = async (location) => {
+    const regex = /[?&]sort_by=([^&]*)/;
+    const match = regex.exec(location?.search);
+    const key = location?.state?.key ? location?.state?.key : 'all';
+    const modeFilter = match?.[1].length > 0 ? `${location?.state?.value}` : `1`;
+
+    const response = await axiosInstance.get(`/product/getAllProductList/${key}/${modeFilter}?name=${location?.name}`);
+    return response.data;
 };
 
-export const getCategories = async () => {
-    try {
-        const response = await axiosInstance.get(`/category/getAllCategories`);
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+export function useGetProducts(location, parmas, name) {
+    let customLocation;
+    if (location?.state?.key) {
+        customLocation = {
+            ...location,
+            name: name,
+        };
+    } else {
+        customLocation = {
+            ...location,
+            name: name,
+            search: location?.search ? location?.search :`?sort_by=tang-dan`,
+            state: {
+                key: parmas?.category,
+                value: location?.state?.value ? location?.state?.value : '1'
+            }
+        }
     }
+
+    return useQuery({
+        queryFn: () => getProducts(customLocation),
+        queryKey: [GET_PRODUCTS_PAGE, location?.search, parmas?.category, name]
+    });
+};
+
+// catagories
+
+export const getCategories = async () => {
+    const response = await axiosInstance.get(`/category/getAllCategories`);
+    return response.data;
+};
+
+export function useGetCategories() {
+    return useQuery({
+        queryFn: () => getCategories(),
+        queryKey: [GET_CATEGORIES]
+    });
+};
+
+export const findProductByImage = async (body) => {
+    const response = await axiosInstance.post(`https://supposedly-massive-antelope.ngrok-free.app/find_similar`, JSON.stringify(body), {
+        AI: true
+    });
+    return response.data;
+};
+
+export function useFindProductByImage(){
+    return useMutation(
+        {
+            mutationFn: (body) => findProductByImage(body),
+        }
+    )
 };

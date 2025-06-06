@@ -1,0 +1,32 @@
+.tableOrder {
+    height: calc(100% - 66px) !important;
+    // overflow-y: auto;
+}
+
+.tableOrderWithPagination {
+    height: calc(100% - 130px) !important;
+    // overflow-y: auto;
+}
+
+.ant-spin-container {
+    height: 100% !important;
+}
+
+.ant-table {
+    height: 100% !important;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.ant-table-container { 
+    height: 100% !important;
+}
+
+.ant-table-content{
+    height: 100% !important;
+}
+
+.selected-row {
+    background-color: #e6f7ff; // Change to your desired highlight color
+}

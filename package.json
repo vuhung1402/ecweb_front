@@ -6,6 +6,7 @@
     "@ant-design/icons": "^5.4.0",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
+    "@tanstack/react-query": "^5.56.2",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -13,6 +14,7 @@
     "antd": "^5.16.2",
     "axios": "^1.5.1",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "dayjs": "^1.11.13",
     "firebase": "^10.12.1",
     "flowbite": "^2.2.0",
@@ -26,6 +28,7 @@
     "react-resizable-panels": "^2.1.0",
     "react-router-dom": "^6.16.0",
     "react-scripts": "5.0.1",
+    "recharts": "^2.15.1",
     "redux": "^4.2.1",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
@@ -33,7 +36,8 @@
     "sass-loader": "^14.2.1",
     "tailwind-merge": "^2.5.2",
     "tailwind-scrollbar-hide": "^1.1.7",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "zustand": "^5.0.0-rc.2"
   },
   "scripts": {
     "start": "webpack-dev-server --mode development --open --hot",

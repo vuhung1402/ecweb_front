@@ -1,6 +1,12 @@
 import axios from 'axios';
 
-export const endpoint = "https://ecweb-backend.onrender.com/api/v1"
+// export const endpoint = "https://ecweb-backend.onrender.com/api/v1"
+
+export const endpoint = "http://localhost:4000/api/v1"
+
+
+
+export const shippingFeeEndpoint = "https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee"
 
 export const dateFormat = "DD/MM/YYYY"
 
@@ -34,6 +40,9 @@ axiosInstance.interceptors.request.use((config) => {
     if(config.GHN){
         config.headers.token = tokenGHN;
         config.headers.shop_id = idGHN;
+    }
+    if(config.AI){
+        config.headers['ngrok-skip-browser-warning'] = true;
     }
 
     return config;

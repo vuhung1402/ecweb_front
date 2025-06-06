@@ -1,125 +1,75 @@
-import React, { useEffect, useState } from "react";
-import { Button } from "antd";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import MotionBox from "@component/MotionBox";
-import { fadeIn } from "@utils/animation";
 
+import HomeContainer from "./HomeContainer";
+import { HomeHeader, HomeBackground, HomePart } from "./Home";
+import HomeBG from "./HomeBG";
 import Header from "@core/Header";
 import HomeProduct from "./HomeProduct";
 import ShopCategory from "./ShopCategory";
 import Sponsor from "./Sponsor";
 import Footer from "@core/Footer";
-import Loading from "@component/Loading/Loading";
 
-import { getProducts } from "./function";
+import useVisibleHeader from "@hooks/useVisibleHeader";
+import { useGetProducts } from "@api/Home";
+import { navigatePath } from "@constants/index";
+import { useUserPackageHook } from "@redux/hooks/userHook";
+import { useGetRecommendProducts } from "@utils/function";
 
-import HomePageImage from '@images/homepage.png';
-import IconArrowDown from '@icon/iconArrowDown.svg';
+const HEADER_ID = 'app-header'
+const HOME_PRODUCT_ID = 'home-product'
 
 const Home = () => {
-    const navigate = useNavigate()
-    const [state, setState] = useState({
-        products: [],
-        position: window.scrollY,
-        visible: false,
-    });
-
-    const handleGetProducts = async () => {
-        const products = await getProducts();
-        setState(prev => ({...prev, products: products.productListAll_DataFormat?.slice(0,8)}));
-    };
-
-    useEffect(() => {
-        handleGetProducts();
-    }, []);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            let moving = window.scrollY;
-            setState(prev => ({...prev, position: moving, visible: moving < 60 ? false : state.position > moving}));
-        };
-
-        document.addEventListener("scroll", handleScroll);
-
-        return () => {
-            document.removeEventListener("scroll", handleScroll);
-        };
-    });
-
-    const handleMobileNavOpenChange = (event) => {
-        document.body.style.overflow = event ? 'hidden' : 'auto';
-    };
+    const navigate = useNavigate();
+    const user = useUserPackageHook();
+    const { isLoading, data } = useGetProducts();
+    const { isLoading: isGetRecommend, data: dataRecommend  } = useGetRecommendProducts(user?.id);
+    const { visible } = useVisibleHeader();
 
     const handleScrollToProduct = () => {
-        const homeProductElement = document.getElementById('home-product');
+        const homeProductElement = document.getElementById(HOME_PRODUCT_ID);
         if (homeProductElement) {
             homeProductElement.scrollIntoView({ behavior: 'smooth' });
         }
     };
 
     const handleCLick = () => {
-        navigate("/products/all")
+        navigate(navigatePath.PRODUCT_ALL)
     }
 
     return (
-        <div className="w-screen h-screen">
-            {state.products?.length === 0 && (
-                <Loading />
-            )}
-            {state.products?.length > 0 && (
-                <>
-                    <div className="flex top-0 fixed w-full justify-center z-[999]" id="app-header">
-                        <Header
-                            visible={state.visible}
-                            handleMobileNavOpenChange={handleMobileNavOpenChange}
-                        />
-                    </div>
-                    <div
-                        className="w-full h-full relative"
-                        style={{
-                            backgroundImage: `url(${HomePageImage})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center',
-                            backgroundRepeat: 'no-repeat',
-                        }}
-                    >
-                        <div
-                            className="uppercase text-[42px] font-bold absolute top-0 left-0 w-full h-full p-8 flex flex-col items-center justify-end"
-                        >
-                            <MotionBox animation={fadeIn(0.5)}>
-                                <p className="text-white text-center">new collection out now!</p>
-                            </MotionBox>
-                            <MotionBox animation={fadeIn(1)}>
-                                <Button onClick={handleCLick} className="uppercase font-bold mt-8 !px-[30px] !py-[20px] flex items-center text-[15px]">
-                                    shop now
-                                </Button>
-                            </MotionBox>
-                            <MotionBox animation={fadeIn(1.5)}>
-                                <IconArrowDown
-                                    className="mt-[60px] text-white cursor-pointer"
-                                    onClick={handleScrollToProduct}
-                                />
-                            </MotionBox>
-                        </div>
-                    </div>
-                    <div id="home-product" className="w-full">
-                        <HomeProduct
-                            products={state.products}
-                            handleCLick={handleCLick}
-                        />
-                    </div>
-                    <div className="w-full">
-                        <ShopCategory />
-                    </div>
-                    <div className="w-full">
-                        <Sponsor />
-                    </div>
-                    <div className="w-full">
-                        <Footer />
-                    </div>
-                </>
-            )}
-        </div>
+        <HomeContainer isLoading={isLoading} isGetRecommend={isGetRecommend}>
+            <>
+                <HomeHeader id={HEADER_ID}>
+                    <Header
+                        visible={visible}
+                    />
+                </HomeHeader>
+                <HomeBackground>
+                    <HomeBG
+                        handleCLick={handleCLick}
+                        handleScrollToProduct={handleScrollToProduct}
+                    />
+                </HomeBackground>
+                <HomePart id={HOME_PRODUCT_ID}>
+                    <HomeProduct
+                        products={dataRecommend?.productListAll_DataFormat}
+                        handleCLick={handleCLick}
+                    />
+                </HomePart>
+                <HomePart>
+                    <ShopCategory />
+                </HomePart>
+                <HomePart>
+                    <Sponsor />
+                </HomePart>
+                <HomePart>
+                    <Footer />
+                </HomePart>
+                <df-messenger intent="WELCOME" chat-title="EcwebBot" agent-id="915d1e00-467b-4b47-891b-014f7044893f"
+                    language-code="vi"></df-messenger>
+            </>
+        </HomeContainer>
     )
 }
 

@@ -1,273 +1,202 @@
 import { endpoint, axiosInstance } from "@api/api"
+import { ADMIN, GET_CATEGORIES_ADMIN, GET_PRODUCT_DETAIL_ADMIN, GET_PRODUCTS_ADMIN, QL_PRODUCT } from "@constants/index";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { message } from "antd"
 
-export const updateOnlShopStatus = async (id, onlShop) => {
-    const token = localStorage.getItem("token");
-    const body = {
-        id,
-        onlShop,
-    };
-
+export const updateOnlShopStatus = async (body) => {
     try {
-        const response = await fetch(`${endpoint}/admin/update_onlShop_product`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                "token" : `${token}`,
-                'Content-Type': 'application/json',
+        const response = await axiosInstance.post(`/admin/update_onlShop_product`, JSON.stringify(body),
+            {
+                requiresAuth: true,
             }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data;
+        )
+        return response.data;
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
     }
+}
+
+export function useUpdateOnlShopStatus () {
+    return useMutation({
+        mutationFn: (body) => updateOnlShopStatus(body) 
+    })
 }
 
 export const getProducts = async (id) => {
-    const token = localStorage.getItem("token");
     try {
-        const response = await fetch(`${endpoint}/admin/admin_to_get_product_list/${id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        if(data?.success){
-            return data?.formatted_product
-        }else{
-            return [];
-        }
+        const response = await axiosInstance.get(`/admin/admin_to_get_product_list/${id}`, {
+            requiresAuth: true,
+        })
+        return response.data
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
     }
+}
+
+export function useGetProducts (id, role) {
+    return useQuery({
+        queryFn: () => getProducts(id),
+        queryKey: [GET_PRODUCTS_ADMIN, id],
+        enabled: !!id && (role?.includes(ADMIN) || role?.includes(QL_PRODUCT)),
+    })
 }
 
 export const getCategories = async () => {
-    const token = localStorage.getItem("token");
     try {
-        const response = await fetch(`${endpoint}/admin/Admin_get_all_category`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data?.category;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
-
-}
-
-export const addCategory = async (name) => {
-    const token = localStorage.getItem("token");
-    const body = {
-        name,
-    }
-
-    try {
-        const response = await fetch(`${endpoint}/admin/add_primary_category`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                "token" : `${token}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data;
+        const response = await axiosInstance.get(`/admin/Admin_get_all_category`, {
+            requiresAuth: true,
+        })
+        return response.data
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
     }
 }
 
-export const deleteCategory = async (category_id) => {
-    const token = localStorage.getItem("token");
-    const body = {
-        category_id
-    }
+export function useGetCategories (role) {
+    return useQuery({
+        queryFn: () => getCategories(),
+        queryKey: [GET_CATEGORIES_ADMIN],
+        enabled: role?.includes(ADMIN) || role?.includes(QL_PRODUCT),
+    })
+}
 
+export const addCategory = async (body) => {
     try {
-        const response = await fetch(`${endpoint}/admin/deleteCategory`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                "token" : `${token}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data?.success;
+        const response = await axiosInstance.post(`/admin/add_primary_category`, JSON.stringify(body), {
+            requiresAuth: true,
+        })
+        return response.data
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
     }
 }
 
-export const editCategory = async (name, category_id) => {
-    const token = localStorage.getItem("token");
-    const body = {
-        name,
-        category_id,
-    }
+export function useAddCategory () {
+    return useMutation({
+        mutationFn: (body) => addCategory(body), 
+    })
+}
 
+export const deleteCategory = async (body) => {
     try {
-        const response = await fetch(`${endpoint}/admin/update_Catergory`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                "token" : `${token}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data?.success;
+        const response = await axiosInstance.post(`/admin/deleteCategory`, JSON.stringify(body), {
+            requiresAuth: true,
+        })
+        return response.data
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
     }
 }
 
-export const addSubCategory = async (name_sub_category, id) => {
-    const token = localStorage.getItem("token");
-    const body = {
-        name_sub_category,
-        id,
-    }
+export function useDeleteCategory () {
+    return useMutation({
+        mutationFn: (body) => deleteCategory(body),
+    })
+}
 
+export const editCategory = async (body) => {
     try {
-        const response = await fetch(`${endpoint}/admin/add_sub_category`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                "token" : `${token}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data?.success;
+        const response = await axiosInstance.post(`/admin/update_Catergory`, JSON.stringify(body), {
+            requiresAuth: true,
+        })
+
+        return response.data;
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
     }
 }
 
-export const handleEditSubCategory = async (name, category_id, sub_category_id) => {
-    const token = localStorage.getItem("token");
-    const body = {
-        name,
-        category_id,
-        sub_category_id,
-    }
+export function useEditCategory () {
+    return useMutation({
+        mutationFn: (body) => editCategory(body)
+    })
+}
 
+export const addSubCategory = async (body) => {
     try {
-        const response = await fetch(`${endpoint}/admin/update_sub_category`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                "token" : `${token}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data?.success;
+        const response = await axiosInstance.post(`/admin/add_sub_category`, JSON.stringify(body), {
+            requiresAuth: true,
+        })
+        return response.data;
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
     }
 }
 
-export const deleteSubCategory = async (category_id, sub_category_id) => {
-    const token = localStorage.getItem("token");
-    const body = {
-        category_id,
-        sub_category_id,
-    }
+export function useAddSubCategory () {
+    return useMutation({
+        mutationFn: (body) => addSubCategory(body),
+    })
+}
 
+export const handleEditSubCategory = async (body) => {
     try {
-        const response = await fetch(`${endpoint}/admin/delete_sub_category`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                "token" : `${token}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data?.success;
+        const response = await axiosInstance.post(`/admin/update_sub_category`, JSON.stringify(body), {
+            requiresAuth: true
+        })
+        return response.data;
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
     }
+}
+
+export function useHandleEditSubCategory () {
+    return useMutation({
+        mutationFn: (body) => handleEditSubCategory(body),
+    })
+}
+
+export const deleteSubCategory = async (body) => {
+
+    try {
+        const response = await axiosInstance.post(`/admin/delete_sub_category`, JSON.stringify(body), {
+            requiresAuth: true
+        })
+        return response.data;
+    } catch (error) {
+        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+        console.error('Error:', error);
+    }
+}
+
+export function useDeleteSubCategory () {
+    return useMutation({
+        mutationFn: (body) => deleteSubCategory(body),
+    })
 }
 
 export const productDetail = async (product_id) => {
-    const token = localStorage.getItem("token");
+
     try {
-        const response = await fetch(`${endpoint}/product/getProductDetail/${product_id}`, {
-            method: 'GET',
-            headers: {
-                "token" : `${token}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data;
+        const response = await axiosInstance.get(`/admin/getProductDetail/${product_id}`, {
+            requiresAuth: true,
+        })
+        return response.data
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
     }
+}
+
+export function useGetProductDetail (product_id) {
+    return useQuery({
+        queryFn: () => productDetail(product_id),
+        queryKey: [GET_PRODUCT_DETAIL_ADMIN, product_id],
+        enabled: !!product_id,
+    })
 }
 
 export const addProduct = async (body) => {
     try {
-        const response = await axiosInstance.post('/admin/add_product', JSON.stringify(body) ,{
+        const response = await axiosInstance.post('/admin/add_product', JSON.stringify(body), {
             requiresAuth: true,
         });
         return response.data;
@@ -276,52 +205,44 @@ export const addProduct = async (body) => {
     };
 };
 
-export const deleteProduct = async (product_id) => {
-    const token = localStorage.getItem("token");
-    const body = {
-        product_id
-    }
+export function useAddProduct () {
+    return useMutation({
+        mutationFn: (body) => addProduct(body),
+    })
+}
 
+export const deleteProduct = async (body) => {
     try {
-        const response = await fetch(`${endpoint}/admin/delete_product`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                "token" : `${token}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data;
+        const response = await axiosInstance.post(`/admin/delete_product`, JSON.stringify(body), {
+            requiresAuth: true,
+        })
+        return response.data;
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
     }
 }
 
+export function useDeleteProduct () {
+    return useMutation({
+        mutationFn: (body) => deleteProduct(body),
+    })
+}
+
 export const updateProduct = async (body) => {
-    const token = localStorage.getItem("token");
     try {
-        const response = await fetch(`${endpoint}/admin/update_product`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                "token" : `${token}`,
-                'Content-Type': 'application/json',
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data;
+        const response = await axiosInstance.post(`/admin/update_product`, JSON.stringify(body), {
+            requiresAuth: true,
+        })
+        return response.data;
     } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+        // message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
         console.error('Error:', error);
     }
+}
+
+export function useUpdateProduct () {
+    return useMutation({
+        mutationFn: (body) => updateProduct(body),
+    })
 }

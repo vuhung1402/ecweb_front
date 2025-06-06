@@ -1,20 +1,20 @@
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { storage } from "../firebase/firebase";
 import { message } from "antd";
-import { useNavigate } from "react-router-dom";
 import { LOGIN_AGAIN } from "./message";
 import { axiosInstance, from_district_id, tokenGHN } from "@api/api";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { useQuery } from "@tanstack/react-query";
 
 export function cn(...inputs) {
     return twMerge(clsx(inputs));
 }
 
-export const formatCurrencyVN = (number, isNotRounded = false) => {
+export const formatCurrencyVN = (number) => {
     if (isNaN(number)) return "";
 
-    let formattedNumber = isNotRounded ? number : Math.ceil(number / 1000) * 1000;
+    let formattedNumber = number;
     let numberStr = formattedNumber.toString();
     let [wholeNumber, decimal] = numberStr.split(",");
 
@@ -118,6 +118,24 @@ export const handleUploadListImage = async (list, color, idImgHover, idPrimaryIm
 export const logAgain = () => {
     message?.info(LOGIN_AGAIN);
     localStorage.removeItem("token");
+}
+
+export const buildApiParams = (params) => {
+    // Kiểm tra nếu params không phải là object
+    if (typeof params !== "object" || params === null) {
+        return "";
+    }
+
+    // Sử dụng Object.entries để duyệt qua các cặp key-value
+    return Object.entries(params)
+        .map(([key, value]) => {
+            if (value === null || value === undefined) {
+                return ''; // Bỏ qua giá trị null hoặc undefined
+            }
+            return `${encodeURIComponent(key)}=${encodeURIComponent(value)}`;
+        })
+        .filter(param => param) // Loại bỏ các chuỗi trống
+        .join("&"); // Nối các cặp key-value bằng dấu &
 }
 
 export const getLevelKeys = (items1) => {
@@ -231,4 +249,56 @@ export const calculateShippingFee = async (to_district_id, to_ward_code) => {
     } catch (error) {
         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
     };
+}
+
+export const getRecommendProducts = async (id) => {
+    try {
+        const response = await axiosInstance.get(`https://supposedly-massive-antelope.ngrok-free.app/recommendations/${id}`, {
+            AI: true,
+        });
+        return response.data;
+    } catch (error) {
+        console.error('Error:', error);
+    };
+}
+
+export function useGetRecommendProducts(id) {
+    return useQuery({
+        queryFn:() => getRecommendProducts(id)
+    })
+}
+
+export const getDistrictsTest = async (province_id) => {
+    const body = {
+        province_id
+    }
+    // try {
+    //     const response = await fetch(`https://online-gateway.ghn.vn/shiip/public-api/master-data/district`, {
+    //         method: 'POST',
+    //         body: JSON.stringify(body),
+    //         headers: {
+    //             "token": tokenGHN,
+    //             'Content-Type': 'application/json',
+    //         }
+    //     });
+    //     if (!response.ok) {
+    //         message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+    //         throw new Error('Network response was not ok');
+    //     }
+    //     const data = await response.json();
+    //     return data;
+    // } catch (error) {
+    //     message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+    //     console.error('Error:', error);
+    // }
+
+    const response = await axiosInstance.post(`https://online-gateway.ghn.vn/shiip/public-api/master-data/district`, JSON.stringify(body));
+
+    return response.data
+}
+
+export function useGetDistrictsTest() {
+    return useQuery({
+        queryFn:() => getDistrictsTest('')
+    })
 }
