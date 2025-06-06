@@ -5,11 +5,11 @@ import { message } from "antd";
 
 export const getOrderDetail = async (id) => {
     const body = {
-        Order_id: id, 
+        Order_id: id,
     };
 
     try {
-        const response = await axiosInstance.post(`/order/get_order_detail`, JSON.stringify(body),{
+        const response = await axiosInstance.post(`/order/get_order_detail`, JSON.stringify(body), {
             requiresAuth: true,
         })
         return response.data;
@@ -19,7 +19,7 @@ export const getOrderDetail = async (id) => {
     }
 }
 
-export function useGetOrderDetail (id) {
+export function useGetOrderDetail(id) {
     return useQuery({
         queryFn: () => getOrderDetail(id),
         queryKey: [GET_ORDER_DETAIL, id],
@@ -38,7 +38,7 @@ export const cancelOrder = async (body) => {
     }
 }
 
-export function useCancelOrder () {
+export function useCancelOrder() {
     return useMutation({
         mutationFn: (body) => cancelOrder(body),
     })
@@ -56,7 +56,7 @@ export const refundMoney = async (body) => {
     }
 }
 
-export function useRefundMoney () {
+export function useRefundMoney() {
     return useMutation(
         {
             mutationFn: (body) => refundMoney(body),
@@ -79,26 +79,22 @@ export const orderHistory = async (Order_id) => {
     }
 }
 
-export function useGetOrderHistory (Order_id) {
+export function useGetOrderHistory(Order_id) {
     return useQuery({
         queryFn: () => orderHistory(Order_id),
         queryKey: [GET_ORDER_HISTORY, Order_id],
-        enabled:!!Order_id
+        enabled: !!Order_id
     })
 }
 
-export const requestReturnOrder = async(body) => {
-    try{
-        const response = await axiosInstance.post(`order/add_description_fop_refund`, JSON.stringify(body), {
-            requiresAuth: true,
-        });
-        return response.data;
-    }catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-    }
+export const requestReturnOrder = async (body) => {
+    const response = await axiosInstance.post(`order/add_description_fop_refund`, JSON.stringify(body), {
+        requiresAuth: true,
+    });
+    return response.data;
 }
 
-export function useRequestReturnOrder () {
+export function useRequestReturnOrder() {
     return useMutation(
         {
             mutationFn: (body) => requestReturnOrder(body),

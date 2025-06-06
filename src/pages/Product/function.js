@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { message } from "antd";
 
 import { endpoint, axiosInstance } from "@api/api";
@@ -52,17 +52,21 @@ const getProducts = async (location) => {
     const key = location?.state?.key ? location?.state?.key : 'all';
     const modeFilter = match?.[1].length > 0 ? `${location?.state?.value}` : `1`;
 
-    const response = await axiosInstance.get(`/product/getAllProductList/${key}/${modeFilter}`);
+    const response = await axiosInstance.get(`/product/getAllProductList/${key}/${modeFilter}?name=${location?.name}`);
     return response.data;
 };
 
-export function useGetProducts(location, parmas) {
+export function useGetProducts(location, parmas, name) {
     let customLocation;
     if (location?.state?.key) {
-        customLocation = location;
+        customLocation = {
+            ...location,
+            name: name,
+        };
     } else {
         customLocation = {
             ...location,
+            name: name,
             search: location?.search ? location?.search :`?sort_by=tang-dan`,
             state: {
                 key: parmas?.category,
@@ -73,7 +77,7 @@ export function useGetProducts(location, parmas) {
 
     return useQuery({
         queryFn: () => getProducts(customLocation),
-        queryKey: [GET_PRODUCTS_PAGE, location?.search, parmas?.category]
+        queryKey: [GET_PRODUCTS_PAGE, location?.search, parmas?.category, name]
     });
 };
 
@@ -89,4 +93,19 @@ export function useGetCategories() {
         queryFn: () => getCategories(),
         queryKey: [GET_CATEGORIES]
     });
+};
+
+export const findProductByImage = async (body) => {
+    const response = await axiosInstance.post(`https://supposedly-massive-antelope.ngrok-free.app/find_similar`, JSON.stringify(body), {
+        AI: true
+    });
+    return response.data;
+};
+
+export function useFindProductByImage(){
+    return useMutation(
+        {
+            mutationFn: (body) => findProductByImage(body),
+        }
+    )
 };

@@ -253,7 +253,9 @@ export const calculateShippingFee = async (to_district_id, to_ward_code) => {
 
 export const getRecommendProducts = async (id) => {
     try {
-        const response = await axiosInstance.get(`https://recommend-system-nlp.onrender.com/recommendations/${id}`);
+        const response = await axiosInstance.get(`https://supposedly-massive-antelope.ngrok-free.app/recommendations/${id}`, {
+            AI: true,
+        });
         return response.data;
     } catch (error) {
         console.error('Error:', error);

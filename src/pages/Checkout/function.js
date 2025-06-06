@@ -15,14 +15,10 @@ export const getAddressInfo = async () => {
 };
 
 export const createOrder = async (body) => {
-    try {
-        const response = await axiosInstance.post(`/order/add_order`, JSON.stringify(body), {
-            requiresAuth: true,
-        });
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-    };
+    const response = await axiosInstance.post(`/order/add_order`, JSON.stringify(body), {
+        requiresAuth: true,
+    });
+    return response.data;
 };
 
 export function useCreateOrder() {
@@ -57,15 +53,10 @@ export function useGetReleasedVoucher() {
 }
 
 export const applyVoucher = async (body) => {
-    try {
-        const response = await axiosInstance.post(`/voucher/applyVoucher`, JSON.stringify(body), {
-            requiresAuth: true,
-        });
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
+    const response = await axiosInstance.post(`/voucher/applyVoucher`, JSON.stringify(body), {
+        requiresAuth: true,
+    });
+    return response.data;
 }
 
 export function useApplyVoucher() {

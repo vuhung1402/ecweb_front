@@ -238,7 +238,7 @@ const VoucherDetail = (props) => {
                 }
                 <Button
                     onClick={onOk}
-                    // loading={pendingUpdateProduct || pendingAddProduct}
+                    loading={mutateUpdateVoucher?.isPending || mutateAddVoucher?.isPending}
                     type="primary"
                     className="font-bold"
                 >

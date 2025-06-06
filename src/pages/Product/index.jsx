@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { useLocation, useNavigate, useParams } from "react-router-dom"
 
 import ProductContainer from "./ProductContainer"
@@ -13,10 +13,18 @@ const Products = () => {
     const params = useParams();
     const location = useLocation();
 
+    const [state, setState] = useState({
+            name: '',
+            nameInput: '',
+            dataFindByImage:'',
+            openModalFindByImage: false,
+        });
+
     const { isLoading: isLoadingCategpories, data: dataCategories } = useGetCategories(params);
-    const { isLoading: isLoadingProducts, data: dataProducts } = useGetProducts(location, params);
+    const { isLoading: isLoadingProducts, data: dataProducts } = useGetProducts(location, params, state.name);
 
     const onClick = ({item, key, keyPath}) => {
+        setState((prev) => ({ ...prev, name: '' }));
         console.log({item});
         navigate(
             {
@@ -45,6 +53,23 @@ const Products = () => {
         )
     };
 
+    const onSearch = (value, _e, info) => {
+        console.log(value)
+        setState((prev) => ({ ...prev, name: value }));
+    }
+
+    const onChange = (value) => {
+        setState((prev) => ({ ...prev, nameInput: value }));
+    }
+
+    const handleOpenModalFindByImage = () => {
+        setState((prev) => ({ ...prev, openModalFindByImage: !state.openModalFindByImage }));
+    }
+
+    const handleDataFindByImage = (value) => {
+        setState((prev) => ({ ...prev, dataFindByImage: value }));
+    }
+
     return (
         <ProductContainer >
             <ProductSidebarWrapper>
@@ -55,8 +80,14 @@ const Products = () => {
             </ProductSidebarWrapper>
             <ProductListWrapper isLoading={isLoadingCategpories || isLoadingProducts}>
                 <ProductList
+                    openModalFindByImage={state.openModalFindByImage}
+                    handleOpenModalFindByImage={handleOpenModalFindByImage}
+                    name={state.nameInput}
+                    onChange={onChange}
                     handleSelect={handleSelect}
-                    data={dataProducts?.productListAll_DataFormat}
+                    onSearch={onSearch}
+                    data={state.dataFindByImage !== '' ? state.dataFindByImage : dataProducts?.productListAll_DataFormat}
+                    handleDataFindByImage={handleDataFindByImage}
                 />
             </ProductListWrapper>
         </ProductContainer>

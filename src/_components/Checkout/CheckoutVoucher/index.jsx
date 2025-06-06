@@ -3,7 +3,7 @@ import { Button, Input, Select, Space, TreeSelect } from "antd";
 import React, { useState } from "react";
 
 const CheckoutVoucher = (props) => {
-    const { discountVouchers, shippingVouchers } = props;
+    const { discountVouchers, shippingVouchers, applyPending } = props;
 
     const { applyVoucher } = props;
     const { setCodeVoucherDiscount, setCodeVoucherShipping } = useCheckoutStore()
@@ -46,6 +46,7 @@ const CheckoutVoucher = (props) => {
             <Button
                 type="primary"
                 className="w-1/3 font-medium rounded-lg text-sm"
+                loading={applyPending}
                 onClick={applyVoucher}
             >
                 Sử dụng

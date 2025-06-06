@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Select, message, Collapse } from "antd";
+import { Button, Select, message, Collapse, notification } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import CheckoutTotal from "@_components/Checkout/CheckoutTotal";
@@ -27,7 +27,7 @@ const CheckOut = () => {
     const location = useLocation();
 
     const { order, codeVoucherDiscount, codeVoucherShipping } = useCheckoutStore()
-    const { mutate }  = useCreateOrder()
+    const { mutate } = useCreateOrder()
     const { data: addressInfo, refetch } = useGetAddressInfo()
     const { data: voucher } = useGetReleasedVoucher()
     const { getQuantity } = useGetCartQuantity()
@@ -58,7 +58,7 @@ const CheckOut = () => {
 
             if (addressInfo?.length > 0) {
                 const index = addressInfo?.findIndex((item) => item?.isDefault)
-    
+
                 if (index !== -1) {
 
                     const districtID = addressInfo[index]?.districtID
@@ -70,7 +70,7 @@ const CheckOut = () => {
                     if (res?.code === 200) fee = res?.data?.total
 
                     const addressesOptions = handleAddresOptions(addressInfo)
-                    
+
                     setState(prev => ({
                         ...prev,
                         shippingFee: fee,
@@ -79,10 +79,10 @@ const CheckOut = () => {
                         addressInfor: addressInfo[index],
                         idAdress: addressInfo[index]?._id
                     }))
-                    
+
                 } else {
                     const addressesOptions = handleAddresOptions(addressInfo)
-                    setState(prev => ({...prev, addresses: addressesOptions}))
+                    setState(prev => ({ ...prev, addresses: addressesOptions }))
                 }
             } else {
                 const response = await getProvinces();
@@ -94,7 +94,7 @@ const CheckOut = () => {
 
         handleData()
 
-    },[addressInfo])
+    }, [addressInfo])
 
     const handleSelectPaymentMethod = (e) => {
         state.paymentMethod = e.target.value;
@@ -145,9 +145,13 @@ const CheckOut = () => {
                 const response = error?.response?.data
                 if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
                     logAgain();
-                    navigate('/login')
+                    navigate('/login');
                 } else {
-                    message.error(response?.message);
+                    notification.info({
+                        message: 'Thông báo',
+                        description: response?.message,
+                    });
+                    navigate('/cart');
                 }
             }
         })
@@ -259,7 +263,7 @@ const CheckOut = () => {
                 />
 
                 <div
-                    style={{height: 'calc(100% - 202px)'}}
+                    style={{ height: 'calc(100% - 202px)' }}
                     className="hidden me:block overflow-y-auto"
                 >
                     {order?.items?.map((item) => {
@@ -271,9 +275,10 @@ const CheckOut = () => {
                     })}
                 </div>
 
-                <CheckoutVoucher 
-                    discountVouchers = {voucher?.dicountVouchers}
-                    shippingVouchers = {voucher?.shippingVouchers}
+                <CheckoutVoucher
+                    discountVouchers={voucher?.dicountVouchers}
+                    shippingVouchers={voucher?.shippingVouchers}
+                    applyPending = {mutateApplyVoucher?.isPending}
                     applyVoucher={applyVoucher}
                 />
 

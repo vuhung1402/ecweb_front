@@ -7,7 +7,6 @@ import Sidebar from '@widgets/AdminUI/Sidebar';
 import Orders from './orders';
 import User from './user';
 import Products from './products';
-import Transaction from './transaction';
 import OrderDetail from './OrderDetail';
 import NewProduct from '@pages/admin/NewProduct';
 

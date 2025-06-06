@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { logAgain } from "@utils/function";
 import { useDispatch } from "react-redux";
 import { numOfCartPackage } from "@redux/actions";
-import { message } from "antd";
+import { message, notification } from "antd";
 
 import CartCard from "@widgets/CartCard";
 import CartContainer from "./CartContainer";
@@ -29,7 +29,7 @@ const CartPage = () => {
         data: undefined,
         selectedItem: [],
         totalPrice: 0,
-        isLoading:{
+        isLoading: {
             type: '',
             status: false,
             id: '',
@@ -38,17 +38,17 @@ const CartPage = () => {
         quantity: 0,
     });
 
-    const { isLoading, data, refetch } = useGetCart();
+    const { isLoading, data, refetch, isError, error } = useGetCart();
     const { mutateAsync, isPending } = useDeleteItemCart();
     const { mutateAsync: updateMutaion, isPending: isUpdateLoading } = useUpdateItemCart();
     const checkoutMutation = useCheckout();
     const { setOrder } = useCheckoutStore()
 
     useEffect(() => {
-        const quantity = data?.items?.reduce((total, item) => total += item?.quantity,0);
-        setState(prev => ({...prev, quantity: quantity}));
+        const quantity = data?.items?.reduce((total, item) => total += item?.quantity, 0);
+        setState(prev => ({ ...prev, quantity: quantity }));
         dispatch(numOfCartPackage(data?.items?.length));
-    },[data])
+    }, [data])
 
 
     const handleCheckout = async () => {
@@ -64,7 +64,7 @@ const CartPage = () => {
                 const orderId = data?.order?.order_id;
 
                 setOrder(order)
-                navigate({ pathname: `/checkout/${orderId}`});
+                navigate({ pathname: `/checkout/${orderId}` });
             },
             onError: (error) => {
                 const response = error?.response?.data
@@ -72,7 +72,11 @@ const CartPage = () => {
                     logAgain();
                     navigate('/login')
                 } else {
-                    message.info("Chọn sản phảm muốn thanh toán!");
+                    notification.info({
+                        message: 'Thông báo',
+                        description: response?.message,
+                    })
+                    refetch();
                 }
             }
         })
@@ -95,14 +99,14 @@ const CartPage = () => {
                 refetch()
                 getQuantity()
                 const findItem = state.selectedItem.findIndex((item) => item?._id === id);
-                if(findItem !== -1){
+                if (findItem !== -1) {
                     const newTotalPrice = state?.totalPrice - state?.selectedItem[findItem]?.price_per_item;
                     const newSelected = state.selectedItem?.filter((_, index) => index !== findItem);
-                    
+
                     setState((prev) => ({
                         ...prev,
                         selectedItem: newSelected,
-                        totalPrice:  newTotalPrice,
+                        totalPrice: newTotalPrice,
                     }));
                 }
                 message.success(SUCCESS);
@@ -120,7 +124,7 @@ const CartPage = () => {
     };
 
     const handleUpdateItem = async (id, quantity) => {
-        if(quantity === 0) return;
+        if (quantity === 0) return;
 
         updateMutaion({ id, quantity }, {
             onSuccess: () => {
@@ -133,14 +137,14 @@ const CartPage = () => {
                     logAgain();
                     navigate('/login');
                 } else {
-                    message.error(FAIL);
+                    message.error(response?.message);
                 };
             }
         });
     }
 
-    return(
-        <CartContainer isLoading={isLoading}>
+    return (
+        <CartContainer isLoading={isLoading} isError={isError} error={error}>
             <>
                 <CartHeader quantity={state.quantity} />
                 <div

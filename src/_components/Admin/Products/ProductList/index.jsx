@@ -186,7 +186,7 @@ const ProductList = (props) => {
         state.idSubCategory = option?.value;
         state.name = option?.label;
         setState((prev) => ({ ...prev }));
-        await filterData(option?.value);
+        await filterData(option?.value === "" ? idCategory : option?.value);
     }
 
     const onNameChange = (event) => {

@@ -162,9 +162,9 @@ const OderDetail = () => {
                                 isShowRequestReturn.includes(orderDetail?.formatted_order_detail?.status)
                                 &&
                                 <ReturnRequest
-                                listImage={orderDetail?.formatted_order_detail?.list_image}
-                                description={orderDetail?.formatted_order_detail?.description}
-                            />
+                                    listImage={orderDetail?.formatted_order_detail?.list_image}
+                                    description={orderDetail?.formatted_order_detail?.description}
+                                />
                             }
 
                             {
