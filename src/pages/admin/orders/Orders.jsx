@@ -1,11 +1,15 @@
+import useWindowSize from "@hooks/useWindowSize";
 import React from "react";
 
 export const OrderListWrapper = (props) => {
+
+    const iw = useWindowSize().width;
+
     return (
         <div
             className=" w-full h-full flex flex-col gap-4 order-list"
             style={{
-                height: 'calc(100vh - 80px)'
+                height: iw > 640 ? 'calc(100vh - 120px)' : 'calc(100vh - 230px)'
             }}
             {...props}
         />

@@ -57,12 +57,12 @@ const Home = () => {
                         handleCLick={handleCLick}
                     />
                 </HomePart>
-                <HomePart>
+                {/* <HomePart>
                     <ShopCategory />
-                </HomePart>
-                <HomePart>
+                </HomePart> */}
+                {/* <HomePart>
                     <Sponsor />
-                </HomePart>
+                </HomePart> */}
                 <HomePart>
                     <Footer />
                 </HomePart>

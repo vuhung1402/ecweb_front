@@ -26,10 +26,10 @@ const CheckOut = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { order, codeVoucherDiscount, codeVoucherShipping } = useCheckoutStore()
-    const { mutate } = useCreateOrder()
+    const { order, codeVoucherDiscount, codeVoucherShipping, expiredAtVoucherDiscount, expiredAtVoucherShipping } = useCheckoutStore()
+    const { mutate, isPending } = useCreateOrder()
     const { data: addressInfo, refetch } = useGetAddressInfo()
-    const { data: voucher } = useGetReleasedVoucher()
+    const { data: voucher, refetch: refetchGetReleasedVoucher } = useGetReleasedVoucher()
     const { getQuantity } = useGetCartQuantity()
 
     const mutateApplyVoucher = useApplyVoucher();
@@ -120,8 +120,13 @@ const CheckOut = () => {
     }
 
     const handleOrder = async () => {
-        setState((prev) => ({ ...prev, isOrderLoading: true }))
-
+        // setState((prev) => ({ ...prev, isOrderLoading: true }))
+        if((expiredAtVoucherDiscount < Date.now() && expiredAtVoucherDiscount !== 0) || (expiredAtVoucherShipping < Date.now() && expiredAtVoucherShipping !== 0)){
+            setState(prev => ({ ...prev, price: order?.total_price, shippingFee: state.initialShippingFee }));
+            message?.info("Áp dụng voucher không thành công");
+            refetchGetReleasedVoucher();
+            return;
+        }
         const body = {
             order: order,
             address: state?.addressInfor,
@@ -130,6 +135,7 @@ const CheckOut = () => {
             type_pay: state?.paymentMethod,
             shipping_code: state.shippingFee,
             checkout_price: state.price,
+            list_voucher: [codeVoucherDiscount, codeVoucherShipping],
         }
 
         mutate(body, {
@@ -137,6 +143,7 @@ const CheckOut = () => {
                 getQuantity()
                 if (res?.paymentUrl) {
                     window.open(res?.paymentUrl, '_blank')
+                    navigate('/order')
                 } else {
                     navigate('/order')
                 }
@@ -166,6 +173,7 @@ const CheckOut = () => {
     }
 
     const applyVoucher = () => {
+        console.log(codeVoucherDiscount, codeVoucherShipping, expiredAtVoucherDiscount, expiredAtVoucherShipping)
         const body = {
             code: [codeVoucherDiscount, codeVoucherShipping],
             shippingFee: state.initialShippingFee,
@@ -228,7 +236,7 @@ const CheckOut = () => {
                 />
 
                 <CheckoutAction
-                    isOrderLoading={state.isOrderLoading}
+                    isOrderLoading={isPending}
                     onOrder={handleOrder}
                 />
 

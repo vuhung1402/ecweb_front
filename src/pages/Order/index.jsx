@@ -18,7 +18,7 @@ const Order = () => {
     const { data: orderList, isLoading } = useGetOrderList(state.query);
 
     const handleChangeTab = async (key) => {
-        setState((prev) => ({ ...prev, data: undefined, tabKey: key, query: `?status=${key}` }));
+        setState((prev) => ({ ...prev, data: undefined, tabKey: key, query: `?status=${key}&sort=-1` }));
     };
 
     return (

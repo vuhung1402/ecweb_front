@@ -8,15 +8,10 @@ export const getOrderDetail = async (id) => {
         Order_id: id,
     };
 
-    try {
-        const response = await axiosInstance.post(`/order/get_order_detail`, JSON.stringify(body), {
-            requiresAuth: true,
-        })
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
+    const response = await axiosInstance.post(`/order/get_order_detail`, JSON.stringify(body), {
+        requiresAuth: true,
+    })
+    return response.data;
 }
 
 export function useGetOrderDetail(id) {
@@ -28,14 +23,10 @@ export function useGetOrderDetail(id) {
 }
 
 export const cancelOrder = async (body) => {
-    try {
-        const response = await axiosInstance.post(`order/cancer_order`, JSON.stringify(body), {
-            requiresAuth: true,
-        });
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-    }
+    const response = await axiosInstance.post(`order/cancer_order`, JSON.stringify(body), {
+        requiresAuth: true,
+    });
+    return response.data;
 }
 
 export function useCancelOrder() {
@@ -46,14 +37,10 @@ export function useCancelOrder() {
 
 export const refundMoney = async (body) => {
 
-    try {
-        const response = await axiosInstance.post(`order/refund_momo_money`, JSON.stringify(body), {
-            requiresAuth: true,
-        });
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-    }
+    const response = await axiosInstance.post(`order/refund_momo_money`, JSON.stringify(body), {
+        requiresAuth: true,
+    });
+    return response.data;
 }
 
 export function useRefundMoney() {
@@ -69,14 +56,10 @@ export const orderHistory = async (Order_id) => {
         Order_id
     }
 
-    try {
-        const response = await axiosInstance.post(`order/get_OrderHistory_log`, JSON.stringify(body), {
-            requiresAuth: true,
-        });
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-    }
+    const response = await axiosInstance.post(`order/get_OrderHistory_log`, JSON.stringify(body), {
+        requiresAuth: true,
+    });
+    return response.data;
 }
 
 export function useGetOrderHistory(Order_id) {

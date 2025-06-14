@@ -4,19 +4,19 @@ import { Button, message } from "antd";
 
 import { addKeyToArraySize, getNotInvalidColor, logAgain } from "@utils/function";
 import useGetCartQuantity from "@hooks/useGetCartQuantity";
-import { addToCart } from "@pages/Product/function";
+import { addToCart, useAddToCart } from "@pages/Product/function";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 
 import { InfoProductDetailColor, InfoProductDetailColorName, InfoProductDetailHeader } from "@pages/ProductDetail/ProductDetail";
 import ProductDetailColorPick from "../ProductDetailColorPick";
 import ProductDetailSize from "../ProductDetailSize";
 import ProductDetailQantity from "../ProductDetailQantity";
-import { SUCCESS } from "@utils/message";
+import { FAIL, SUCCESS } from "@utils/message";
 
-const ID_TEXT_NAME_COLOR='text-name-color'
+const ID_TEXT_NAME_COLOR = 'text-name-color'
 
 const InfoProductDetail = ({ data, handleGotoImage }) => {
-    
+
     const [state, setState] = useState({
         number: 1,
         color: [],
@@ -29,6 +29,7 @@ const InfoProductDetail = ({ data, handleGotoImage }) => {
 
     const navigate = useNavigate();
     const { getQuantity } = useGetCartQuantity()
+    const mutateAddToCart = useAddToCart();
 
     useEffect(() => {
         if (data) {
@@ -109,21 +110,36 @@ const InfoProductDetail = ({ data, handleGotoImage }) => {
             price_per_one: data?.price,
         }
 
-        setState((prev) => ({ ...prev, loadingAddCart: true }));
-        const result = await addToCart(cart);
-        if (result?.success) {
-            getQuantity();
-            setState((prev) => ({ ...prev, loadingAddCart: false }));
-            message.success(SUCCESS);
-        } else {
-            if (result?.message === TOKEN_INVALID || result?.message === NOT_AUTHENTICATION) {
-                logAgain();
-                navigate('/login');
-            } else {
-                message.error(result?.message);
-                setState((prev) => ({ ...prev, loadingAddCart: false }));
+        // setState((prev) => ({ ...prev, loadingAddCart: true }));
+        await mutateAddToCart.mutateAsync(cart, {
+            onSuccess: () => {
+                getQuantity();
+                message.success(SUCCESS);
+            },
+            onError: (error) => {
+                const response = error?.response?.data;
+                if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
+                    logAgain();
+                    navigate('/login');
+                } else {
+                    message.error(response?.message);
+                }
             }
-        }
+        })
+        // const result = await addToCart(cart);
+        // if (result?.success) {
+        //     getQuantity();
+        //     setState((prev) => ({ ...prev, loadingAddCart: false }));
+        //     message.success(SUCCESS);
+        // } else {
+        //     if (result?.message === TOKEN_INVALID || result?.message === NOT_AUTHENTICATION) {
+        //         logAgain();
+        //         navigate('/login');
+        //     } else {
+        //         message.error(result?.message);
+        //         setState((prev) => ({ ...prev, loadingAddCart: false }));
+        //     }
+        // }
     }
 
     return (
@@ -156,7 +172,7 @@ const InfoProductDetail = ({ data, handleGotoImage }) => {
 
             <Button
                 onClick={handleAddToCart}
-                loading={state.loadingAddCart}
+                loading={mutateAddToCart.isPending}
                 type="primary"
                 className=" w-full mt-3 p-4 !h-auto font-bold uppercase"
             >

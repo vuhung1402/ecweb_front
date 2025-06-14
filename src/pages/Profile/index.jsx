@@ -11,10 +11,10 @@ import AccountInfor from "@_components/Profile/AccountInfor";
 const Profile = () => {
     // const [infor, setInfor] = useState();
 
-    const { data: infor, isError, isLoading:isGetInfor } = useGetProfileInfo();
+    const { data: infor, isError, isLoading:isGetInfor, error } = useGetProfileInfo();
 
     return (
-        <ProfileContainer isError = {isError} isGetInfor = {isGetInfor} >
+        <ProfileContainer isError = {isError} isGetInfor = {isGetInfor} error={error} >
             <ContentWrapper>
                 <InforWrapper>
                     <h1 className="text-3xl font-bold text-center mb-8">Tài khoản của bạn</h1>

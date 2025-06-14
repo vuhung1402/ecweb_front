@@ -9,21 +9,16 @@ export const getOrderDetail = async (Order_id, user_id) => {
         Order_id,
         user_id
     }
-    try {
-        const response = await axiosInstance.post(`/admin/get_order_detail_to_admin`, JSON.stringify(body),
-            {
-                requiresAuth: true,
-            }
-        )
+    const response = await axiosInstance.post(`/admin/get_order_detail_to_admin`, JSON.stringify(body),
+        {
+            requiresAuth: true,
+        }
+    )
 
-        return response.data;
-    } catch (error) {
-        console.log("An error occur when get order detail: ", error);
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-    }
+    return response.data;
 };
 
-export function useGetOrderDetail (Order_id, user_id) {
+export function useGetOrderDetail(Order_id, user_id) {
     return useQuery(
         {
             queryFn: () => getOrderDetail(Order_id, user_id),
@@ -40,38 +35,29 @@ export const updateStatuOrder = async (body) => {
     //     new_status_order,
     // }
 
-    try {
-        const response = await axiosInstance.post(`/admin/update_status_order`, JSON.stringify(body), {
-            requiresAuth: true,
-        });
-        return response.data
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
+    const response = await axiosInstance.post(`/admin/update_status_order`, JSON.stringify(body), {
+        requiresAuth: true,
+    });
+    return response.data
 }
 
-export function useUpdateStatusOrder () {
+export function useUpdateStatusOrder() {
     return useMutation(
         {
             mutationFn: (body) => updateStatuOrder(body),
         }
     )
-} 
+}
 
 export const refundMoney = async (body) => {
 
-    try {
-        const response = await axiosInstance.post(`admin/refund_momo_money_admin`, JSON.stringify(body), {
-            requiresAuth: true,
-        });
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-    }
+    const response = await axiosInstance.post(`admin/refund_momo_money_admin`, JSON.stringify(body), {
+        requiresAuth: true,
+    });
+    return response.data;
 }
 
-export function useRefundMoney () {
+export function useRefundMoney() {
     return useMutation(
         {
             mutationFn: (body) => refundMoney(body),

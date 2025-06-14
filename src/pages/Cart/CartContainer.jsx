@@ -14,8 +14,9 @@ const CartContainer = (props) => {
     if (props.isError) {
         const response = props?.error?.response?.data
         if (response?.message === TOKEN_INVALID || response?.message === NOT_AUTHENTICATION) {
+            message.info(LOGIN_AGAIN);
             logAgain();
-            navigate('/login')
+            navigate('/login');
         }
     }
 
