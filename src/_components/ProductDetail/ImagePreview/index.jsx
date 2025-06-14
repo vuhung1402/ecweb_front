@@ -67,7 +67,7 @@ const ImagePreview = ({ imageArray, currentImg }) => {
                                 key={`small-image-${index}`}
                                 className={`w-[64px] h-[64px] cursor-pointer ${Number(imageId) === index ? 'border': ''}`}
                             >
-                                <img src={item?.url} />
+                                <img alt="123s" src={item?.url} />
                             </a>
                         )
                     })
@@ -82,7 +82,7 @@ const ImagePreview = ({ imageArray, currentImg }) => {
                                 key={`big-image-${index}`}
                                 className="w-full"
                             >
-                                <img src={item?.url} className="w-full" />
+                                <img alt="big-img" src={item?.url} className="w-full" />
                             </div>
                         )
                     })
@@ -96,7 +96,7 @@ const ImagePreview = ({ imageArray, currentImg }) => {
                 {
                     imageArray?.map((item, index) => {
                         return (
-                           <img key={`img-carousel-${index}`} src={item?.url} className="w-full h-auto" />
+                           <img alt="img" key={`img-carousel-${index}`} src={item?.url} className="w-full h-auto" />
                         )
                     })
                 }

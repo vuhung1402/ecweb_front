@@ -7,7 +7,6 @@ import HomeBG from "./HomeBG";
 import Header from "@core/Header";
 import HomeProduct from "./HomeProduct";
 import ShopCategory from "./ShopCategory";
-import Sponsor from "./Sponsor";
 import Footer from "@core/Footer";
 
 import useVisibleHeader from "@hooks/useVisibleHeader";
@@ -21,9 +20,13 @@ const HOME_PRODUCT_ID = 'home-product'
 
 const Home = () => {
     const navigate = useNavigate();
+
     const user = useUserPackageHook();
-    const { isLoading, data } = useGetProducts();
+
+    const { isLoading } = useGetProducts();
+
     const { isLoading: isGetRecommend, data: dataRecommend  } = useGetRecommendProducts(user?.id);
+
     const { visible } = useVisibleHeader();
 
     const handleScrollToProduct = () => {
@@ -60,9 +63,9 @@ const Home = () => {
                 <HomePart>
                     <ShopCategory />
                 </HomePart>
-                <HomePart>
+                {/* <HomePart>
                     <Sponsor />
-                </HomePart>
+                </HomePart> */}
                 <HomePart>
                     <Footer />
                 </HomePart>

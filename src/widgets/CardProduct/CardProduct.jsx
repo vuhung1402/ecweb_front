@@ -4,9 +4,9 @@ import { Card } from "antd";
 
 import { formatCurrencyVN } from "@utils/function";
 
-const { Meta } = Card;
-
 import './style.scss';
+
+const { Meta } = Card;
 
 const CardProduct = ({ data }) => {
     const navigate = useNavigate();
@@ -31,28 +31,31 @@ const CardProduct = ({ data }) => {
             hoverable
             rootClassName="card-product relative h-auto"
             className="border border-[#f0f0f0]"
-            style={{width: 250}}
+            style={{width: 300}}
             cover={
                 <div
                     onClick={() => handleNavigate(`/product-detail/${data?.name}`, data?.id)}
-                    className="h-[250px] w-full flex justify-center relative card-img-wrapper"
+                    className="h-[300px] w-full flex justify-center relative card-img-wrapper"
                 >
                     <img
                         className={`w-auto h-full cursor-pointer`}
                         src={img.length ? img : data?.image?.url}
+                        alt="main-img"
                     />
                     <img
                         className={`w-auto h-full cursor-pointer top-0 absolute transition-all duration-300 hover-img`}
                         src={data?.imageHover?.url}
+                        alt="hover-img"
                     />
                 </div>
             }
         >
             <Meta
                 title={data?.name}
+                className="font-semibold"
                 description={
                     <>
-                        <div className="font-normal text-sm tracking-wider">
+                        <div className="font-semibold text-sm tracking-wider">
                             {formatCurrencyVN(data?.price)}
                         </div>
                         <div className="mt-2 flex gap-3">
@@ -66,7 +69,7 @@ const CardProduct = ({ data }) => {
                                         onMouseEnter={() => handleColorHover(item?.image?.url)}
                                         key={`color-${index}`}
                                         className={`cursor-pointer mr-2 hover:border border-black px-2 py-1 w-[24px] h-[24px] rounded-full`}
-                                    ></div>
+                                    />
                                 );
                             })}
                         </div>

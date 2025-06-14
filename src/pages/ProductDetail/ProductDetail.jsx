@@ -3,7 +3,7 @@ import React from "react";
 
 export const ProductDetailWrapper = (props) => {
     return (
-        <div className="w-full h-full flex flex-col me:flex-row" {...props} />
+        <div className="w-full max-w-[1600px] px-10 mx-auto h-full flex flex-col me:flex-row" {...props} />
     );
 };
 
