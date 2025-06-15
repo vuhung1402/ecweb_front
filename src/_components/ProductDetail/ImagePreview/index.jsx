@@ -90,8 +90,13 @@ const ImagePreview = ({ imageArray, currentImg }) => {
             </BigImageWrapper>
             <Carousel
                 rootClassName="w-full slide-show block me:hidden"
-                dots={{className: 'text-black'}}
+                // dots={{className: 'text-black'}}
                 ref={carouselRef}
+                customPaging={(i) => {
+                    console.log({ i });
+
+                    return <img alt="img" key={`img-carousel-preview-${i}`} src={imageArray?.[i]?.url} className="w-full h-auto" />
+                }}
             >
                 {
                     imageArray?.map((item, index) => {

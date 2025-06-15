@@ -9,13 +9,13 @@ export const ProductDetailWrapper = (props) => {
 
 export const ImagePreviewWrapper = (props) => {
     return (
-        <div className="w-full me:w-2/3 me:min-w-[67%] h-fit flex gap-3" {...props} />
+        <div className="w-full me:w-[55%] me:min-w-1/2 h-full flex gap-3" {...props} />
     );
 };
 
 export const InfoProductWrapper = (props) => {
     return (
-        <div className="flex flex-grow" {...props}/>
+        <div className="my-[20px] flex flex-col gap-6 flex-1" {...props}/>
     );
 };
 
@@ -34,8 +34,8 @@ export const BigImageWrapper = (props) => {
 export const InfoProductDetailHeader = (props) => {
     return (
         <>
-            <div className="text-3xl me:text-[20px] font-bold py-3 border-b-[1px]">{props?.name}</div>
-            <div className="text-red-500 text-[18px] font-bold opacity-[0.92] border-b-[1px] py-3">{formatCurrencyVN(props?.price)}</div>
+            <div className="text-3xl font-bold py-3 border-b-[1px]">{props?.name}</div>
+            <div className="text-red-500 text-3xl font-bold opacity-[0.92] border-b-[1px] py-3">{formatCurrencyVN(props?.price)}</div>
         </>
     );
 };
@@ -51,6 +51,6 @@ export const InfoProductDetailColor = (props) => {
 
 export const InfoProductDetailColorName = ({colorName, ...props}) => {
     return (
-        <div className="text-xs font-bold opacity-60 my-3" {...props}>{colorName}</div>
+        <div className="text-sm font-semibold text-gray-900 my-3" {...props}>Màu sắc: {colorName}</div>
     );
 };

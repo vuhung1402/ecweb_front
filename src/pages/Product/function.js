@@ -81,6 +81,19 @@ export function useGetProducts(location, parmas, name) {
     });
 };
 
+export const getRelatedProducts = async (key) => {
+    const response = await axiosInstance.get(`/product/getAllProductList/${key}/1`)
+
+    return response?.data
+}
+
+export function useGetRelatedProducts(key) {
+    return useQuery({
+        queryFn: () => getRelatedProducts(key),
+        queryKey: [...GET_PRODUCTS_PAGE, 'get_related_products']
+    })
+}
+
 // catagories
 
 export const getCategories = async () => {

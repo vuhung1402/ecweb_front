@@ -1,0 +1,41 @@
+.slide-show-prodcut-detail .slick-slide div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    padding: 20px 0;
+}
+
+.slide-show-prodcut-detail .slick-slide img {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.slide-show-prodcut-detail .slick-dots {
+    position: relative;
+    flex-wrap: wrap;
+    gap: 12px;
+    max-width: 600px;
+    margin: 0 auto;
+    padding-top: 10px;
+}
+
+.slide-show-prodcut-detail .slick-dots li {
+    width: 100px !important;
+    height: 100px !important;
+    aspect-ratio: 1 / 1;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.slide-show-prodcut-detail .slick-dots img {
+    width: 100px;
+    height: 100px !important;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.slide-show-prodcut-detail .slick-dots img:hover {
+    scale: 1.05;
+    transition-duration: 300ms;
+}

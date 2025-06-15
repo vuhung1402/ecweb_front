@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Card } from "antd";
 
 import { formatCurrencyVN } from "@utils/function";
@@ -10,6 +10,8 @@ const { Meta } = Card;
 
 const CardProduct = ({ data }) => {
     const navigate = useNavigate();
+
+    const pathname = useLocation().pathname
 
     const handleColorHover = (img) => {
         setImg(img);
@@ -24,14 +26,18 @@ const CardProduct = ({ data }) => {
                 state: { key: id }
             }
         );
+
+        if (pathname.includes('product-detail')) {
+            window.location.reload()
+        }
+
     };
 
     return (
         <Card
             hoverable
             rootClassName="card-product relative h-auto"
-            className="border border-[#f0f0f0]"
-            style={{width: 300}}
+            className="!w-[300px] border border-[#f0f0f0]"
             cover={
                 <div
                     onClick={() => handleNavigate(`/product-detail/${data?.name}`, data?.id)}

@@ -127,7 +127,7 @@ const InfoProductDetail = ({ data, handleGotoImage }) => {
     }
 
     return (
-        <div className="w-full sticky h-fit top-20">
+        <div className="w-full h-fit top-20 bg-white rounded-2xl shadow-lg border p-8">
             <InfoProductDetailHeader
                 name={data?.name}
                 price={data?.price}
@@ -163,15 +163,6 @@ const InfoProductDetail = ({ data, handleGotoImage }) => {
             >
                 Thêm vào giỏ hàng
             </Button>
-
-            <div className="mt-5">
-                <div className="text-[14px] font-bold">Mô tả</div>
-
-                <div
-                    className="mt-4"
-                    dangerouslySetInnerHTML={{ __html: data?.description }}
-                />
-            </div>
         </div>
     )
 }
