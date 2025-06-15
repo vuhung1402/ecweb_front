@@ -60,7 +60,7 @@ const Home = () => {
                         handleCLick={handleCLick}
                     />
                 </HomePart>
-                <HomePart>
+                {/* <HomePart>
                     <ShopCategory />
                 </HomePart>
                 {/* <HomePart>

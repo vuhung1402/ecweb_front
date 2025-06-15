@@ -105,11 +105,11 @@ const Header = (props) => {
             label: 'CỬA HÀNG',
             route: '/store'
         },
-        {
-            key: 'header-menu-4',
-            label: 'CHÍNH SÁCH',
-            children: policyTitle,
-        },
+        // {
+        //     key: 'header-menu-4',
+        //     label: 'CHÍNH SÁCH',
+        //     children: policyTitle,
+        // },
     ];
 
     const toggleMobileMenu = () => {

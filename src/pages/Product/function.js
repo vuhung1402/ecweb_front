@@ -5,26 +5,36 @@ import { endpoint, axiosInstance } from "@api/api";
 import { GET_CATEGORIES, GET_PRODUCTS_PAGE, GET_QUANTITY_CARD } from "@constants/index";
 
 export const addToCart = async (body) => {
-    const token = localStorage.getItem("token");
-    try {
-        const response = await fetch(`${endpoint}/cart/add_to_cart`, {
-            method: 'POST',
-            body: JSON.stringify(body),
-            headers: {
-                'Content-Type': 'application/json',
-                'token': token,
-            }
-        });
-        if (!response.ok) {
-            message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-            throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
+    // const token = localStorage.getItem("token");
+    // const response = await fetch(`${endpoint}/cart/add_to_cart`, {
+    //     method: 'POST',
+    //     body: JSON.stringify(body),
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //         'token': token,
+    //     }
+    // });
+    // if (!response.ok) {
+    //     message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
+    //     throw new Error('Network response was not ok');
+    // }
+    // const data = await response.json();
+    // return data;
+
+    const response = await axiosInstance.post(`/cart/add_to_cart`,
+        body,
+        {
+            requiresAuth: true,
+        },
+    );
+
+    return response.data
+}
+
+export const useAddToCart = () => {
+    return useMutation({
+        mutationFn: (body) => addToCart(body)
+    })
 }
 
 // get quantity cart
@@ -67,7 +77,7 @@ export function useGetProducts(location, parmas, name) {
         customLocation = {
             ...location,
             name: name,
-            search: location?.search ? location?.search :`?sort_by=tang-dan`,
+            search: location?.search ? location?.search : `?sort_by=tang-dan`,
             state: {
                 key: parmas?.category,
                 value: location?.state?.value ? location?.state?.value : '1'
@@ -115,7 +125,7 @@ export const findProductByImage = async (body) => {
     return response.data;
 };
 
-export function useFindProductByImage(){
+export function useFindProductByImage() {
     return useMutation(
         {
             mutationFn: (body) => findProductByImage(body),

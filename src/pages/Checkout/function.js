@@ -1,17 +1,12 @@
 import { axiosInstance } from "@api/api";
-import { message } from "antd";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { GET_ADDRESS_INFO, GET_RELEASED_VOUCHER } from "@constants/index";
 
 export const getAddressInfo = async () => {
-    try {
-        const response = await axiosInstance.get(`/users/get_address`, {
-            requiresAuth: true,
-        });
-        return response.data;
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-    };
+    const response = await axiosInstance.get(`/users/get_address`, {
+        requiresAuth: true,
+    });
+    return response.data;
 };
 
 export const createOrder = async (body) => {
@@ -35,14 +30,13 @@ export function useGetAddressInfo() {
 }
 
 export const getReleasedVoucher = async () => {
-    try {
-        const response = await axiosInstance.get(`/voucher/getReleasedVouchers`);
+    const response = await axiosInstance.get(`/voucher/getReleasedVouchers`, 
+        {
+            requiresAuth: true,
+        }
+    );
 
-        return response.data;
-    } catch {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
+    return response.data;
 }
 
 export function useGetReleasedVoucher() {

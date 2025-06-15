@@ -5,16 +5,11 @@ import { message } from "antd"
 
 
 export const getVoucherList = async (type, status) => {
-    try{
-        const response = await axiosInstance.get(`/admin/getVouchers?type=${type}&status=${status}`, {
-            requiresAuth: true,
-        });
+    const response = await axiosInstance.get(`/admin/getVouchers?type=${type}&status=${status}`, {
+        requiresAuth: true,
+    });
 
-        return response.data;
-    }catch{
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
+    return response.data;
 }
 
 export function useGetVoucherList(type, status, role) {
@@ -27,16 +22,11 @@ export function useGetVoucherList(type, status, role) {
 }
 
 export const getVoucherDetail = async (id) => {
-    try{
-        const response = await axiosInstance.get(`/admin/getDetail?id=${id}`, {
-            requiresAuth: true,
-        });
+    const response = await axiosInstance.get(`/admin/getDetail?id=${id}`, {
+        requiresAuth: true,
+    });
 
-        return response.data;
-    }catch{
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
+    return response.data;
 }
 
 export function useGetVoucherDetail(id) {
@@ -48,16 +38,11 @@ export function useGetVoucherDetail(id) {
 }
 
 export const createVoucher = async (body) => {
-    try{
-        const response = await axiosInstance.post(`/admin/createVoucher`, JSON.stringify(body), {
-            requiresAuth: true,
-        });
+    const response = await axiosInstance.post(`/admin/createVoucher`, JSON.stringify(body), {
+        requiresAuth: true,
+    });
 
-        return response.data;
-    }catch(error){
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
+    return response.data;
 }
 
 export function useCreateVoucher() {
@@ -69,16 +54,11 @@ export function useCreateVoucher() {
 }
 
 export const updateVoucher = async (body) => {
-    try{
-        const response = await axiosInstance.post(`/admin/updateVoucher`, JSON.stringify(body), {
-            requiresAuth: true,
-        });
+    const response = await axiosInstance.post(`/admin/updateVoucher`, JSON.stringify(body), {
+        requiresAuth: true,
+    });
 
-        return response.data;
-    }catch(error){
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
+    return response.data;
 }
 
 export function useUpdateVoucher() {
@@ -90,16 +70,11 @@ export function useUpdateVoucher() {
 }
 
 export const deleteVoucher = async (body) => {
-    try{
-        const response = await axiosInstance.post(`/admin/deleteVoucher`, JSON.stringify(body), {
-            requiresAuth: true,
-        });
+    const response = await axiosInstance.post(`/admin/deleteVoucher`, JSON.stringify(body), {
+        requiresAuth: true,
+    });
 
-        return response.data;
-    }catch{
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
+    return response.data;
 }
 
 export function useDeleteVoucher() {
@@ -111,16 +86,11 @@ export function useDeleteVoucher() {
 }
 
 export const updateStatus = async (body) => {
-    try{
-        const response = await axiosInstance.post(`/admin/updateStatus`, JSON.stringify(body), {
-            requiresAuth: true,
-        });
+    const response = await axiosInstance.post(`/admin/updateStatus`, JSON.stringify(body), {
+        requiresAuth: true,
+    });
 
-        return response.data;
-    }catch{
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
+    return response.data;
 }
 
 export function useUpdateStatus() {

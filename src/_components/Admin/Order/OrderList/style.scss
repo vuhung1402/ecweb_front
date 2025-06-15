@@ -1,10 +1,10 @@
 .tableOrder {
-    height: calc(100% - 66px) !important;
+    height: fit-content !important
     // overflow-y: auto;
 }
 
 .tableOrderWithPagination {
-    height: calc(100% - 130px) !important;
+    height: calc(100% - 300px) !important;
     // overflow-y: auto;
 }
 

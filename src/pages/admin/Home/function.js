@@ -1,18 +1,12 @@
 import { axiosInstance } from "@api/api";
 import { ADMIN, GET_ADMIN_REVENEU_STATISTICAL, GET_ADMIN_STATISTICAL } from "@constants/index";
 import { useQuery } from "@tanstack/react-query";
-import { message } from "antd";
 
 export const getStatistical = async () => {
-    try {
-        const response = await axiosInstance.get(`/admin/statistical`, {
-            requiresAuth: true,
-        });
-        return response.data
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
+    const response = await axiosInstance.get(`/admin/statistical`, {
+        requiresAuth: true,
+    });
+    return response.data
 }
 
 export function useGetStatistical(role) {
@@ -26,15 +20,10 @@ export function useGetStatistical(role) {
 }
 
 export const getReveneuStatistical = async (year) => {
-    try {
-        const response = await axiosInstance.get(`/admin/revenueStatistics?year=${year}`, {
-            requiresAuth: true,
-        });
-        return response.data
-    } catch (error) {
-        message.error("Rất tiếc, trang web đang bảo trì. Vui lòng quay lại sau");
-        console.error('Error:', error);
-    }
+    const response = await axiosInstance.get(`/admin/revenueStatistics?year=${year}`, {
+        requiresAuth: true,
+    });
+    return response.data
 }
 
 export function useGetReveneuStatistical(year, role) {

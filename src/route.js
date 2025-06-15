@@ -92,6 +92,11 @@ const AppRoutes = [
         defaultLayout: false,
     },
     {
+        path: '/successpayment',
+        Component: Page?.SuccessPayment,
+        defaultLayout: false,
+    },
+    {
         path: '/admin/orderDetail/:id',
         Component: Page?.AdminOrderDetailPage,
         defaultLayout: true,

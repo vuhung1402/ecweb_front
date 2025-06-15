@@ -162,7 +162,7 @@ const VoucherList = (props) => {
                 dataSource={vouchers?.vouchers}
                 pagination={{
                     hideOnSinglePage: true,
-                    pageSize: 15
+                    pageSize: 10
                 }}
                 rowClassName={rowClassName} // Add rowClassName prop
                 onRow={(voucher) => ({

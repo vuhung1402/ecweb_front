@@ -318,11 +318,14 @@ const Admin = () => {
                         <div className='group hidden me:flex w-2 cursor-col-resize items-center justify-center rounded-md bg-gray-50'>
                             <ResizableHandle className='h-1 w-24 rounded-full bg-neutral-400 duration-300 group-hover:bg-primaryb group-active:duration-75 lg:h-24 lg:w-1' />
                         </div>
-                        <ResizablePanel defaultValue={40} minSize={40} className='hidden me:block' id='admin-order-right'>
-                            <div className="flex h-full justify-center items-center border rounded-md border-[rgb(229,230,230)]">
-                                {renderDetailTab}
-                            </div>
-                        </ResizablePanel>
+                        {
+                            state?.tab === 0 ? <></> :
+                            <ResizablePanel defaultValue={40} minSize={40} className='hidden me:block' id='admin-order-right'>
+                                <div className="flex h-full justify-center items-center border rounded-md border-[rgb(229,230,230)]">
+                                    {renderDetailTab}
+                                </div>
+                            </ResizablePanel>
+                        }
                     </ResizablePanelGroup>
                 </SildeBarContentWrapper>
             </ContentWrapper>

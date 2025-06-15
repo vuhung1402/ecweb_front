@@ -19,7 +19,7 @@ export const VoucherListWrapper = (props) => {
 export const ActionWrraper = (props) => {
     return (
         <div
-            className='flex flex-col 2xl:flex-row gap-3 items-center justify-end 2xl:justify-between mb-3 px-2'
+            className='flex 2xl:flex-row gap-3 items-center justify-end 2xl:justify-between mb-3 px-2'
             {...props}
         />
     )

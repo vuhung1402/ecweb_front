@@ -57,6 +57,7 @@ const VoucherDetail = (props) => {
     const onOk = () => {
         if (state.expiredAt < dayjs(new Date()).valueOf()) {
             message.error("Ngày hết hạn không hợp lệ");
+            refetchVoucherDetail();
             return;
         }
         if (mode === 'edit') {
@@ -149,9 +150,9 @@ const VoucherDetail = (props) => {
         }));
     };
 
-    if(!voucherId && mode !== 'new') return <div className="font-bold">Chi tiết sản phẩm sẽ hiển thị ở đây</div>
+    if (!voucherId && mode !== 'new') return <div className="font-bold">Chi tiết sản phẩm sẽ hiển thị ở đây</div>
 
-    if(isGetVoucherDetail) return <Loading/>
+    if (isGetVoucherDetail) return <Loading />
 
     return (
         <VoucherDetailContainer>
@@ -234,6 +235,17 @@ const VoucherDetail = (props) => {
                     >
                         {voucherDetail?.voucher?.status === voucherStatus.EXPIRED && 'Phát hành lại'}
                         {voucherDetail?.voucher?.status === voucherStatus.UNRELEASED && 'Phát hành'}
+                    </Button>
+                }
+                {
+                    mode === 'edit' && voucherDetail?.voucher?.status === voucherStatus.RELEASED &&
+                    <Button
+                        onClick={() => onUpdateStatus(voucherStatus.UNRELEASED)}
+                        loading={mutateUpdateStatus.isPending}
+                        type="primary"
+                        className="font-bold"
+                    >
+                        Ngừng phát hành
                     </Button>
                 }
                 <Button

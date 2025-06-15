@@ -6,13 +6,16 @@ const CheckoutVoucher = (props) => {
     const { discountVouchers, shippingVouchers, applyPending } = props;
 
     const { applyVoucher } = props;
-    const { setCodeVoucherDiscount, setCodeVoucherShipping } = useCheckoutStore()
+    const { setCodeVoucherDiscount, setCodeVoucherShipping, setExpiredAtVoucherDiscount, setExpiredAtVoucherShipping } = useCheckoutStore()
 
-    const onSelectVoucher = (value, type) => {
-        if (type === 'discount') {
-            setCodeVoucherDiscount(value)
-        } else {
-            setCodeVoucherShipping(value)
+    const onSelectVoucher = (_, option) => {
+        console.log(option);
+        if (option?.type === 'discount') {
+            setCodeVoucherDiscount(option?.value)
+            setExpiredAtVoucherDiscount(option?.expiredAt)
+        } else if (option?.type === 'shipping') {
+            setCodeVoucherShipping(option?.value)
+            setExpiredAtVoucherShipping(option?.expiredAt)
         }
     }
 
@@ -22,25 +25,37 @@ const CheckoutVoucher = (props) => {
                 style={{
                     width: 150,
                 }}
+                onClear={() => {
+                    setCodeVoucherDiscount('')
+                    setExpiredAtVoucherDiscount(0)
+                }}
                 placeholder="Chọn mã giảm giá"
                 allowClear
                 options={discountVouchers?.map((discountVoucher) => ({
                     label: discountVoucher?.name,
                     value: discountVoucher?.code,
+                    type: 'discount',
+                    expiredAt: discountVoucher?.expiredAt
                 }))}
-                onChange={(value) => onSelectVoucher(value, 'discount')}
+                onChange={onSelectVoucher}
             />
             <Select
                 style={{
                     width: 150,
+                }}
+                onClear={() => {
+                    setCodeVoucherShipping('')
+                    setExpiredAtVoucherShipping(0)
                 }}
                 placeholder="Mã miễn phí vận chuyển"
                 allowClear
                 options={shippingVouchers?.map((shippingVoucher) => ({
                     label: shippingVoucher?.name,
                     value: shippingVoucher?.code,
+                    type: 'shipping',
+                    expiredAt: shippingVoucher?.expiredAt
                 }))}
-                onChange={(value) => onSelectVoucher(value, 'shipping')}
+                onChange={onSelectVoucher}
             />
 
             <Button
