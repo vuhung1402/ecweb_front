@@ -1,25 +1,42 @@
 import React from "react";
-import { List, Tooltip } from "antd";
+import { Breadcrumb, List, Tooltip } from "antd";
 
 import CardProduct from "@widgets/CardProduct/CardProduct";
 import ProductFilter from "@widgets/ProductFilter/ProductFilter";
 import ProductSearch from "@widgets/ProductSearch";
 import { CameraFilled } from "@ant-design/icons";
 import ModalFindByImage from "@widgets/ModalFindByImage";
+import { useLocation } from "react-router-dom";
 
 const ProductList = (props) => {
     const { data, name, openModalFindByImage } = props;
     const { handleSelect, onSearch, onChange, handleOpenModalFindByImage, handleDataFindByImage } = props;
 
+    const location = useLocation();
+
+    const breadcurmbItems = [
+        {
+            title: <a href="/">Trang chủ</a>,
+        },
+        {
+            title: <a href="/products/all">Sản phẩm</a>
+        },
+        {
+            title: <p>{location?.state?.value ?? ''}</p>
+        }
+    ]
+
     return (
-        <div className="bg-white w-full">
+        <div className="bg-gray-50 w-full">
             <div className="px-4 sm:px-6 sm:py-10 w-full lg:px-8 h-full">
-                <div className="flex flex-col gap-3 sm:flex-row justify-between sm:items-center mb-4">
-                    <h2 className="select-none hidden sm:block text-2xl font-bold text-gray-900 uppercase tracking-widest">Sản phẩm</h2>
-                    <div className="flex gap-3">
+                <div className="w-full flex flex-col gap-3 justify-between mb-4">
+                    <div className="w-full flex flex-col sm:flex-row gap-4 sm:gap-10">
                         <ProductSearch onSearch={onSearch} name={name} onChange={onChange} />
+
+                        <ProductFilter handleSelect={handleSelect} />
+
                         <div
-                            className="cursor-pointer"
+                            className="cursor-pointer w-full sm:w-auto flex justify-end"
                             onClick={handleOpenModalFindByImage}
                         >
                             <Tooltip title="Tìm kiếm bằng hình ảnh">
@@ -27,10 +44,14 @@ const ProductList = (props) => {
                                     style={
                                         { fontSize: '30px', color: '#08c' }
                                     }
+                                    className="h-[40px]"
                                 />
                             </Tooltip>
                         </div>
-                        <ProductFilter handleSelect={handleSelect} />
+                    </div>
+
+                    <div>
+                        <Breadcrumb className="font-bold" items={breadcurmbItems} />
                     </div>
                 </div>
                 <List

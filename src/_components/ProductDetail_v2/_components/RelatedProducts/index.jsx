@@ -24,8 +24,8 @@ const RelatedProducts = () => {
                 }}
                 grid={{
                     gutter: 20,
-                    xxl: 5,
-                    xl: 4,
+                    xxl: 4,
+                    xl: 3,
                     lg: 3,
                     md: 3,
                     sm: 2,

@@ -9,11 +9,10 @@ const ProductFilter = ({handleSelect}) => {
 
     return(
         <Select
+            size='large'
             onSelect={handleSelect}
             showSearch
-            style={{
-                width: 200,
-            }}
+            className='w-full sm:w-[400px]'
             placeholder="Search to Select"
             optionFilterProp="children"
             filterOption={(input, option) => (option?.label ?? '').includes(input)}

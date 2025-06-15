@@ -32,7 +32,8 @@ const Products = () => {
             },
             {
                 state: {
-                    key: key
+                    key: key,
+                    value: item?.props?.route ?? ''
                 }
             }
         )
@@ -55,7 +56,6 @@ const Products = () => {
     };
 
     const onSearch = (value, _e, info) => {
-        console.log(value)
         setState((prev) => ({ ...prev, name: value }));
     }
 
