@@ -254,7 +254,9 @@ const Header = (props) => {
                     >
                         <div className="flex items-center justify-center gap-2">
                             <UserOutlined className="text-lg" />
-                            <div>{infor?.name}</div>
+                            {
+                                user?.accessToken && <div>{infor?.name}</div>
+                            }
                         </div>
                     </Popover>
                 </div>
