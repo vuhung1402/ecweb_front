@@ -12,6 +12,7 @@ import { getLevelKeys } from "@utils/function";
 
 import './style.scss';
 import useGetCartQuantity from "@hooks/useGetCartQuantity";
+import { useGetProfileInfo } from "@pages/Profile/function";
 
 const policyTitle = [
     {key: 'policy-title-1' , label: 'CHÍNH SÁCH ĐỔI TRẢ'},
@@ -31,6 +32,8 @@ const Header = (props) => {
     const navigate = useNavigate();
     const user = useUserPackageHook();
     const { cartQuantity, getQuantity } = useGetCartQuantity()
+
+    const { data: infor, isError, isLoading:isGetInfor, error } = useGetProfileInfo();
 
     const [account, setAccount] = useState(false)
     const [mobileMenuVisible, setMobileMenuVisible] = useState(false);
@@ -251,7 +254,7 @@ const Header = (props) => {
                     >
                         <div className="flex items-center justify-center gap-2">
                             <UserOutlined className="text-lg" />
-                            <div>{user?.email?.split("@")[0]}</div>
+                            <div>{infor?.name}</div>
                         </div>
                     </Popover>
                 </div>
