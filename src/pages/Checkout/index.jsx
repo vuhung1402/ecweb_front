@@ -49,7 +49,8 @@ const CheckOut = () => {
         isOrderLoading: false,
         isCollapse: true,
         insertAddress: false,
-        addressInfor: ''
+        addressInfor: '',
+        applyVoucherSuccess: true,
     });
 
     useEffect(() => {
@@ -121,11 +122,13 @@ const CheckOut = () => {
 
     const handleOrder = async () => {
         // setState((prev) => ({ ...prev, isOrderLoading: true }))
-        if ((expiredAtVoucherDiscount < Date.now() && expiredAtVoucherDiscount !== 0) || (expiredAtVoucherShipping < Date.now() && expiredAtVoucherShipping !== 0)) {
+        if(state.applyVoucherSuccess){
+            if ((expiredAtVoucherDiscount < Date.now() && expiredAtVoucherDiscount !== 0) || (expiredAtVoucherShipping < Date.now() && expiredAtVoucherShipping !== 0)) {
             setState(prev => ({ ...prev, price: order?.total_price, shippingFee: state.initialShippingFee }));
             message?.info("Áp dụng voucher không thành công");
             refetchGetReleasedVoucher();
             return;
+        }
         }
         const body = {
             order: order,
@@ -135,7 +138,7 @@ const CheckOut = () => {
             type_pay: state?.paymentMethod,
             shipping_code: state.shippingFee,
             checkout_price: state.price,
-            list_voucher: [codeVoucherDiscount, codeVoucherShipping],
+            list_voucher: state.applyVoucherSuccess ? [codeVoucherDiscount, codeVoucherShipping] : [],
         }
 
         mutate(body, {
@@ -190,11 +193,11 @@ const CheckOut = () => {
 
         mutateApplyVoucher.mutateAsync(body, {
             onSuccess: (res) => {
-                setState(prev => ({ ...prev, price: res?.discountedPrice, shippingFee: res?.discountedShippingFee }));
+                setState(prev => ({ ...prev, applyVoucherSuccess: true, price: res?.discountedPrice, shippingFee: res?.discountedShippingFee }));
                 message.success('Áp dụng mã giảm giá thành công');
             },
             onError: (error) => {
-                refetchGetReleasedVoucher();
+                setState(prev => ({ ...prev, applyVoucherSuccess: false }));
                 message.error(error?.response?.data?.message);
             }
         })
