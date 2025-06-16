@@ -10,7 +10,7 @@ const PaymentInfor = (props) => {
             <div className="flex flex-col gap-3 py-3 text-sm border-b-[1px]">
                 <div className="flex justify-between">
                     <div>Tổng tiền sản phẩm:</div>
-                    <div className="font-bold text-sm">{formatCurrencyVN(price_pay)}</div>
+                    <div className="font-bold text-sm">{formatCurrencyVN(data)}</div>
                 </div>
                 <div className="flex justify-between">
                     <div>Chi phí vận chuyển:</div>

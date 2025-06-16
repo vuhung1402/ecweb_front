@@ -193,7 +193,7 @@ const CheckOut = () => {
 
         mutateApplyVoucher.mutateAsync(body, {
             onSuccess: (res) => {
-                setState(prev => ({ ...prev, applyVoucherSuccess: true, price: res?.discountedPrice, shippingFee: res?.discountedShippingFee }));
+                setState(prev => ({ ...prev, applyVoucherSuccess: true, price: Math.round(res?.discountedPrice), shippingFee: Math.round(res?.discountedShippingFee) }));
                 message.success('Áp dụng mã giảm giá thành công');
             },
             onError: (error) => {

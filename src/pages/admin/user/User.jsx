@@ -1,4 +1,6 @@
 import React from "react";
+import useWindowSize from "@hooks/useWindowSize";
+
 
 export const UserFilterWrapper = (props) => {
     return(
@@ -7,8 +9,15 @@ export const UserFilterWrapper = (props) => {
 }
 
 export const UserListWrapper = (props) => {
-    return(
-        <div className=" w-full" {...props}>
+    const iw = useWindowSize().width;
+
+    return (
+        <div
+            style={{
+                height: iw > 640 ? 'calc(100vh - 120px)' : 'calc(100vh - 230px)'
+            }}
+            {...props}
+        >
 
         </div>
     )
