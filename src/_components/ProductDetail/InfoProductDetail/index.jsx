@@ -173,7 +173,6 @@ const InfoProductDetail = ({ data, handleGotoImage }) => {
             <Button
                 onClick={handleAddToCart}
                 loading={mutateAddToCart.isPending}
-                disabled={Object.keys(state.selectSize).length === 0}
                 type="primary"
                 className=" w-full mt-3 p-4 !h-auto font-bold uppercase"
             >

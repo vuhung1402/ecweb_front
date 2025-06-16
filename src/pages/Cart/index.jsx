@@ -123,12 +123,28 @@ const CartPage = () => {
         });
     };
 
-    const handleUpdateItem = async (id, quantity) => {
+    const handleUpdateItem = async (id, quantity, type) => {
         if (quantity === 0) return;
 
         updateMutaion({ id, quantity }, {
             onSuccess: () => {
                 refetch()
+                const findItem = state.selectedItem.findIndex((item) => item?._id === id);
+                if (findItem !== -1) {
+                    let newTotalPrice;
+                    if(type === "minus"){
+                        newTotalPrice = state?.totalPrice - state?.selectedItem[findItem]?.price_per_one;
+                    }else{
+                        newTotalPrice = state?.totalPrice + state?.selectedItem[findItem]?.price_per_one;
+                    }
+                    // const newSelected = state.selectedItem?.filter((_, index) => index !== findItem);
+
+                    setState((prev) => ({
+                        ...prev,
+                        // selectedItem: newSelected,
+                        totalPrice: newTotalPrice,
+                    }));
+                }
                 getQuantity()
             },
             onError: (error) => {

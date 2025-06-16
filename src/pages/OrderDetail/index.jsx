@@ -14,7 +14,7 @@ import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { logAgain } from "@utils/function";
 import { FAIL, SUCCESS } from "@utils/message";
 import OderDetailContainer from "./OrderDetailContainer";
-import { AddressInforDetail, AddressInforTitle, AddressInforWrapper, BackTitle, BackWrapper, ContentOrderInfoWrapper, ContentWrapper, InforTitle, InforWrapper, OrderActionWrapper, OrderId, OrderInfoWrapper, OrderStatusWrapper, PaymentInforWrapper, PaymentMethod, PaymentMethodContentWrapper, PaymentMethodWrapper, PaymentTitle, SideBarWrapper, Title, UserInforContentWrapper, UserInforDetailWrapper, UserInforTitle, UserInforWrapper } from "./OrderDetail";
+import { AddressInforDetail, AddressInforTitle, AddressInforWrapper, BackTitle, BackWrapper, ContentOrderInfoWrapper, ContentWrapper, InforTitle, InforWrapper, OrderActionWrapper, OrderId, OrderInfoWrapper, OrderStatusWrapper, PaymentInforWrapper, PaymentMethod, PaymentMethodContentWrapper, PaymentMethodWrapper, PaymentTitle, PaymentUrl, SideBarWrapper, Title, UserInforContentWrapper, UserInforDetailWrapper, UserInforTitle, UserInforWrapper } from "./OrderDetail";
 import ModalRequestReturnOrder from "@_components/OrderDetail/ModalRequestReturnOrder";
 import ReturnRequest from "@_components/Admin/OrderDetail/ReturnRequest";
 
@@ -152,6 +152,10 @@ const OderDetail = () => {
                                 <PaymentMethodContentWrapper>
                                     <OrderId id={param?.id} />
                                     <PaymentMethod paymentMethdod={paymentMethdod} />
+                                    {
+                                        orderDetail?.formatted_order_detail?.status === 0 &&
+                                        <PaymentUrl paymentUrl={orderDetail?.formatted_order_detail?.paymentUrl}/>
+                                    }
                                 </PaymentMethodContentWrapper>
                             </PaymentMethodWrapper>
                             <OrderStatusWrapper>

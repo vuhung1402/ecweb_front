@@ -4,7 +4,7 @@ import { Truck, RotateCcw, Shield, Award } from 'lucide-react'
 
 const SpecialOffer = () => {
     const offer = [
-        { icon: Truck, text: "Miễn phí vận chuyển đơn từ 300k", color: "text-green-600" },
+        // { icon: Truck, text: "Miễn phí vận chuyển đơn từ 300k", color: "text-green-600" },
         { icon: RotateCcw, text: "Đổi trả trong 30 ngày", color: "text-blue-600" },
         { icon: Shield, text: "Bảo hành chất lượng 1 năm", color: "text-purple-600" },
         { icon: Award, text: "Chính hãng 100%", color: "text-orange-600" },

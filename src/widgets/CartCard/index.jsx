@@ -34,12 +34,12 @@ const CartCard = (props) => {
 
     const handleMinus = async () => {
         setState(prev => ({...prev, isLoadingMinus: true}));
-        await handleUpdateItem(data?._id, data?.quantity - 1)
+        await handleUpdateItem(data?._id, data?.quantity - 1, "minus")
     }
 
     const handlePlus = async () => {
         setState(prev => ({...prev, isLoadingPlus: true}));
-        await handleUpdateItem(data?._id, data?.quantity + 1)
+        await handleUpdateItem(data?._id, data?.quantity + 1, "plus")
     }
 
     const buttonStyle = 'flex items-center justify-center bg-gray-300 text-xs hover:bg-gray-400 transition-colors duration-200 text-gray-800 font-bold';

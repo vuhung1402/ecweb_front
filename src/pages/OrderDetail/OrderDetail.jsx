@@ -186,6 +186,15 @@ export const PaymentMethod = (props) => {
     )
 }
 
+export const PaymentUrl = (props) => {
+    return (
+        <div className="flex gap-3">
+            <div className="font-medium w-28">Link thanh toán</div>
+            <div className="font-bold text-green-500">{props?.paymentUrl}</div>
+        </div>
+    )
+}
+
 export const OrderStatusWrapper = (props) => {
     return (
         <div className="flex flex-col gap-3 mb-3" {...props}/>

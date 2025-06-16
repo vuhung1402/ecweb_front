@@ -25,6 +25,7 @@ const VoucherDetail = (props) => {
             minPrice: 0,
             type: '',
             expiredAt: 0,
+            limit: 0,
         }
     )
 
@@ -48,6 +49,7 @@ const VoucherDetail = (props) => {
     }, [mode, voucherId, isGetVoucherDetail]);
 
     const onChange = (value, atrb) => {
+        console.log(value)
         setState({
             ...state,
             [atrb]: value
@@ -136,6 +138,7 @@ const VoucherDetail = (props) => {
             minPrice: voucher?.minPrice,
             type: voucher?.type,
             expiredAt: voucher?.expiredAt,
+            limit: voucher?.limit,
         }));
     }
 
@@ -220,6 +223,14 @@ const VoucherDetail = (props) => {
                         value={state.expiredAt !== 0 ? dayjs(state.expiredAt) : dayjs(new Date())}
                         format={dateFormat}
                         onChange={(date, dateString) => onChange(dayjs(date).valueOf(), 'expiredAt')}
+                        className="w-full"
+                    />
+                </InforDetailWrapper>
+                <InforDetailWrapper>
+                    <div className="">Số lượng</div>
+                    <InputNumber
+                        value={state.limit}
+                        onChange={(value) => onChange(value, 'limit')}
                         className="w-full"
                     />
                 </InforDetailWrapper>

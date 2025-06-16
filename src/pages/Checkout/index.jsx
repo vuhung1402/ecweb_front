@@ -121,7 +121,7 @@ const CheckOut = () => {
 
     const handleOrder = async () => {
         // setState((prev) => ({ ...prev, isOrderLoading: true }))
-        if((expiredAtVoucherDiscount < Date.now() && expiredAtVoucherDiscount !== 0) || (expiredAtVoucherShipping < Date.now() && expiredAtVoucherShipping !== 0)){
+        if ((expiredAtVoucherDiscount < Date.now() && expiredAtVoucherDiscount !== 0) || (expiredAtVoucherShipping < Date.now() && expiredAtVoucherShipping !== 0)) {
             setState(prev => ({ ...prev, price: order?.total_price, shippingFee: state.initialShippingFee }));
             message?.info("Áp dụng voucher không thành công");
             refetchGetReleasedVoucher();
@@ -173,9 +173,17 @@ const CheckOut = () => {
     }
 
     const applyVoucher = () => {
-        console.log(codeVoucherDiscount, codeVoucherShipping, expiredAtVoucherDiscount, expiredAtVoucherShipping)
+        const code = [];
+
+        if (codeVoucherDiscount && codeVoucherDiscount.trim() !== "") {
+            code.push(codeVoucherDiscount);
+        }
+
+        if (codeVoucherShipping && codeVoucherShipping.trim() !== "") {
+            code.push(codeVoucherShipping);
+        }
         const body = {
-            code: [codeVoucherDiscount, codeVoucherShipping],
+            code,
             shippingFee: state.initialShippingFee,
             price: order?.total_price,
         }
@@ -186,6 +194,7 @@ const CheckOut = () => {
                 message.success('Áp dụng mã giảm giá thành công');
             },
             onError: (error) => {
+                refetchGetReleasedVoucher();
                 message.error(error?.response?.data?.message);
             }
         })
@@ -271,7 +280,7 @@ const CheckOut = () => {
                 />
 
                 <div
-                    style={{ height: 'calc(100% - 202px)' }}
+                    style={{ height: 'calc(100% - 240px)' }}
                     className="hidden me:block overflow-y-auto"
                 >
                     {order?.items?.map((item) => {
@@ -286,7 +295,7 @@ const CheckOut = () => {
                 <CheckoutVoucher
                     discountVouchers={voucher?.dicountVouchers}
                     shippingVouchers={voucher?.shippingVouchers}
-                    applyPending = {mutateApplyVoucher?.isPending}
+                    applyPending={mutateApplyVoucher?.isPending}
                     applyVoucher={applyVoucher}
                 />
 

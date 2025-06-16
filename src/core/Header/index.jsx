@@ -162,7 +162,7 @@ const Header = (props) => {
     };
 
     return (     
-        <header className={`relative w-full px-4 md:px-20 lg:px-40 top-0 left-0 right-0 bg-white shadow-md z-50 ${visible ? 'header-visible' : 'header-hidden'}`}>
+        <header className={`relative w-full px-4 md:px-20 lg:px-40 top-0 left-0 right-0 bg-white shadow-md z-50`}>
             {/* Mobile Menu Drawer */}
             <Drawer
                 placement="left"
@@ -249,8 +249,9 @@ const Header = (props) => {
                         open={state?.popOverAcc}
                         onOpenChange={handlepopOverAcc}
                     >
-                        <div>
+                        <div className="flex items-center justify-center gap-2">
                             <UserOutlined className="text-lg" />
+                            <div>{user?.email?.split("@")[0]}</div>
                         </div>
                     </Popover>
                 </div>

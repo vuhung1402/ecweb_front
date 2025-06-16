@@ -20,11 +20,9 @@ const CheckoutVoucher = (props) => {
     }
 
     return (
-        <div className="flex items-center gap-4 border-b-[1px] py-2">
+        <div className="flex flex-col items-center gap-1 border-b-[1px] py-2">
             <Select
-                style={{
-                    width: 150,
-                }}
+                style={{ width: '100%' }}
                 onClear={() => {
                     setCodeVoucherDiscount('')
                     setExpiredAtVoucherDiscount(0)
@@ -40,9 +38,7 @@ const CheckoutVoucher = (props) => {
                 onChange={onSelectVoucher}
             />
             <Select
-                style={{
-                    width: 150,
-                }}
+                style={{ width: '100%' }}
                 onClear={() => {
                     setCodeVoucherShipping('')
                     setExpiredAtVoucherShipping(0)
@@ -60,7 +56,7 @@ const CheckoutVoucher = (props) => {
 
             <Button
                 type="primary"
-                className="w-1/3 font-medium rounded-lg text-sm"
+                className="w-full font-medium rounded-lg text-sm"
                 loading={applyPending}
                 onClick={applyVoucher}
             >

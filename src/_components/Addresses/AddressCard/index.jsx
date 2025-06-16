@@ -6,7 +6,7 @@ import AddressBasicInfo from "../AddressBasicInfo";
 import AddressCardHeader from "../AddressCardHeader";
 import AddressUpdateCard from "../AddressUpdateCard";
 
-import { FAIL } from "@utils/message";
+import { FAIL, SUCCESS } from "@utils/message";
 import { useDeleteAdress } from "@api/Addresses";
 import { NOT_AUTHENTICATION, TOKEN_INVALID } from "@utils/error";
 import { getDistricts, getProvinces, getWards, logAgain } from "@utils/function";
@@ -135,7 +135,8 @@ const AddressCard = (props) => {
     const handleDeleteAddress = () => {
         deleteAddressMutation(address?._id, {
             onSuccess: () => {
-                refetch()
+                message.success(SUCCESS);
+                refetch();
             },
             onError: (error) => {
                 const response = error?.response?.data
