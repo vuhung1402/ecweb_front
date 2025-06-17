@@ -13,9 +13,8 @@ const SuccessPayment = () => {
         <div className="w-screen h-screen flex items-center justify-center">
             <Result
                 status="success"
-                title="200"
                 className="font-bold"
-                subTitle="Thanh toán thành công"
+                subTitle="Thanh toán đơn hàng thành công"
                 extra={
                     <Button className="font-bold" onClick={hanldeOnclick} type="primary">
                         Back Home
