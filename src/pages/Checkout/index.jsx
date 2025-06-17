@@ -188,7 +188,7 @@ const CheckOut = () => {
         const body = {
             code,
             shippingFee: state.initialShippingFee,
-            price: order?.total_price,
+            price: order?.total_price + state.initialShippingFee,
         }
 
         mutateApplyVoucher.mutateAsync(body, {
