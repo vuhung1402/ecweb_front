@@ -14,7 +14,7 @@ const HomeProduct = (props) => {
     return (
         <div className="w-full p-10 flex justify-center flex-col items-center gap-7">
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-center text-gray-800">
-                Check out our <span className="text-primary">new arrivals</span>
+                CÓ THỂ BẠN <span className="text-primary">SẼ THÍCH</span>
             </h2>
             <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 3xl:grid-cols-4 xl:gap-x-10">
                 {products?.map((item, index) => {
