@@ -124,6 +124,7 @@ const OrderDetail = (props) => {
                                 }}
                             >
                                 <Button
+                                    loading={mutateUpdateStatusOrder.isPending}
                                     type="primary"
                                     className="font-bold"
                                 >
@@ -147,6 +148,7 @@ const OrderDetail = (props) => {
                         }}
                     >
                         <Button
+                            loading={mutateRefundMoney.isPending || mutateUpdateStatusOrder.isPending}
                             type="primary"
                             className="font-bold"
                         >
@@ -167,6 +169,7 @@ const OrderDetail = (props) => {
                         }}
                     >
                         <Button
+                            loading={mutateRefundMoney.isPending || mutateUpdateStatusOrder.isPending}
                             type="primary"
                             className="font-bold"
                         >
