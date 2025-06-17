@@ -126,6 +126,11 @@ const CartPage = () => {
     const handleUpdateItem = async (id, quantity, type) => {
         if (quantity === 0) return;
 
+        if(quantity > 10) {
+            message.info("Quá số lượng cho phép");
+            return;
+        }
+
         updateMutaion({ id, quantity }, {
             onSuccess: () => {
                 refetch()
