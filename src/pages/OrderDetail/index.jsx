@@ -196,6 +196,7 @@ const OderDetail = () => {
                                         }}
                                     >
                                         <Button
+                                            loading={isPendingCancelOrder || isPendingRefundMoney}
                                             type="primary"
                                             className="font-bold"
                                         >
