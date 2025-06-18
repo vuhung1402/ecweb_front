@@ -102,6 +102,20 @@ const CheckOut = () => {
         setState((prev) => ({ ...prev }));
     }
 
+    const initialPrice = () => {
+        setState({
+            ...state,
+            price: order?.total_price,
+        })
+    }
+
+    const initialShippingFee = () => {
+        setState({
+            ...state,
+            shippingFee: state.initialShippingFee,
+        })
+    }
+
     const handleSelectAddressInfo = async (value, option) => {
         const res = await calculateShippingFee(option?.districtID, option?.wardCode);
         let fee = 0;
@@ -300,6 +314,8 @@ const CheckOut = () => {
                     shippingVouchers={voucher?.shippingVouchers}
                     applyPending={mutateApplyVoucher?.isPending}
                     applyVoucher={applyVoucher}
+                    initialPrice={initialPrice}
+                    initialShippingFee={initialShippingFee}
                 />
 
                 <CheckoutPrice

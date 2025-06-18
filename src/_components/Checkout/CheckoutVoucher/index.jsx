@@ -5,7 +5,7 @@ import React, { useState } from "react";
 const CheckoutVoucher = (props) => {
     const { discountVouchers, shippingVouchers, applyPending } = props;
 
-    const { applyVoucher } = props;
+    const { applyVoucher, initialPrice, initialShippingFee } = props;
     const { setCodeVoucherDiscount, setCodeVoucherShipping, setExpiredAtVoucherDiscount, setExpiredAtVoucherShipping } = useCheckoutStore()
 
     const onSelectVoucher = (_, option) => {
@@ -26,6 +26,7 @@ const CheckoutVoucher = (props) => {
                 onClear={() => {
                     setCodeVoucherDiscount('')
                     setExpiredAtVoucherDiscount(0)
+                    initialPrice()
                 }}
                 placeholder="Chọn mã giảm giá"
                 allowClear
@@ -42,6 +43,7 @@ const CheckoutVoucher = (props) => {
                 onClear={() => {
                     setCodeVoucherShipping('')
                     setExpiredAtVoucherShipping(0)
+                    initialShippingFee()
                 }}
                 placeholder="Mã miễn phí vận chuyển"
                 allowClear
